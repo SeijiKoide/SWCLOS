@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0060)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/OWLAPIs.html -->
+<html><head><title>14. OWL APIs</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>14. &nbsp;OWL APIs </h2>
+<h3>14.1 &nbsp;Subsumption in OWL </h3>
+<p>We discriminate the substantial inclusiveness on concepts that is decided 
+through rdfs:subClassOf, owl:intersectionOf, and owl:unionOf, against the 
+non-substantial inclusiveness, that can be reasoned out by entailment rules and 
+a subsumption inference engine. The former is calculated through the CLOS 
+class-subclass relationship, and the latter is deduced by the subsumption 
+algorithm described below in SWCLOS. The top concept in the OWL universe, 
+owl:Thing, substantially subsumes every concept of OWL vocabulary in the CLOS 
+class-subclass relation or OWL reasoning, but the bottom concept, owl:Nothing, 
+is virtually subsumed by other concepts only through this algorithm. We extended 
+and modified the basic structural subsumption algorithm, that is described in 
+&ldquo;The Description Logic Handbook&rdquo; [DLH], to one that contains disjunction 
+(owl:unionOf), negation (owl:complementOf), equivalency (owl:sameAs and 
+owl:equivalentOf), functional and inverse-functional relation 
+(owl:FunctionalProperty and owl:InverseFunctionalProperty), symetric relation 
+(owl:SymmetricProperty), the value restriction (owl:allValuesFrom), the full 
+existential restriction (owl:someValuesFrom), the filler restriction 
+(owl:hasValue), and the number restriction (owl:maxCardinality, 
+owl:minCardinality, and owl:cardinality).</p>
+<p>The algorithm is summarized as follows, for two concepts <i>C</i> and 
+<i>D</i>; </p>
+<ol type="1">
+  <li>If <i>C</i> is the bottom, then it returns true. </li>
+  <li>If <i>D</i> is the top, then it returns true. </li>
+  <li>If <i>D</i> is the bottom, then it returns false. </li>
+  <li>If <i>C</i> is a subclass of <i>D</i> in CLOS, then it returns true.</i> </li>
+  <li>If <i>D</i> is a subclass of <i>C</i> in CLOS, then it returns false.</i> </li>
+  <li>If <i>C</i> and <i>D</i> is the same as individual, then it returns true. </li>
+  <li>If <i>C</i> and <i>D</i> have oneOf slots and <i>C</i>Åfs members are 
+  subset of <i>D</i>Åfs members, then it returns true, otherwise false. </li>
+  <li>For some (<i>cc</i>) of equivalent classes of <i>C</i> and some 
+  (<i>dd</i>) of equivalent classes of <i>D</i>; 
+  <ul>
+    <li>If <i>cc</i> is a subclass of <i>dd</i> in CLOS, then it returns true. </li>
+    <li>If <i>dd</i> is a subclass of <i>cc</i> in CLOS, then it returns false. </li>
+    <li>If <i>cc</i> has unionOf slot values and every member is subsumed by 
+    <i>dd</i>, then it returns true. </li>
+    <li>If <i>dd</i> has unionOf slot values and <i>cc</i> is subsumed by some 
+    of union members of <i>dd</i>, then it returns true. This process is called 
+    <i>union branching</i>. </li>
+    <li>If <i>dd</i> has intersectionOf slot values, then the algorithm for 
+    intersection is performed. See the below. </li>
+    <li>If <i>cc</i> and <i>dd</i> is equal through owl:equivalentClass, 
+    owl:FunctionalProperty, or owl:InversefunctionalProperty, then it returns 
+    true. </li>
+    <li>If <i>cc</i> and <i>dd</i> are complement, then it returns false. </li>
+    <li>If <i>cc</i> and <i>dd</i> are disjoint, then it returns false. </li>
+    <li>Otherwise go to the next step below for transtivity checking as 
+    individuals. </li></ul></li>
+  <li>For some (<i>cc</i>) of same individuals of <i>C</i> and some (<i>dd</i>) 
+  of same individuals of <i>D</i>; 
+  <ul>
+    <li>If <i>cc</i> and <i>dd</i> shares a transitive property and <i>cc</i> is 
+    inferior to <i>dd</i> on the property, then return true. </li></ul></li></ol>
+<p>The algorithm for intersections is summarized as follows.</p>
+<ol type="1">
+  <li>Firstly, <i>D</i> is unfolded on the intersection of concepts. Namely, if 
+  an element of intersections is also the concept of intersections, all members 
+  of the intersection are retrieved and the flattened list of all intersection 
+  elements is made. </li>
+  <li>Secondly, <i>C</i>&rsquo;s class precedence list (cpl), that is, a list of all 
+  super concepts of <i>C</i> including itself is computed. </li>
+  <li>If every concept member (except property restrictions) of intersections of 
+  unfolded <i>D</i> subsumes some concept member of <i>C</i>&rsquo;s cpl, then go to 
+  the next step, otherwise false. </li>
+  <li>If no restrictions of unfolded <i>D</i>, then returns true. Otherwise, go 
+  to the next step, namely model generation and testing process. </li>
+  <li>Generate possible models of <i>C</i> and every models are checked if some 
+  of them satisfy the <i>D</i>&rsquo;s restrictions. 
+  <ul>
+    <li>Firstly, all slot definitions of <i>C</i> for RDF and OWL properties are 
+    retrieved. </li>
+    <li>For each of restrictions of unfolded <i>D</i>, the following steps are 
+    performed, and every step must be true, otherwise imediately returns with 
+    false. 
+    <ul>
+      <li type="circle">In case of no slot definition of <i>C</i> and no 
+      cardinality restriction of <i>D</i>, if <i>D</i>&rsquo;s restriction is 
+      allValuesFrom, then true, else if someValuesFrom or hasValue, then returns 
+      false in <b>auto-epistemic-closed-world</b> or true in open world. </li>
+      <li type="circle">In case that there is no slot definition of <i>C</i> and 
+      cardinality restriction of <i>D</i> exists, </li>
+      <li type="circle">In case that both <i>C</i>&rsquo;s slot and <i>D</i>&rsquo;s 
+      restriction exists, possible models of <i>C</i> are created from 
+      <i>C</i>&rsquo;s slot definition of the current property under the cardinality 
+      restriction from <i>D</i>, and possible models of <i>D</i> are also 
+      created. Then, some of <i>C</i>&rsquo;s models satisfy every <i>D</i>&rsquo;s models, 
+      then true, otherwise returns false. </li></ul></li></ul></li></ol>
+<p>The algorithm of generation models and typed unification theory, which is 
+used in model matching, is more complicated and difficult for beginers of 
+SWCLOS. This advanced topic is shown in Phd theses.</p>
+<p>The following demonstrates the function of this algorithm. </p>
+<code>gx-user(7): (subsumed-p vin:DryWhiteWine 
+vin:WhiteNonSweetWine)<br/>t<br/>t<br/>gx-user(8): (get-form 
+vin:WhiteNonSweetWine)<br/>(owl:Class 
+vin:WhiteNonSweetWine<br/>&nbsp;&nbsp;(owl:intersectionOf 
+vin:WhiteWine<br/>&nbsp;&nbsp;&nbsp;&nbsp;(owl:allValuesFromRestriction 
+(owl:onProperty 
+vin:hasSugar)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:allValuesFrom (OneOf 
+(owl:oneOf vin:Dry vin:OffDry))))))<br/>gx-user(9): (get-form 
+vin:DryWhiteWine)<br/>(owl:Class 
+vin:DryWhiteWine<br/>&nbsp;&nbsp;(owl:intersectionOf vin:DryWine 
+vin:WhiteWine))<br/>gx-user(10): (get-form vin:DryWine)<br/>(owl:Class 
+vin:DryWine<br/>&nbsp;&nbsp;(owl:intersectionOf 
+vin:Wine<br/>&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValueRestriction (owl:onProperty 
+vin:hasSugar)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValue 
+vin:Dry))))<br/></code>
+<p>
+<div class="titlebar">
+<div class="defname">subsumed-p <i>C</i> <i>D</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns true if concept <i>C</i>&nbsp; is subsumed by <i>D</i>. 
+</div></p>
+<h3>14.2 &nbsp;Membership in OWL </h3>
+<p>We extended the membership checking algorithm in OWL and it is implemented to 
+<b>gx:typep</b>. The followings demonstrate some membership relations among 
+classes and things in OWL after loading Wine Ontology.</p>
+<blockquote><code>gx-user(15): (typep vin:ElyseZinfandel 
+  vin:Zinfandel)<br/>t<br/>t<br/>gx-user(16): (typep vin:ElyseZinfandel 
+  owl:Thing)<br/>t<br/>t<br/>gx-user(17): (owl-thing-p 
+  vin:ElyseZinfandel)<br/>t<br/>gx-user(18): (typep vin:Zinfandel 
+  owl:Class)<br/>t<br/>t<br/>gx-user(19): (typep vin:Zinfandel 
+  owl:Thing)<br/>t<br/>t<br/>gx-user(20): (owl-class-p 
+  vin:Zinfandel)<br/>t<br/>gx-user(21): (owl-class-p 
+  owl:Class)<br/>nil<br/>gx-user(22): (owl-class-p 
+  owl:Restriction)<br/>nil<br/>gx-user(23): (owl-thing-p 
+  owl:Class)<br/>nil<br/>gx-user(24): (owl-thing-p 
+  owl:Restriction)<br/>nil<br/>gx-user(25): (owl-class-p 
+  owl:Thing)<br/>t<br/>gx-user(26): (owl-thing-p owl:Thing)<br/>t<br/>gx-user(27): 
+  (owl-class-p owl:Nothing)<br/>t<br/>gx-user(28): (owl-thing-p 
+  owl:Nothing)<br/>nil<br/></code></blockquote><br/>
+<p>An individual (instance) that is typed to owl:Thing and a concept (class) 
+that is typed to owl:Class belong to the OWL universe. However, note that 
+owl:Class and owl:Restriction are not members in OWL universe. Also note that 
+owl:Thing itself belongs to OWL universe but owl:Nothing does not, even though 
+the class of owl:Nothing is owl:Class as well as owl:Thing, because owl:Nothing 
+is complement of owl:Thing.</p>
+<p>
+<div class="titlebar">
+<div class="defname">owl-class-p <i>obj</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This is almost same as &lsquo;(cl:typep <i>obj</i> owl:Class)&rsquo; but a 
+  little bit faster and concise expression. </div></p>
+<p>
+<div class="titlebar">
+<div class="defname">owl-thing-p <i>obj</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This is almost same as &lsquo;(cl:typep <i>obj</i> owl:Thing)&rsquo; but a 
+  little bit faster and concise expression. </div></p>
+<p>
+<div class="titlebar">
+<div class="defname">typep <i>object</i> <i>type</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">tests the membership of object to type in the semantics of OWL. 
+</div></p>
+<h3>14.3 &nbsp;The Most Specific Concepts </h3>
+<p>Computing the most specific concepts in a set of concepts is basic operation 
+in DL and SWCLOS. We use this routine very often in SWCLOS. </p>
+<p>
+<div class="titlebar">
+<div class="defname">most-specific-concepts <i>classes</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns the most specific concepts in RDF(S) and OWL semantics, or 
+  classes minus duplicates and superclasses of other classes in <i>classes</i>. 
+  This function internally uses <b>subsumed-p</b> and <b>owl-equivalent-p</b>. 
+  Note that this function does not check disjointness of classes. 
+</div></p>
+<h2>References</h2><a id="ReferenceHorst" 
+name="ReferenceHorst"/><span class="refhead">[DLH]</span> <span class="refbody">Baader, F., et al. (eds.): 
+The Description Logic Handbook, Cambridge, (2003). 
+</span><br/><span class="refhead">[Horst]</span> <span class="refbody">ter Horst, H. J.: Combining 
+RDF and Part of OWL with Rules: Semantics, Decidability, Complexity. The 
+Semantic Web - ISWC2005, pp.668-684, Springer (2005). 
+</span><br/><span class="refhead">[Koide04]</span> <span class="refbody">Koide, S., Kawamura, M.: 
+SWCLOS: A semantic web processor on common lisp object system. In: 3rd 
+International Semantic Web Conference (ISWC2004), Demos. (2004), 
+http://iswc2004.semanticweb.org/demos/32/. 
+</span><br/><span class="refhead">[Koide05]</span> <span class="refbody">Koide, S., Aasman, J., 
+Haflich, S.: OWL vs. object oriented programming. In: Workshop on SemanticWeb 
+Enabled Software Engineering (SWESE) at the 4th International Semantic Web 
+Conference (ISWC 2005), Galway, Ireland (November 2005), 
+http://www.mel.nist.gov/msid/conferences/SWESE/propository/8owl-vs-OOP.rdf. 
+</span><br/><span class="refhead">[Koide06]</span> <span class="refbody">Koide, S., Takeda, H.: 
+OWL-Full reasoning from an object oriented perspective. In: Asian Semantic Web 
+Conf., ASWC2006, Springer (2006) 263?277, 
+http://wwwkasm.nii.ac.jp/papers/takeda/06/koide06aswc.pdf. 
+</span><br/><span class="refhead">[Koide09]</span> <span class="refbody">Koide, S., Takeda, H.: 
+Meta-circularity and mop in common lisp for OWL Full. In: ELW Åf09: Proceedings 
+of the 6th European Lisp Workshop, New York, NY, USA, ACM (2009) 28?34. 
+</span>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 
+<br/>Copyright (c) 2007-2010 Seiji Koide. Oct.2010 <br/></small></i></body></html>

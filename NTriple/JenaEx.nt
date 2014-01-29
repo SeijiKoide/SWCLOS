@@ -1,0 +1,4 @@
+_:a001 <http://www.w3.org/2001/vcard-rdf/3.0#Family> "Smith" .
+_:a001 <http://www.w3.org/2001/vcard-rdf/3.0#Given> "John" .
+<http://somewhere/JohnSmith> <http://www.w3.org/2001/vcard-rdf/3.0#N> _:a001 .
+<http://somewhere/JohnSmith> <http://www.w3.org/2001/vcard-rdf/3.0#FN> "John Smith" .

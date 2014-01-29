@@ -1,0 +1,276 @@
+<?xml version='1.0'?>
+  <rdf:RDF
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+     xml:base="http://www.w3.org/2001/vcard-rdf/3.0"
+     xmlns="http://www.w3.org/2001/vcard-rdf/3.0">
+
+  <rdf:Description ID="FN">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Formatted Name</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="NICKNAME">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Nickname</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="BDAY">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Birthday</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="MAILER">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>EMail Program</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="GEO">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Geographical Information</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="TITLE">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Position Title</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="ROLE">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Position Role</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="CATEGORIES">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Categories</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="NAME">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>vCard Name</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="SOURCE">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Source</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="NOTE">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Notes</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="PRODID">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Product ID</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="REV">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Revision</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="SORT-STRING">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Sort String</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="CLASS">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Class</rdfs:label>
+  </rdf:Description>
+
+
+  <rdf:Description ID="TEL">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Telephone</rdfs:label>
+    <rdfs:range rdf:resource="#TELTYPES"/>
+  </rdf:Description>
+
+  <rdfs:Class rdf:ID="TELTYPES"/>
+   <TELTYPES rdf:ID="home"/>      <TELTYPES rdf:ID="msg"/>
+   <TELTYPES rdf:ID="work"/>      <TELTYPES rdf:ID="fax"/>
+   <TELTYPES rdf:ID="cell"/>      <TELTYPES rdf:ID="video"/>
+   <TELTYPES rdf:ID="pager"/>     <TELTYPES rdf:ID="bbs"/>
+   <TELTYPES rdf:ID="modem"/>     <TELTYPES rdf:ID="car"/>
+   <TELTYPES rdf:ID="isdn"/>      <TELTYPES rdf:ID="pcs"/>
+
+  <rdf:Description ID="EMAIL">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Email Address</rdfs:label>
+    <rdfs:range rdf:resource="#EMAILTYPES"/>
+  </rdf:Description>
+
+  <rdfs:Class rdf:ID="EMAILTYPES"/>
+   <EMAILTYPES rdf:ID="internet"/>
+   <EMAILTYPES rdf:ID="x400"/>    <EMAILTYPES rdf:ID="pref"/> 
+  <rdf:Description ID="ADR">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Address</rdfs:label>
+    <rdfs:range rdf:resource="#ADRTYPES"/>
+  </rdf:Description>
+
+  <rdfs:Class rdf:ID="ADRTYPES"/>
+   <ADRTYPES rdf:ID="dom"/>         <ADRTYPES rdf:ID="intl"/>
+   <ADRTYPES rdf:ID="postal"/>      <ADRTYPES rdf:ID="parcel"/>
+   <ADRTYPES rdf:ID="home"/>        <ADRTYPES rdf:ID="work"/>
+   <ADRTYPES rdf:ID="pref"/> 
+  <rdfs:Class rdf:ID="ADRPROPERTIES">
+     <rdfs:subClassOf rdf:resource="#ADRTYPES"/>
+  </rdfs:Class>
+
+  <rdf:Description ID="Pobox">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Post Office Box</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Extadd">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Extended Address</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Street">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Street</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Locality">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Locality/Suburb</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Region">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Region/State</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Pcode">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Postal Code</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Country">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Country</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ADRPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="LABEL">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Address Label</rdfs:label>
+    <rdfs:range rdf:resource="#ADRTYPES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="TZ">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Timezone</rdfs:label>
+    <rdfs:range rdf:resource="#TZTYPES"/>
+  </rdf:Description>
+
+  <rdfs:Class rdf:ID="TZTYPES"/>
+   <TZTYPES rdf:ID="text"/>
+
+  <rdfs:Class rdf:ID="NPROPERTIES"/>
+
+  <rdf:Description ID="N">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Name</rdfs:label>
+    <rdfs:range rdf:resource="#NPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Family">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Family Name</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#NPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Given">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Given Name</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#NPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Other">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Other Names</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#NPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Prefix">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Prefix Name</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#NPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Suffix">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Suffix Name</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#NPROPERTIES"/>
+  </rdf:Description>
+
+
+  <rdfs:Class rdf:ID="ORGPROPERTIES"/>
+
+  <rdf:Description ID="ORG">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Organisation</rdfs:label>
+    <rdfs:range rdf:resource="#ORGPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Orgname">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Organisation Name</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ORGPROPERTIES"/>
+  </rdf:Description>
+
+  <rdf:Description ID="Orgunit">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Organisation Unit</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#ORGPROPERTIES"/>
+  </rdf:Description>
+
+
+  <rdf:Description ID="PHOTO">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Photograph</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="LOGO">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Logo Image</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="SOUND">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Audio Sound</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="KEY">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Public Key</rdfs:label>
+  </rdf:Description>
+
+
+  <rdf:Description ID="AGENT">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Agent</rdfs:label>
+  </rdf:Description>
+
+ <rdf:Description ID="UID">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Unique ID</rdfs:label>
+  </rdf:Description>
+
+  <rdf:Description ID="GROUP">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    <rdfs:label>Group vCard Properties</rdfs:label>
+  </rdf:Description>
+
+</rdf:RDF>

@@ -1,0 +1,61 @@
+<HTML>
+<HEAD>
+<TITLE>Overview of SWCLOS Code</TITLE>
+<!-- Written by: Seiji Koide, 19-May-2008 -->
+<META http-equiv="Content-Type" content="text/html">
+<META http-equiv="Content-Style-Type" content="text/css">
+<link href="overview.css" rel="stylesheet" type="text/css">
+</HEAD>
+
+<H1>Overview of SWCLOS Code</H1>
+
+<P>We had already published many papers and documents on SWCLOS, including 
+<a href="http://research.nii.ac.jp/TechReports/09-014E.html">SWCLOS user's manual</a>. They are delivered together 
+with this document from <a href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">SWCLOS home page</a> or you can 
+search and easily find them over the Internet. However, while the concept and the aim of SWCLOS is very clear, 
+it is difficult to read and understand the program code. The reason is partly because SWCLOS requires knowledge of 
+RDF(S) and OWL in addition to knowledge of CLOS plus the Meta-Object Protocol (MOP), and partly because many 
+fragments of procedures in program are allocated to many classes as methods and it makes hard to seize the effective 
+functions realized by the combination of several methods as a whole program. 
+
+<P>The aim of this document is to support readers to read the SWCLOS program code and understand it. It is 
+desirable that readers have knowledge on CLOS and MOP. The book by G. Kiczales, 
+<a href="http://www.amazon.com/Art-Metaobject-Protocol-Gregor-Kiczales/dp/0262610744/">
+"The Art of the Metaobject Protocol"</a> helps for lispers who are not so matured on MOP. 
+The documents on <a href="http://www.w3.org/RDF/">RDF(S)</a> and <a href="http://www.w3.org/2004/OWL/">OWL</a> 
+from W3C and papers on SWCLOS are also prerequisite for readers. 
+
+<P>To generate this document from program source code automatically, the document generation system by 
+<a href="http://aima.cs.berkeley.edu/lisp/doc/overview.html">Norvig's AIMA Lisp program</a> is borrowed and 
+tailored by author. This is very effective to save the cost for documentation and keep the concistency of 
+information.
+</P> 
+
+<P>This document includes followings:
+
+<UL>
+<LI> An <A HREF="entries.html">alphabetical index</A> of all names in the code.
+<LI> The Lisp source code itself for <a href="../RDF">RDF</a>, <a href="../RDFS">RDFS</a>, <a href="../OWL">OWL</a>, 
+and <a href="../NTriple">NTriple</a> as a browsable directory.
+<LI> The following subsystems are organized into subdirectories.<BR><BR>
+<UL>
+<!--
+<LI TYPE="circle"> <A HREF="overview-UTILITIES.html">Utilities</A>: 
+Basic functions that are loaded every time, and commonly used by other subsystems. This module includes 'utilities' file from <I>AIMA</I>.
+-->
+<LI TYPE="circle"> <A HREF="overview-RDF.html">RDF</A>: 
+includes files for RDF/XML reader and parser.
+<LI TYPE="circle"> <A HREF="overview-RDFS.html">RDFS</A>: 
+includes files for the implementation of the semantics of RDF and RDFS.
+<LI TYPE="circle"> <A HREF="overview-OWL.html">OWL</A>: 
+inludes files for the implementation of OWL.
+<LI TYPE="circle"> <A HREF="overview-NTriple.html">NTriple</A>: 
+inludes files for the implementation of NTriple, NTriple parser/writer.
+</UL>
+</UL>
+
+<p></p>
+
+<hr>
+<i><small> Author: <a href="mailto:SeijiKoide@aol.com?subject=SWCLOS">Seiji Koide</a>.  
+Copyright (c) 2008,2009 Seiji Koide. Nov. 2009 </small></i></body></html>

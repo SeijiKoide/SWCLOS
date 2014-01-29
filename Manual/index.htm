@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>SWCLOS User's Manual</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<!-- copy and paste into every html files this link and style for css -->
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<hr/>
+
+<h1 align="center">SWCLOS User's Manual</h1>
+<hr/>
+
+<p align="right"><small>This document is a revised version of <a 
+href="http://research.nii.ac.jp/TechReports/09-014E.html">NII Technical Report 
+(NII-2009-014E)</a>. </small></p>
+<h2>Table of Contents</h2>
+<ol>
+  <li><a 
+  href="01Introduction.htm">Introduction</a> 
+
+  <dl>
+    <dd></dd></dl></li>
+  <li><a 
+  href="02Basics.htm">SWCLOS Basics</a> 
+  <dl>
+    <dd>2.1 &nbsp;How to Get SWCLOS</dd></dl>
+  <dl>
+    <dd>2.2 &nbsp;Proprietary Rights</dd></dl>
+  <dl>
+    <dd>2.3 &nbsp;How to Start SWCLOS</dd></dl>
+  <dl>
+    <dd>2.4 &nbsp;Monotonicity of Knowledge</dd></dl>
+  <dl>
+    <dd>2.5 &nbsp;Open World Assumption and Three-Value Logic</dd></dl></li>
+  <li><a 
+  href="03Resource.htm">URI, 
+  QName, and Resource</a> 
+  <dl>
+    <dd>3.1 &nbsp;URI</dd></dl>
+  <dl>
+    <dd>3.2 &nbsp;QName</dd></dl>
+  <dl>
+    <dd>3.3 &nbsp;URI Namedspace</dd></dl>
+  <dl>
+    <dd>3.4 &nbsp;Resource</dd></dl>
+  <dl>
+    <dd>3.5 &nbsp;NodeID</dd></dl></li>
+  <li><a 
+  href="04RDFObject.htm">RDF 
+  Resource Objects</a> 
+  <dl>
+    <dd>4.1 &nbsp;Resource Objects and the Syntax in S-expression</dd></dl>
+  <dl>
+    <dd>4.2 &nbsp;Adding and Getting a Resource Form</dd></dl></li>
+  <li><a href="05RDFSchema.htm">RDFS 
+  Vocabularies and Semantics</a> 
+  <dl>
+    <dd>5.1 &nbsp;Resource Classes, Metaclasses, and Instances</dd></dl>
+  <dl>
+    <dd>5.2 &nbsp;rdf:type and rdfs:subClassOf</dd></dl>
+  <dl>
+    <dd>5.3 &nbsp;rdfs:subPropertyOf</dd></dl>
+  <dl>
+    <dd>5.4 &nbsp;Properties and Slots</dd></dl>
+  <dl>
+    <dd>5.5 &nbsp;Adding Resource Objects</dd></dl>
+  <dl>
+    <dd>5.6 &nbsp;Adding Slots</dd></dl>
+  <dl>
+    <dd>5.7 &nbsp;Adding Slot Values</dd></dl>
+  <dl>
+    <dd>5.8 &nbsp;Adding Multiple Types</dd></dl>
+  <dl>
+    <dd>5.9 &nbsp;Extension of Property and Slot Definition</dd></dl></li>
+  <li><a 
+  href="06Datatypes.htm">String, 
+  Number, Datatype, and Lang</a> 
+  <dl>
+    <dd>6.1 &nbsp;Literal</dd></dl>
+  <dl>
+    <dd>6.2 &nbsp;XSD Datatypes in SWCLOS</dd></dl>
+  <dl>
+    <dd>6.3 &nbsp;xml:lang in SWCLOS</dd></dl></li>
+  <li><a 
+  href="07RDFCollection.htm">RDF 
+  Collection</a> 
+  <dl>
+    <dd>7.1 &nbsp;RDF Container</dd></dl>
+  <dl>
+    <dd>7.2 &nbsp;List</dd></dl></li>
+  <li><a 
+  href="08DomainRange.htm">Domain 
+  and Range</a> 
+  <dl>
+    <dd>8.1 &nbsp;Adding Domain and Range Constraints</dd></dl>
+  <dl>
+    <dd>8.2 &nbsp;Domain and Range Constraint Satisfaction</dd></dl></li>
+  <li><a 
+  href="09RDFSAxiomsEntailments.htm">RDFS 
+  Axioms and Entailments</a> 
+  <dl>
+    <dd>9.1 &nbsp;RDF and RDFS Axioms</dd></dl>
+  <dl>
+    <dd>9.2 &nbsp;RDFS Entailment</dd></dl>
+  <dl>
+    <dd>9.3 &nbsp;RDF Entailment Rules</dd></dl>
+  <dl>
+    <dd>9.4 &nbsp;RDFS Entailment Rules</dd></dl></li>
+  <li><a 
+  href="10RDFParserWriter.htm">RDF/XML 
+  Parser and Writer</a> 
+  <dl>
+    <dd>10.1 &nbsp;RDF/XML Parser</dd></dl>
+  <dl>
+    <dd>10.2 &nbsp;RDF/XML Writer</dd></dl></li>
+  <li><a 
+  href="11NTriples.htm">N-Triples</a> 
+
+  <dl>
+    <dd>11.1 &nbsp;N-Triple Parser</dd></dl>
+  <dl>
+    <dd>11.2 &nbsp;Adding N-Triples</dd></dl>
+  <dl>
+    <dd>11.3 &nbsp;N-Triple Writer</dd></dl></li>
+  <li><a 
+  href="12OWLSWCLOS.htm">OWL in 
+  SWCLOS</a> 
+  <dl>
+    <dd>12.1 &nbsp;OWL Extension of RDF and RDFS</dd></dl>
+  <dl>
+    <dd>12.2 &nbsp;Description Logic and OWL in SWCLOS</dd></dl>
+  <dl>
+    <dd>12.3 &nbsp;OWL Property Restrictions</dd></dl>
+  <dl>
+    <dd>12.4 &nbsp;Substantial and Non-Substantial Relationship</dd></dl>
+  <dl>
+    <dd>12.5 &nbsp;Axiomatic Complete Relations</dd></dl></li>
+  <li><a 
+  href="13OWLEntailments.htm">OWL 
+  Axioms and Entailment Rules </a>
+  <dl>
+    <dd>13.1 &nbsp;OWL Axioms </dd></dl>
+  <dl>
+    <dd>13.2 &nbsp;OWL Semantics and Entailment Rules </dd></dl></li>
+  <li><a href="14OWLAPIs.htm">OWL 
+  APIs </a>
+  <dl>
+    <dd>14.1 &nbsp;Subsumption in OWL </dd></dl></li></ol>
+<hr/>
+
+<H2>Acknowledgements</H2>
+<p>SWCLOS was developed at one of the Japanese IT programs titled "Building 
+Operation Support System for Large-Scale Systems using IT", that was conducted 
+by the Ministry of Education, Culture, Sports, Science, and Technology from 2002 
+to 2005 fiscal year. After 2005, SWCLOS is updated and maintained by Seiji Koide 
+at IHI Corporation and National Insitute of Informatics. </p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. 
+Feb.2006<br/>Copyright (c) 2007-2010 Seiji Koide. 
+Oct.2010<br/></small></i>
+
+</body></html>

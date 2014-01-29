@@ -1,0 +1,2370 @@
+<HTML>
+<HEAD>
+<TITLE>OWL System</TITLE> 
+<META http-equiv="Content-Type" content="text/html">
+<META http-equiv="Content-Style-Type" content="text/css">
+<link href="overview.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+p {
+	text-indent: 0;
+}
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 3%; COLOR: black; MARGIN-RIGHT: 3%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 0px; FONT-SIZE: 10pt; BORDER-LEFT: 0px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -3%; MARGIN-RIGHT: -3%
+}
+.moreindent {
+	MARGIN-LEFT: 3%; MARGIN-RIGHT: 3%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+</HEAD> 
+<BODY bgcolor="#ffffff"> 
+
+<H1>SWCLOS: A Semantic Web Reasoner on CLOS</H1>
+<H2>OWL Subsystem</H2>
+<P>
+
+<P><HR size=3>
+<UL>
+<LI><A HREF="#OWL/owlerror.cl"><B>owlerror.cl</B></A>  OWL Error Module
+<LI><A HREF="#OWL/owlkernel.cl"><B>owlkernel.cl</B></A>  OWL Kernel Module
+<LI><A HREF="#OWL/owlsamedifferent.cl"><B>owlsamedifferent.cl</B></A>  OWL Same/Different Module
+<LI><A HREF="#OWL/owlequivalentdisjoint.cl"><B>owlequivalentdisjoint.cl</B></A>  OWL Equivalent/Disjoint Module
+<LI><A HREF="#OWL/NNF.cl"><B>NNF.cl</B></A>  NNF transformation module
+<LI><A HREF="#OWL/tunify.cl"><B>tunify.cl</B></A>  Unification with Type
+<LI><A HREF="#OWL/subsume.cl"><B>subsume.cl</B></A>  Subsume Module
+<LI><A HREF="#OWL/OWL.cl"><B>OWL.cl</B></A>  OWL Module
+</UL>
+
+<A NAME="OWL/owlerror.cl"><HR>
+<H2>File <A HREF="../OWL\owlerror.cl">OWL\owlerror.cl</A></H2></A>
+<P>
+<H2> OWL Error Module</H2>
+<P>
+ IT Program Project in Japan: 
+<P>
+ This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2009, 2010 Seiji Koide
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>owl-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Top error for unsatisfiability in OWL universe</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>owl-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Top warning for unsatisfiability in OWL universe</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="oneof-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>oneof-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in oneOf</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="oneof-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>oneof-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in oneOf</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equivalentclass-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>equivalentclass-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in equivalentClasses</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equivalentclass-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>equivalentclass-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in equivalentClasses</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="disjointwith-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>disjointwith-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in disjointWith</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="disjointwith-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>disjointwith-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in disjointWith</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="complementof-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>complementof-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in complementOf</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="complementof-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>complementof-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in complementOf</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="sameas-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>sameas-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in sameAs</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="sameas-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>sameas-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in sameAs</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="differentfrom-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>differentfrom-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in differentFrom</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="differentfrom-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>differentfrom-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in differentFrom</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="cardinality-constraint-condition-unsatiafiable"><A HREF="../OWL\owlerror.cl"><B>cardinality-constraint-condition-unsatiafiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable in cardinality</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="cardinality-constraint-condition-unsatiafiable-warning"><A HREF="../OWL\owlerror.cl"><B>cardinality-constraint-condition-unsatiafiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>unsatisfiable warning in cardinality</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="forall-condition-unsatisfiable"><A HREF="../OWL\owlerror.cl"><B>forall-condition-unsatisfiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="forall-condition-unsatisfiable-warning"><A HREF="../OWL\owlerror.cl"><B>forall-condition-unsatisfiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="exists-condition-unsatisfiable"><A HREF="../OWL\owlerror.cl"><B>exists-condition-unsatisfiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="exists-condition-unsatisfiable-warning"><A HREF="../OWL\owlerror.cl"><B>exists-condition-unsatisfiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="hasvalue-condition-unsatisfiable"><A HREF="../OWL\owlerror.cl"><B>hasvalue-condition-unsatisfiable</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="hasvalue-condition-unsatisfiable-warning"><A HREF="../OWL\owlerror.cl"><B>hasvalue-condition-unsatisfiable-warning</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Seiji Koide Nov-15-2010
+<P>
+<A NAME="OWL/owlkernel.cl"><HR>
+<H2>File <A HREF="../OWL\owlkernel.cl">OWL\owlkernel.cl</A></H2></A>
+<P>
+<H2> OWL Kernel Module</H2>
+<P>
+ IT Program Project in Japan: 
+<P>
+ This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2009, 2010 Seiji Koide
+<P>
+<P><HR WIDTH=80% ALIGN=left><P>
+ Loading this file onto RDF modules creats the OWL universe as part of the RDF universe.
+<BR>
+<PRE><CODE>
+
+                                           ............................
+                                           :        :                 :
+ rdf-node --------------------rdfs:Class --:-----owl:Class --- owl:Restriction
+     :                     /      : :......:     /
+     :               ...../.......:             /
+     :               :   /        :            /
+     :               :  /  +------:-- owl:Thing
+     :               : /  /       :
+  gnode --- rdfs:Resource --- rdf:Property
+
+  &lt;--, /     super/sub class relation, the direction of super is right to left.
+  ..., :     class/instance relation, the direction of class is upward and left to right.
+</CODE></PRE><P>
+<BR>
+<H2> Compatibility between RDF and OWL Universes in SWCLOS</H2>
+ W3C specifies two styles on the compatibility between RDF universe and OWL universe.  
+ One is called OWL Full style in which rdf:Class is identical to owl:Class, rdfs:Resource is 
+ identical to owl:Thing, and rdf:Property is identical to owl:ObjectProperty. Another is 
+ called DL style and in which the semantics does not follow RDF semantics. The class 
+ extensions between owl:Thing, owl:Class, and owl:ObjectProperty are mutually disjoint. 
+ See, http://www.w3.org/TR/owl-semantics/rdfs.html.
+<P>
+ In SWCLOS implementation, owl:Thing is a subclass of rdfs:Resource, owl:Class is a subclass 
+ of rdfs:Class, and owl:ObjectProperty is a subclass of rdf:Property. Thus, OWL universe is 
+ included in RDF universe, and the semantics of RDF is realized in OWL unvierse due to the 
+ CLOS Object-Oriented ususal manner. 
+<P>
+<H2> OWL Full Semantics (classes are also instances).</H2>
+ In OWL Full, every class can be an instance of metaclass(es). This is naturally realized in 
+ SWCLOS with owl:Class subclassing to rdfs:Class (eventually to cl:standard-class). In 
+ addition, we set owl:Class as subclass of owl:Thing (eventually to rdfs:Resource). Thus, 
+ classes in OWL (the extension of owl:Class) inherit the slots of rdf:Resource, rdfs:label, 
+ rdfs:comment, rdf:type, etc. from rdfs:Resource.
+<P>
+<H2> OWL Property Slot Definition</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*default-slot-definition-class*"><A HREF="../OWL\owlkernel.cl"><B>*default-slot-definition-class*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Every slot of which name corresponds to RDF property is defined as an instance of 
+Property-direct-slot-definition. This variable is set to symbol 
+gx::Property-direct-slot-definition in RDFS module and set to 
+OwlProperty-direct-slot-definition in OWL module.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> owl:Class and owl:Thing with Houskeeping Slots</H2>
+<P>
+ Note that the following programming style is useful to use SWCLOS as APIs for applications 
+ that extend semantics of RDF(S) or OWL.
+<P>
+ Before loading RDF(S) or OWL knowledge into SWCLOS, you can define the housekeeping or 
+ application specific methods at CLOS objects and classes in the ontology of application, 
+ then load the ontology in RDF(S) or OWL. 
+<P>
+ Adding function of SWCLOS in RDF semantics adds new definition without any collisions onto 
+ CLOS slot definitions and methods. As a result, you can obtain ontological knowledge and 
+ application methods around ontologies.
+<P>
+ In case of no extension of OWL semantics, you can define application methods after loading 
+ OWL ontologies.
+<P>
+ We add two new slots into resource objects, <I>funprop-inverse</I> that is the inverse pointer of 
+ a property of owl:FunctionProperty and <I>inverse-funprop-inverse</I> that is the inverse pointer 
+ of a property of owl:InverseFunctionProperty.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="class"><A HREF="../OWL\owlkernel.cl"><B>Class</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>The meta class in OWL universe. This class is a subclass and instance of 
+rdfs:Class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="thing"><A HREF="../OWL\owlkernel.cl"><B>Thing</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>The top class in OWL universe. This class is a subclass of rdfs:Resource 
+and instance of owl:Class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%equivalent-classes-of"><A HREF="../OWL\owlkernel.cl"><B>%equivalent-classes-of</B></A></A> <I>c</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns nil if no definition on owl:equivalentClass.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equivalent-classes-of"><A HREF="../OWL\owlkernel.cl"><B>equivalent-classes-of</B></A></A> <I>c</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a list of equivalences to <I>c</I>. Note that this function 
+   returns one element list of <I>c</I>, when no equivalences defined.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-class-p"><A HREF="../OWL\owlkernel.cl"><B>owl-class-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:Class?
+   Note that owl:Class and owl:Restriction is not owl class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-class-subtype-p"><A HREF="../OWL\owlkernel.cl"><B>%owl-class-subtype-p</B></A></A> <I>class</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If you are sure that <I>class</I> is a metaobject of CLOS, use this instead of 
+   (cl:subtypep <I>class</I> owl:Class).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-class?"><A HREF="../OWL\owlkernel.cl"><B>owl-class?</B></A></A> <I>symbol</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this bound value to <I>symbol</I> is owl class?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%same-as-of"><A HREF="../OWL\owlkernel.cl"><B>%same-as-of</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns nil if no definition on owl:sameAs.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="same-as-of"><A HREF="../OWL\owlkernel.cl"><B>same-as-of</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a list of sames as <I>x</I>. Note that this function 
+   returns one element list of <I>x</I>, when no same individuals defined.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="nothing"><A HREF="../OWL\owlkernel.cl"><B>Nothing</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-thing-p"><A HREF="../OWL\owlkernel.cl"><B>owl-thing-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:Thing?
+   Note that owl:Class and owl:Thing is not owl thing.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-thing-subclass-p"><A HREF="../OWL\owlkernel.cl"><B>%owl-thing-subclass-p</B></A></A> <I>class</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If you are sure that <I>class</I> is a metaobject of CLOS, use this instead of 
+  (cl:subtypep <I>class</I> owl:Thing).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Note the domain & range of owl:equivalentProperty is rdf:Property rather than 
+ owl:ObjectProperty.
+<P>
+<P>
+<H2> Object Property for owl:inverseOf Book-keeping</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="objectproperty"><A HREF="../OWL\owlkernel.cl"><B>ObjectProperty</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This class defines an inverse slot of the inverse-of property.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equivalent-property-of"><A HREF="../OWL\owlkernel.cl"><B>equivalent-property-of</B></A></A> <I>c</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:property"><A HREF="../OWL\owlkernel.cl"><B>change-class</B></A></A> <I>(instance
+                                                                                                                   Property)</I> <I>(new-class
+                                                                                                                                     Class)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>In case that <I>new-class</I> is owl:ObjectProperty, the domain of <I>instance</I> is retrieved and 
+   slot definitions named its domain for <I>instance</I> is changed to an instance of 
+   <I>OwlProperty-direct-slot-definition</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Restriction Subclasses</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="restriction"><A HREF="../OWL\owlkernel.cl"><B>Restriction</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>owl:Restriction is a metaclass a subclass of owl:Class in OWL.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="default-direct-superclasses:restriction"><A HREF="../OWL\owlkernel.cl"><B>default-direct-superclasses</B></A></A> <I>(class
+                                                                                                                                                    Restriction)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>The default direct superclass of restrictions is rdfs:Resource.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="allvaluesfromrestriction"><A HREF="../OWL\owlkernel.cl"><B>allValuesFromRestriction</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>A class for value restrictions is a subclass of owl:Restriction.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:allvaluesfromrestriction"><A HREF="../OWL\owlkernel.cl"><B>print-object</B></A></A> <I>(obj
+                                                                                                                                   allValuesFromRestriction)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name:allvaluesfromrestriction"><A HREF="../OWL\owlkernel.cl"><B>name</B></A></A> <I>(object
+                                                                                                                   allValuesFromRestriction)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="somevaluesfromrestriction"><A HREF="../OWL\owlkernel.cl"><B>someValuesFromRestriction</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:somevaluesfromrestriction"><A HREF="../OWL\owlkernel.cl"><B>print-object</B></A></A> <I>(obj
+                                                                                                                                    someValuesFromRestriction)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name:somevaluesfromrestriction"><A HREF="../OWL\owlkernel.cl"><B>name</B></A></A> <I>(object
+                                                                                                                    someValuesFromRestriction)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="hasvaluerestriction"><A HREF="../OWL\owlkernel.cl"><B>hasValueRestriction</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:hasvaluerestriction"><A HREF="../OWL\owlkernel.cl"><B>print-object</B></A></A> <I>(obj
+                                                                                                                              hasValueRestriction)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name:hasvaluerestriction"><A HREF="../OWL\owlkernel.cl"><B>name</B></A></A> <I>(object
+                                                                                                              hasValueRestriction)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="cardinalityrestriction"><A HREF="../OWL\owlkernel.cl"><B>cardinalityRestriction</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:cardinalityrestriction"><A HREF="../OWL\owlkernel.cl"><B>print-object</B></A></A> <I>(obj
+                                                                                                                                 cardinalityRestriction)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-cardinality-p"><A HREF="../OWL\owlkernel.cl"><B>owl-cardinality-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> OneOf class</H2>
+<P>
+ Note that oneOf elements may be in the RDF universe.
+ Note that the domain of owl:oneOf is rdfs:Class. Namely, 
+ The owl:oneOf slot definition is attached to rdfs:Class.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:class"><A HREF="../OWL\owlkernel.cl"><B>print-object</B></A></A> <I>(obj
+                                                                                                                Class)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-oneof-p"><A HREF="../OWL\owlkernel.cl"><B>owl-oneof-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>x</I> an object that holds owl:oneOf data?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> How to Calculate a Type Value in Effective Slot Definition in OWL</H2>
+<P>
+ After the calculation of initargs as standard slot definition and rdf property slot 
+ definition, the type option is recalculated, if OWL module is loaded. Because, it may 
+ include existential restriction for slot value, and it must be treated in OWL semantics.
+<P>
+ The form of type option is one of the followings.
+<PRE><CODE>
+ &lt;fval&gt; ::= t | &lt;class-meta-object&gt; | (and &lt;fval&gt; ...) |
+            (forall &lt;slot-name&gt; &lt;fval&gt;) | (exists &lt;slot-name&gt; &lt;fval&gt;) |
+            (fills &lt;slot-name&gt; &lt;fval&gt;)
+            (&lt;= &lt;slot-name&gt; &lt;fval&gt;)  | (&gt;= &lt;slot-name&gt; &lt;fval&gt;)  |
+            (= &lt;slot-name&gt; &lt;fval&gt;)
+</CODE></PRE><P>
+ Here, <I>class-meta-object</I> is a class object which comes from direct slot definition in RDF,
+ (and <I>fval</I> ...) is computed by <I>excl::compute-effective-slot-definition-initargs</I> method 
+ at standard slot definition, (forall <I>slot-name</I> <I>fval</I>) originates from owl:allValuesFrom 
+ constraint and (exists <I>slot-name</I> <I>fval</I>) originates from owl:someValuesFrom constraint. 
+ (fills <I>slot-name</I> <I>fval</I>) represents owl:hasValueRestriction. 
+<P>
+ On the other hand, (&lt;= <I>slot-name</I> <I>fval</I>) is from owl:minCardinality, 
+ (>= <I>slot-name</I> <I>fval</I>) is from owl:maxCardinality, and (= <I>slot-name</I> <I>fval</I>) is from 
+ owl:cardinality.
+<P>
+ To compute the most specific concepts which include the above special <I>fval</I> forms, 
+ <B>most-specific-concepts-for-slotd-type</B>, <I>strict-supertype-p-for-slotd-type</I> and 
+ <I>strict-subtype-p-for-slotd-type</I> are defined, which specifically process these <I>fval</I> 
+ with <B>subsumed-p</B> and <B>owl-equivalent-p</B>. 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="compute-effective-slot-definition-initargs:class"><A HREF="../OWL\owlkernel.cl"><B>compute-effective-slot-definition-initargs</B></A></A> <I>(class
+                                                                                                                                                                            Class)</I> <I>direct-slotds</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%compute-effective-slot-definition-initargs"><A HREF="../OWL\owlkernel.cl"><B>%compute-effective-slot-definition-initargs</B></A></A> <I>class</I> <I>class-name</I> <I>slot-name</I> <I>direct-slotds</I> <I>initargs</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ If <I>initargs</I> in making an effective-slot-definition includes :maxcardinality or 
+ :mincardinality keyword, the slot-definition must be OwlProperty-direct-slot-definition.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="effective-slot-definition-class:class"><A HREF="../OWL\owlkernel.cl"><B>effective-slot-definition-class</B></A></A> <I>(class
+                                                                                                                                                      Class)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This method calls next method if there is no :maxcardinality keyword in <I>initargs</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="type-option-check-with-cardinality"><A HREF="../OWL\owlkernel.cl"><B>type-option-check-with-cardinality</B></A></A> <I>instance</I> <I>filler</I> <I>slotd</I> <I>oldval</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="satisfy-filler"><A HREF="../OWL\owlkernel.cl"><B>satisfy-filler</B></A></A> <I>x</I> <I>R</I> <I>y</I> <I>type</I> <I>maxc</I> <I>minc</I> <I>oldval</I> <I>slotd</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Default Super Class in OWL</H2>
+<P>
+ If <I>v</I> is typed to owl:Class, then <I>v</I> is subtyped to owl:Thing.
+<P>
+ In order to set up the anonymous class for (owl:Class (owl:complementOf owl:Nothing)) of owl:Thing 
+ (owl:Class owl:Thing (rdfs:label "Thing") (owl:unionOf owl:Nothing (owl:Class (owl:complementOf owl:Nothing))))
+ this rule must be defined before reading the OWL file.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="default-direct-superclasses:class"><A HREF="../OWL\owlkernel.cl"><B>default-direct-superclasses</B></A></A> <I>(class
+                                                                                                                                              Class)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-instance:(eql class)"><A HREF="../OWL\owlkernel.cl"><B>make-instance</B></A></A> <I>(class
+                                                                                                                        (eql
+                                                                                                                         Class))</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:class"><A HREF="../OWL\owlkernel.cl"><B>change-class</B></A></A> <I>(from
+                                                                                                                Class)</I> <I>(to
+                                                                                                                               Thing)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This is happen when <I>from</I> is class in RDF and it is changed into OWL.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><HR WIDTH=80% ALIGN=left><P>
+<H2> Here OWL rdf file is read.</H2>
+<P>
+<P><HR WIDTH=80% ALIGN=left><P>
+<P>
+ Note that 
+ (rdfs:Class owl:FunctionalProperty (rdfs:subClassOf rdf:Property))
+ (rdfs:Class owl:InverseFunctionalProperty  (rdfs:subClassOf owl:ObjectProperty))
+<P>
+ Then, we add owl:Functional&InverseFunctionalProperty
+<P>
+<H2> We add some new axioms for OWL.</H2>
+<P>
+ For OWL Full, an owl class also inherit owl:Thing
+<P>
+<H2> %addForm for OWL</H2>
+ Calling sequence: %addForm (<I>type</I> <I>slots</I> <I>role</I>)
+ When <I>type</I> is an undefined symbol as resource,
+<BR>
+<OL>
+<LI>If <I>type</I> is a symbol rdf:Description and <I>role</I> is a symbol owl:intersectionOf,
+   owl:unionOf, then owl:Class is used for <I>type</I>. See, rule2a and rule2b.
+<LI>If <I>role</I> is a symbol owl:distinctMembers or owl:oneOf, then owl:Thing is used for <I>type</I>.
+   See. rule3.
+</OL>
+<BR>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-range-constraint-from"><A HREF="../OWL\owlkernel.cl"><B>get-range-constraint-from</B></A></A> <I>role</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This is same as one in RDFS module except owl:intersectionOf, owl:unionOf returns owl:Class, 
+   and owl:oneOf returns owl:Thing instead of rdf:List.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:class"><A HREF="../OWL\owlkernel.cl"><B>change-class</B></A></A> <I>(from
+                                                                                                                class)</I> <I>(to
+                                                                                                                               class)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:class"><A HREF="../OWL\owlkernel.cl"><B>change-class</B></A></A> <I>(class
+                                                                                                                Class)</I> <I>(new-class
+                                                                                                                               (eql
+                                                                                                                                Class))</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:class"><A HREF="../OWL\owlkernel.cl"><B>change-class</B></A></A> <I>(class
+                                                                                                                Class)</I> <I>(new-class
+                                                                                                                               Class)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Seiji Koide Nov-15-2010
+<P>
+<A NAME="OWL/owlsamedifferent.cl"><HR>
+<H2>File <A HREF="../OWL\owlsamedifferent.cl">OWL\owlsamedifferent.cl</A></H2></A>
+<P>
+<H2> OWL Same/Different Module</H2>
+<P>
+ IT Program Project in Japan: 
+<P>
+ This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2009, 2010 Seiji Koide
+<P>
+<P>
+<H2> Functional Property</H2>
+<P>
+ owl:FunctionalProperty is an instance of rdfs:Class.
+<PRE><CODE>
+ (rdfs:Class owl:FunctionalProperty
+             (rdfs:label "FunctionalProperty")
+             (rdfs:subClassOf rdf:Property))
+</CODE></PRE><P>
+ owl:FunctionalProperty does not belong to OWL universe, and an instance of 
+ owl:FunctionalProperty may not belong to OWL universe.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="functional-property?"><A HREF="../OWL\owlsamedifferent.cl"><B>functional-property?</B></A></A> <I>name</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>name</I> is an owl functional property name</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="functional-property-p"><A HREF="../OWL\owlsamedifferent.cl"><B>functional-property-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:FunctionalProperty?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Inverse Functional Property</H2>
+ owl:InverseFunctionalProperty is an instance of rdfs:Class.
+<PRE><CODE>
+ (rdfs:Class owl:InverseFunctionalProperty
+             (rdfs:label "InverseFunctionalProperty")
+             (rdfs:subClassOf owl:ObjectProperty))
+</CODE></PRE><P>
+ An instance of owl:InversefunctionalProperty may not be an instance of 
+ owl:ObjectProperty. Then, the range value may not be owl:Thing and may be rdfs:Literal.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="inverse-functional-property-p"><A HREF="../OWL\owlsamedifferent.cl"><B>inverse-functional-property-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:InverseFunctionalProperty?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="functional-property-equal-p"><A HREF="../OWL\owlsamedifferent.cl"><B>functional-property-equal-p</B></A></A> <I>x</I> <I>y</I> <I>&key</I> <I>test</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="inverse-functional-property-equal-p"><A HREF="../OWL\owlsamedifferent.cl"><B>inverse-functional-property-equal-p</B></A></A> <I>x</I> <I>y</I> <I>&key</I> <I>test</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> sameAs</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-sameas"><A HREF="../OWL\owlsamedifferent.cl"><B>shared-initialize-after-for-sameAs</B></A></A> <I>instance</I> <I>newsames</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-%owl-same-p"><A HREF="../OWL\owlsamedifferent.cl"><B>definitely-%owl-same-p</B></A></A> <I>x</I> <I>y</I> <I>&optional</I> <I>pairs</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> is defined as the same in OWL semantics.
+   <I>x</I> and <I>y</I> should be neither a symbol nor an iri.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-owl-same-p"><A HREF="../OWL\owlsamedifferent.cl"><B>definitely-owl-same-p</B></A></A> <I>x</I> <I>y</I> <I>&optional</I> <I>pairs</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> is defined as the same in OWL semantics.
+   <I>x</I> and <I>y</I> may be a symbol or an iri.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-same-p:resource"><A HREF="../OWL\owlsamedifferent.cl"><B>%owl-same-p</B></A></A> <I>(x
+                                                                                                                        Resource)</I> <I>(y
+                                                                                                                                          Resource)</I> <I>&optional</I> <I>pairs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Non-resolution version. This is used in <B>owl-equalp</B> and <B>owl-equivalent-p</B>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-%%owl-different-p"><A HREF="../OWL\owlsamedifferent.cl"><B>definitely-%%owl-different-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-%disjoint-p"><A HREF="../OWL\owlsamedifferent.cl"><B>definitely-%disjoint-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> owl-different-p</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="different-from-of"><A HREF="../OWL\owlsamedifferent.cl"><B>different-from-of</B></A></A> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-%owl-different-p"><A HREF="../OWL\owlsamedifferent.cl"><B>definitely-%owl-different-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-different-p"><A HREF="../OWL\owlsamedifferent.cl"><B>%owl-different-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-different-p"><A HREF="../OWL\owlsamedifferent.cl"><B>owl-different-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is <I>x</I> different from <I>y</I> as individual in semantics of OWL?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-owl-different-p"><A HREF="../OWL\owlsamedifferent.cl"><B>definitely-owl-different-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> are definitely different and have no possibility of unification.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> differentFrom</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-differentfrom"><A HREF="../OWL\owlsamedifferent.cl"><B>shared-initialize-after-for-differentFrom</B></A></A> <I>instance</I> <I>differents</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Seiji Koide Nov-15-2010
+<P>
+<A NAME="OWL/owlequivalentdisjoint.cl"><HR>
+<H2>File <A HREF="../OWL\owlequivalentdisjoint.cl">OWL\owlequivalentdisjoint.cl</A></H2></A>
+<P>
+<H2> OWL Equivalent/Disjoint Module</H2>
+<P>
+ IT Program Project in Japan: 
+<P>
+ This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2009, 2010 Seiji Koide
+<P>
+<P>
+<H2> Equivalency as Class</H2>
+<P>
+ owl:equivalentOf, owl:intersectionOf, owl:unionOf, owl:complementOf, and owl:oneOf are 
+ complete relation. Therefore, at these relation the equivalency as class at righthand 
+ side implies the equivalency as class at lefthand side.
+<P>
+<H2> equivalentClass</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-equivalentclass"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>shared-initialize-after-for-equivalentClass</B></A></A> <I>class</I> <I>equivalentclasses</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>owl:equivalentClass is a subproperty of rdfs:subClassOf, so 
+  the objects are automatically captured as subclasses in nature. 
+  However, this characteristics is very tricky and bad for construction of stable ontology.
+  Therefore, the class is not asserted as subclass.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection-equivalent"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%intersection-equivalent</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If both <I>x</I> and <I>y</I> have an intersection of concepts and two sets of intersection are 
+equivalent as class, then <I>x</I> and <I>y</I> is equivalent as class. If either or neither has an 
+instersection, then returns false.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%union-equivalent"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%union-equivalent</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If both <I>x</I> and <I>y</I> have an union of concepts and two sets of union are equivalent as class, 
+   then <I>x</I> and <I>y</I> is equivalent as class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%complemently-equal"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%complemently-equal</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%oneof-equivalent"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%oneof-equivalent</B></A></A> <I>x-ones</I> <I>y-ones</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If two OneOf sets are set-equal, then both are equal as class.
+  sets are test by owl-same-p.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-restriction-equal"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%owl-restriction-equal</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-equivalent-p-without-type-equivalents"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%owl-equivalent-p-without-type-equivalents</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-equivalent-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>owl-equivalent-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> are equivalent classes.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="definitely-owl-equivalent-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>definitely-owl-equivalent-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> are equivalent classes.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-equivalent-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%owl-equivalent-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>checks owl:equivalentOf.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-equivalent-p-without-equivalents"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%owl-equivalent-p-without-equivalents</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This subsubfunction prevents recursive call for %owl-equivalent-p.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-equivalent-p-without-complements"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%owl-equivalent-p-without-complements</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> are equivalent classes or equal literals, symbols,
+   and objects. At first, <I>x</I> and <I>y</I> should be a class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Disjointness</H2>
+<P>
+ When equivalent classes are given for arguments as disjoint classes, the unsatisfiable error 
+ happens. Note that two concepts in disjointness cannot make intersection, and multiple 
+ classing.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-disjointwith"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>shared-initialize-after-for-disjointWith</B></A></A> <I>class</I> <I>disjoints</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Not only from the disjoint statement, but also owl:intersectionOf values and owl:oneOf 
+ values decide the disjointness. Namely, if two values for such complete relational properties 
+ are disjoint, then the arguments are disjoint.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-disjoint-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%owl-disjoint-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>special rules of disjointness in OWL.
+   This function is used internally in routines of default reasoning for disjointness.
+   Namely, it returns <I>nil nil</I> if the disjointness is explicitly not stated.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="check-simple-disjoint-pair-p-in-supers"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>check-simple-disjoint-pair-p-in-supers</B></A></A> <I>name</I> <I>supers</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>simply checks the satifiability among <I>supers</I> of <I>class</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="simple-disjoint-pair-p-in-supers"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>simple-disjoint-pair-p-in-supers</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This predicate cannot be applicable to slot type option.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="check-simple-disjoint-pair-p-in-slot-types"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>check-simple-disjoint-pair-p-in-slot-types</B></A></A> <I>class</I> <I>types</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>simply checks the satifiability among slot type option <I>types</I> of <I>class</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="simple-disjoint-p-in-slot-types"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>simple-disjoint-p-in-slot-types</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This should be called in computation of slot type option inheritance. So, 
+   the role or owl:onProperty of <I>c1</I> and <I>c2</I> must be equal.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection-disjoint-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%intersection-disjoint-p</B></A></A> <I>xinter</I> <I>yinter</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>xinter</I> and <I>yinter</I> are disjoint.
+   This function returns true if either of args has intersection, 
+   and returns unknown if neither of args has intersection.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%restriction-disjoint-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%restriction-disjoint-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ disjointness in OWL universe is ????
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="disjoint-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>disjoint-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>c</I> and <I>d</I> are disjoint in OWL.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%disjoint-p"><A HREF="../OWL\owlequivalentdisjoint.cl"><B>%disjoint-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<A NAME="OWL/NNF.cl"><HR>
+<H2>File <A HREF="../OWL\NNF.cl">OWL\NNF.cl</A></H2></A>
+<P>
+<H2> NNF transformation module</H2>
+<P>
+ This program is borrowed from AIMA
+  2008, 2009 (c) Seiji Koide
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="conjuncts"><A HREF="../OWL\NNF.cl"><B>conjuncts</B></A></A> <I>sentence</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a list of the conjuncts in this sentence.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="disjuncts"><A HREF="../OWL\NNF.cl"><B>disjuncts</B></A></A> <I>sentence</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a list of the disjuncts in this sentence.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="+logical-connectives+"><A HREF="../OWL\NNF.cl"><B>+logical-connectives+</B></A></A> </TH>
+<TD align="right">[constant]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="+logical-quantifiers+"><A HREF="../OWL\NNF.cl"><B>+logical-quantifiers+</B></A></A> </TH>
+<TD align="right">[constant]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="atomic-clause?"><A HREF="../OWL\NNF.cl"><B>atomic-clause?</B></A></A> <I>sentence</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>An atomic clause has no connectives or quantifiers.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="literal-clause?"><A HREF="../OWL\NNF.cl"><B>literal-clause?</B></A></A> <I>sentence</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>A literal is an atomic clause or a negated atomic clause.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="negative-clause?"><A HREF="../OWL\NNF.cl"><B>negative-clause?</B></A></A> <I>sentence</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>A negative clause has NOT as the operator.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="merge-disjuncts"><A HREF="../OWL\NNF.cl"><B>merge-disjuncts</B></A></A> <I>disjuncts</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a CNF expression for the disjunction.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="eliminate-implications"><A HREF="../OWL\NNF.cl"><B>eliminate-implications</B></A></A> <I>p</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="has-variable?"><A HREF="../OWL\NNF.cl"><B>has-variable?</B></A></A> <I>p</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="->cnf"><A HREF="../OWL\NNF.cl"><B>->cnf</B></A></A> <I>p</I> <I>&optional</I> <I>vars</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Convert a sentence p to conjunctive normal form [p 279-280].</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="->inf"><A HREF="../OWL\NNF.cl"><B>->inf</B></A></A> <I>p</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Convert a sentence p to implicative normal form [p 282].</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="cnf1->inf1"><A HREF="../OWL\NNF.cl"><B>cnf1->inf1</B></A></A> <I>p</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="logic"><A HREF="../OWL\NNF.cl"><B>logic</B></A></A> <I>sentence</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Canonicalize a sentence into proper logical form.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*new-variable-counter*"><A HREF="../OWL\NNF.cl"><B>*new-variable-counter*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="variable?"><A HREF="../OWL\NNF.cl"><B>variable?</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is x a variable (a symbol starting with ?)?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="new-variable"><A HREF="../OWL\NNF.cl"><B>new-variable</B></A></A> <I>var</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Create a new variable.  Assumes user never types variables of form $X.9</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="concat-symbol"><A HREF="../OWL\NNF.cl"><B>concat-symbol</B></A></A> <I>&rest</I> <I>args</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Concatenate the args into one string, and turn that into a symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="skolemize"><A HREF="../OWL\NNF.cl"><B>skolemize</B></A></A> <I>p</I> <I>vars</I> <I>outside-vars</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Within the proposition P, replace each of VARS with a skolem constant,
+  or if OUTSIDE-VARS is non-null, a skolem function of them.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="skolem-constant"><A HREF="../OWL\NNF.cl"><B>skolem-constant</B></A></A> <I>name</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a unique skolem constant, a symbol starting with '$'.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Followings are by Seiji
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="skolem-constant-p"><A HREF="../OWL\NNF.cl"><B>skolem-constant-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="skolem-p"><A HREF="../OWL\NNF.cl"><B>skolem-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unskolemize"><A HREF="../OWL\NNF.cl"><B>unskolemize</B></A></A> <I>sk</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<A NAME="OWL/tunify.cl"><HR>
+<H2>File <A HREF="../OWL\tunify.cl">OWL\tunify.cl</A></H2></A>
+<P>
+<H2> Unification with Type</H2>
+<P>
+ This program is encoded by Seiji Koide based non-typed unifier of 
+ "Paradigms of AI Programming: Case Studies in Common Lisp", 
+ by Peter Norvig, published by Morgan Kaufmann, 1992.
+<P>
+ This program is integrated to SWCLOS, an OWL processor on CLOS.
+  2008,2009 (c) Seiji Koide
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="+fail+"><A HREF="../OWL\tunify.cl"><B>+fail+</B></A></A> </TH>
+<TD align="right">[constant]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Indicates unification failure</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="+no-bindings+"><A HREF="../OWL\tunify.cl"><B>+no-bindings+</B></A></A> </TH>
+<TD align="right">[constant]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Indicates unification success, with no variables.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-binding"><A HREF="../OWL\tunify.cl"><B>get-binding</B></A></A> <I>var</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Find a (variable . value) pair in a binding list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="binding-var"><A HREF="../OWL\tunify.cl"><B>binding-var</B></A></A> <I>binding</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Get the variable part of a single binding.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="binding-val"><A HREF="../OWL\tunify.cl"><B>binding-val</B></A></A> <I>binding</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Get the value part of a single binding.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="lookup"><A HREF="../OWL\tunify.cl"><B>lookup</B></A></A> <I>var</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Get the value part (for var) from a binding list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="extend-bindings"><A HREF="../OWL\tunify.cl"><B>extend-bindings</B></A></A> <I>var</I> <I>val</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Add a (var . val) pair to the head of a binding list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="occurs-in?"><A HREF="../OWL\tunify.cl"><B>occurs-in?</B></A></A> <I>var</I> <I>x</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Does var occur anywhere inside x?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subst-bindings"><A HREF="../OWL\tunify.cl"><B>subst-bindings</B></A></A> <I>bindings</I> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Substitute the value of variables in bindings into x,
+  taking recursively bound variables into account.</TD>
+</TR></TBODY></TABLE></DIV> 
+ <I>binding</I>    := '(' <I>key</I> '.' <I>value</I> ')'
+ <I>key</I>        := <I>variable</I> | <I>constant</I> | <I>skolem function</I> | <I>individual</I>
+ <I>value</I>      := <I>variable</I> | <I>constant</I> | <I>skolem function</I> | <I>individual</I>
+ <I>cbinding</I>   := '(' <I>ckey</I> '.' <I>cvalue</I> ')'
+ <I>key</I>        := <I>variable</I> | <I>constant</I> | <I>skolem function</I> | <I>class</I>
+ <I>value</I>      := <I>variable</I> | <I>constant</I> | <I>skolem function</I> | <I>class</I>
+ <I>kbinding</I>   := '(' <I>kkey</I> '.' <I>kvalue</I> ')'
+ <I>key</I>        := <I>variable</I> | <I>constant</I> | <I>skolem function</I> | <I>metaclass</I>
+ <I>value</I>      := <I>variable</I> | <I>constant</I> | <I>skolem function</I> | <I>metaclass</I>
+<BR>
+<UL>
+<LI><I>variable</I> is a lisp symbol with starting '?' character.
+<LI><I>constant</I> is a lisp symbol without starting '?' character.
+<LI><I>skolem function</I> is a conce cell.
+<LI><I>individual</I> is a resource object as individual.
+<LI><I>class</I> is a resource object as class.
+<LI><I>metaclass</I> is a resource object as metaclass.
+</UL>
+<BR>
+ This bindings simulate the environment for lisp symbol bindings.
+ The virtual value of this bindings supersedes the actual symbol value.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="symbol-value+"><A HREF="../OWL\tunify.cl"><B>symbol-value+</B></A></A> <I>key</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>simulates 'symbol-value' in lisp with <I>bindings</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name+"><A HREF="../OWL\tunify.cl"><B>name+</B></A></A> <I>object</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="class-of+"><A HREF="../OWL\tunify.cl"><B>class-of+</B></A></A> <I>x</I> <I>bindings</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>simulates class-of but <I>cbindings</I> is prior to actual class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ A variable is a symbol whose name starts with character #\?.
+ See also NNF for <B>variable?</B> and <B>new-variable</B>.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-binding"><A HREF="../OWL\tunify.cl"><B>make-binding</B></A></A> <I>var</I> <I>val</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="variables-in"><A HREF="../OWL\tunify.cl"><B>variables-in</B></A></A> <I>exp</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a list of all the variables in EXP.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unique-find-anywhere-if"><A HREF="../OWL\tunify.cl"><B>unique-find-anywhere-if</B></A></A> <I>predicate</I> <I>tree</I> <I>&optional</I> <I>found-so-far</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a list of leaves of tree satisfying predicate,
+  with duplicates removed.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="find-anywhere-if"><A HREF="../OWL\tunify.cl"><B>find-anywhere-if</B></A></A> <I>predicate</I> <I>tree</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Does predicate apply to any atom in the tree?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rename-variables"><A HREF="../OWL\tunify.cl"><B>rename-variables</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Replace all variables in x with new ones.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Followings are simulate <B>owl-same-p</B>, <I>different-p</I>, <B>owl-equivalent-p</B>, 
+ <B>subtypep</B>, <B>disjoint-p</B> on <I>bindings</I> and <I>cbindings</I>. These functions 
+ are used in the typep unification program.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-same-p+"><A HREF="../OWL\tunify.cl"><B>owl-same-p+</B></A></A> <I>x</I> <I>y</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>can <I>x</I> and <I>y</I> be regarded as same with <I>bindings</I>?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="different-p+"><A HREF="../OWL\tunify.cl"><B>different-p+</B></A></A> <I>x</I> <I>y</I> <I>bindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>can <I>x</I> and <I>y</I> be regarded as different with <I>bindings</I>?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-equivalent-p+"><A HREF="../OWL\tunify.cl"><B>owl-equivalent-p+</B></A></A> <I>c</I> <I>d</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>can <I>c</I> and <I>d</I> be regarded as equivalent class with <I>cbindings</I>?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subtypep+"><A HREF="../OWL\tunify.cl"><B>subtypep+</B></A></A> <I>c</I> <I>d</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>is <I>c</I> a subtype of <I>d</I> with <I>cbindings</I>?
+   Note that <I>cl:subtypep</I> is used.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="disjoint-class-p+"><A HREF="../OWL\tunify.cl"><B>disjoint-class-p+</B></A></A> <I>c</I> <I>d</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ The bindings in lisp provide the base level bindings in unification.
+ The bindings in unification provides situated bindings that change in situation. 
+ The unify implementation in "Paradigms of AI Programming" is just same as the symbol 
+ bindings in old lisp system by association list. So, the mechanism of old lisp 
+ binding is utialized for situated binding and classing in unification.
+<P>
+<P>
+<H2> Typed Unification</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify"><A HREF="../OWL\tunify.cl"><B>unify</B></A></A> <I>x</I> <I>y</I> <I>&optional</I> <I>bindings</I> <I>cbindings</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="tunify"><A HREF="../OWL\tunify.cl"><B>tunify</B></A></A> <I>c</I> <I>d</I> <I>&optional</I> <I>cbindings</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ttunify"><A HREF="../OWL\tunify.cl"><B>ttunify</B></A></A> <I>c</I> <I>d</I> <I>&optional</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify-var"><A HREF="../OWL\tunify.cl"><B>unify-var</B></A></A> <I>var</I> <I>x</I> <I>bindings</I> <I>cbindings</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="tunify-var"><A HREF="../OWL\tunify.cl"><B>tunify-var</B></A></A> <I>var</I> <I>x</I> <I>cbindings</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ttunify-var"><A HREF="../OWL\tunify.cl"><B>ttunify-var</B></A></A> <I>var</I> <I>x</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify-skolem"><A HREF="../OWL\tunify.cl"><B>unify-skolem</B></A></A> <I>x</I> <I>y</I> <I>bindings</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Both <I>x</I> and <I>y</I> are skolem function that originate existential quantification.
+   In SWCLOS, it represents a successor in a binary relation of (role predecessor successor).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify-xskolem"><A HREF="../OWL\tunify.cl"><B>unify-xskolem</B></A></A> <I>x</I> <I>y</I> <I>bindings</I> <I>cbindings</I> <I>&optional</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Only <I>x</I> is a skolem function that originate existential quantification.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify-yskolem"><A HREF="../OWL\tunify.cl"><B>unify-yskolem</B></A></A> <I>x</I> <I>y</I> <I>bindings</I> <I>cbindings</I> <I>&optional</I> <I>kbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Only <I>y</I> is a skolem function that originate existential quantification.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify-object"><A HREF="../OWL\tunify.cl"><B>unify-object</B></A></A> <I>x</I> <I>y</I> <I>bindings</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unify-class"><A HREF="../OWL\tunify.cl"><B>unify-class</B></A></A> <I>c</I> <I>d</I> <I>cbindings</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unifier"><A HREF="../OWL\tunify.cl"><B>unifier</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return something that unifies with both x and y (or fail).</TD>
+</TR></TBODY></TABLE></DIV> 
+<A NAME="OWL/subsume.cl"><HR>
+<H2>File <A HREF="../OWL\subsume.cl">OWL\subsume.cl</A></H2></A>
+<P>
+<H2> Subsume Module</H2>
+<P>
+ This code is written by Seiji Koide.
+<P>
+ Copyright (c) 2009 Seiji Koide
+<P>
+<P>
+<H2> Subsumption </H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subsumed-p"><A HREF="../OWL\subsume.cl"><B>subsumed-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>tests whether <I>c</I> is subsumed by <I>d</I> in OWL semantics.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subsumed-p-without-equivalency"><A HREF="../OWL\subsume.cl"><B>subsumed-p-without-equivalency</B></A></A> <I>cc</I> <I>dd</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>subsumtion test without class equivalency of <I>cc</I> and <I>dd</I> for CLOS objects.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unfold-intersection"><A HREF="../OWL\subsume.cl"><B>unfold-intersection</B></A></A> <I>conj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns unfolded concepts of <I>conj</I>, if <I>conj</I> is an intersection in OWL, 
+   otherwise returns <I>conj</I> itself.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="intersection-subsumed-p"><A HREF="../OWL\subsume.cl"><B>intersection-subsumed-p</B></A></A> <I>c</I> <I>dintersections</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection-subsumed-p"><A HREF="../OWL\subsume.cl"><B>%intersection-subsumed-p</B></A></A> <I>c</I> <I>dintersections</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection-restriction-subsumed-p"><A HREF="../OWL\subsume.cl"><B>%intersection-restriction-subsumed-p</B></A></A> <I>cslots</I> <I>dprops</I> <I>dcards</I> <I>dcnsts</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="satisfy-max-cardinality"><A HREF="../OWL\subsume.cl"><B>satisfy-max-cardinality</B></A></A> <I>dmax</I> <I>model</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Models</H2>
+<P>
+ <I>models</I> := ( <I>model</I>* )
+ <I>model</I>  := ( <I>bindings</I> <I>cbindings</I> . <I>cmax</I> <I>cmin</I> <I>atoms</I> )
+ <I>atoms</I>  := ( <B>atom</B>* )
+ <B>atom</B>   := ( <I>role</I> <I>predecessor</I> <I>successor</I> ) 
+ <I>predecessor</I> and <I>successor</I> is a <I>var</I>.
+<BR>
+<UL>
+<LI><I>models</I> are disjunction of models.
+<LI><I>atoms</I> are conjunction of atomic formula in logic.
+<LI><B>atom</B> may be general logical form, but should be a binary form in this program.
+<LI><I>cbindings</I> provides concept (class) bindings for logical variable.
+<LI><I>bindings</I> is usual one.
+<LI><I>role</I> is a lisp symbol.
+<LI><I>class</I> is a resource object.
+</UL>
+<BR>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="generate-models-for-susumee-from-slot"><A HREF="../OWL\subsume.cl"><B>generate-models-for-susumee-from-slot</B></A></A> <I>var</I> <I>role</I> <I>cmax</I> <I>cmin</I> <I>slotd</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>var</I> is a <I>role</I>-predecessor. </TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="create-models-for-subsumer-from-restrictions"><A HREF="../OWL\subsume.cl"><B>create-models-for-subsumer-from-restrictions</B></A></A> <I>var</I> <I>role</I> <I>max</I> <I>min</I> <I>conjuncts</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>creates a model from universal <I>var</I> and restriction <I>conjuncts</I>.
+   Note that all properties in <I>conjuncts</I> are is <I>role</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="clash-p"><A HREF="../OWL\subsume.cl"><B>clash-p</B></A></A> <I>bindings</I> <I>cbindings</I> <I>conjuncts</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>tests conjuncts clashing or not.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="add-conjunct-existentially"><A HREF="../OWL\subsume.cl"><B>add-conjunct-existentially</B></A></A> <I>role</I> <I>predecessor</I> <I>successor</I> <I>exist</I> <I>model</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>adds a new atom of (<I>role</I> <I>predecessor</I> <I>successor</I>:<I>exist</I>) into <I>model</I>, 
+   and returns a satisfiable model. Note this function is applied for existential 
+   quantification of successor.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="impose-conjunct-existentially"><A HREF="../OWL\subsume.cl"><B>impose-conjunct-existentially</B></A></A> <I>role</I> <I>predecessor</I> <I>successor</I> <I>type</I> <I>model</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>imposes a new atom of (<I>role</I> <I>predecessor</I> <I>successor</I>:<I>type</I>) onto each atom in <I>atoms</I>
+   and returns a satisfiable model for <I>bindings</I>, <I>cbindings</I>, and <I>atoms</I>. 
+   Note that the cardinality of atoms do not increased but bindings may be extended and  
+   cbindings are extended. If the conjunction is clashed, this function returns nil.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="generate-subsumee-models"><A HREF="../OWL\subsume.cl"><B>generate-subsumee-models</B></A></A> <I>var</I> <I>role</I> <I>cmax</I> <I>cmin</I> <I>types</I> <I>alls</I> <I>exists</I> <I>fillers</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>generates updated models for <I>var</I> and <I>role</I> onto <I>models</I> with constraint 
+   <I>cmax</I>, <I>cmin</I>, <I>types</I>, <I>alls</I>, <I>exists</I>, and <I>fillers</I> of <I>role</I>-successor.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="reduce-models"><A HREF="../OWL\subsume.cl"><B>reduce-models</B></A></A> <I>cmax</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="reduce-atoms"><A HREF="../OWL\subsume.cl"><B>reduce-atoms</B></A></A> <I>cmax</I> <I>bindings</I> <I>cbindings</I> <I>atoms</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="generate-subsumer-models"><A HREF="../OWL\subsume.cl"><B>generate-subsumer-models</B></A></A> <I>var</I> <I>role</I> <I>cmax</I> <I>types</I> <I>alls</I> <I>exists</I> <I>fillers</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>generates updated models for <I>var</I> and <I>role</I> onto <I>models</I> with constraint 
+   max caridinality <I>cmax</I>, <I>types</I>, <I>alls</I>, <I>exists</I>, and <I>fillers</I> of successor 
+   of <I>var</I> for <I>role</I>. If <I>var</I> is nil, then new-var is created inside.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="generate-models-for-existential"><A HREF="../OWL\subsume.cl"><B>generate-models-for-existential</B></A></A> <I>var</I> <I>role</I> <I>exists</I> <I>models</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>exists</I> are a list of types for (role var y1:type1), (role var y2:type2) ...</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%satisfy-model"><A HREF="../OWL\subsume.cl"><B>%satisfy-model</B></A></A> <I>cmodel</I> <I>dmax</I> <I>dmin</I> <I>dmodel</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subsumed-p-successors"><A HREF="../OWL\subsume.cl"><B>subsumed-p-successors</B></A></A> <I>y1</I> <I>bindings1</I> <I>cbindings1</I> <I>y2</I> <I>bindings2</I> <I>cbindings2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subsumed-p-in-satisfy"><A HREF="../OWL\subsume.cl"><B>subsumed-p-in-satisfy</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-same-p-in-satisfy"><A HREF="../OWL\subsume.cl"><B>owl-same-p-in-satisfy</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="typep-in-satisfy"><A HREF="../OWL\subsume.cl"><B>typep-in-satisfy</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Transitive Property</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="transitive-property-p"><A HREF="../OWL\subsume.cl"><B>transitive-property-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:TransitiveProperty?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="transitive-property-subsumed-p"><A HREF="../OWL\subsume.cl"><B>transitive-property-subsumed-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<P>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-subtypep"><A HREF="../OWL\subsume.cl"><B>%owl-subtypep</B></A></A> <I>type1</I> <I>type2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>same prodedure as %rdf-subtypep but calls subsumed-p instead-of %rdf-subtypep or 
+%owl-subtypep. Conjuction is specially treated as same way of subsumed-p.</TD>
+</TR></TBODY></TABLE></DIV> 
+<A NAME="OWL/OWL.cl"><HR>
+<H2>File <A HREF="../OWL\OWL.cl">OWL\OWL.cl</A></H2></A>
+<P>
+<H2> OWL Module</H2>
+<P>
+ IT Program Project in Japan: 
+<P>
+ This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2009 Seiji Koide
+<P>
+ <B>owl-equalp</B> checks the equality of objects in OWL, namely it returns t, if 
+<BR>
+<OL>
+<LI>owl-equivalent-p holds, if args are property.
+<LI>if args are restrictions, then if both of owl:onProperty values are equal and values are
+   equal as owl:allValuesFrom or owl:someValuesFrom or owl:hasValue, 
+   and either both or neither cardinality restriction are also equal.
+<LI>owl-same-p holds.
+<LI>otherwise equal in the sense of rdf-graph equality.
+</OL>
+<BR>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-equalp"><A HREF="../OWL\OWL.cl"><B>owl-equalp</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> is equal in semantics of RDF(S) superimposed by OWL. 
+   This predicate checks <I>x</I> and <I>y</I> in classes as individuals.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Subsumption </H2>
+<P>
+<P>
+ (subsumed-p vin:DryWhiteWine vin:WhiteNonSweetWine) -> t
+<P>
+<P>
+ (subsumed-p food:Fruit food:EdibleThing) 
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%union-subsumed-p"><A HREF="../OWL\OWL.cl"><B>%union-subsumed-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection1-subsumed-p"><A HREF="../OWL\OWL.cl"><B>%intersection1-subsumed-p</B></A></A> <I>var</I> <I>conjuncts</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function directly computes conjuncts instead of C's intersection. This is useful to compute 
+   conjunction (and) without creating an intersection class.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection12-subsumed-p"><A HREF="../OWL\OWL.cl"><B>%intersection12-subsumed-p</B></A></A> <I>var</I> <I>conjuncts</I> <I>dintersections</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%oneof1-subsumed-p"><A HREF="../OWL\OWL.cl"><B>%oneof1-subsumed-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%oneof2-subsumed-p"><A HREF="../OWL\OWL.cl"><B>%oneof2-subsumed-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="oneof-subsumed-p"><A HREF="../OWL\OWL.cl"><B>oneof-subsumed-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="collect-most-specific-concepts"><A HREF="../OWL\OWL.cl"><B>collect-most-specific-concepts</B></A></A> <I>class</I> <I>instance</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function is used for shared-initialize.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-intersect-siblings"><A HREF="../OWL\OWL.cl"><B>get-intersect-siblings</B></A></A> <I>class</I> <I>intersections</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a set of subclasses of all member of <I>intersections</I>, removing duplicates and 
+   ones that has same intersection as <I>class</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-union-spouses"><A HREF="../OWL\OWL.cl"><B>get-union-spouses</B></A></A> <I>class</I> <I>unions</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a set of superclases of all member of <I>unions</I>, removing duplicates and 
+  ones that has same union as <I>class</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-superclasses-siblings"><A HREF="../OWL\OWL.cl"><B>get-superclasses-siblings</B></A></A> <I>class</I> <I>superclasses</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-subclasses-siblings"><A HREF="../OWL\OWL.cl"><B>get-subclasses-siblings</B></A></A> <I>class</I> <I>subclasses</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="subtypep-for-refining"><A HREF="../OWL\OWL.cl"><B>subtypep-for-refining</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%intersection-refining-p"><A HREF="../OWL\OWL.cl"><B>%intersection-refining-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%union-refining-p"><A HREF="../OWL\OWL.cl"><B>%union-refining-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%oneof-refining-p"><A HREF="../OWL\OWL.cl"><B>%oneof-refining-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%complement-refining-p"><A HREF="../OWL\OWL.cl"><B>%complement-refining-p</B></A></A> <I>c1</I> <I>c2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> owl:complementOf</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-complementof"><A HREF="../OWL\OWL.cl"><B>shared-initialize-after-for-complementOf</B></A></A> <I>class</I> <I>complements</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> intersectionOf</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-intersectionof"><A HREF="../OWL\OWL.cl"><B>shared-initialize-after-for-intersectionOf</B></A></A> <I>class</I> <I>intersections</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="intersection-p"><A HREF="../OWL\OWL.cl"><B>intersection-p</B></A></A> <I>class</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="intersection-of"><A HREF="../OWL\OWL.cl"><B>intersection-of</B></A></A> <I>class</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="check-intersection-refining-for-subclasses"><A HREF="../OWL\OWL.cl"><B>check-intersection-refining-for-subclasses</B></A></A> <I>class</I> <I>superclasses</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="refine-concept-by-intersection"><A HREF="../OWL\OWL.cl"><B>refine-concept-by-intersection</B></A></A> <I>classes</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns most specific concepts that include subs of <I>classes</I> as intersection's sub.
+   Note that return values include initial values and newly added values.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> unionOf Shared Initialize After Action</H2>
+ After defining a class with owl:unionOf slot, 
+<BR>
+<OL>
+<LI>If the defined class <I>class</I> is a subclass of a superclass <I>sib</I> of a union member,
+   <I>class</I> is inserted between the superclass <I>sib</I> and the union member.
+<LI>If the defined class <I>class</I> is not a subclass of a superclass <I>sib</I> of a union member,
+   <I>class</I> is a sibling of <I>sib</I>. 
+</OL>
+<BR>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-after-for-unionof"><A HREF="../OWL\OWL.cl"><B>shared-initialize-after-for-unionOf</B></A></A> <I>class</I> <I>unions</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="check-union-refining-for-subclasses"><A HREF="../OWL\OWL.cl"><B>check-union-refining-for-subclasses</B></A></A> <I>class</I> <I>subclasses</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:thing"><A HREF="../OWL\OWL.cl"><B>change-class</B></A></A> <I>(instance
+                                                                                                          Thing)</I> <I>(new-class
+                                                                                                                         (eql
+                                                                                                                          Class))</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="change-class:thing"><A HREF="../OWL\OWL.cl"><B>change-class</B></A></A> <I>(instance
+                                                                                                          Thing)</I> <I>(new-class
+                                                                                                                         Class)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Shared-initialize Before for owl:Class</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:class"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(class
+                                                                                                                    Class)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I> <I>&key</I> <I>(name
+                                                                                                                                                                                              nil)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Shared-initialize After for owl:Class</H2>
+<P>
+ <B>update-instance-for-different-class</B> is called in <B>change-class</B>.
+ Usually <B>change-class</B> is invoked by <I>ensure-class</I> without <I>initargs</I>.
+ So, direct-superclasses is set by <B>reinitialize-instance</B> in <I>ensure-class</I>
+ after <B>change-class</B>. The following routine is prepared only for direct 
+ invocation of <B>change-class</B> by users.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="update-instance-for-different-class:class"><A HREF="../OWL\OWL.cl"><B>update-instance-for-different-class</B></A></A> <I>(previous
+                                                                                                                                                        Class)</I> <I>(current
+                                                                                                                                                                       Class)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>ensures owl:Thing as superclasses in OWL universe. This routine is effective
+   only if a user designates :direct-superclasses but no inheritance of owl:Thing.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:class"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(class
+                                                                                                                    Class)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Symmetric Property</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="symmetric-property-p"><A HREF="../OWL\OWL.cl"><B>symmetric-property-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:SymmetricProperty?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize-before-in-owl"><A HREF="../OWL\OWL.cl"><B>shared-initialize-before-in-OWL</B></A></A> <I>instance</I> <I>slot-names</I> <I>initargs</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:resource"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(instance
+                                                                                                                       Resource)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>book-keeping for reification</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Shared-initialize After for owl:Thing</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:thing"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(instance
+                                                                                                                    Thing)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+ Warning: Entailed in refining: #<I>vin:WhiteWine vin:StGenevieveTexasWhite</I> 
+ to vin:WhiteNonSweetWine.
+ owl:equivalentClass is a subproperty of rdfs:subClassOf, so 
+ the objects are automatically captured as subclasses in nature. 
+ However, this characteristics is very tricky and bad for construction of stable ontology.
+ Because rdfs:subClassOf is substantial relation, but equivalentClass is temporal one.
+ We treat equivalentClass in inference instead of subproperty of rdfs:subClassOf 
+ or superclass-subclass relation.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-this-supers:class"><A HREF="../OWL\OWL.cl"><B>make-this-supers</B></A></A> <I>(class
+                                                                                                                  Class)</I> <I>superclasses</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns an append list of MSCs of restrictions and MSCs of non restrictions in <I>old-users</I> and <I>new-supers</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="most-specific-concepts-for-restrictions"><A HREF="../OWL\OWL.cl"><B>most-specific-concepts-for-restrictions</B></A></A> <I>classes</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Transitivity</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="transitive-p"><A HREF="../OWL\OWL.cl"><B>transitive-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="transitive-subp"><A HREF="../OWL\OWL.cl"><B>transitive-subp</B></A></A> <I>property</I> <I>sub</I> <I>super</I> <I>&optional</I> <I>visited</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="strict-transitive-subp"><A HREF="../OWL\OWL.cl"><B>strict-transitive-subp</B></A></A> <I>property</I> <I>sub</I> <I>super</I> <I>visited</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="strict-transitive-superp"><A HREF="../OWL\OWL.cl"><B>strict-transitive-superp</B></A></A> <I>property</I> <I>super</I> <I>sub</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="strict-include-p"><A HREF="../OWL\OWL.cl"><B>strict-include-p</B></A></A> <I>property</I> <I>super</I> <I>sub</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="most-specific-transitives"><A HREF="../OWL\OWL.cl"><B>most-specific-transitives</B></A></A> <I>property</I> <I>transitives</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Here after Bookkeeping Facilities
+<P>
+<P>
+<H2> owl:AllDifferent</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:alldifferent"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(instance
+                                                                                                                           AllDifferent)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="no-twin-p"><A HREF="../OWL\OWL.cl"><B>no-twin-p</B></A></A> <I>class</I> <I>instance</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%symbols2values"><A HREF="../OWL\OWL.cl"><B>%symbols2values</B></A></A> <I>lst</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> owl:Restriction again</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-restriction-p"><A HREF="../OWL\OWL.cl"><B>owl-restriction-p</B></A></A> <I>obj</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>obj</I> an instance of owl:Restriction?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="restriction-subtypep"><A HREF="../OWL\OWL.cl"><B>restriction-subtypep</B></A></A> <I>restriction1</I> <I>restriction2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> owl:intersectionOf is translated to super/subtype relation.</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="collect-all-subsumed-types:class"><A HREF="../OWL\OWL.cl"><B>collect-all-subsumed-types</B></A></A> <I>(class
+                                                                                                                                      Class)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="collect-all-instances-of:class"><A HREF="../OWL\OWL.cl"><B>collect-all-instances-of</B></A></A> <I>(class
+                                                                                                                                  Class)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="all-instances-generator:class"><A HREF="../OWL\OWL.cl"><B>all-instances-generator</B></A></A> <I>(class
+                                                                                                                                Class)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-complement-p"><A HREF="../OWL\OWL.cl"><B>owl-complement-p</B></A></A> <I>c</I> <I>d</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%owl-complement-p"><A HREF="../OWL\OWL.cl"><B>%owl-complement-p</B></A></A> <I>cc</I> <I>dd</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ensure-class-using-class:class"><A HREF="../OWL\OWL.cl"><B>ensure-class-using-class</B></A></A> <I>(class
+                                                                                                                                  Class)</I> <I>name</I> <I>&rest</I> <I>args</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2>  hasValue Restriction sets up an initial value of the slot.</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:hasvaluerestriction"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(class
+                                                                                                                                  hasValueRestriction)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:somevaluesfromrestriction"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(class
+                                                                                                                                        someValuesFromRestriction)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:allvaluesfromrestriction"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(class
+                                                                                                                                       allValuesFromRestriction)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:cardinalityrestriction"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(class
+                                                                                                                                     cardinalityRestriction)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> For owl:equivalentProperty</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equivalentproperty-maintain"><A HREF="../OWL\OWL.cl"><B>equivalentProperty-maintain</B></A></A> <I>instance</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equivalent-property-p"><A HREF="../OWL\OWL.cl"><B>equivalent-property-p</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Are <I>x</I> and <I>y</I> equivalent property in semantics of OWL?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="most-specific-properties"><A HREF="../OWL\OWL.cl"><B>most-specific-properties</B></A></A> <I>properties</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> owl:inverseOf</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%get-inverse-prop"><A HREF="../OWL\OWL.cl"><B>%get-inverse-prop</B></A></A> <I>prop</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Property in OWL</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:objectproperty"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(instance
+                                                                                                                             ObjectProperty)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:symmetricproperty"><A HREF="../OWL\OWL.cl"><B>shared-initialize</B></A></A> <I>(instance
+                                                                                                                                SymmetricProperty)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="domain-value:property"><A HREF="../OWL\OWL.cl"><B>domain-value</B></A></A> <I>(property
+                                                                                                             Property)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="domain-value:objectproperty"><A HREF="../OWL\OWL.cl"><B>domain-value</B></A></A> <I>(property
+                                                                                                                   ObjectProperty)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="range-value:property"><A HREF="../OWL\OWL.cl"><B>range-value</B></A></A> <I>(property
+                                                                                                           Property)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="range-value:objectproperty"><A HREF="../OWL\OWL.cl"><B>range-value</B></A></A> <I>(property
+                                                                                                                 ObjectProperty)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ We construct every inference upon subsumption-basis.
+ Subsumption is infered by structural subsumption algorithms, here.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="union-of"><A HREF="../OWL\OWL.cl"><B>union-of</B></A></A> <I>class</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="complement-of"><A HREF="../OWL\OWL.cl"><B>complement-of</B></A></A> <I>class</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="onproperty-of"><A HREF="../OWL\OWL.cl"><B>onproperty-of</B></A></A> <I>restriction</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Membership in OWL</H2>
+<P>
+ The following is taken from http://www.w3.org/TR/owl-ref/#equivalentProperty-def.
+<P>
+ "Property equivalence is not the same as property equality. Equivalent properties have the same "values" 
+ (i.e., the same property extension), but may have different intensional meaning (i.e., denote different concepts). 
+ Property equality should be expressed with the owl:sameAs construct. As this requires that properties are 
+ treated as individuals, such axioms are only allowed in OWL Full."
+<P>
+ Since we consider the domain and range constraint and OWL onPorperty restrictions are intensional data of properties.
+ we do not treat here the equivalent property.
+ We do not implement sameAs functions for properties.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%%typep"><A HREF="../OWL\OWL.cl"><B>%%typep</B></A></A> <I>object</I> <I>type</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>object</I> and <I>type</I> is an object in RDF universe.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%typep-without-type-equivalents"><A HREF="../OWL\OWL.cl"><B>%typep-without-type-equivalents</B></A></A> <I>object</I> <I>type</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This is sub-subfunction for <B>typep</B>. This is only invoked in <B>%%typep</B>.
+   This function tests type relation for each member of owl:sameAs group.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="typep-without-sames-and-equivalents-in-owl"><A HREF="../OWL\OWL.cl"><B>typep-without-sames-and-equivalents-in-owl</B></A></A> <I>object</I> <I>type</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>object</I> and <I>type</I> are in RDF universe and no direct class-instance relations.
+   <I>type</I> may be a complex concept.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-intersection-type-p"><A HREF="../OWL\OWL.cl"><B>owl-intersection-type-p</B></A></A> <I>object</I> <I>intersections</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>when every element in <I>intersections</I> satisfies a type of <I>object</I> then true.
+   If any element does not satisfy obviously, then imediately returns with false.
+   Otherwise, finally the result for all of <I>intersections</I> is true or unknown.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-union-type-p"><A HREF="../OWL\OWL.cl"><B>owl-union-type-p</B></A></A> <I>object</I> <I>unions</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="owl-complement-type-p"><A HREF="../OWL\OWL.cl"><B>owl-complement-type-p</B></A></A> <I>object</I> <I>complement</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> slot-value</H2>
+<P>
+ Cardinality check
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="cardinality-ok-p:t"><A HREF="../OWL\OWL.cl"><B>cardinality-ok-p</B></A></A> <I>value</I> <I>(slotd
+                                                                                                                           OwlProperty-effective-slot-definition)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>simply checks <I>value</I> with cardinality constraint without models and returns true if no problems.
+   It is expected that elements in <I>value</I> will be unified if false is returned.</TD>
+</TR></TBODY></TABLE></DIV> 
+<HR>
+<TABLE BORDER=4 CELLPADDING=4 CELLSPACING=0><tr>
+<td> <A HREF="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">SWCLOS Home</A>
+<td> <A HREF="../../contact.html">Authors</A>
+<td> <A HREF="overview.html">Lisp Code Overview</A>
+</TABLE>
+</BODY> 
+</HTML>

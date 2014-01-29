@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+     <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+     <!ENTITY dc   "http://dublincore.org/documents/2003/06/02/dces#" >
+     <!ENTITY eg   "http://galaxy-express.co.jp/semantic-web/example#" >
+   ]>
+
+<rdf:RDF
+  xmlns     ="&eg;"
+  xmlns:eg  ="&eg;"
+  xmlns:dc  ="&dc;"
+  xmlns:rdf ="&rdf;"
+  xmlns:rdfs="&rdfs;"
+>
+
+<rdf:Property rdf:ID="name">
+  <rdfs:domain rdf:resource="#Person" />
+  <rdfs:range rdf:resource="&rdfs;Literal" />
+</rdf:Property>
+<rdf:Property rdf:about="&dc;title">
+  <rdfs:domain rdf:resource="#Document" />
+  <rdfs:range rdf:resource="&rdfs;Literal" />
+</rdf:Property>
+<rdf:Property rdf:ID="author">
+  <rdfs:domain rdf:resource="#Document" />
+  <rdfs:range rdf:resource="#Person" />
+</rdf:Property>
+<rdfs:Class rdf:ID="Person">
+  <rdfs:subClassOf rdf:resource="#Agent" />
+</rdfs:Class>
+<rdfs:Class rdf:ID="Document">
+  <rdfs:subClassOf rdf:resource="#Work" />
+</rdfs:Class>
+<eg:Document rdf:about="http:/.../Proposal/">
+  <eg:author>
+    <eg:Person>
+       <eg:name>Tim Berners-Lee</eg:name>
+    </eg:Person>
+  </eg:author>
+  <dc:title>Information Management: A Proposal</dc:title>
+</eg:Document>
+</rdf:RDF>

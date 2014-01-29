@@ -1,0 +1,385 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0062)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/SWCLOSOWL.html -->
+<html><head><title>12. OWL in SWCLOS</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>12. &nbsp;OWL in SWCLOS </h2>
+<p>The OWL Web Ontology Languages, which are the extension of RDF and RDFS, are 
+the W3C Recommendation for Web Ontology description. There are three 
+sub-languages of OWL, that is, OWL Light, OWL DL, and OWL Full. The OWL Light 
+specification is prepared for an easy realization by implementers. However, the 
+capability of ontology description is lower than other OWL languages. The 
+capability of ontology description of OWL DL is underpinned by Description Logic 
+(DL). The satisfiability checking and the entailment rules by DL is very 
+powerful and useful to describe a consistent ontology, but the inference on 
+datatype is out of scope of DL, and ones cannot treat classes as an instance of 
+some class in the same way of RDFS. OWL Full provides full power for ontology 
+description, where the class is not discriminated to the instance, and ones can 
+treat classes as instance in the same way as RDFS. In the framework of logics, 
+it is difficult to implement the OWL Full metamodeling capability, because it 
+requires second order logic or higher.</p>
+<p>SWCLOS is a language for Object-Oriented Programming (OOP) that is built on 
+top of CLOS. CLOS allows ones metamodeling, namely, programmers can treat 
+classes as instance of some class. Thus, if you are familiar with 
+meta-programming of CLOS, you can encode metamodeling of ontology in SWCLOS. 
+With SWCLOS you will obtain the performance of OWL Full. </p>
+<h3>12.1 &nbsp;OWL Extension of RDF and RDFS</h3>
+<p>In theory, OWL is an extension of RDF and RDFS. Therefore, any OWL file, 
+including the OWL specification file that is described in RDF/XML, must be 
+readable as RDF rather than OWL. In practice, we can obtain, with the OWL 
+specification file <a href="http://www.w3.org/2002/07/owl.rdf">owl.rdf</a> from 
+W3C, OWL entities as RDF resource objects in the RDF universe. See the following 
+demonstration, in which only RDFS module of SWCLOS has been loaded initially. 
+</p>
+<code>cg-user(1): (in-package gx-user)<br/>#&lt;The gx-user 
+package&gt;<br/>gx-user(2): (read-rdf-file #'addRdfXml "OWL/OWL.RDF")<br/>Warning: 
+Entail by rdf1: owl:imports rdf:type rdf:Property.<br/>Warning: Entail by rdf1: 
+owl:versionInfo rdf:type rdf:Property.<br/>Warning: Entail by rdf1: 
+owl:priorVersion rdf:type rdf:Property.<br/>Warning: Implicit range entailment: 
+owl:Ontology rdf:type rdfs:Class.<br/>Warning: Entail by rdf1: owl:unionOf 
+rdf:type rdf:Property.<br/>Warning: Entail by rdf1: owl:complementOf rdf:type 
+rdf:Property.<br/>:done<br/>gx-user(3): (pprint (get-form owl:Thing))<br/>(owl:Class 
+owl:Thing (rdfs:label "Thing")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:unionOf owl:Nothing<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Class 
+(owl:complementOf owl:Nothing))))<br/>gx-user(4): (pprint (get-form 
+owl:Nothing))<br/>
+(owl:Class owl:Nothing (rdf:about #&lt;uri 
+http://www.w3.org/2002/07/owl#Nothing&gt;)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:label "Nothing") <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:complementOf owl:Thing))<br/>gx-user(5): (typep owl:Class 
+rdfs:Class)<br/>t<br/>t<br/>gx-user(6): (subtypep owl:Class 
+rdfs:Class)<br/>t<br/>t<br/>gx-user(7): (subtypep owl:Class 
+rdfs:Resource)<br/>t<br/>t<br/>gx-user(8): (subtypep owl:Thing 
+rdfs:Resource)<br/>t<br/>t<br/>gx-user(9): (subtypep owl:Class owl:Thing) ; note 
+that this is incorrect.<br/>nil<br/>t<br/></code><br/>
+<p>In this demonstration, after boot up SWCLOS without OWL modules, invoking 
+<b>read-rdf-file</b> caused to load owl.rdf file. Some results by reading 
+owl.rdf were demonstrated with <b>get-form</b> on owl:Thing and owl:Nothing. 
+</p>
+<p>However, this ontology does not result any capability upon OWL entailments 
+and includes some ambiguities of inclusiveness between the RDF universe and the 
+OWL universe. An OWL reasoner must be equipped with OWL semantics so as to 
+realize many OWL entailments as well as clear-cut relation between the RDF 
+universe and the OWL universe. OWL module of SWCLOS provides OWL functionalities 
+with the owl.rdf file. After this section, OWL realization on SWCLOS is 
+explained.</p>
+<h3>12.2 &nbsp;Description Logic and OWL in SWCLOS</h3>
+<p>The syntax and semantics of Description Logic (DL) is compactly described at 
+Appendix of <i>The Description Logic Handbook</i> from Cambridge Press. In this 
+section, OWL DL semantics is explained partly using DL terminologies and partly 
+using OWL terminologies. Note that the following remarks.</p>
+<table align="center" border="1">
+  <tbody>
+  <tr align="center" bgcolor="#ccffff">
+    <td>Terminologies in DL</td>
+    <td>Description in S-expression of SWCLOS</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>concept</td>
+    <td><i>class</i></td></tr>
+  <tr bgcolor="#ffffff">
+    <td>role</td>
+    <td><i>property</i></td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>top concept</td>
+    <td>owl:Thing</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>bottom concept</td>
+    <td>owl:Nothing</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>concept inclusion</td>
+    <td>(owl:Class <i>C</i> (rdfs:subClassOf <i>D</i>))</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>concept equality</td>
+    <td>(owl:Class <i>C</i> (owl:equivalentClass <i>D</i>))</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>role inclusion</td>
+    <td>(rdf:Property <i>R</i> (rdfs:subPropertyOf <i>S</i>))</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>role equality</td>
+    <td>(rdf:Property <i>R</i> (owl:equivalentProperty <i>S</i>))</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>intersection of concepts</td>
+    <td>(owl:intersectionOf <i>C</i><sub>1</sub> ... <i>C</i><sub><i>n</i></sub>)</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>union of concepts</td>
+    <td>(owl:unionOf <i>C</i><sub>1</sub> ... <i>C</i><sub><i>n</i></sub>)</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>negation of concepts</td>
+    <td>(owl:complementOf <i>C</i>)</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>value restriction</td>
+    <td>(owl:Restriction (owl:onPropertyOf <i>R</i>) (owl:allValuesFrom 
+      <i>C</i>))</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>limited existential quantification</td>
+    <td>(owl:Restriction (owl:onPropertyOf <i>R</i>) (owl:someValuesFrom 
+      owl:Thing))</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>full existential quantification</td>
+    <td>(owl:Restriction (owl:onPropertyOf <i>R</i>) (owl:someValuesFrom 
+      <i>C</i>))</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>at-least number restriction</td>
+    <td>(owl:Restriction (owl:onPropertyOf <i>R</i>) (owl:minCardinality 
+      <i>n</i>))</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>at-most number restriction</td>
+    <td>(owl:Restriction (owl:onPropertyOf <i>R</i>) (owl:maxCardinality 
+      <i>n</i>))</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>exact number restriction</td>
+    <td>(owl:Restriction (owl:onPropertyOf <i>R</i>) (owl:cardinality 
+      <i>n</i>))</td></tr>
+  <tr bgcolor="#ffffff">
+    <td>same-as agreement</td>
+    <td>(owl:Thing <i>u</i><sub>1</sub> (owl:sameAs <i>u</i><sub>2</sub>))</td></tr>
+  <tr bgcolor="#e5e5e5">
+    <td>one-of</td>
+    <td>(owl:Thing (owl:oneOf <i>I</i><sub>1</sub> ... <i>I</i><sub><i>n</i></sub>))</td></tr></tbody></table>
+<p><a id="SWCLOSdefResource" name="SWCLOSdefResource"/>
+To define a concept in OWL, <b>defConcept</b> is used instead of 
+<b>defResource</b> in RDFS. However, both macros generate completely same forms. 
+The purpose of &lsquo;<b>defConcept</b>&rsquo; macro is just syntax sugar for OWL. See the 
+following example after loading OWL module, where the concept Woman and Man are 
+defined. In addition, an anonymous class that stands for the concept of negation 
+of Woman, is defined. Since the negation of Woman represents a set of all 
+individuals of Man, the concept Man is defined as the intersection of Person and 
+the negation of Woman. The following demonstration also shows the entailment of 
+intersection of concepts. </p>
+<code>gx-user(7): (defConcept 
+Woman (owl:intersectionOf Person Female))<br/>Warning: Range entailX3 by 
+owl:intersectionOf: Person rdf:type owl:Class.<br/>Warning: Range entailX3 by 
+owl:intersectionOf: Female rdf:type owl:Class.<br/>#&lt;owl:Class 
+Woman&gt;<br/>gx-user(8): (defConcept 
+Man<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:intersectionOf 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Person<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Class 
+(owl:complementOf Woman))))<br/>#&lt;owl:Class Man&gt;<br/>gx-user(9): 
+(defIndividual John_Doe (rdf:type Man))<br/>#&lt;Man John_Doe&gt;<br/>gx-user(10): 
+(defIndividual Jane_Doe (rdf:type Woman))<br/>#&lt;Woman 
+Jane_Doe&gt;<br/>gx-user(11): (typep John_Doe Female)<br/>nil<br/>t<br/>gx-user(12): 
+(typep Jane_Doe Female)<br/>t<br/>t<br/></code><br/>
+<p>The concept that is not defined but referred is called <i>atomic concept</i>, 
+e.g., Person and Female in the above demonstration, while a <i>complex 
+concept</i> is defined using other concepts (complex or atomic), e.g., Woman and 
+Man. The atomic concept in SWCLOS exists as object but does not have slot values 
+except rdfs:subClassOf and owl:equivalentClass. </p>
+<h3>12.3 &nbsp;OWL Property Restrictions</h3>
+<p>A complex concept is often composed of concepts and restrictions. A 
+restriction, which is an instance of owl:Restriction, works as constraint for a 
+specific property and a specific concept. A property restriction is anonymous 
+and has only two slots of owl:onPropertyOf and restriction types, i.e., 
+owl:allValuesFrom, owl:someValuesFrom, owl:hasValue, owl:maxCardinality, 
+owl:minCardinality, and owl:cardinality.</p>
+<p>In the following example, the concept Mother is defined as the intersection 
+of Woman and the restriction such that the property hasChild must exist in Woman 
+individuals and one value of the property hasChild must be an instance of Person 
+at least.</p>
+<code>gx-user(13): (defConcept 
+Mother<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:intersectionOf<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Woman<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Restriction 
+(owl:onProperty hasChild)<br/>(owl:someValuesFrom Person))))<br/>Warning: Range 
+entailX3 by owl:onProperty: hasChild rdf:type rdf:Property.<br/>#&lt;owl:Class 
+Mother&gt;<br/>gx-user(14): (defConcept Father 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:intersectionOf 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Man<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Restriction 
+(owl:onProperty 
+hasChild)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:someValuesFrom 
+Person))))<br/>#&lt;owl:Class Father&gt;<br/></code><br/>
+<p>The property restriction in the intersection is useful to make a sub concept 
+that is specialized by the property restriction. In the above case, the concept 
+Mother is defined as Woman who has the slot hasChild, in which one slot value at 
+least must be an instance of a Person. Exactly speaking on the above 
+demonstration, it is possible to have something but Person in the hasChild slot 
+in the above definition. Note that it is needed to add the value restriction 
+(owl:allValuesFrom) on hasChild for Person, if you want to restrict that all of 
+children must be a Person, exactly in OWL semantics.</p>
+<p>Note that owl:Restriction in OWL is specialized to subclass restrictions in 
+SWCLOS, i.e., owl:hasValueRestriction, owl:someValuesFromRestriction, 
+owl:allValuesFromRestriction, or owl:cardinalityRestriction. The reason is 
+mainly for human readability of an anonymous object of owl:Restriction. Using 
+this subclassing of owl:Restriction, SWCLOS provides the customization of 
+printing restrictions. See the followings.</p>
+<blockquote><code>gx-user(15): (-&gt; Father 
+  owl:intersectionOf)<br/>(#&lt;owl:Class Man&gt; 
+  #&lt;ÅŒhasChild.Person&gt;)<br/></code></blockquote><br/>
+<p>In CLOS, we have the type option in the slot definition. Therefore, we have 
+implemented the allValuesFrom functionality and the someValuesFrom functionality 
+through this type option in the slot definition as well as the range value 
+constraint in RDFS. Furthermore, in order to implement the cardinality 
+constraint, we set two new slot option, <b>maxcardinality</b> and 
+<b>mincardinality</b> in the slot definition as 
+<b>OwlProperty-slot-definition</b>. </p>
+<h3>12.4 &nbsp;Substantial and non-Substantial Relationship</h3>
+<p>Whereas the subsumption relationship is decided with only rdfs:subClassOf in 
+RDFS, the subsumption decidability is very complicated in OWL. There are many 
+properties that rule subsumption, such as rdfs:subClassOf, owl:intersectionOf, 
+owl:unionOf, owl:equivalentClass, owl:equivalentProperty on rdf:type, 
+rdfs:subPropertyOf on rdf:type, etc. From the viewpoint of DL, they have same 
+strength for subsumption decidability. However, from the viewpoint of Ontology 
+Engineering, generally we have to discriminate substantial ones and 
+non-substantial ones for subsumption. For instance, the wife and husband 
+relation is weaker than man-person or woman-person relation. The former is not 
+substantial but the latter is substantial.</p>
+<p>On the other hand, from the viewpoint of CLOS, rdfs:subClassOf relation is 
+mapped onto class-subclass relation, and a CLOS object as rdfs:subClassOf 
+property value is also placed in the direct-superclasses list slot in the class 
+metaobject. Then, in case that a property <i>prop1</i> is a subproperty of 
+rdfs:subClassOf, or a equivalent property of rdfs:subClassOf, whether or not 
+should we place the property value into the direct-superclasses list in the 
+class to which the property <i>prop1</i> is attached? In other words, what 
+property should cause the structural variation in CLOS superclass-subclass 
+relation, and what property should not cause the structural variation? For 
+instance, food:Wine is equivalent to vin:Wine, and food:Wine in Food Ontology 
+does not have any slots, and vin:Wine in Wine Ontology has many slots. If we add 
+vin:Wine into the direct-superclasses list of food:Wine, then food:Wine inherits 
+all slot definitions in the superclasses of vin:Wine. So, should we put the same 
+slots as vin:Wine to food:Wine or not? In SWCLOS, we specified that 
+rdfs:subClassOf, owl:intersectionOf, and owl:unionOf should cause the structural 
+variation of CLOS, but other properties such as owl:equivalentClass, 
+owl:equivalentProperty, including subproperties and equivalent properties of 
+rdfs:subClass, owl:intersectionOf, and owl:unionOf, should not cause the 
+structural variation. The predicate <b>gx:subtypep</b> supports the subsumption 
+by class-subclass relation in RDFS semantics, and <b>subsumed-p</b> reasons the 
+subsumption using other subsumption-related properties in OWL.</p>
+<p>From the standpoint of ontology engineering, the effects of substantial 
+properties may propagate to other entities, but the result of non-substantial 
+properties should not cause any side effects in ontology. Thus, such 
+discrimination rule of substantial and non-substantial subsumption allows ones 
+to add and delete the relation of rdfs:subPropertyOf, owl:equivalentClass, etc., 
+and keeps easy to maintain ontologies.</p>
+<h3>12.5 &nbsp;Axiomatic Complete Relations</h3>
+<p>Among many properties in OWL, only four properties, i.e., owl:intersectionOf, 
+owl:unionOf, owl:complementOf, and owl:oneOf make axiomatic complete relations 
+as <i>if and only if</i> condition. In other words, these properties define 
+complete equivalency upon the binary relation of concepts. For example, the 
+following states the definition of WhiteBordeaux, and if something is a Bordeaux 
+and WhiteWine, it should be concluded to be a WhiteBordeaux.</p>
+<code>gx-user(2): (defpackage vin) <br/>#&lt;The vin package&gt; <br/>gx-user(3): 
+(defConcept vin::WhiteBordeaux <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type owl:Class)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:intersectionOf 
+vin::Bordeaux vin::WhiteWine))<br/>Warning: Range entailX3 by owl:intersectionOf: 
+vin::Bordeaux rdf:type owl:Class.<br/>Warning: Range entailX3 by 
+owl:intersectionOf: vin::WhiteWine rdf:type owl:Class.<br/>#&lt;owl:Class 
+vin:WhiteBordeaux&gt;<br/>gx-user(4): (defIndividual aWine (rdf:type vin:Bordeaux 
+vin:WhiteWine))<br/>Warning: Multiple classing 
+with<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(#&lt;owl:Class 
+vin:Bordeaux&gt; #&lt;owl:Class 
+vin:WhiteWine&gt;)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for 
+#&lt;vin:Bordeaux aWine&gt;<br/>#&lt;vin:WhiteBordeaux 
+aWine&gt;<br/></code><br/>
+<p>Similarly, the following assertion defines WineColor, which has the 
+enumerative membership of White, Rose, and Red of complete relation, so that it 
+states that the instance of WineColor is exactly one of the three, and not to be 
+the others.</p>
+<code>gx-user(5): (defConcept vin::WineColor 
+(rdf:type 
+owl:Class)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:oneOf 
+vin::White vin::Rose vin::Red))<br/>#&lt;owl:Class 
+vin:WineColor&gt;<br/>gx-user(6): vin:White<br/>#&lt;vin:WineColor 
+vin:White&gt;<br/></code><br/>
+<p>Therefore, it is not necessary to mind Open World Assumption upon such 
+axiomatic complete relation properties. If we find the contents of the 
+definition body matches the database, then we may conclude the definition is 
+applicable to the database without a worry about other statements.</p>
+<p>See the following example. SWCLOS concludes that QueenElizabethII should be a 
+woman, because there is a terminology that a person who has gender female is a 
+woman, and it is asserted that QueenElizabethII is an instance of Person and 
+hasGender Female. Here, note that SWCLOS proactively made the entailment without 
+demand or query from users.</p>
+<code>gx-user(2): (defConcept 
+Person (rdf:type 
+owl:Class)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:intersectionOf<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Human<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Restriction 
+(owl:onProperty 
+hasGender)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:cardinality 
+1))))<br/>Warning: Range entailX3 by owl:intersectionOf: Human rdf:type 
+owl:Class.<br/>Warning: Range entailX3 by owl:onProperty: hasGender rdf:type 
+rdf:Property.<br/>#&lt;owl:Class Person&gt;<br/>gx-user(3): (defConcept Woman 
+(rdf:type 
+owl:Class)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:intersectionOf<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Person<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Restriction 
+(owl:onProperty 
+hasGender)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValue 
+Female))))<br/>#&lt;owl:Class Woman&gt;<br/>gx-user(4): (defIndividual 
+QueenElizabethII (rdf:type 
+Person)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(hasGender 
+Female))<br/>Warning: Entailed in refining: #&lt;Person QueenElizabethII&gt; to 
+Woman.<br/>#&lt;Woman QueenElizabethII&gt;<br/></code><br/>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 
+<br/>Copyright (c) 2007-2010 Seiji Koide. Oct.2010 <br/></small></i></body></meta>

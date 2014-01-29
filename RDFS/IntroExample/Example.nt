@@ -1,0 +1,22 @@
+# Since Qname syntax is not legal N-triples syntax, and in the interests of brevity and readability, 
+# we will use the convention whereby a Qname is used without surrounding angle brackets to indicate 
+# the corresponding uriref enclosed in angle brackets, eg the triple
+#
+# <ex:a> rdf:type rdfs:Property .
+#
+# should be read as an abbreviation for the N-triples syntax
+#
+# <ex:a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Property> .
+#
+
+<http://somewhere-for-eg/eg#name>     rdf:type        rdf:Property .
+<http://somewhere-for-eg/eg#Person>   rdfs:subClassOf <http://somewhere-for-eg/eg#Agent> .
+<http://somewhere-for-eg/eg#Document> rdfs:subClassOf <http://somewhere-for-eg/eg#Work> .
+<http://somewhere-for-eg/eg#author>   rdf:type        rdf:Property .
+<http://somewhere-for-eg/eg#author>   rdfs:domain     <http://somewhere-for-eg/eg#Document> .
+<http://somewhere-for-eg/eg#author>   rdfs:range      <http://somewhere-for-eg/eg#Agent> .
+<http://.../Proposal/>                rdf:type        <http://somewhere-for-eg/eg#Document> .
+<http://.../Proposal/> <http://dublincore.org/2002/08/13/dces#title> "Information Management: A Proposal" .
+<http://.../Proposal/> <http://somewhere-for-eg/eg#author>  _:a .
+_:a                                   rdf:type        <http://somewhere-for-eg/eg#Person> .
+_:a                <http://somewhere-for-eg/eg#name>  "Tim Berners-Lee" .

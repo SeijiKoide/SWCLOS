@@ -1,0 +1,32 @@
+cg-user(1): 
+; Fast loading C:\Documents and Settings\Seiji\My Documents\KoideHP\SWCLOS2\SWCLOSsys.fasl
+
+;=========== System Description ================
+;   System: "SWCLOS: A Semantic Web Processor on CLOS"
+;     default package: #<The common-graphics-user package>
+;     default pathname: #P"C:\\Documents and Settings\\Seiji\\My Documents\\KoideHP\\SWCLOS2\\"
+;     default module class: defsystem:lisp-module
+;     the system contains the following modules:
+;       System: "RDF subsystem of SWCLOS"
+;       System: "RDFS subsystem of SWCLOS"
+;       System: "OWL subsystem of SWCLOS"
+;       System: "NTriple subsystem of SWCLOS"
+;===============================================
+
+;;To recompile, execute this form:
+(compile-system :swclos :recompile t)
+
+;;To load, execute this form:
+(load-system :swclos)
+cg-user(1): (compile-system :swclos :recompile t)
+; Compiling system: "SWCLOS: A Semantic Web Processor on CLOS".
+                      ...
+
+cg-user(2): (load-system :swclos)
+                      ...
+cg-user(3): 
+; Fast loading C:\Documents and Settings\Seiji\My Documents\KoideHP\SWCLOS2\swclos.fasl
+; Fast loading C:\Documents and Settings\Seiji\My Documents\KoideHP\SWCLOS2\utilities.fasl
+; Fast loading C:\Documents and Settings\Seiji\My Documents\KoideHP\SWCLOS2\hyperspec.fasl
+; Fast loading C:\Documents and Settings\Seiji\My Documents\KoideHP\SWCLOS2\index.fasl
+cg-user(3): (gen-index)

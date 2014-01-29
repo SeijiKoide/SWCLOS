@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>はじめに</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2><a id="ch-Introduction" name="ch-Introduction">1. はじめに</a></h2>
+<p>SWCLOS は Lisp で知識処理をしたい リスププログラマーのためのソフトウェアツールである．
+その名前は Semantic Web Common Lisp Object System の頭文字からとられているが，その名の示す通り
+SWCLOS はセマンティックウェブのために，Common Lisp Object System (CLOS)上に構築されている．
+SWCLOS においては，RDF, RDFS, OWL, そしてユーザ定義のオントロジーにおける語彙のすべての
+用語はCLOSのオブジェクトを表示し，その意味論はCLOSではなく RDF(S) と OWL に基づいているが，
+プログラミングは依然としてオブジェクト指向のパラダイムに従っている．</p>
+<p>SWCLOS はセマンティックウェブ技術とオブジェクト指向プログラミング技術を融合させたものである．
+その他のセマンティックウェブ・システムに比べて，SWCLOS にはユニークな特徴がある．
+SWCLOS の利点も欠点も，動的オブジェクト指向言語である CLOS と Lisp 言語の性質に帰することが
+できると言えよう． もしリスププログラマーがセマンティック技術のためのアプリケーションを開発
+する必要があるとすれば， SWCLOS はその解となり得る． 更に，もしそのプログラマーが CLOS プログラミング
+に長けているのなら， SWCLOS は最適の解となる． SWCLOS は CLOS のメタプログラミング機能を用いて，
+OWL Full レベルでのオントロジー・メタモデリング機能を提供する． リスププログラマーはいつもの
+プログラミングと同様なやりかたで， SWCLOS 上でセマンティックウェブのための CLOS プログラミングを
+行うことができる． 必要なことは，標準の CLOS 意味論と RDF(S)/OWL 意味論の違いを学ぶことだけである．</p>
+<p>この文書は SWCLOS プログラマーのためのユーザマニュアルである． SWCLOS のプログラムは RDF/XML
+フォーマット， N-トリプルフォーマット， ttl フォーマット， そして SWCLOS 用のリスプの S 式のオントロジーファイルを読み込むことができ，
+リスプで SWCLOS オブジェクトを取り扱って，その処理結果を上記の様々なフォーマットに書きだすことができる．
+それゆえ，そのようなセマンティックウェブの各種フォーマットを介して他とコミュニケートすることができる．</p>
+<p>もし CLOS プログラマーがセマンティック技術とは何かを知りたいのなら，SWCLOS はそれを学んで
+セマンティックウェブ・プログラミングを開始する絶好の機会を提供する．</p>
+<hr/>
+<small><i>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb.2006 
+<br/>Copyright (c) 2007-2010 Seiji Koide. Oct.2010 </i>翻訳 2013/03/12<br/></small></body></html>

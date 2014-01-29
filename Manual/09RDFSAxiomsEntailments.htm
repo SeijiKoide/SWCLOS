@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0074)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/RDFSAxiomsEntailments.html -->
+<html><head><title>9. RDFS Axioms and Entailments</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>9. &nbsp;RDFS Axioms and Entailments</h2>
+<h3>9.1 &nbsp;RDF and RDFS Axioms</h3>
+<p>In SWCLOS, <a href="http://www.w3.org/TR/rdf-mt/">all RDF and RDFS axioms</a> 
+are implemented. For exmaple, the following example shows <a 
+href="http://www.w3.org/TR/rdf-mt#RDF_axiomatic_triples">RDF axiomatic 
+triples</a>.</p>
+<blockquote><code>gx-user(2): (typep rdf:type 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(3): (typep rdf:subject 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(4): (typep rdf:predicate 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(5): (typep rdf:object 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(6): (typep rdf:first 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(7): (typep rdf:rest 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(8): (typep rdf:value 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(9): (typep rdf:nil 
+  rdf:List)<br/>t<br/>t<br/></code></blockquote>
+<p>The following example shows a part of <a 
+href="http://www.w3.org/TR/rdf-mt#RDFS_axiomatic_triples">RDFS axiomatic 
+triples</a>.</p>
+<blockquote><code>gx-user(14): (rdfs:domain 
+  rdf:type)<br/>#&lt;rdfs:Class rdfs:Resource&gt;<br/>gx-user(15): (rdfs:domain 
+  rdfs:domain)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(16): (rdfs:domain 
+  rdfs:range)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(17): (rdfs:domain 
+  rdfs:subPropertyOf)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(18): 
+  (rdfs:domain rdfs:subClassOf)<br/>#&lt;RDFSclass rdfs:Class&gt;<br/>gx-user(19): 
+  (rdfs:domain rdf:subject)<br/>#&lt;rdfs:Class 
+  rdf:Statement&gt;<br/><br/>gx-user(24): (rdfs:range rdf:type)<br/>#&lt;rdfsClass 
+  rdfs:Class&gt;<br/>gx-user(25): (rdfs:range rdfs:domain)<br/>#&lt;rdfsClass 
+  rdfs:Class&gt;<br/>gx-user(26): (rdfs:range rdfs:range)<br/>#&lt;rdfsClass 
+  rdfs:Class&gt;<br/>gx-user(27): (rdfs:range 
+  rdfs:subPropertyOf)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(28): 
+  (rdfs:range rdfs:subClassOf)<br/>#&lt;rdfsClass 
+  rdfs:Class&gt;<br/><br/>gx-user(31): (rdfs:subClassOf 
+  rdf:Alt)<br/>#&lt;rdfs:Class rdfs:Container&gt;<br/>gx-user(32): 
+  (rdfs:subClassOf rdf:Bag)<br/>#&lt;rdfs:Class 
+  rdfs:Container&gt;<br/>gx-user(33): (rdfs:subClassOf 
+  rdf:Seq)<br/>#&lt;rdfs:Class rdfs:Container&gt;<br/>gx-user(34): 
+  (rdfs:subClassOf rdfs:ContainerMembershipProperty)<br/>#&lt;rdfs:Class 
+  rdf:Property&gt;<br/><br/>gx-user(35): (rdfs:subPropertyOf 
+  rdfs:isDefinedBy)<br/>(#&lt;rdf:Property rdfs:seeAlso&gt;)<br/><br/>gx-user(36): 
+  (typep rdf:XMLLiteral rdfs:Datatype)<br/>t<br/>t<br/>gx-user(37): 
+  (rdfs:subClassOf rdf:XMLLiteral)<br/>#&lt;rdfs:Class 
+  rdfs:Literal&gt;<br/>gx-user(38): (rdfs:subClassOf 
+  rdfs:Datatype)<br/>#&lt;rdfsClass rdfs:Class&gt;<br/></code></blockquote>
+<p>The followings also show important axiomatic triples on RDFS.</p>
+<blockquote><code>gx-user(39): (typep rdfs:Resource 
+  rdfs:Class)<br/>t<br/>t<br/>gx-user(40): (typep rdfs:Class 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(41): (typep rdfs:Resource 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(42): (typep rdfs:Class 
+  rdfs:Class)<br/>t<br/>t<br/>gx-user(43): (typep rdf:XMLLiteral 
+  rdfs:Class)<br/>t<br/>t<br/>gx-user(44): (typep rdfs:Datatype 
+  rdfs:Class)<br/>t<br/>t<br/></code></blockquote>
+<p>The class-instance relation in RDF is directly defined with rdf:type 
+property. The notion of RDF class is different from the class notion in CLOS, 
+but the subsumption relation among objects is the same as that in CLOS. The 
+straightforward mapping of rdf:type relation to CLOS class instance relation 
+conveys gains and benefits such as the potential of CLOS is available. However, 
+this straightforward mapping causes only one obstacle to implement RDF on top of 
+CLOS, namely rdfs:Class that is an instance of rdfs:Class itself. Allegro Common 
+Lisp rejects such membership loop among classes, whereas cl:standard-object is 
+an instance of itself in CLOS. Therefore, to work around this obstacle, the 
+internal proxy class, <b>rdfsClass</b>, is introduced as a class of rdfs:Class 
+and simultaneously as a subclass of rdfs:Class. Note that this twisted relation 
+of class/instance and superclass/subclass between rdfs:Class and rdfsClass in 
+CLOS produces a membership loop of rdfs:Class as well as the relation between 
+rdfs:Resource and rdfs:Class in CLOS. See the followings. </p>
+<blockquote><code>gx-user(2): (cl:typep rdfs:Resource 
+  rdfs:Class)<br/>t<br/>gx-user(3): (cl:subtypep rdfs:Class 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(4): (cl:typep rdfs:Resource 
+  rdfs:Resource)<br/>t<br/>gx-user(5): (cl:typep rdfs:Class 
+  'rdfsClass)<br/>t<br/>gx-user(6): (cl:subtypep 'rdfsClass 
+  rdfs:Class)<br/>t<br/>t<br/>gx-user(7): (cl:typep rdfs:Class 
+  rdfs:Class)<br/>t<br/></code></blockquote>
+<p>Note that the <i>membership loop</i> on rdfs:Class is really implemented in 
+CLOS semantics by means of a trick called twisted relation between rdfs:Class 
+and its direct class <b>rdfsClass</b>.</p>
+<h3>9.2 &nbsp;RDFS Entailment</h3>
+<p>The <a href="http://www.w3.org/TR/rdf-mt#rdfs_entailment">RDFS entailment</a> 
+directs that every resource in RDF is typed to rdfs:Resource. The following 
+shows some examples.</p>
+<blockquote><code>gx-user(13): (typep rdfs:Resource 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(14): (typep rdfs:Class 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(15): (typep rdf:nil 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(16): (typep rdfs:comment 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(17): (typep "This is a plain literal." 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(18): (typep 1 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(19): (typep &lt;http://www.somewhere&gt; 
+  rdfs:Resource)<br/>t<br/>t<br/></code></blockquote>
+<h3>9.3 &nbsp;RDF Entailment Rules</h3>
+<p>There are two <a href="http://www.w3.org/TR/rdf-mt/#RDFRules">RDF entailment 
+rules</a>, <b>rdf1</b> and <b>rdf2</b> as follows.</p>
+<blockquote><code>gx-user(9): (defIndividual uuu (aaa 
+  yyy))<br/>Warning: Entail by rdfs1: aaa rdf:type 
+  rdf:Property.<br/>#&lt;|rdfs:Resource| uuu&gt;<br/>gx-user(10): (typep aaa 
+  rdf:Property)<br/>t<br/>t<br/>gx-user(11): (defIndividual vvv (aaa (xsd:integer 
+  1)))<br/>#&lt;|rdfs:Resource| vvv&gt;<br/>gx-user(12): (get-form 
+  vvv)<br/>(|rdfs:Resource| vvv (aaa "1"^^xsd:integer))<br/>gx-user(13): (typep 
+  (slot-value vvv 'aaa) rdf:XMLLiteral)<br/>t<br/>t<br/></code></blockquote>
+<p>In any input triple, a predicate is an instance of rdf:Property (entailment 
+rule <b>rdf1</b>). When an object of an input triple is a well-typed XML 
+literal, SWCLOS creates an data object that is an instance of rdf:XMLLiteral 
+typed to the designated type (entailment rule <b>rdf2</b>).</p>
+<h3>9.4 &nbsp;RDFS Entailment Rules</h3>
+<p>There are 13 rules in RDFS as shown in <a 
+href="http://www.w3.org/TR/rdf-mt/#RDFSRules">RDFS Entailment Rules in RDF 
+Semantics</a>. </p>
+<p>However a lisp string and number is interpreted as a plain literal in RDFS by 
+SWCLOS. Therefore, <b>rdfs1</b> rule is implicitly realized for a plain literal. 
+</p>
+<p>Note that hereafter if line numbers are renewed some younger number, it means 
+the system is newly booted and refleshed.</p>
+<blockquote><code>gx-user(2): (typep "This is a string in 
+  lisp." rdfs:Literal)<br/>t<br/>t<br/>gx-user(3): (typep 1 
+  rdfs:Literal)<br/>t<br/>t<br/></code></blockquote>
+<p>For a plain literal with language tag, SWCLOS creates an instance object of 
+<a 
+href="06Datatypes.htm#SWCLOSinLang"><b>rdf:inLang</b></a>, 
+then the result for a literal with language tag also satisfies <b>rdfs1</b> 
+rule.</p>
+<p>Note that the system is rebooted, before each of the following examples, 
+otherwise uuu or aaa in the example are collides.</p><code>gx-user(4): (defIndividual uuu (aaa (:en "This is an English 
+text.")))<br/>Warning: Entail by rdf1: aaa rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| uuu&gt;<br/>gx-user(5): (get-form 
+uuu)<br/>(|rdfs:Resource| uuu (aaa (:en "This is an English 
+text.")))<br/>gx-user(6): (slot-value uuu 'aaa)<br/>"This is an English 
+text."@en<br/>gx-user(7): (typep (slot-value uuu 'aaa) 
+rdfs:Literal)<br/>t<br/>t<br/></code>
+<p><b>Rdfs2</b> is a domain entailment as follows. SWCLOS proactively performs 
+this entailment rule. In other words, SWCLOS newly creates an instance or 
+refines the existing instance according to this rule.</p><code>gx-user(2): (defProperty aaa (rdfs:domain xxx))<br/>Warning: Range 
+entailX3 by rdfs:domain: xxx rdf:type rdfs:Class.<br/>#&lt;rdf:Property 
+aaa&gt;<br/>gx-user(3): (defIndividual uuu (aaa yyy))<br/>#&lt;xxx 
+uuu&gt;<br/>gx-user(4): (typep uuu xxx)<br/>t<br/>t<br/></code>
+<p><b>Rdfs3</b> is a range entailment same as domain rule 
+<b>rdfs2</b>.</p><code>gx-user(2): (defProperty aaa 
+(rdfs:range xxx))<br/>Warning: Range entailX3 by rdfs:range: xxx rdf:type 
+rdfs:Class.<br/>#&lt;rdf:Property aaa&gt;<br/>gx-user(3): (defIndividual uuu (aaa 
+vvv))<br/>Warning: Range entailX3 by aaa: vvv rdf:type 
+xxx.<br/>#&lt;|rdfs:Resource| uuu&gt;<br/>gx-user(4): (typep vvv 
+xxx)<br/>t<br/>t<br/></code>
+<p><b>Rdfs4a</b> rule entails a subject in any triple is an instance of 
+rdfs:Resource. In a description of form for <b>addForm</b> input parameter, 
+individual's type is designated by a <i>class</i>specifier in the form. If 
+'rdf:Description' is indicated for <i>class</i> description, or cl:nil is passed 
+for the resource object creation as no type indication, <b>rdfs4a</b> rule may 
+be applicable. However, there is a sensitive question in SWCLOS. In RDF(S) 
+semantics, rdfs:Resource is a type of every resource, despite that a resource is 
+an instance of rdfs:Class or an instance of rdfs:Resource. On the other hand, in 
+CLOS level at SWCLOS implementation, we have two possibilities for the instance 
+of rdfs:Resource. It may be either as an instance of rdfs:Resource CLOS class 
+(namely instance), or as an instance of rdfs:Class metaclass (namely class). As 
+a default in SWCLOS, an instance of rdfs:Resource as CLOS instance of 
+rdfs:Resource is created. Thus, SWCLOS changes the category of created object 
+from instance to class later on, if a metaclass is indicated for the object at 
+the proper definition.</p>
+<p><b>Rdfs4b</b> has the same logic and the same problem as <b>rdfs4a</b> for 
+the range entailment. See the following example.</p><code>gx-user(2): (addForm '(cl:nil (:name uuu) (aaa xxx)))<br/>Warning: 
+Entail by rdf1: aaa rdf:type rdf:Property.<br/>#&lt;|rdfs:Resource| 
+uuu&gt;<br/>gx-user(3): (typep uuu rdfs:Resource)<br/>t<br/>t<br/>gx-user(4): (typep 
+xxx rdfs:Resource)<br/>t<br/>t<br/></code>
+<p><b>Rdfs5</b> is a transitivity rule on rdfs:subPropertyOf. We implemented it 
+on properties.</p><code>gx-user(2): (defProperty uuu 
+(rdfs:subPropertyOf vvv))<br/>Warning: Range entailX3 by rdfs:subPropertyOf: vvv 
+rdf:type rdf:Property.<br/>#&lt;rdf:Property uuu&gt;<br/>gx-user(3): (defProperty 
+vvv (rdfs:subPropertyOf xxx))<br/>Warning: Range entailX3 by rdfs:subPropertyOf: 
+xxx rdf:type rdf:Property.<br/>#&lt;rdf:Property vvv&gt;<br/>gx-user(4): 
+(subproperty-p uuu xxx)<br/>t<br/></code>
+<p><b>Rdfs6</b> is very natural rule on rdfs:subPropertyOf as well as 
+<b>rdfs10</b> on rdfs:subClassOf.</p>
+<blockquote><code>gx-user(9): (subproperty-p uuu 
+  uuu)<br/>t<br/></code></blockquote>
+<p><b>Rdfs7</b> may be a little bit confusing.</p><code>gx-user(2): (defProperty aaa (rdfs:subPropertyOf 
+bbb))<br/>Warning: Range entailX3 by rdfs:subPropertyOf: bbb rdf:type 
+rdf:Property.<br/>#&lt;rdf:Property aaa&gt;<br/>gx-user(3): (defIndividual uuu 
+(aaa yyy))<br/>#&lt;|rdfs:Resource| uuu&gt;<br/>gx-user(4): (slot-value uuu 
+'bbb)<br/>Error: The slot bbb is missing from the object #&lt;|rdfs:Resource| 
+uuu&gt;<br/>&nbsp;&nbsp;of class #&lt;rdfs:Class |rdfs:Resource|&gt; during 
+operation slot-value.<br/>[condition type: program-error]<br/>gx-user(5): (-&gt; 
+uuu bbb)<br/>#&lt;|rdfs:Resource| yyy&gt;<br/></code><br/>
+<p>In the form, (slot-value uuu 'bbb), although getting a slot value of bbb that 
+is attached to uuu object was attempted, the value yyy is attached by slot named 
+aaa, then CLOS signaled an slot missing alarm. The function &ldquo;<b>-&gt;</b>&rdquo; is 
+for RDF graph traversing and getting the value at the final place arrived. It 
+takes account of not only designated properties as travel path but also their 
+super-properties. </p>
+<p><b>Rdfs8</b> means that the default superclass of instance of rdfs:CLass 
+metaclass is rdfs:Resource.</p>
+<blockquote><code>gx-user(2): (defResource uuu (rdf:type 
+  rdfs:Class))<br/>#&lt;rdfs:Class uuu&gt;<br/>gx-user(3): (subtypep uuu 
+  rdfs:Resource)<br/>t<br/>t<br/></code></blockquote>
+<p><b>Rdfs9</b> subsumption rule and <b>rdfs10</b> are natively equipped with in 
+CLOS.</p><code>gx-user(2): (defResource uuu (rdfs:subClassOf 
+xxx))<br/>Warning: Range entailX1 by rdfs:subClassOf: xxx rdf:type 
+rdfs:Class.<br/>#&lt;rdfs:Class uuu&gt;<br/>gx-user(3): (defIndividual vvv 
+(rdf:type uuu))<br/>#&lt;uuu vvv&gt;<br/>gx-user(4): (typep vvv 
+xxx)<br/>t<br/>t<br/>gx-user(5): (cl:typep vvv xxx)<br/>t<br/>gx-user(6): (subtypep 
+uuu uuu)<br/>t<br/>t<br/>gx-user(7): (cl:subtypep uuu 
+uuu)<br/>t<br/>t<br/></code><br/>
+<p><b>Rdfs11</b> transitivity rule of rdfs:subClassOf is also natively equipped 
+with in CLOS.</p><code>gx-user(2): (defResource uuu 
+(rdfs:subClassOf vvv))<br/>Warning: Range entailX1 by rdfs:subClassOf: vvv 
+rdf:type rdfs:Class.<br/>#&lt;rdfs:Class uuu&gt;<br/>gx-user(3): (defResource vvv 
+(rdfs:subClassOf xxx))<br/>Warning: Range entailX1 by rdfs:subClassOf: xxx 
+rdf:type rdfs:Class.<br/>#&lt;rdfs:Class vvv&gt;<br/>gx-user(4): (subtypep uuu 
+xxx)<br/>t<br/>t<br/>gx-user(5): (cl:subtypep uuu xxx)<br/>t<br/>t<br/></code><br/>
+<p><b>Rdfs12</b> is a special rule for rdfs:ContainerMembershipProperty. SWCLOS 
+proactively adds the entailment that an instance of 
+rdfs:ContainerMembershipProperty is a subproperty of rdfs:member.</p><code>gx-user(2): (defIndividual uuu (rdf:type 
+rdfs:ContainerMembershipProperty))<br/>#&lt;rdfs:ContainerMembershipProperty 
+uuu&gt;<br/>gx-user(3): (subproperty-p uuu rdfs:member)<br/>t<br/></code><br/>
+<p>The last rule <b>rdfs13</b> is for data type definition.</p><code>gx-user(2): (defResource uuu (rdf:type 
+rdfs:Datatype))<br/>Warning: Datatype uuu is defined. Please define lisp type 
+with same name.<br/>#&lt;rdfs:Datatype uuu&gt;<br/>gx-user(3): (subtypep uuu 
+rdfs:Literal)<br/>t<br/>t<br/></code><br/>
+<p>SWCLOS satisfies <b>rdfs13</b> by creating an instance of rdfs:Datatype. 
+However, the lisp system cannot interpret this type until the same name lisp 
+type is defined.</p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp">Seiji Koide</a>. Copyright 
+(c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 <br/>Copyright (c) 2007-2010 
+Seiji Koide. Oct.2010 <br/></small></i></body></html>

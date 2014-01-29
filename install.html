@@ -1,0 +1,78 @@
+<HTML>
+<HEAD>
+<TITLE>Downloading and Installing SWCLOS</TITLE>
+<!-- Changed by: Seiji Koide   12-Sep-2008 -->
+<!-- Changed by: Peter Norvig, 24-Jul-1996 -->
+<META http-equiv="Content-Type" content="text/html">
+<META http-equiv="Content-Style-Type" content="text/css">
+<link href="overview.css" rel="stylesheet" type="text/css">
+</HEAD>
+<BODY bgcolor=#ffffff>
+<H1>Downloading and Installing SWCLOS</H1>
+<P>
+This page gives instructions for downloading SWCLOS, and 
+installing it on your local system.  This installation procedure need
+only be followed once.  
+
+<H2>Downloading SWCLOS</H1>
+<P>
+To download the code, follow these steps:
+
+<OL>
+<LI> Access SWCLOS home page <a href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">
+http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm</a>, and select the menu item "Download".
+
+<LI> Click the direction for ZIP file for downloading all modules and documents, then you 
+can store SWCLOS system at any place of local PC. 
+
+<LI> Unpack manually the ZIP file, if it is not expanded automatically. Then, replace the SWCLOS folder 
+to your favorite directory, ex. C:\allegro-projects\" on Windows, 
+</OL>
+
+<H2>Installing a Lisp Interpreter/Compiler</H2>
+<P>
+SWCLOS runs only on top of Allegro Common Lisp (ACL) from Franz, Inc. If you do not have ACL, you can download the 
+evaluation version of ACL, <a href="http://www.franz.com/downloads/">Allegro CL Free Express Edition</a> for Windows.
+It is free and works completely in the same as the commercial version. It is quite enough if you do not load huge ontologies 
+on SWCLOS. Please make sure you have the authority of local manager in MS-Windows for installing ACL.
+</P>
+
+<H3>How to change the character mode:</H3>
+We always use ACL in modern mode (character case sensitive), in which the
+lisp system distinguishes upper-case letters and lower-case letters. 
+The case-sensitive mode is mandatory to use the URI library and SWCLOS in ACL.
+Note that ACL Free Express is not in modern mode. 
+<b>You must follow the instruction below in order to set up modern mode for 
+ACL Free Express</b>.  If you have a commercial ACL, you do not need the following steps. 
+Running the modern version in MS-Windows is just menu selection from the start menu. 
+
+<OL>
+<LI>Run acl<I>nn</I>-express downloaded.
+<LI>Execute the following form in Lisp window. You will obtain 'allegro.exe' file under 
+'C:\Program Files\acl<I>nn</I>-express' folder.
+<P>
+<pre class="box"><code>     (progn
+       (build-lisp-image "sys:allegro.dxl" :case-mode :case-sensitive-lower)
+       (when (probe-file "sys:allegro.exe") (delete-file "sys:allegro.exe"))
+       (sys:copy-file "sys:allegro-express.exe" "sys:allegro.exe"))
+</code></pre><BR>
+</P>
+<LI>To start Lisp, invoke 'allegro.exe' instead of 'allegro-ansi.exe'. 
+In Windows, it is a good idea to set up the start menu for 'allegro.exe'. You may change and revise 
+the start menu folder from 'allegro-ansi.exe' to 'allegro.exe' on the title and the link.
+</OL>
+
+<H2>Running SWCLOS</H2>
+
+The steps above need be done only once;
+you are now ready to use SWCLOS. Please read ReadMe.txt in the SWCLOS folder.
+
+<H2>For Mac Users</H2>
+
+I confirmed that SWCLOS runs on top of ACL-express for MacOS X for Intell CPU, with IDE by X-Windows.
+I also confirmed the modern version can be generated on MacOS, too.
+
+<P>
+<hr>
+<i><small> Author: <a href="mailto:SeijiKoide@aol.com?subject=SWCLOS">Seiji Koide</a>. Modified Norvig's file. Copyright (c) 2011 Seiji Koide. Jan. 2011 </small></i></body></html>
+</TABLE></BODY></HTML>

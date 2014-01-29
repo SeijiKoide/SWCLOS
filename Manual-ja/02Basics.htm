@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/BASICS.html -->
+<html><head><title>SWCLOS の基本</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<!-- copy and paste into every html files this link and style for css -->
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>2. &nbsp;SWCLOS の基本</h2>
+<h3>2.1 &nbsp;SWCLOS を入手する</h3>
+<p>SWCLOS は当初は開発者である小出誠二によって，株式会社ギャラクシー・エクスプレスにおいて開発された
+オープン・ソース・プログラムであり，引き続き彼によって更新が継続されている．
+最新の版は国立情報学研究所 (NII) の彼のホームページ
+<a 
+href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">http://www-kasm.nii.ac.jp/~koide/SWCLOS2.htm</a>
+から入手可能である． 
+</p>
+<p>SWCLOS の現在の版は Franz 社の Allegro Common Lisp (ACL) 8.1, 8.2, 9.0 上で開発されている．
+だれかによって他のリスプ処理系に移植されることを望むものではあるが，その作業は困難を極めるであろう．
+なぜならば，一部の実装は ACL 特有の部分に深く関係しているからである．</p>
+<h3>2.2 &nbsp;権利関係</h3>
+<p>株式会社ギャラクシー・エクスプレスがかつてすべてのコピーライトを所有していて，
+パッケージ名 <b>gx</b> と <b>gx-user</b> を変更すること以外は， AS IS で SWCLOS の利用を制限なしに許可していた．
+'GX’はギャラクシー・エクスプレスが開発予定であったロケットの名前である．
+現在の状況については下記の注記と配布の README ファイルを参照されたい．</p>
+<p><small>株式会社ギャラクシー・エクスプレスは 2010 年に株式会社 IHI に吸収され，
+開発者の小出誠二も IHI に移動した．したがって，上記の条項は IHI に引き継がれ，
+現在もギャラクシーに代えて IHI として効力を持っていると考えられる．その後，
+小出は IHI を退職し，現在は国立情報学研究所の特任研究員である．
+SWCLOS は日本の IT プログラム 「IT を用いた大規模システムのための運転支援システムの構築」 の成果の一つである．</small></p>
+<h3>2.3 &nbsp;SWCLOS を始めるには</h3>
+<p>SWCLOS を利用するには， ACL modern リスプに SWCLOS をコンパイル・ロードののち，リスプリスナー・ウィンドウにおいて
+<b>gx-user</b> パッケージに入るのがよい． SWCLOS では大文字小文字を区別し，リスプのリーダは case-sensitive-lower
+モードでなければならないことに注意されたい．この仕様はANSI-標準ではないが，間もなくそうなることを期待している．</p>
+<blockquote><code>cg-user(1): (in-package gx-user)<br/>#&lt;The gx-user 
+  package&gt;<br/>gx-user(2): <br/></code></blockquote>
+<p>Franz 社は Allegro Common Lisp における case-sensitive 機能について，よいチュートリアルを提供している．
+<a 
+href="http://www.franz.com/support/tutorials/casemode-tutorial.htm">http://www.franz.com/support/tutorials/casemode-tutorial.htm</a>
+を参照されたい．</p>
+<h3>2.4 &nbsp;知識の単調性について</h3>
+<p>セマンティックウェブでは知識は常に増加し，解釈はいつでもより精密により豊かになることが前提とされている．
+SWCLOS ではオントロジーにおける前方参照の解決のために，この単調性の原則を利用している．
+現在の版では，オントロジーにおけるエンティティが削除されることはなく，undo 機能は提供されていない 
+（もし矛盾する知識が入力されると， SWCLOS はすぐに警告を発してブレークするので，その場ですぐに問題を修正することができる）．
+Undo のような機能は次期バージョンにおいて提供されるであろう．</p>
+<p>SWCLOS の至る所で， その機能はセマンティックウェブの原則にしたがっているが，
+ただし，上記単調性の原則によりスロット値に新しい値を追加するには，<b>put-value</b> 関数を用いなければならない．
+通常のスロット値設定機能 (setf (slot-value ...) ...) はこの版では元の CLOS の意味論を保持している．</p>
+<h3>2.5 &nbsp;開世界仮説と三値論理</h3>
+<p>セマンティックウェブでは World Wide Web は動的であり，移ろいやすく，
+WWW のすべてを知ることは不可能であるという意味で，オープンとされている．
+論理の観点から言えば，閉世界仮説は推論の基本的前提である．それゆえ，
+論理の考えかたに慣れた人はこのことを心に留めるべきである．</p>
+<p>記述論理 (Description Logic, DL) の主な機能は,  i) オブジェクトをクラスに分類すること, ii) あるクラスが他のクラスに包摂されるかどうかを決定すること, である．
+SWCLOS ではこの働きは,  i) <b>gx:typep</b> により,  ii) RDF ユニバースにおける <b>gx:subtypep</b>, OWL ユニバースにおける
+<b>gx:subsumed-p</b> により，実行されるが，これらの関数は返値として二つの値を返す．
+最初の値はクエリに対する yes/no を表現し，二番目の値は確実さを表現する．
+それゆえ, <tt>&lt;t,t&gt;</tt> は論理値の真を表し，<tt>&lt;nil,t&gt;</tt> は偽を表すと見なすことができる．
+そして, <tt>&lt;nil,nil&gt;</tt> は未定または未知を意味する．<tt>&lt;t,nil&gt;</tt> は決して起こらない．
+この三値論理は元々上記の値を返す cl:subtypep についての ANSI Common Lisp の仕様を拡張したものである．その詳細は
+ANSI Common Lisp 仕様書
+<a 
+href="http://www.lispworks.com/documentation/HyperSpec/Body/f_subtpp.htm#subtypep">http://www.lispworks.com/documentation/HyperSpec/Body/f_subtpp.htm#subtypep</a> を参照されたい．
+しかしながら，リスププログラマーはこの三値論理の使い方に惑う必要はない．もし返値の最初の値だけを使うのなら，
+プログラムは未定を偽と同等に扱うことになる． SWCLOS において三値論理をどう計算しているのか興味があれば，
+お手元のソースコードを参考にされたい．</p>
+<hr/>
+<small><i>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. 
+Feb.2006<br/>Copyright (c) 2007-2010, 2013 Seiji Koide. 
+Mar.2013 </i>翻訳 2013/03/12<br/></small></body></html>

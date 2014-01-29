@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/BASICS.html -->
+<html><head><title>SWCLOS Basics</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<!-- copy and paste into every html files this link and style for css -->
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>2. &nbsp;SWCLOS Basics</h2>
+<h3>2.1 &nbsp;How to Get SWCLOS</h3>
+<p>SWCLOS is an Open Source Program that was originally developed at GALAXY 
+EXPRESS CORPORATION in Japan, and Seiji Koide, who is the developer of SWCLOS, 
+has been continued updating it. The latest version is available from Koide's 
+home page at National Institute of Informatics (NII) <a 
+href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm</a>. 
+</p>
+<p>The SWCLOS current version is developed on Allegro Common Lisp (ACL) 8.1, 8.2, and 9.0
+Windows version that is delivered by Franz Inc. We hope someone ports it to 
+other lisp systems, although it is probably hard, because partly the 
+implementation is concerned with ACL specific features. </p>
+<h3>2.2 &nbsp;Proprietary Rights</h3>
+<p>GALAXY EXPRESS CORPORATION held all copyrights and allowed anyone to use 
+SWCLOS anyhow AS IS, except modifying the package name of <b>gx</b> and 
+<b>gx-user</b>. ÅeGXÅf was the rocket 
+name from GALAXY EXPRESS CORPORATION. See the following note and README file in delivery about the current status of the proprietary. </p>
+<p><small>Note that the company GALAXY EXPRESS CORPORATION was undertaken by IHI 
+Corporation at 2010, and the developer Seiji Koide was also moved to IHI. So, 
+he believes this term is inherited by IHI and still effective for the company 
+IHI instead of GALAXY at present. After that he retired from IHI and has become 
+a research fellow at National Institute of Infomatics. 
+Note that SWCLOS is a part of successful results of 
+Japanese IT national programs titled ÅgBuilding Operation Support System for 
+Large-Scale Systems using IT.Åh </small></p>
+<h3>2.3 &nbsp;How to Start SWCLOS</h3>
+<p>After compiling and loading SWCLOS into the ACL modern lisp version, it is 
+much better to enter <b>gx-user</b> package in the lisp listener window to use 
+SWCLOS. Please note that SWCLOS requires case-sensitive-lower on case mode of 
+lisp-reader to distinguish upper and lower case of letters. This features is not 
+ANSI-standard today, but we hope it will be so, soon. </p>
+<blockquote><code>cg-user(1): (in-package gx-user)<br/>#&lt;The gx-user 
+  package&gt;<br/>gx-user(2): <br/></code></blockquote>
+<p>Franz has prepared a good tutorial for the case of letters. See <a 
+href="http://www.franz.com/support/tutorials/casemode-tutorial.htm">http://www.franz.com/support/tutorials/casemode-tutorial.htm</a>. 
+</p>
+<h3>2.4 &nbsp;Monotonicity of Knowledge</h3>
+<p>In Semantic Webs it is assumed that the knowledge always increases and the 
+interpretation become monotonously more precise and richer. SWCLOS leverages the 
+monotonicity principle in Semantic Webs to accept the forward reference in 
+ontology description. In the current version, there are no delete functions for 
+entities in ontologies, and there is no undo functionality (if you input inconsistent data, SWCLOS immediately 
+signal an alarm and open the break window, so you can remedy problems immediately). Undo function will be 
+provided at the next version. </p>
+<p>Neverthless, you should use <b>put-value</b> function to put a new value to a 
+slot value place with the above monotonic principle. Slot-value setting function (setf (slot-value ...) ...)
+keeps the original CLOS semantics in this version. </p>
+<h3>2.5 &nbsp;Open World Assumption and Three-Value Logic</h3>
+<p>Semantic Webs assume that the World Wide Webs are dynamic, changeable, and 
+open in the sense that no one knows all of WWWs. From the viewpoint of logic, 
+Close World Assumption is a basic assumption of inference. Therefore, people who 
+are accustomed to logic thinking should mind this point. </p>
+<p>The primary function of Description Logics (DLs) is i) to classify objects to 
+classes, ii) to determine whether or not a class is subsumed by another class. 
+In SWCLOS, this work is performed by i) <b>gx:typep</b> and ii) 
+<b>gx:subtypep</b> in the RDF universe, <b>gx:subsumed-p</b> in the OWL universe. 
+These functions return two values; the first value represents yes/no for query 
+and the second represents the certainty. Therefore, we can deem such return 
+values that the pair of <tt>&lt;t,t&gt;</tt> expresses Boolean true, 
+<tt>&lt;nil,t&gt;</tt> expresses Boolean false, and <tt>&lt;nil,nil&gt;</tt> 
+means unknown. Note <tt>&lt;t,nil&gt;</tt> never happens. This ternary-value 
+logic is an extension of ANSI Common Lisp native specification on cl:subtypep, 
+which returns two values described above. See the document of ANSI Common Lisp 
+<a 
+href="http://www.lispworks.com/documentation/HyperSpec/Body/f_subtpp.htm#subtypep">http://www.lispworks.com/documentation/HyperSpec/Body/f_subtpp.htm#subtypep</a>. 
+However, you do not need to mind how to use the ternary value logic. If you use only 
+the first return value, your program does not care of unknown and it is regarded 
+as Boolean false. If you are interested how to compute ternary-value logic in 
+SWCLOS, see the source code you obtained. </p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. 
+Feb.2006<br/>Copyright (c) 2007-2010, 2013 Seiji Koide. 
+Mar.2013<br/></small></i></body></html>

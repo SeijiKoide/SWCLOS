@@ -1,0 +1,551 @@
+<HTML>
+<HEAD>
+<TITLE>Utilities (Subsystem of Planning Code)</TITLE> 
+<META http-equiv="Content-Type" content="text/html">
+<META http-equiv="Content-Style-Type" content="text/css">
+<link href="overview.css" rel="stylesheet" type="text/css">
+</HEAD> 
+<BODY bgcolor="#ffffff"> 
+
+<H1>Utilities (Subsystem of Planning Code)</H1>
+
+The <b>utilities</b> system provides a set of basic functions, macros,
+and data types that are used throughout the other systems. <br/>
+
+This system is copied from Artificial Intelligence Modern Approach (AIMA) and 
+modified by Seiji Koide.
+
+<P><HR size=3></UL><A HREF="../utilities\"><B>utilities\</B></A>:
+<UL> <LI><A HREF="#utilities\utilities.cl"><B>utilities.cl</B></A>  Basic utility functions and macros, used throughout the code. </UL>
+
+<A NAME="utilities\utilities.cl"><HR>
+<H2>File <A HREF="../utilities\utilities.cl">utilities\utilities.cl</A></H2></A>
+<H2> Basic utility functions and macros, used throughout the code. 
+</H2>
+ This file is copied from AIMA utilities/utilities.lisp by Seiji.
+ Loop macro and related macros for control are removed and all of 
+ codes are revised for Common Lisp loop macros. 
+<H2> Control Flow Macros
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="deletef"><A HREF="../utilities\utilities.cl"><B>deletef</B></A></A> (<I>item</I> <I>sequence</I> <I>&rest</I> <I>keys</I> <I>&environment</I> <I>env</I>)</U></TD>
+<TD width="60" align="right">[macro]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Destructively delete item from sequence, which must be SETF-able.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="define-if-undefined"><A HREF="../utilities\utilities.cl"><B>define-if-undefined</B></A></A> (<I>&rest</I> <I>definitions</I>)</U></TD>
+<TD width="60" align="right">[macro]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Use this to conditionally define functions, variables, or macros that
+  may or may not be pre-defined in this Lisp.  This can be used to provide
+  CLtL2 compatibility for older Lisps.</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> List Utilities
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="mklist"><A HREF="../utilities\utilities.cl"><B>mklist</B></A></A> (<I>x</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If <I>x</I> is a list, return it; otherwise return a singleton list, ( <I>x</I> ).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="length>1"><A HREF="../utilities\utilities.cl"><B>length>1</B></A></A> (<I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list of two or more elements?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="length=1"><A HREF="../utilities\utilities.cl"><B>length=1</B></A></A> (<I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list of exactly one element?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="length-in-1diff"><A HREF="../utilities\utilities.cl"><B>length-in-1diff</B></A></A> (<I>lst1</I> <I>lst2</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="random-element"><A HREF="../utilities\utilities.cl"><B>random-element</B></A></A> (<I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return some element of the list, chosen at random.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="mappend"><A HREF="../utilities\utilities.cl"><B>mappend</B></A></A> (<I>fn</I> <I>&rest</I> <I>lists</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Apply <I>fn</I> to respective elements of list(s), and append results.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="starts-with"><A HREF="../utilities\utilities.cl"><B>starts-with</B></A></A> (<I>list</I> <I>element</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list that starts with the given element?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="last1"><A HREF="../utilities\utilities.cl"><B>last1</B></A></A> (<I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return the last element of a list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="left-rotate"><A HREF="../utilities\utilities.cl"><B>left-rotate</B></A></A> (<I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Move the first element to the end of the list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="right-rotate"><A HREF="../utilities\utilities.cl"><B>right-rotate</B></A></A> (<I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Move the last element to the front of the list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="transpose"><A HREF="../utilities\utilities.cl"><B>transpose</B></A></A> (<I>list-of-lists</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Transpose a matrix represented as a list of lists.
+  Example: (transpose '((a b c) (d e f))) => ((a d) (b e) (c f)).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="reuse-cons"><A HREF="../utilities\utilities.cl"><B>reuse-cons</B></A></A> (<I>x</I> <I>y</I> <I>x-y</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return (cons <I>x</I> <I>y</I>), or reuse <I>x-y</I> if it is equal to (cons <I>x</I> <I>y</I>)</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="make-exp:t"><A HREF="../utilities\utilities.cl"><B>make-exp</B></A></A> (<I>op</I> <I>&rest</I> <I>args</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="op"><A HREF="../utilities\utilities.cl"><B>op</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Operator of an expression</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="op:t"><A HREF="../utilities\utilities.cl"><B>op</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="op:cons"><A HREF="../utilities\utilities.cl"><B>op</B></A></A> (<I>(exp
+                                                                                        cons)</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="args"><A HREF="../utilities\utilities.cl"><B>args</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Arguments of an expression</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="args:t"><A HREF="../utilities\utilities.cl"><B>args</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="args:cons"><A HREF="../utilities\utilities.cl"><B>args</B></A></A> (<I>(exp
+                                                                                            cons)</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="arg1"><A HREF="../utilities\utilities.cl"><B>arg1</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>First argument</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="arg1:cons"><A HREF="../utilities\utilities.cl"><B>arg1</B></A></A> (<I>(exp
+                                                                                            cons)</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="arg2"><A HREF="../utilities\utilities.cl"><B>arg2</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Second argument</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="arg2:cons"><A HREF="../utilities\utilities.cl"><B>arg2</B></A></A> (<I>(exp
+                                                                                            cons)</I>)</U></TD>
+<TD width="65" align="right">[method]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="prefix->infix"><A HREF="../utilities\utilities.cl"><B>prefix->infix</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Convert a fully parenthesized prefix expression into infix notation.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="insert-between"><A HREF="../utilities\utilities.cl"><B>insert-between</B></A></A> (<I>item</I> <I>list</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Insert item between every element of list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> Numeric Utilities
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="infinity"><A HREF="../utilities\utilities.cl"><B>infinity</B></A></A> ()</U></TD>
+<TD width="70" align="right">[constant]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="minus-infinity"><A HREF="../utilities\utilities.cl"><B>minus-infinity</B></A></A> ()</U></TD>
+<TD width="70" align="right">[constant]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="average"><A HREF="../utilities\utilities.cl"><B>average</B></A></A> (<I>numbers</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Numerical average (mean) of a list of numbers.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="running-average"><A HREF="../utilities\utilities.cl"><B>running-average</B></A></A> (<I>avg</I> <I>new</I> <I>n</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Calculate new average given previous average over n data points</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="square"><A HREF="../utilities\utilities.cl"><B>square</B></A></A> (<I>x</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="sum"><A HREF="../utilities\utilities.cl"><B>sum</B></A></A> (<I>numbers</I> <I>&optional</I> <I>key</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Add up all the numbers; if KEY is given, apply it to each number first.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="between"><A HREF="../utilities\utilities.cl"><B>between</B></A></A> (<I>x</I> <I>y</I> <I>z</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Predicate; return t iff number x is between numbers y and z.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="rms-error"><A HREF="../utilities\utilities.cl"><B>rms-error</B></A></A> (<I>predicted</I> <I>target</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Compute root mean square error between predicted list and target list</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="ms-error"><A HREF="../utilities\utilities.cl"><B>ms-error</B></A></A> (<I>predicted</I> <I>target</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Compute mean square error between predicted list and target list</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="boolean-error"><A HREF="../utilities\utilities.cl"><B>boolean-error</B></A></A> (<I>predicted</I> <I>target</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="dot-product"><A HREF="../utilities\utilities.cl"><B>dot-product</B></A></A> (<I>l1</I> <I>l2</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="iota"><A HREF="../utilities\utilities.cl"><B>iota</B></A></A> (<I>n</I> <I>&optional</I> <I>start-at</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a list of n consecutive integers, by default starting at 0.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="random-integer"><A HREF="../utilities\utilities.cl"><B>random-integer</B></A></A> (<I>from</I> <I>to</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return an integer chosen at random from the given interval.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="normal"><A HREF="../utilities\utilities.cl"><B>normal</B></A></A> (<I>x</I> <I>mu</I> <I>sigma</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="sample-with-replacement"><A HREF="../utilities\utilities.cl"><B>sample-with-replacement</B></A></A> (<I>n</I> <I>population</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="sample-without-replacement"><A HREF="../utilities\utilities.cl"><B>sample-without-replacement</B></A></A> (<I>n</I> <I>population</I> <I>&optional</I> <I>m</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="fuzz"><A HREF="../utilities\utilities.cl"><B>fuzz</B></A></A> (<I>quantity</I> <I>&optional</I> <I>proportion</I> <I>round-off</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Add and also subtract a random fuzz-factor to a quantity.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="round-off"><A HREF="../utilities\utilities.cl"><B>round-off</B></A></A> (<I>number</I> <I>precision</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Round off the number to specified precision. E.g. (round-off 1.23 .1) = 1.2</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> Trivial Functions
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="nothing"><A HREF="../utilities\utilities.cl"><B>nothing</B></A></A> (<I>&rest</I> <I>args</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Don't do anything, and return nil.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="true"><A HREF="../utilities\utilities.cl"><B>true</B></A></A> (<I>&rest</I> <I>args</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Always return true.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="false"><A HREF="../utilities\utilities.cl"><B>false</B></A></A> (<I>&rest</I> <I>args</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Always return false.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="required"><A HREF="../utilities\utilities.cl"><B>required</B></A></A> (<I>&optional</I> <I>msg</I> <I>&rest</I> <I>args</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If this ever gets called, it means something that was required was not
+  supplied.  Use as default value for &key args or defstruct slots.</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> Utilities for strings and symbols and printing
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="stringify"><A HREF="../utilities\utilities.cl"><B>stringify</B></A></A> (<I>exp</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Coerce argument to a string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="concat-symbol"><A HREF="../utilities\utilities.cl"><B>concat-symbol</B></A></A> (<I>&rest</I> <I>args</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Concatenate the args into one string, and turn that into a symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> Assorted conversion utilities and predicates
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="copy-array"><A HREF="../utilities\utilities.cl"><B>copy-array</B></A></A> (<I>a</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Make a copy of an array.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="copy-subarray"><A HREF="../utilities\utilities.cl"><B>copy-subarray</B></A></A> (<I>a</I> <I>b</I> <I>indices</I> <I>dim</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="array->vector"><A HREF="../utilities\utilities.cl"><B>array->vector</B></A></A> (<I>array</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Convert a multi-dimensional array to a vector with the same elements.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="plot-alist"><A HREF="../utilities\utilities.cl"><B>plot-alist</B></A></A> (<I>alist</I> <I>file</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="copy-hash-table"><A HREF="../utilities\utilities.cl"><B>copy-hash-table</B></A></A> (<I>H1</I> <I>&optional</I> <I>copy-fn</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="hash-table->list"><A HREF="../utilities\utilities.cl"><B>hash-table->list</B></A></A> (<I>table</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Convert a hash table into a list of (key . val) pairs.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="hprint"><A HREF="../utilities\utilities.cl"><B>hprint</B></A></A> (<I>h</I> <I>&optional</I> <I>stream</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>prints a hash table line by line</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="compose"><A HREF="../utilities\utilities.cl"><B>compose</B></A></A> (<I>f</I> <I>g</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return a function h such that (h x) = (f (g x)).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="the-biggest"><A HREF="../utilities\utilities.cl"><B>the-biggest</B></A></A> (<I>fn</I> <I>l</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="the-biggest-random-tie"><A HREF="../utilities\utilities.cl"><B>the-biggest-random-tie</B></A></A> (<I>fn</I> <I>l</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="the-biggest-that"><A HREF="../utilities\utilities.cl"><B>the-biggest-that</B></A></A> (<I>fn</I> <I>p</I> <I>l</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="the-smallest"><A HREF="../utilities\utilities.cl"><B>the-smallest</B></A></A> (<I>fn</I> <I>l</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="the-smallest-random-tie"><A HREF="../utilities\utilities.cl"><B>the-smallest-random-tie</B></A></A> (<I>fn</I> <I>l</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="the-smallest-that"><A HREF="../utilities\utilities.cl"><B>the-smallest-that</B></A></A> (<I>fn</I> <I>p</I> <I>l</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<H2> Same element ?
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="same-element-p"><A HREF="../utilities\utilities.cl"><B>same-element-p</B></A></A> (<I>fn</I> <I>sequence</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="unfiablly-same-type-p"><A HREF="../utilities\utilities.cl"><B>unfiablly-same-type-p</B></A></A> (<I>sequence</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<H2> Utilities for strings and symbols and printing
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="print-repeated"><A HREF="../utilities\utilities.cl"><B>print-repeated</B></A></A> (<I>string</I> <I>n</I> <I>&optional</I> <I>stream</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Print the string n times.</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> Debugging tool
+</H2>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="*debugging*"><A HREF="../utilities\utilities.cl"><B>*debugging*</B></A></A> </U></TD>
+<TD width="67" align="right">[variable]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0"><TBODY>
+<TR><TD><U><A NAME="dprint"><A HREF="../utilities\utilities.cl"><B>dprint</B></A></A> (<I>&rest</I> <I>args</I>)</U></TD>
+<TD width="70" align="right">[function]</TD></TR>
+</TBODY></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Echo all the args when *debugging* is true.  Return the first one.</TD>
+</TR></TBODY></TABLE></DIV> 
+<HR>
+<TABLE BORDER=4 CELLPADDING=4 CELLSPACING=0><tr>
+<td> <A HREF="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">SWCLOS Home</A>
+<td> <A HREF="../../contact.html">Authors</A>
+<td> <A HREF="overview.html">Lisp Code Overview</A>
+</TABLE>
+</BODY> 
+</HTML>

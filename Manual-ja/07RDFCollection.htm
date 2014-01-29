@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0066)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/RDFCollection.html -->
+<html><head><title>RDF Collection</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>7. &nbsp;RDF Collection</h2>
+<h3>7.1 &nbsp;RDF Container</h3>
+<p>To represent collections of resources, RDF provides three ways as subclass of 
+rdfs:Container. </p>
+<ul>
+  <li>rdf:Bag is a collection type without ordering elements. </li>
+  <li>rdf:Alt is a collection type without ordering elements. The first of 
+  elements is to be selected alternatively among them. </li>
+  <li>rdf:Seq is a collection type with ordering elements. </li></ul>
+<p>The first member of container is the value of the property rdf:_1, the second 
+member is the value of the property rdf:_2, and so on. This kind of property, 
+rdf:_<i>nnn</i>, is called an <i>ordinal property</i>.</p>
+<p><b>Figure 7.1</b> is an example of a collection of rdf:Bag, which is taken 
+from Jena tutorial.</p>
+<p align="center"><a id="figure7.1" name="figure7.1"><img alt="An Example of rdfs:Bag" 
+src="FIGURES/BagEx.PNG" border="0"/> </a></p>
+<p align="center"><b>Figure 7.1 An Example of rdfs:Bag (from Jena 
+Tutorial) </b></p>
+<p>Then, the followings encode Figure 7.1.</p><code>gx-user(3): (defpackage somewhere)<br/>#&lt;The somewhere 
+package&gt;<br/>gx-user(4): (defpackage vCard)<br/>#&lt;The vCard 
+package&gt;<br/>gx-user(5): (defIndividual 
+somewhere::JohnSmith<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://somewhere/JohnSmith")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vCard::FN 
+"John 
+Smith")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vCard::N 
+(rdfs:Resource (vCard::Given 
+"John")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vCard::Family 
+"Smith"))))<br/>Warning: Entail by rdf1: vCard::FN rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: vCard::N rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: vCard::Given rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: vCard::Family rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| somewhere:JohnSmith&gt;<br/>gx-user(6): 
+(defIndividual 
+somewhere::BeckySmith<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://somewhere/BeckySmith")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vCard:FN 
+"Becky 
+Smith")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vCard:N 
+(rdfs:Resource (vCard:Given 
+"Becky")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vCard:Family 
+"Smith"))))<br/>#&lt;|rdfs:Resource| somewhere:BeckySmith&gt;<br/>gx-user(7): 
+(defIndividual _:bag01 (rdf:type 
+rdf:Bag)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf::_1 
+somewhere:BeckySmith)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf::_2 
+somewhere:JohnSmith))<br/>Warning: Entail by rdf1: rdf:_1 rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: rdf:_2 rdf:type 
+rdf:Property.<br/>#&lt;rdf:Bag :anonymous&gt;<br/>gx-user(8): (get-form 
+_:bag01)<br/>(rdf:Bag (rdf:type rdf:Bag)<br/>&nbsp;&nbsp;(rdf:_1 
+somewhere:BeckySmith) (rdf:_2 somewhere:JohnSmith))<br/></code><br/>
+<p>In SWCLOS, ordinal properties are initially not defined. However, if you put 
+them in proper position, it is automatically defined as an instance of 
+rdfs:ContainerMembershipProperty.</p>
+<p>In Figure 7.1, the top node is a blank node, then we put it a blank node 
+identifier _:bag01. Note that a blank node object is bound to a designated blank 
+node ID. In SWCLOS, a node name is not mandatory even if in the top level node, 
+but it is preferable to put a node identifier for convenience.</p>
+<h3>7.2 &nbsp;List</h3>
+<p>In RDF semantics, we can make an instance of rdf:List with rdf:first, 
+rdf:rest and rdf:nil. <b>Figure 7.2</b> shows an example of list structure in 
+RDF, which is from <a href="http://www.w3.org/TR/rdf-primer#figure16">RDF 
+Primer</a>.</p>
+<p align="center"><img alt="An RDF Collection (list structure)" 
+src="FIGURES/ListStructure.png" border="0"/> </p>
+<p align="center"><b>Figure 7.2 An RDF Collection (list structure) 
+(from <a href="http://www.w3.org/TR/rdf-primer#figure16">RDF Primer</a>)</b></p>
+<p>This RDF graph is encoded as follows straightforwardly.</p><code>gx-user(2): (defpackage eg (:documentation 
+"http://example.org/"))<br/>#&lt;The eg package&gt;<br/>gx-user(3): (defpackage 
+vocab<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:documentation 
+"http://example.org/students/vocab/"))<br/>#&lt;The vocab 
+package&gt;<br/>gx-user(4): (defIndividual 
+eg::courses/6.001<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/courses/6.001")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vocab::students<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:List 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:first<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/students/Amy")))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:rest<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:List 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:first<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/students/Mohamed")))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:rest<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:List 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:first<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/students/Johann")))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:rest 
+rdf:nil))))))))<br/>Warning: Entail by rdf1: vocab::students rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| eg:courses/6.001&gt;<br/>gx-user(5): 
+(pprint (get-form eg:courses/6.001))<br/><br/>(|rdfs:Resource| 
+eg:courses/6.001<br/>&nbsp;(rdf:about 
+&lt;http://example.org/courses/6.001&gt;)<br/>&nbsp;(vocab:students<br/>&nbsp;&nbsp;(rdf:List<br/>&nbsp;&nbsp;&nbsp;(rdf:first<br/>&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource 
+(rdf:about 
+&lt;http://example.org/students/Amy&gt;)))<br/>&nbsp;&nbsp;&nbsp;(rdf:rest<br/>&nbsp;&nbsp;&nbsp;&nbsp;(rdf:List<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:first<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource 
+(rdf:about 
+&lt;http://example.org/students/Mohamed&gt;)))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:rest<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:List<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:first<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource 
+(rdf:about 
+&lt;http://example.org/students/Johann&gt;)))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:rest 
+rdf:nil))))))))<br/></code><br/>
+<p>You can get any data in list using path traverse function '-&gt;' as 
+follows.</p><code>gx-user(6): (get-form (-&gt; 
+eg:courses/6.001 vocab:students rdf:rest 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdf:rest 
+rdf:first))<br/>(rdfs:Resource (rdf:about 
+&lt;http://example.org/students/Johann&gt;))<br/>gx-user(7): (-&gt; 
+eg:courses/6.001 vocab:students rdf:rest rdf:rest rdf:rest)<br/>#&lt;rdf:List 
+rdf:nil&gt;<br/></code><br/>
+<p>However, using rdf:List is very tedious in SWCLOS. We can use the lisp list 
+to represent a collection of resources in SWCLOS. You may represent the 
+collection of students as follows, whereas the RDF graph is not equal to Figure 
+7.2. </p><code>gx-user(7): (defIndividual 
+eg::courses/6.002<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/courses/6.002")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vocab::students<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/students/Amy"))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/students/Mohamed"))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:Resource<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:about 
+"http://example.org/students/Johann"))))<br/>#&lt;|rdfs:Resource| 
+eg:courses/6.002&gt;<br/>gx-user(8): (get-form 
+eg:courses/6.002)<br/>(|rdfs:Resource| eg:courses/6.002<br/>&nbsp;(rdf:about 
+&lt;http://example.org/courses/6.002&gt;)<br/>&nbsp;(vocab:students<br/>&nbsp;&nbsp;(rdfs:Resource 
+(rdf:about 
+&lt;http://example.org/students/Amy&gt;))<br/>&nbsp;&nbsp;(rdfs:Resource 
+(rdf:about 
+&lt;http://example.org/students/Mohamed&gt;))<br/>&nbsp;&nbsp;(rdfs:Resource 
+(rdf:about &lt;http://example.org/students/Johann&gt;))))<br/>gx-user(9): (-&gt; 
+eg:courses/6.002 vocab:students)<br/>(#&lt;rdfs:Resource :anonymous&gt; 
+#&lt;rdfs:Resource :anonymous&gt; &nbsp;#&lt;rdfs:Resource 
+:anonymous&gt;)<br/>gx-user(10): (mapcar #'get-form *)<br/>((rdfs:Resource 
+(rdf:about &lt;http://example.org/students/Amy&gt;))<br/>&nbsp;(rdfs:Resource 
+(rdf:about &lt;http://example.org/students/Mohamed&gt;))<br/>&nbsp;(rdfs:Resource 
+(rdf:about &lt;http://example.org/students/Johann&gt;)))<br/></code><br/>
+<p>Even though this input form does not contain rdf:first and rdf:rest, it is 
+very easy for lisp programmers to imagine the above forms from the list 
+structure in Figure 7.2. </p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp">Seiji Koide</a>. Copyright 
+(c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 <br/>Copyright (c) 2007-2010 
+Seiji Koide. Oct.2010 <br/></small></i></body></html>

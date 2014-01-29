@@ -1,0 +1,612 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0062)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/RDFSchema.html -->
+<html><head><title>RDFS Vocabularies and Semantics</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<!-- copy and paste into every html files this link and style for css -->
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>5. &nbsp;RDFS Vocabularies and Semantics</h2>
+<p>The RDF ontology description language, <a 
+href="http://www.w3.org/TR/rdf-schema/">RDF Schema (RDFS)</a>, is a semantic 
+extension of RDF. It provides a device to describe groups of same kind resources 
+(classes) and the inclusiveness among these groups. RDFS provides the minimal 
+set for describing concepts for ontology. The vocabulary contains rdfs:Resource 
+and rdfs:Class, which provide the classification notion together with the 
+property rdf:type, and the subsumption notion of classification with the 
+property rdfs:subClassOf. These semantics of RDFS is similar to the CLOS 
+perspective, namely rdf:type to instance-class relation and rdfs:subClassOf to 
+subclass-superclass relation. Therefore, RDFS classes are mapped onto CLOS 
+classes and RDFS instances are mapped onto CLOS instances in SWCLOS.</p>
+<h3>5.1 &nbsp;Resource Classes, Metaclasses, and Instances </h3>
+<p><b>Figure 5.1</b> shows the relationship in RDF(S) vocabulary. A broken 
+curved line stands for rdf:type relation, and a solid straight line stands for 
+rdfs:subClassOf relation. rdfs:Resource is a superclass of all other classes, 
+and rdfs:Class is a class of all classes, including rdfs:Class itself. A class 
+of classes is called <i>metaclass</i> in CLOS. So, rdfs:Class and rdfs:Datatype 
+in RDFS vocabulary are metaclasses in CLOS.</p>
+<p align="center"><img alt="RDFS Graph" 
+src="FIGURES/RDFSHierarchy.PNG" border="0"/> </p>
+<p align="center"><b>Figure 5.1 RDFS Hierarchy Graph</b></p>
+<p></p>
+<p>The notion of metaclass, class, and instance is very important in CLOS. 
+Therefore, predicates for these categories on RDF resources are prepared. See 
+the followings.</p>
+<code>gx-user(33): (rsc-object-p 
+rdfs:Class)<br/>t<br/>gx-user(34): (rsc-object-p 
+rdfs:Resource)<br/>t<br/>gx-user(35): (rsc-object-p 
+rdf:Property)<br/>t<br/>gx-user(36): (rsc-object-p 
+rdfs:comment)<br/>t<br/>gx-user(37): (rsc-object-p "This is a 
+comment.")<br/>nil<br/>gx-user(38): (rsc-object-p "This is also a 
+comment."@en)<br/>nil<br/>gx-user(39): (rsc-object-p 
+"1"^^xsd:nonNegativeInteger)<br/>t<br/>gx-user(40): (rsc-object-p 
+1)<br/>nil<br/>gx-user(41): (rsc-object-p &lt;Foo&gt;)<br/>nil<br/>gx-user(42): 
+(rsc-object-p &lt;&lt;Foo&gt;&gt;)<br/>t<br/>gx-user(43): (rdf-class-p 
+rdfs:Class)<br/>t<br/>gx-user(44): (rdf-class-p 
+rdfs:Resource)<br/>t<br/>gx-user(45): (rdf-class-p 
+rdf:Property)<br/>t<br/>gx-user(46): (rdf-class-p 
+rdfs:comment)<br/>nil<br/>gx-user(47): (rdf-metaclass-p 
+rdfs:Class)<br/>t<br/>gx-user(48): (rdf-metaclass-p 
+rdfs:Resource)<br/>nil<br/>gx-user(48): (rdf-instance-p 
+rdf:Property)<br/>nil<br/>gx-user(49): (rdf-instance-p 
+rdfs:comment)<br/>t<br/>gx-user(50): (rdf-class-p rdf:List)<br/>t<br/>gx-user(51): 
+(rdf-instance-p rdf:nil)<br/>t<br/></code>
+<p><a id="SWCLOSrsc-object-p" name="SWCLOSrsc-object-p"/>
+<div class="titlebar">
+<div class="defname">rsc-object-p <i>x</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>x</i> is not a literal but an resource object in RDF. Actually, this 
+  function returns true, if <i>x</i> is an instance of rdfs:Resource in CLOS. 
+  This is same as (cl:typep x rdfs:Resource), but more efficient a little bit. 
+</div></p>
+<p><a id="SWCLOSclass-p" name="SWCLOSclass-p"/>
+<div class="titlebar">
+<div class="defname">rdf-class-p <i>thing</i></div>
+<div class="deftype">[Function]]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>thing</i> is a class of resource in RDF. Actually, this function returns 
+  true, if <i>thing</i> is rdfs:Class or an instance of rdfs:Class in CLOS. 
+</div></p>
+<p><a id="SWCLOSmetaclass-p" name="SWCLOSmetaclass-p"/>
+<div class="titlebar">
+<div class="defname">rdf-metaclass-p <i>thing</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>thing</i> is a metaclass of resource. Actually, this function returns 
+  true, if <i>thing</i> is rdfs:Class or an instance and simultaneously subclass 
+  of rdfs:Class in CLOS. </div></p>
+<p><a id="SWCLOSstrict-class-p" name="SWCLOSstrict-class-p"/>
+<div class="titlebar">
+<div class="defname">strict-class-p <i>thing</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>thing</i> is a class but not a metaclass of resource. </div></p>
+
+<a id="SWCLOSrdf-instance-p" name="SWCLOSrdf-instance-p"/>
+<div class="titlebar">
+<div class="defname">rdf-instance-p <i>thing</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>thing</i> is an instance of rdfs:Resource but not an instance of 
+  rdfs:Class. </div>
+<p><a id="SWCLOSresource?" name="SWCLOSresource?"/>
+<div class="titlebar">
+<div class="defname">resource? <i>symbol</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>symbol</i> is a symbol and its value is a resource. </div></p>
+<p><a id="SWCLOSclass?" name="SWCLOSclass?"/>
+<div class="titlebar">
+<div class="defname">class? <i>symbol</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>symbol</i> is a symbol and its value is a class of resource. 
+</div></p>
+<p><a id="SWCLOSmetaclass?" name="SWCLOSmetaclass?">
+<div class="titlebar">
+<div class="defname">metaclass? <i>symbol</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>symbol</i> is a symbol and its value is a meta class of resource. 
+</div></p>
+<p><a id="SWCLOSstrict-class?" name="SWCLOSstrict-class?">
+<div class="titlebar">
+<div class="defname">strict-class? <i>symbol</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>symbol</i> is a symbol and its value is a class but not a metaclass of 
+  resource. </div></p>
+<p><a id="SWCLOSinstance?" name="SWCLOSinstance?">
+<div class="titlebar">
+<div class="defname">instance? <i>symbol</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a>, 
+  if <i>symbol</i> is a symbol and its value is an instance of resource. 
+</div></p><br/>
+<h3>5.2 &nbsp;rdf:type and rdfs:subClassOf</h3>
+<p><b>Figure 5.1</b> depicts class-instance relations described with rdf:type 
+property. Class-subclass relations are described with rdfs:subClassOf property, 
+and property-subproperty relations are described with rdfs:subPropertyOf in RDFS 
+vocabulary. </p>
+<p>To get rdf:type property value of resources, you may use <a 
+href="#SWCLOStype-of"><b>gx:type-of</b></a> 
+and <a 
+href="http://www.franz.com/support/documentation/8.0/ansicl/dictentr/class-of.htm">cl:class-of</a> 
+function. Note that <b>gx:type-of</b> is customized type-of function for 
+resources instead of cl:type-of so that it brings RDFS semantics, but 
+cl:class-of is a native function in CLOS. Therefore, while <b>gx:type-of</b> for 
+rdfs:Class returns rdfs:Class in RDFS semantics, cl:class-of for rdfs:Class 
+returns actual metaclass object of rdfs:Class in CLOS as shown below. </p>
+<blockquote>
+<code>gx-user(10): (type-of 
+  1)<br/>xsd:byte<br/>gx-user(11): (type-of 
+  "1"^^xsd:integer)<br/>xsd:integer<br/>gx-user(14): (type-of 
+  rdf:Property)<br/>rdfs:Class<br/>gx-user(15): (class-of 
+  rdf:Property)<br/>#&lt;rdfsClass rdfs:Class&gt;<br/>gx-user(16): (type-of 
+  rdfs:comment)<br/>rdf:Property<br/>gx-user(17): (class-of 
+  rdfs:comment)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(18): (type-of 
+  rdfs:Datatype)<br/>rdfs:Class<br/>gx-user(19): (class-of 
+  rdfs:Datatype)<br/>#&lt;rdfsClass rdfs:Class&gt;<br/>gx-user(20): (type-of 
+  rdfs:Class)<br/>rdfs:Class<br/>gx-user(21): (class-of 
+  rdfs:Class)<br/>#&lt;gx::meta-node rdfsClass&gt;<br/></code></blockquote>
+<p><a id="SWCLOStype-of" name="SWCLOStype-of">
+<div class="titlebar">
+<div class="defname">type-of <i>resource</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns the name of the class of <i>resource</i>. This function is 
+  almost same as cl:type-of, but exactly obeys RDFS semantics. The return value 
+  for rdfs:Class object is the name of itself. </div></p>
+<p>To get instances of a class, the function <b>collect-direct-instances-of</b> 
+retrieves the direct instances of a class, and the function 
+<b>collect-all-instances-of</b> collects all instances from the class and its 
+subclasses. </p>
+<blockquote><code>gx-user(31): (collect-direct-instances-of 
+  rdf:List)<br/>(#&lt;rdf:List rdf:nil&gt;)<br/>gx-user(32): 
+  (collect-all-instances-of rdfs:Class)<br/>(#&lt;rdfs:Class |rdfs:Resource|&gt; 
+  #&lt;rdfs:Class rdf:Alt&gt;<br/>&nbsp;#&lt;rdfs:Class rdf:Seq&gt; 
+  #&lt;rdfs:Class rdf:Bag&gt;<br/>&nbsp;#&lt;rdfs:Class 
+  rdfs:ContainerMembershipProperty&gt;<br/>&nbsp;#&lt;rdfs:Class rdfs:Literal&gt; 
+  #&lt;rdfs:Class rdfs:Container&gt;<br/>&nbsp;#&lt;rdfs:Class 
+  gx::shadow-class&gt; #&lt;rdfs:Class rdf:List&gt;<br/>&nbsp;#&lt;rdfs:Class 
+  gx::ill-structured-XMLLiteral&gt; ...)</code><br/>
+</blockquote>
+<p><a id="SWCLOScollect-direct-instances-of" name="SWCLOScollect-direct-instances-of"/>
+<div class="titlebar">
+<div class="defname">collect-direct-instances-of <i>class</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe"><i>class</i> is a symbol or a class object. This method returns 
+  instances that are directly defined to <i>class</i>. Note that this is not 
+  affected by literal classes. </div></p>
+<p><a id="SWCLOScollect-all-instances-of" name="SWCLOScollect-all-instances-of"/>
+<div class="titlebar">
+<div class="defname">collect-all-instances-of <i>class</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe"><i>class</i> is a symbol or a class object. This method returns 
+  instances that are defined to <i>class</i> and subclasses of <i>class</i>. For 
+  OWL classes, this method collects not only direct instances of <i>class</i> 
+  and its subclasses but also indirect instances by OWL semantics. 
+</div></p>
+<p>Note that <b>gx:typep</b> also accepts uris, QName symbols, and literal data 
+in different semantics from cl:typep.</p>
+<blockquote>
+<code>gx-user(7): (typep 
+  &lt;http://somewhere/&gt; rdfs:Resource)<br/>t<br/>t<br/>gx-user(8): (typep "This 
+  is literal." rdfs:Resource)<br/>t<br/>t<br/>gx-user(9): (typep 1 
+  rdfs:Resource)<br/>t<br/>t<br/>gx-user(10): (typep "This is literal." 
+  rdfs:Literal)<br/>t<br/>t<br/>gx-user(11): (typep 1 
+  rdfs:Literal)<br/>t<br/>t<br/></code></blockquote>
+<p><a id="SWCLOStypep" name="SWCLOStypep"/>
+<div class="titlebar">
+<div class="defname">typep <i>resource type</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns true if <i>resource</i> is a member of <i>type</i> in RDF 
+  semantics. </div></p>
+<p>The class-subclass relation in RDFS is defined with rdfs:subClassOf property, 
+and the relation is similar to the CLOS class-subclass relation. However, 
+<b>gx:subtypep</b> is available to test class-subclass relation in RDF 
+semantics. Namely, it accepts uris, QName symbols, and data types in different 
+way from cl:subtypep. See the followings. </p>
+<code>gx-user(35): (subtypep rdf:Alt 
+rdfs:Container)<br/>t<br/>t<br/>gx-user(36): (subtypep rdf:Alt 
+rdfs:Resource)<br/>t<br/>t<br/>gx-user(37): (subtypep 
+&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdfs:Resource)<br/>t<br/>t<br/>gx-user(38): 
+(subtypep xsd:integer rdfs:Literal)<br/>t<br/>t<br/>gx-user(39): (subtypep 
+xsd:integer rdfs:Resource)<br/>t<br/>t<br/></code>
+<p><a id="SWCLOSsubtypep" name="SWCLOSsubtypep"/>
+<div class="titlebar">
+<div class="defname">subtypep <i>type1 type2</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns true if <i>type1</i> is a subtype of <i>type2</i> in RDF 
+  semantics. </div></p>
+<p>The rdfs:subClassOf value of a resource class is retrieved using slot-value 
+with slot-name rdfs:subClassOf. </p>
+<code>gx-user(40): 
+(slot-value rdf:Alt 'rdfs:subClassOf)<br/>#&lt;rdfs:Class 
+rdfs:Container&gt;<br/></code>
+<br/>
+<h3>5.3 rdfs:subPropertyOf</h3>
+<p>The properties, which are instances of rdf:Property, have super-property and 
+sub-property notion, although CLOS instances do not have the super-sub relation 
+on slots. Therefore, the super-sub notion upon properties is implemented in 
+SWCLOS. <b>subproperty-p</b> tests the super-sub relation on property. 
+<b>superproperty-of</b> and <b>subproperty-of</b> functions retrieve direct 
+super-properties and sub-properties of a parameter. The detail of property is 
+explained at <a 
+href="DomainRange.html#SWCLOSdomainrange">Section 
+8</a>. </p>
+<code>gx-user(3): (subproperty-p rdfs:isDefinedBy 
+rdfs:seeAlso)<br/>t<br/>gx-user(4): (subproperty-of 
+rdfs:seeAlso)<br/>(#&lt;rdf:Property rdfs:isDefinedBy&gt;)<br/>gx-user(5): 
+(superproperty-of rdfs:isDefinedBy)<br/>(#&lt;rdf:Property 
+rdfs:seeAlso&gt;)<br/></code>
+<p><a id="SWCLOSsubproperty-p" name="SWCLOSsubproperty-p"/>
+<div class="titlebar">
+<div class="defname">subproperty-p <i>property1 property2</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns true, if <i>property1</i> is an subproperty of 
+  <i>property2</i>. Otherwise, cl:nil is returned. </div></p>
+<p><a id="SWCLOSsuperproperty-of" name="SWCLOSsuperproperty-of"/>
+<div class="titlebar">
+<div class="defname">superproperty-of <i>property</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns a direct superproperty of <i>property</i>, if exists. 
+  Otherwise, cl:nil is returned. </div></p>
+<p><a id="SWCLOSsubproperty-of" name="SWCLOSsubproperty-of">
+<div class="titlebar">
+<div class="defname">subproperty-of <i>property</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns a direct subproperty of <i>property</i>, if exists. 
+  Otherwise, cl:nil is returned. </div></p>
+<h3>5.4 &nbsp;Properties and Slots </h3>
+<p>In RDF, the property is the first-class entity that exists as resource. 
+Therefore, the property resource exists as CLOS object, an instance of the class 
+rdf:Property, in SWCLOS. </p>
+<p>An RDF triple, <i>subject/predicate/object</i> is realized by a subjective 
+CLOS object, a slot name, and its slot value in SWCLOS. Therefore, getting an 
+<i>object</i> value in a triple in RDF graph is equal to getting a slot value of 
+the slot name corresponding to the property name. </p>
+<p>Note that the line 2 in the following example just demonstrated rdfs:comment 
+resource object as the first-class entity. The line 3 shows the role of property 
+as predicate in triples. The line 4 shows the comment value on rdfs:comment. 
+Please see the difference and discriminate a property as an resource object and 
+a property as predicate or a role of binary relationship.</p>
+<blockquote><code>gx-user(2): 
+  rdfs:comment<br/>#&lt;rdf:Property rdfs:comment&gt;<br/>gx-user(3): (slot-value 
+  rdfs:Resource 'rdfs:comment)<br/>"The class resource, 
+  everything."<br/>gx-user(4): (slot-value rdfs:comment 'rdfs:comment)<br/>"A 
+  description of the subject resource."</code></blockquote>
+<p>However, rdf:type has very special semantics. It specifies the type of 
+object, and it is transformed to a class-instance relation in CLOS. Therefore, 
+we get rdf:type value in several ways. </p>
+<blockquote><code>gx-user(2): (slot-value rdfs:comment 
+  'rdf:type)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(3): (class-of 
+  rdfs:comment)<br/>#&lt;rdfs:Class rdf:Property&gt;<br/>gx-user(4): (type-of 
+  rdfs:comment)<br/>rdf:Property<br/>gx-user(5): (-&gt; rdfs:comment 
+  rdf:type)<br/>rdf:Property<br/></code></blockquote>
+<p>The function '-&gt;' allows users to traverse over an RDF graph according to 
+a given path and return the value (node name or literal) at the arrival 
+point.</p>
+<code>gx-user(6): (-&gt; rdfs:comment rdf:type 
+rdf:type)<br/>rdfs:Class<br/>gx-user(7): (-&gt; rdfs:comment rdf:type rdf:type 
+rdfs:comment)<br/>"The class of classes."<br/>gx-user(8): (-&gt; rdfs:comment 
+rdf:type rdf:type rdfs:comment rdf:type)<br/>xsd:string<br/></code>
+<p><a id="SWCLOS->" name="SWCLOS->">
+<div class="titlebar">
+<div class="defname">-&gt; <i>node edge1 ... </i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">starting at <i>node</i>, this function traverses over the RDF 
+  graph according to the path given as parameters, <i>edge1 ...</i> , and 
+  returns the arrival node. In case of multiple paths are possible, this 
+  function takes one route encountered at first. If there is no route which 
+  coincides with path, cl:nil is returned. If an edge is a list, i.e., a 
+  specifier for edge, in which the first is a property name and the second is a 
+  type specifier as filter, then a route where the designated type satisfies the 
+  edge value as type is chosen. Note that this search has no backtrack. 
+</div></p>
+<a id=Section5.5 name=Section5.5/>
+<h3>5.5 &nbsp;Adding Resource Objects and Forward Reference</h3>
+<p>In CLOS, a class must be defined before making its instance. A CLOS 
+programmer cannot add a slot value to an instance object without the slot 
+definition upon the class. In contrast, adding a triple, 
+<i>subject/predicate/object</i>, is a basic manner in constructing ontology in 
+RDF. It implies that SWCLOS must add a slot value without the slot definition in 
+the class. Therefore, SWCLOS enabled the piecewise slot addition for objects. 
+Furthermore, the capability for forward referencing is required. Namely, SWCLOS 
+must be able to accept undefined classes and instances as referent. Fortunately 
+we have the principle of monotonicity in Semantic Webs and many entailment rules 
+in RDF, RDFS and OWL. SWCLOS exploited the principle of monotonicity and a 
+number of entailment rules in order to realize the forward referencing for 
+objects. See SWCLOS <a 
+href="http://iswc2004.semanticweb.org/demos/32/">paper1</a>, <a 
+href="http://www.mel.nist.gov/msid/conferences/SWESE/repository/8owl-vs-OOP.pdf">paper2</a>, 
+<a href="http://www-kasm.nii.ac.jp/papers/takeda/06/koide06aswc.pdf">paper3 at 
+ASWC2006</a>, and <a 
+href="http://portal.acm.org/citation.cfm?id=1562868.1562872">paper4 at 
+ELW2009</a> on theoretical details. In this document, we explain the usage of 
+this piecewise adding functionality. </p>
+<p><b>Figure 5.2</b> illustrates a part of Wine Ontology described in RDFS 
+rather than OWL. You may make this RDF graph in a usual manner of CLOS object 
+definition, namely in order from abstract classes to special classes and from 
+classes to instances. However, SWCLOS allows you to define any object in any 
+order with the premise of monotonicity principle. SWCLOS ensures the final 
+result shown in Figure 5.2, when all pieces of knowledge are inputted.</p>
+<p align="center"><a name="Figure 5.2"/><img alt="RDF Graph in Wine Ontology" 
+src="FIGURES/WineRDF.PNG" border="0"/> </p>
+<p align="center"><b>Figure 5.2 RDF Graph in Wine Ontology</b></p>
+<p>The followings are an example to create the RDF graph shown in Figure 
+5.2.</p>
+<code>gx-user(2): (defpackage vin)<br/>#&lt;The vin 
+package&gt;<br/>gx-user(3): (defIndividual 
+vin::ElyseZinfandel<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+vin::Zinfandel)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vin::hasMaker 
+vin::Elyse))<br/>Warning: Entail by rdf1: vin::hasMaker rdf:type 
+rdf:Property.<br/>Warning: Range entail by rdf:type: vin::Zinfandel rdf:type 
+rdfs:Class.<br/>#&lt;vin:Zinfandel vin:ElyseZinfandel&gt;<br/>gx-user(4): 
+vin:Elyse<br/>#&lt;|rdfs:Resource| vin:Elyse&gt;<br/>gx-user(5): (defIndividual 
+vin:Elyse (rdf:type vin::Winery))<br/>Warning: Range entail by rdf:type: 
+vin::Winery rdf:type rdfs:Class.<br/>#&lt;vin:Winery vin:Elyse&gt;<br/>gx-user(6): 
+(defConcept vin:Zinfandel (rdfs:subClassOf vin::Wine))<br/>Warning: Range 
+entailX1 by rdfs:subClassOf: vin::Wine rdf:type rdfs:Class.<br/>#&lt;rdfs:Class 
+vin:Zinfandel&gt;<br/>gx-user(7): (slot-value vin:Zinfandel 
+'rdfs:subClassOf)<br/>#&lt;rdfs:Class vin:Wine&gt;<br/>gx-user(8): (subtypep 
+vin:Zinfandel rdfs:Resource)<br/>t<br/>t<br/></code>
+<p>At the beginning of the example above, a lisp package named 'vin' was created 
+for Wine Ontology. Then, vin:ElyseZinfandel, whose maker is vin:Elyse, was 
+defined. Note that all of 'vin' vocabulary in Wine Ontology are to be interned 
+in 'vin' package before reading as QName. Otherwise, when you input a new lisp 
+symbol as QName, you must use double colons, because you have no way to make 
+exported symbols directly with neither calling export function nor defining them 
+at the time of the package definition. Since SWCLOS interprets lisp symbols at 
+the position of resources as QName and automatically exports them, then you may 
+specify the QName symbols with one colon afterwards.</p>
+<p>The macro <a 
+href="#SWCLOSdefIndividual">defIndividual</a> 
+is used to define an individual or an instance of resource. At line 3, 
+vin:Zinfandel, vin:hasMaker, and vin:Elyse are referred to but not defined as 
+QName yet. So, SWCLOS reasoned out at least that vin:Zinfandel must be an 
+instance of rdfs:Class, vin:hasMaker must be an instance of rdf:Property, and 
+vin:Elyse must be an instance of rdfs:Resource using some of entailment rules in 
+RDF and RDFS. See Section 9. The line 3 in the above example not only made an 
+instance slot for vin:ElyseZinfandel, vin:hasMaker and vin:Elyse, but also 
+automatically defined the CLOS slot definition of vin:hasMaker at the class 
+vin:Zinfandel.</p>
+<p>The line 4 to 5 shows the type of vin:Elyse is changed from rdfs:Resource to 
+vin:Winery. Note that vin:Winery is a subclass of rdfs:Resource and shares 
+rdfs:Class as its type with rdfs:Resource. The line 6 to 8 demonstrates that 
+vin:Wine is added into the rdfs:subClassOf slot of vin:Zinfandel. Exactly, the 
+superclass of vin:Zinfandel is refined from rdfs:Resource to vin:Wine, because 
+it is directed, and rdfs:Resource as superclass of vin:Zinfandel is involved by 
+the transitivity of subsumption through vin:Wine. Thus, the automatic 
+redefinition in SWCLOS is possible and knowledge monotonously increases. The 
+forward reference involves the entailment through the various entailment rules, 
+and the statement of explicit assertion refines the results of earlier 
+entailing.</p>
+<p><a id="SWCLOSdefIndividual" name="SWCLOSdefIndividual"/>
+<div class="titlebar">
+<div class="defname">defIndividual <i>name (role1 filler1) ... </i></div>
+<div class="deftype">[Macro]</div></div>
+<div class="defdescribe"><i>name</i> is a QName symbol or unexported lisp symbol of this 
+  individual, and <i>role</i> is a property name (symbol) including rdf:type 
+  etc., and <i>filler</i> is a value of the property. This macro generates and 
+  evaluates the form like &lsquo;(addForm (:name <i>name</i>) (<i>role1</i> 
+  <i>filler1</i>) ... )&rsquo;. If an rdf:type value is not supplied, the most 
+  specific concepts of domain restrictions are calculated and used. If there is 
+  no rdf:type indication and no domain restrictions, the default value is 
+  rdfs:Resource. A <i>filler</i> may be a sub form in <a 
+  href="RDFobject.html#SWCLOSaddForm"><b>addForm</b></a> 
+  calling sequence. See <a 
+  href="RDFobject.html#SWCLOSaddForm"><b>addForm</b></a> 
+  for the syntax detail. </div></p>
+  <p><a id="SWCLOSdefConcept" name="SWCLOSdefConcept"/>
+<div class="titlebar">
+<div class="defname">defConcept <i>name (role1 filler1) ... </i></div>
+<div class="deftype">[Macro]</div></div>
+<div class="defdescribe">This macro works as same as <b>defIndividual</b> but the default 
+  rdf:type value is rdfs:Class. </div></p>
+<p><a id="SWCLOSdefProperty" name="SWCLOSdefProperty"/>
+<div class="titlebar">
+<div class="defname">defProperty <i>name (role1 filler1) ... </i></div>
+<div class="deftype">[Macro]</div></div>
+<div class="defdescribe">This macro works as same as <b>defIndividual</b> but the default 
+  rdf:type value is rdf:Property. </div></p>
+<h3>5.6 &nbsp;Adding Slots </h3>
+<p>In class-based Object-Oriented Programming Language like CLOS, slot 
+structures in an instance must be defined before making the instance. However, 
+in RDF, a property as predicate and its value can be defined at any RDF graph 
+node (subject) within the domain restriction on the property. Therefore, it is 
+enabled to add any slot (pair of role and filler) to any resource object without 
+the explicit slot definition in the class. SWCLOS automatically adds the new 
+slot definition in the class on the demand of new slot addition to an 
+individual.</p>
+<p>There is no special function for users to add new slots into objects in 
+SWCLOS. Instead you can add new slots using <b>defIndividual</b> or 
+<b>defConcept</b> macro, piecewisely. SWCLOS accepts such piecewise and multiple 
+definitions for multiple slots on a resource. After the above example, you can 
+add a new slot (vin:hasColor vin:Red) to vin:ElyseZinfandel as 
+follows.</p>
+<code>gx-user(9): (defIndividual 
+vin:ElyseZinfandel (vin::hasColor vin::Red))<br/>Warning: Entail by rdf1: 
+vin::hasColor rdf:type rdf:Property.<br/>#&lt;vin:Zinfandel 
+vin:ElyseZinfandel&gt;<br/>gx-user(10): (get-form 
+vin:ElyseZinfandel)<br/>(|rdfs:Resource| vin:ElyseZinfandel (rdf:type 
+vin:Zinfandel)<br/>&nbsp;&nbsp;(vin:hasMaker vin:Elyse) (vin:hasColor 
+vin:Red))</code><br/>
+<h3>5.7 &nbsp;Adding Slot Values </h3>
+<p>Setting a slot value <font color=red>must show</font> very different 
+behaviors in SWCLOS. (setf slot-value) is available but it does 
+<strike>not</strike> overwrite an old value. <font color=red>However, a new slot 
+value must be added into slot in the semantics of RDF and the principle of 
+monotonicity. So, <b>put-value</b> is provided for RDF semantics.</font> It just 
+adds a new value into the slot value. Precisely, if both an old value and a new 
+value are not a list and different from each other, the result of adding is a 
+list of old and new value. If both are a list, the result is a union of both. If 
+one of them is not a list, it is added (adjoin) to another value as a set 
+element. This is from the monotonicity principle in Semantic Webs.</p>
+<code>gx-user(17): (defIndividual MyResource (myProp "original 
+one"))<br/>Warning: Entail by rdf1: myProp rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| MyResource&gt;<br/>gx-user(18): (slot-value 
+MyResource 'myProp)<br/>"original one"<br/>gx-user(19): (put-value MyResource 
+myProp "added 1st")<br/>("added 1st" "original one")<br/>gx-user(20): (put-value 
+MyResource myProp "added 2nd")<br/>("added 2nd" "added 1st" "original 
+one")<br/>gx-user(21): (slot-value MyResource 'myProp)<br/>("added 2nd" "added 
+1st" "original one")<br/></code>
+<p>When you add same value that is already stored in the slot, nothing 
+happens.</p>
+<code face=monospace>gx-user(22): (put-value MyResource myProp 
+"added 1st")<br/>("added 2nd" "added 1st" "original one")<br/>gx-user(23): 
+(slot-value MyResource 'myProp)<br/>("added 2nd" "added 1st" "original 
+one")<br/></code><br/>
+<h3>5.8 &nbsp;Adding Multiple Types </h3>
+<p>A CLOS object belongs to only one class. However, an instance in RDF may be a 
+member of multiple classes. In order to solve this problem, we set up an 
+invisible class that is an instance of metaclass <b>gx::shadowed-class</b>. For 
+example, suppose SaucelitoCanyonZinfandel1998 in Wine Ontology is an instance of 
+Zinfandel and Vintage, SWCLOS set a shadowed-class named Zinfandel.0 that has 
+Zinfandel and Vintage as its superclass.</p>
+<code>gx-user(2): 
+(defpackage vin)<br/>#&lt;The vin package&gt;<br/>gx-user(3): (defIndividual 
+vin::SaucelitoCanyonZinfandel1998<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+vin::Zinfandel)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+vin::Vintage))<br/>Warning: Range entail by rdf:type: vin::Zinfandel rdf:type 
+rdfs:Class.<br/>Warning: Range entailX2 by rdf:type: vin::Vintage rdf:type 
+rdfs:Class.<br/>Warning: Multiple classing with 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(#&lt;rdfs:Class 
+vin:Zinfandel&gt; #&lt;rdfs:Class vin:Vintage&gt;) for 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&lt;vin:Zinfandel 
+vin:SaucelitoCanyonZinfandel1998&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&lt;vin:Zinfandel.0 
+vin:SaucelitoCanyonZinfandel1998&gt;<br/>gx-user(4): (typep 
+vin:SaucelitoCanyonZinfandel1998 vin:Zinfandel)<br/>t<br/>t<br/>gx-user(5): (typep 
+vin:SaucelitoCanyonZinfandel1998 vin:Vintage)<br/>t<br/>t<br/>gx-user(6): (type-of 
+vin:SaucelitoCanyonZinfandel1998)<br/>(vin:Vintage 
+vin:Zinfandel)</code><br/>
+<h3>5.9 &nbsp;Extension of property and slot definition </h3>
+<p>A set of all triples whose predicate is a specific property is called the <a 
+href="http://www.w3.org/TR/rdf-mt#defexten"><i>extension</i> of the property in 
+RDF</a>. A slot in an instance of CLOS is captured as one element of the 
+extension of a property of slot name. In CLOS, we have the slot-definition 
+objects that are allocated for a class metaobject and shared by its instances. A 
+slot definition object in a class holds a slot-name and a type constraint for 
+the slot value. SWCLOS also keeps the subject information on the property 
+extension in the slot-definition objects. Furthermore, every slot definition 
+object for a RDF entity is linked to by a property resource object. Function 
+<b>collect-all-extensions-of</b> collects all elements in the extension of a 
+property and lists up them.</p>
+<code>gx-user(53): 
+rdfs:comment<br/>#&lt;rdf:Property rdfs:comment&gt;<br/>gx-user(54): (find 
+'rdfs:comment (mop:class-slots 
+rdfs:Class)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:key 
+#'name)<br/>#&lt;gx::Property-effective-slot-definition rdfs:comment @ 
+#x20a9520a&gt;<br/>gx-user(55): 
+(cl:typep<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(find 
+'rdfs:comment (mop:class-slots 
+rdfs:Class)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:key 
+#'name)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mop:slot-definition)<br/>t<br/>gx-user(56): 
+(collect-all-extensions-of rdfs:comment)<br/>((#&lt;rdfsClass rdfs:Class&gt; "The 
+class of classes.")<br/>&nbsp;(#&lt;rdfs:Class rdfs:Resource&gt; "The class 
+resource, everything.")<br/>&nbsp;(#&lt;rdfs:Class rdf:Property&gt; "The class of 
+RDF properties.")<br/>&nbsp;(#&lt;rdfs:Class rdf:Statement&gt; "The class of RDF 
+statements.")<br/>&nbsp;(#&lt;rdfs:Class rdfs:Datatype&gt; "The class of RDF 
+datatypes.")<br/>&nbsp;(#&lt;rdfs:Class rdf:List&gt; "The class of RDF 
+Lists.")<br/>&nbsp;(#&lt;rdfs:Class rdfs:Container&gt; "The class of RDF 
+containers.")<br/>&nbsp;(#&lt;rdfs:Class 
+rdfs:ContainerMembershipProperty&gt;<br/>&nbsp;&nbsp;"The class of container 
+membership properties, rdf:_1, rdf:_2, ...,<br/>&nbsp;&nbsp;all of which are 
+sub-properties of 'member'.")<br/>&nbsp;(#&lt;rdfs:Class rdf:Bag&gt; "The class 
+of unordered containers.")<br/>&nbsp;(#&lt;rdfs:Class rdf:Seq&gt; "The class of 
+ordered containers.") ...)<br/></code>
+<p><a id="SWCLOS(collect-all-extensions-of" name="SWCLOS(collect-all-extensions-of"/>
+<div class="titlebar">
+<div class="defname">collect-all-extensions-of <i>property</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">collects an element of the extension of <i>property</i> and 
+  returns a list of role and filler pairs. </div></p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp">Seiji Koide</a>. Copyright 
+(c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 <br/>Copyright (c) 2007-2010 
+Seiji Koide. Oct.2010 <br/></small></i></body></html>

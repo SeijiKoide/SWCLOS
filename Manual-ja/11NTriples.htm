@@ -1,0 +1,333 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0061)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/NTriples.html -->
+<html><head><title>N-Triples</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>11. &nbsp;N-Triples </h2>
+<p>Note also that N-Triples module is separated from RDFS system. You must load 
+it to use it.</p>
+<h3>11.1 &nbsp;N-Triple Parser</h3>
+<p>The <a href="http://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a> is a 
+textual expression of RDF graph. A line in N-Triples represents one triple of 
+<i>subject/predicate/object</i>. The proper <a 
+href="http://www.w3.org/TR/rdf-testcases/#ntriples">syntax of N-Triple</a> 
+requires URI references and does not allow QNames. However, we relaxed the 
+syntax to allow non-ASCII character sets and QNames instead of URI references. 
+</p>
+<p>The graph at <a 
+href="04RDFObject.htm#figure4.1">Figure4.1</a> 
+is expressed in N-Triples as follows. To represent a blank node, you need to use 
+a nodeID in N-Triples. Note that there is one period at the end of each line, 
+where the tilde, locally in the followings, means the line continuation. </p>
+<p class="box"><code>&lt;http://www.w3.org/TR/rdf-syntax-grammar&gt; 
+&lt;http://www.example.org/terms/editor&gt; _:a01 .<br/>_:a01 
+&lt;http://www.example.org/terms/homePage&gt; 
+&lt;http://purl.org/net/dajobe/&gt; .<br/>_:a01 
+&lt;http://www.example.org/terms/fullName&gt; "Dave Becket" 
+.<br/>&lt;http://www.w3.org/TR/rdf-syntax-grammar&gt; 
+&lt;http://purl.org/dc/elements/1.1./title&gt; ~<br/>&nbsp;&nbsp;"RDF/XML Syntax 
+Specification (Revised)" .</code></p>
+<p>As you see, the strict syntax of N-Triple is tedious for using URIs. So, we 
+have relaxed it so as to accept the corresponding QNames instead of the URIs. 
+</p>
+<p class=box><code>&lt;http://www.w3.org/TR/rdf-syntax-grammar&gt; ex:editor _:a01 
+.<br/>_:a01 ex:homePage &lt;http://purl.org/net/dajobe/&gt; .<br/>_:a01 
+ex:fullName "Dave Becket" .<br/>&lt;http://www.w3.org/TR/rdf-syntax-grammar&gt; 
+dc:title ~<br/>&nbsp;&nbsp;"RDF/XML Syntax Specification (Revised)" .</code></p>
+<p>The function <b>read-NTriple-file</b> reads the relaxed N-Triple format file, 
+and parses each line to three strings of <i>subject/predicate/object</i>. This 
+function is usually used with <b>addTriple-from-file</b>, then 
+<b>addTriple-from-file</b> accepts and interprets 
+<i>subject/predicate/object</i> strings, including strings that stands for 
+QNames. URIs for resources <em>do not cause</em> to invoke <a 
+href="03Resource.htm#SWCLOSuri2symbol"><b>uri2symbol</b></a> 
+in reading, so the generated CLOS objects are bound only to <b>iri</b> values. 
+QNames for resources cause to invoke a query for users in case that the 
+namespace is unknown. In the example below, this shows a right and bottom corner 
+part of <a 
+href="07RDFCollection.htm#figure7.1"><b>Figure7.1</b></a>. 
+</p><code>gx-user(2): (read-NTriple-file #'addTriple-from-file 
+"RDFS/JenaEx.nt")<br/>Warning: Entail in _:a001 vCard:Family "Smith":<br/>..... 
+vCard:Family rdf:type rdf:Property.<br/>Warning: Entail in _:a001 vCard:Family 
+"Smith":<br/>..... _:a001 rdf:type rdfs:Resource<br/>Warning: Entail in _:a001 
+vCard:Given "John":<br/>..... vCard:Given rdf:type rdf:Property.<br/>Warning: 
+Entail in &lt;http://somewhere/JohnSmith&gt; vCard:N _:a001:<br/>..... vCard:N 
+rdf:type rdf:Property.<br/>Warning: Entail in &lt;http://somewhere/JohnSmith&gt; 
+vCard:N _:a001:<br/>..... &lt;http://somewhere/JohnSmith&gt; rdf:type 
+rdfs:Resource.<br/>Warning: Entail in &lt;http://somewhere/JohnSmith&gt; vCard:FN 
+"John Smith":<br/>..... vCard:FN rdf:type rdf:Property.<br/>:done<br/>gx-user(3): 
+(get-form _:a001)<br/>(|rdfs:Resource| (vCard:Family "Smith") (vCard:Given 
+"John"))<br/>gx-user(4): (get-form 
+&lt;&lt;http://somewhere/JohnSmith&gt;&gt;)<br/>(|rdfs:Resource| (rdf:about 
+&lt;http://somewhere/JohnSmith&gt;)<br/>(vCard:N (|rdfs:Resource| (vCard:Family 
+"Smith") (vCard:Given "John")))<br/>(vCard:FN "John Smith"))<br/></code>
+<p><a id="SWCLOSread-NTriple-file" name="SWCLOSread-NTriple-file"/>
+<div class="titlebar">
+<div class="defname">read-NTriple-file <i>accepter-fun</i> [ <i>file</i> [ 
+<i>code</i> ]]</div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This function reads and parses a <i>file</i> that contains 
+  N-Triple format data, then passes three strings of 
+  <i>subject/predicate/object</i> to <i>accepter-fun</i>. The <i>code</i> is a 
+  character code of <i>file</i>. The default value of <i>code</i> is ':utf-8'. 
+</div></p>
+<p><a id="SWCLOSaddTriple-from-file" name="SWCLOSaddTriple-from-file"/>
+<div class="titlebar">
+<div class="defname">addTriple-from-file <i>subject predicate object</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe"><i>subject</i>, <i>predicate</i>, and <i>object</i> are strings. 
+  This function interprets three parameters, and adds the triple data into 
+  memory. Actually, this function interns three symbols or interns three uris of 
+  parameters, and invokes <b>addTriple</b>. </div></p>
+<h3>11.2 &nbsp;Adding N-Triples</h3>
+<p>The method <b>addTriple</b> adds an N-Triple, i.e., one 
+<i>subject/predicate/object</i>, into memory. In fact, there are many methods of 
+<b>addTriple</b>. One method is a piece of building blocks, and each method 
+burdens with a part of a whole work parted into pieces. In the followings, 
+<b>addTriple</b> methods are categorized by combination patterns of parameter, 
+but note that one category is also a collection of several methods. </p>
+<p><a id="SWCLOSaddTriplefortype" name="SWCLOSaddTriplefortype"/>
+<div class="titlebar">
+<div class="defname">addTriple <i>subject</i> (<i>predicate</i> (eql rdf:type)) 
+<i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">If <i>subject</i> and/or <i>object</i> is a URI, it is changed to 
+  an <b>iri</b>. If <i>object</i> is a symbol or <b>iri</b>, it is changed to an 
+  instance of rdfs:Class. Finally, <i>subject</i> is defined as an instance of 
+  <i>object</i> using <b>addClass</b> if <i>object</i> is a metaclass, or 
+  <b>addInstance</b> if <i>object</i> is a class. When <i>subject</i> is already 
+  an instance of the <i>object</i>, nothing happens. This method involves the 
+  range entailment on rdf:type for an undefined <i>object</i>. </div></p>
+<p><a id="SWCLOSaddTripleforsubtype" name="SWCLOSaddTripleforsubtype"/>
+<div class="titlebar">
+<div class="defname">addTriple <i>subject</i> (<i>predicate</i> (eql 
+rdfs:subClassOf)) <i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">If <i>subject</i> and/or <i>object</i> is a URI, it is changed to 
+  an <b>iri</b>. If <i>subject</i> and/or <i>object</i> is an <b>iri</b>, it is 
+  changed to an instance of rdfs:Class. If <i>subject</i> and/or <i>object</i> 
+  is a resource but not a class, it is changed to an instance of rdfs:Class. In 
+  the case that <i>subject</i> and <i>object</i> are classes, if <i>subject</i> 
+  is already a subclass of <i>object</i>, then nothing is done, else this method 
+  redefines superclasses of <i>subject</i> with <b>addClass</b> with the most 
+  specific concepts of previous superclasses and <i>object</i>. 
+</div></p>
+<p><a id="SWCLOSaddTripleforsubproperty" name="SWCLOSaddTripleforsubproperty"/>
+<div class="titlebar">
+<div class="defname">addTriple <i>subject</i> (<i>predicate</i> (eql 
+rdfs:subPropertyOf)) <i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">If <i>subject</i> and/or <i>object</i> is a URI, it is changed to 
+  an <b>iri</b>. If <i>subject</i> and/or <i>object</i> is an <b>iri</b>, it is 
+  changed to an instance of rdf:Property. If <i>subject</i> and/or <i>object</i> 
+  is a resource but not a property, it is changed to an instance of 
+  rdf:Property. In the case that <i>subject</i> and <i>object</i> are 
+  properties, if <i>subject</i> is already a subproperty of <i>object</i>, then 
+  nothing is done, else this method redefines <i>subject</i> as an subproperty 
+  of <i>object</i> using <b>addInstance</b> with the most specific properties of 
+  previous superproperties and <i>object</i>. </div></p>
+<p><a id="SWCLOSaddTriplestandard" name="SWCLOSaddTriplestandard"/>
+<div class="titlebar">
+<div class="defname">addTriple <i>subject</i> (<i>predicate</i> rdf:Property) 
+<i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">If <i>subject</i> is a URI, it is changed to an <b>iri</b>. If 
+  <i>subject</i> is a symbol or an <b>iri</b>, and <i>object</i> is a symbol or 
+  an <b>iri</b>, then <i>object</i> is defined with the range constraint from 
+  <i>predicate</i>, if it is not defined, otherwise it is redefined with the 
+  range constraint. If <i>subject</i> is a symbol or an <b>iri</b>, and 
+  <i>object</i> is a number or string or a resource, then <i>subject</i> is 
+  defined using the domain restriction from <i>predicate</i>. If <i>subject</i> 
+  is a resource, it is checked using the domain restriction from 
+  <i>predicate</i> and this triple is installed using <b>addInstance</b> or 
+  <b>addClass</b> with the most specific domain class. </div></p>
+<p><a id="SWCLOSaddTripleforsymbol" name="SWCLOSaddTripleforsymbol"/>
+<div class="titlebar">
+<div class="defname">addTriple <i>subject</i> (<i>predicate</i> symbol) 
+<i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">When <i>predicate</i> is undefined, then defines it as instance of 
+  rdf:Property. This function recursive-calls with getting the value of 
+  <i>predicate</i>. </div></p>
+<p><a id="SWCLOSaddTripleforURI" name="SWCLOSaddTripleforURI"/>
+<div class="titlebar">
+<div class="defname">addTriple <i>subject</i> (<i>predicate</i> net.uri:uri) 
+<i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">This function translates <i>predicate</i> URI to a QName, then 
+  recursively calls with the <i>predicate</i> QName. This function also adds 
+  <i>predicate</i> URI to rdf:about slot of <i>predicate</i> object. 
+</div></p>
+<p><a id="SWCLOSaddTripleforURIsubject" name="SWCLOSaddTripleforURIsubject"/>
+<div class="titlebar">
+<div class="defname">addTriple (<i>subject</i> net.uri:uri) <i>predicate</i> 
+<i>object</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">This method changes <i>subject</i> to <b>iri</b>, then recursively 
+  calls with the <i>subject</i> of <b>iri</b>. </div></p>
+<p>For convenience to programmers, three define macros are prepared in 
+S-expression. <b>defTriple</b> and <b>/.</b> and <b>./</b> are completely the 
+same for N-Triple definition. After the example above of 
+<b>read-NTriple-file</b>, the followings demonstrate the example of 
+<b>defTriple</b>. </p><code>gx-user(2): (defpackage 
+vCard)<br/>#&lt;The vCard package&gt;<br/>gx-user(3): (defTriple 
+&lt;http://somewhere/JohnSmith&gt; vCard::FN "John Smith") <br/>Warning: Entail 
+in &lt;http://somewhere/JohnSmith&gt; vCard:FN "John Smith":<br/>..... vCard:FN 
+rdf:type rdf:Property.<br/>Warning: Entail in &lt;http://somewhere/JohnSmith&gt; 
+vCard:FN "John Smith":<br/>..... &lt;http://somewhere/JohnSmith&gt; rdf:type 
+rdfs:Resource<br/>#&lt;|rdfs:Resource| :anonymous&gt;<br/>gx-user(4): (defTriple 
+&lt;http://somewhere/JohnSmith&gt; vCard::N _:a001)<br/>Warning: Entail in 
+&lt;http://somewhere/JohnSmith&gt; vCard:N _:a001:<br/>..... vCard:N rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| :anonymous&gt;<br/>gx-user(5): (defTriple 
+_:a001 vCard::Family "Smith")<br/>Warning: Entail in _:a001 vCard:Family 
+"Smith":<br/>..... vCard:Family rdf:type rdf:Property.<br/>#&lt;|rdfs:Resource| 
+:anonymous&gt;<br/>gx-user(6): (defTriple _:a001 vCard::Given "John")<br/>Warning: 
+Entail in _:a001 vCard:Given "John":<br/>..... vCard:Given rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| :anonymous&gt;<br/>gx-user(7): (get-form 
+&lt;&lt;http://somewhere/JohnSmith&gt;&gt;)<br/>(|rdfs:Resource| (rdf:about 
+&lt;http://somewhere/JohnSmith&gt;) (vCard:FN "John Smith")<br/>(vCard:N 
+(|rdfs:Resource| (vCard:Family "Smith") (vCard:Given 
+"John"))))<br/></code>
+<p><a id="SWCLOSdefTripleforURIsubject" name="SWCLOSdefTripleforURIsubject"/>
+<div class="titlebar">
+<div class="defname">defTriple <i>subject</i> <i>predicate</i> <i>object</i></div>
+<div class="deftype">[Macro]</div></div>
+<div class="titlebar">
+<div class="defname">/. <i>subject</i> <i>predicate</i> <i>object</i></div>
+<div class="deftype">[Macro]</div></div>
+<div class="titlebar">
+<div class="defname">./ <i>subject</i> <i>predicate</i> <i>object</i></div>
+<div class="deftype">[Macro]</div></div>
+<div class="defdescribe">This macro makes the form '(addTriple <i>subject</i> 
+  <i>predicate</i> <i>object</i>)'.</div></p>
+<h3>11.3 &nbsp;N-Triple Writer</h3>
+<p>The resource forms are also obtained as list of triples and also printed out 
+in N-Triple format as well as the <i>object-centered form</i> by <b>get-form</b> 
+and <b>write-xml</b>. The function <b>get-triple</b> returns a list of relaxed 
+N-Triples in S-expression that are composed QNames rather than URIs, and 
+<b>write-nt</b> prints them in exact N-Triples format. See the followings. 
+</p><code>gx-user(12): (get-triple 
+&lt;&lt;http://somewhere/JohnSmith&gt;&gt;)<br/>((<HTTP: JohnSmith somewhere> 
+rdf:type |rdfs:Resource|)<br/>&nbsp;(<HTTP: JohnSmith somewhere> vCard:FN "John 
+Smith")<br/>&nbsp;(<HTTP: JohnSmith somewhere> vCard:N _:gx5)<br/>&nbsp;(_:gx2 
+rdf:type |rdfs:Resource|)<br/>&nbsp;(_:gx2 vCard:Family "Smith")<br/>&nbsp;(_:gx2 
+vCard:Given "John"))<br/>gx-user(13): (setf (documentation (find-package :vCard) 
+t)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"http://www.w3.org/2001/vcard-rdf/3.0")<br/>"http://www.w3.org/2001/vcard-rdf/3.0"<br/>gx-user(14): 
+(set-uri-namedspace-from-pkg (find-package :vCard))<br/>#&lt;The vCard 
+package&gt;<br/>gx-user(15): (write-nt 
+&lt;&lt;http://somewhere/JohnSmith&gt;&gt;)<br/>&lt;http://somewhere/JohnSmith&gt; 
+&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; 
+~<br/>&nbsp;&nbsp;&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt; 
+.<br/>&lt;http://somewhere/JohnSmith&gt; 
+&lt;http://www.w3.org/2001/vcard-rdf/3.0#FN&gt; ~<br/>&nbsp;&nbsp;"John Smith" 
+.<br/>&lt;http://somewhere/JohnSmith&gt; 
+&lt;http://www.w3.org/2001/vcard-rdf/3.0#N&gt; _:gx10 .<br/>_:gx3 
+&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; 
+~<br/>&lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt; .<br/>_:gx3 
+&lt;http://www.w3.org/2001/vcard-rdf/3.0#Family&gt; "Smith" .<br/>_:gx3 
+&lt;http://www.w3.org/2001/vcard-rdf/3.0#Given&gt; "John" .<br/></code><br/>
+<p>Note that at the line number 12 and 15 in the above example, a nodeID symbol 
+is automatically newly generated by <b>get-triple</b>, and given to 
+<b>write-nt</b> rather than nodeID given by users.</p>
+<p><a id="SWCLOSget-triple" name="SWCLOSget-triple"/>
+<div class="titlebar">
+<div class="defname">get-triple <i>resource</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns the definition of <i>resource</i> in S-expression of 
+  triples. Some nodeIDs are named as 'gx<i>nnn</i>' for anonymous nodes in 
+  triple. </div></p>
+<p><a id="SWCLOSwrite-triple" name="SWCLOSwrite-triple"/>
+<div class="titlebar">
+<div class="defname">write-triple <i>triple</i> [ <i>stream</i> ]</div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This function prints out <i>triple</i>, which is a list of three 
+  element <i>subject/predicate/object</i>. </div></p>
+<p><a id="SWCLOSwrite-nt" name="SWCLOSwrite-n"/t>
+<div class="titlebar">
+<div class="defname">write-nt <i>resource</i> [ <i>stream</i> ]</div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This function gets triples of <i>resource</i> with 
+  <b>get-triple</b> and prints out them using <b>write-triple</b>. For anonymous 
+  <i>resource</i>, a nodeID to which a resource object is bound must be given. 
+  This functions returns no value. </div></p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp">Seiji Koide</a>. Copyright 
+(c) 2006 GALAXY EXPRESS CORPORATION. Mar. 2006 <br/>Copyright (c) 2007-2010 Seiji 
+Koide. Oct.2010 <br/></small></i></body></html>

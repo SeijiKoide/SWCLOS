@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0062)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/RDFobject.html -->
+<html><head><title>RDF Resource Objects</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<!-- copy and paste into every html files this link and style for css -->
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>4. &nbsp;RDF Resource Objects</h2>
+<h3>4.1 &nbsp;Resource Objects and the Syntax in S-expression </h3>
+<p>In RDF graph model, a node is represented by either resource nodes or 
+literals. A resource node is either a named node, which has a globally unique 
+URI, or a blank node, which has no URI. A literal is a kind of string or number, 
+or an instance of XMLLiteral. Figure 4.1, which is taken from <a 
+href="http://www.w3.org/TR/rdf-syntax-grammar/">RDF/XML Syntax 
+Specification</a>, shows an example of RDF graph. In the figure, a rectangle 
+represents a literal and an ellipse represents an anonymous blank node or a 
+resource node that contains a URI inside. In SWCLOS, Figure 4.1 is expressed as 
+follows in S-expression. </p><br/>
+<p align="center"><a id="figure4.1" name="figure4.1"><img alt="RDF Graph Example" 
+src="FIGURES/RDFGraphExample.png" border="0"/> </a></p>
+<p align="center"><b>Figure 4.1 RDF Graph Example (from <a 
+href="http://www.w3.org/TR/rdf-syntax-grammar/">RDF/XML Syntax 
+Specification</a>)</b></p>
+<code>(rdf:Description 
+<br/>&nbsp;&nbsp;(rdf:about&nbsp;"http://www.w3.org/TR/rdf-syntax-grammar")<br/>
+&nbsp;&nbsp;(ex:editor<br/>&nbsp;&nbsp;&nbsp;&nbsp;(rdf:Description<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ex:homePage<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:Description&nbsp;(rdf:about&nbsp;"http://purl.org/net/dajobe/")))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ex:fullName&nbsp;"Dave 
+Beckett")))<br/>
+&nbsp;&nbsp;(dc:title&nbsp;"RDF/XML&nbsp;Syntax&nbsp;Specification&nbsp;(Revised)"))</code>
+<br/>
+<p>Whereas rdf:about in SWCLOS looks like a property in RDF, it is not a 
+property in RDF but an XML attribute that takes a place in RDF/XML format 
+resource definition. The ex:editor, ex:homePage, ex:fullName, and dc:title are 
+RDF properties in QName representation for the corresponding URIs on the edges 
+in the figure. The terminology &lsquo;rdf:Description&rsquo; that appears in S-expression 
+for RDF graph representation just denotes a sequence for RDF description. With 
+<a 
+href="#SWCLOSaddForm"><b>addForm</b></a> 
+function, this statement turns out a resource object. See the syntax in BNF 
+described below. Precisely, the assertion above produces three CLOS objects, 
+that is, two named resource objects and one anonymous resource object, in 
+addition to two lisp strings. </p>
+<h3>4.2 &nbsp;Adding and Getting a Resource Form</h3>
+<p>SWCLOS allows users to add such a form as mentioned in the previous section, 
+that is, <i>nested object-centered representation</i> of RDF graph into the lisp 
+environment. However, if a resource name is not supplied, the created object is 
+anonymous. See the following example. If you type the lines as the 
+demonstration, a dialogue window will pop up twice at the line 5 for package 
+name of uri &ldquo;http://purl.org/net/&rdquo; and &ldquo;http://www.w3.org/TR/&rdquo;. Please note to 
+push &lsquo;cancel&rsquo; button in this case. If you gave some package name for the query, 
+SWCLOS would create the package and make a symbol, e.g., 
+<i>package-name-you-input</i>:dajobe. Then, you would obtain a different look at 
+line 6, where the symbol name <i>package-name-you-input</i>:dajobe would appear 
+instead of &lsquo;(rdf:Description (rdf:about "http://purl.org/net/dajobe/"))&rsquo; for the 
+anonymous object. </p>
+<code>gx-user(3): (defpackage 
+ex)<br/>#&lt;The ex package&gt;<br/>gx-user(4): (defpackage dc)<br/>#&lt;The dc 
+package&gt;<br/>gx-user(5): (addForm '(rdf:Description<br/>&nbsp;&nbsp;(rdf:about 
+"http://www.w3.org/TR/rdf-syntax-grammar")<br/>&nbsp;&nbsp;(ex::editor<br/>&nbsp;&nbsp;&nbsp;&nbsp;(rdf:Description<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ex::homePage<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:Description 
+(rdf:about 
+"http://purl.org/net/dajobe/")))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ex::fullName 
+"Dave Beckett")))<br/>&nbsp;&nbsp;(dc::title "RDF/XML Syntax Specification 
+(Revised)")))<br/>Warning: Entail by rdf1: ex::editor rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: dc::title rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: ex::homePage rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: ex::fullName rdf:type 
+rdf:Property.<br/>#&lt;|rdfs:Resource| common-lisp:nil&gt;<br/>gx-user(6): (pprint 
+(get-form 
+&lt;&lt;http://www.w3.org/TR/rdf-syntax-grammar&gt;&gt;))<br/><br/>(rdf:Description 
+(rdf:about 
+"http://www.w3.org/TR/rdf-syntax-grammar")<br/>&nbsp;&nbsp;(ex:editor<br/>&nbsp;&nbsp;&nbsp;&nbsp;(rdf:Description<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ex:homePage 
+(rdf:Description (rdf:about 
+"http://purl.org/net/dajobe/")))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ex:fullName 
+"Dave Beckett")))<br/>&nbsp;&nbsp;(dc:title "RDF/XML Syntax Specification 
+(Revised)"))<br/></code>
+<p>Do not care about those warnings at line 5 at this time. It will be explained 
+at <a 
+href="RDFSchema.html#Section5.5"><b>Section 
+5.5</b></a>. In this example, an RDF graph shown in <b>Figure 4.1</b> is 
+inputted through a form in S-expression in SWCLOS, and three objects are created 
+in the environment. You can backwardly generate the form in RDF graph from the 
+subjective resource object using <b>get-form</b> in the lisp top level. </p>
+<p>The value of property &lsquo;ex:editor&rsquo; is anonymous. The value of &lsquo;ex:homePage&rsquo; is 
+also anonymous, because SWCLOS did not obtain the name by your cancellation for 
+its package name. Note that SWCLOS cannot identify anonymous objects by name, 
+even if they have the URI in rdf:about attribute. (However, you can get anonymous objects through corresponding URIs with function iri-value.)</p>
+<p>Function <b>addForm</b> interprets a <i>form</i> according to the following 
+BNF syntax, where {A--Z} means any character from A to Z, and {<i>SomeNode</i> - 
+<i>element</i>} means the possibility of <i>SomeNode</i> minus <i>element</i>. 
+Also note &lsquo;<i>xyz</i>&rsquo; means a sequence of character <i>x</i>, <i>y</i>, and 
+<i>z</i>. #\x means a character <i>x</i>. </p><i>form</i> ::= <i>number</i> | 
+<i>string</i> | <i>uri</i> | <i>qname</i> | <i>langedString</i> | 
+<i>datatypeString</i> 
+|<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* <i>lang-tag</i> <i>ws</i><sup>+</sup> <i>string</i> <i>ws</i>* &lsquo;)&rsquo; | &lsquo;(&rsquo; 
+<i>ws</i>* <i>datatype</i> <i>ws</i><sup>+</sup> <i>datum</i> <i>ws</i>* &lsquo;)&rsquo; | 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* &lsquo;@&rsquo; <i>ws</i><sup>+</sup> <i>lang-tag</i> <i>ws</i><sup>+</sup> <i>string</i> <i>ws</i>* 
+&lsquo;)&rsquo; | <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* &lsquo;^^&rsquo; <i>ws</i><sup>+</sup> <i>datatype</i> <i>ws</i><sup>+</sup> <i>datum</i> <i>ws</i>* 
+&lsquo;)&rsquo; | <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* &lsquo;rdf:Description&rsquo; [<i>ws</i><sup>+</sup> <i>nform</i>] {<i>ws</i><sup>+</sup> 
+<i>lang-form</i> | <i>ws</i><sup>+</sup> <i>slot-form</i>}* <i>ws</i>* &lsquo;)&rsquo; 
+|<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* <i>type-tag</i> [<i>ws</i><sup>+</sup> <i>nform</i>] {<i>ws</i><sup>+</sup> 
+<i>lang-form</i> | <i>ws</i><sup>+</sup> <i>slot-form</i>}* <i>ws</i>* 
+&lsquo;)&rsquo;<br/><i>lang-form</i> ::= &lsquo;(&rsquo; <i>ws</i>* &lsquo;xml:lang&rsquo; <i>ws</i><sup>+</sup> <i>lang-tag</i> 
+<i>ws</i>* &lsquo;)&rsquo; <br/><i>slot-form</i> ::= &lsquo;(&rsquo; <i>ws</i>* &lsquo;rdf:about&rsquo; <i>ws</i><sup>+</sup> 
+<i>uri</i> <i>ws</i>* &lsquo;)&rsquo; | &lsquo;(&rsquo; <i>ws</i>* &lsquo;rdf:ID&rsquo; <i>ws</i><sup>+</sup> <i>name</i> 
+<i>ws</i>* &lsquo;)&rsquo; | 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* &lsquo;rdf:nodeID&rsquo; <i>ws</i><sup>+</sup> <i>bname</i> <i>ws</i>* &lsquo;)&rsquo; | &lsquo;(&rsquo; <i>ws</i>* 
+&lsquo;:name&rsquo; <i>ws</i><sup>+</sup> <i>name</i> <i>ws</i>* &lsquo;)&rsquo; | 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lsquo;(&rsquo; 
+<i>ws</i>* <i>role</i> {<i>ws</i><sup>+</sup> <i>lang-tag</i>}? {<i>ws</i><sup>+</sup> <i>form</i>}<sup>+</sup> 
+<i>ws</i>* &lsquo;)&rsquo; <br/><i>langedString</i> ::= <i>string</i> &lsquo;@&rsquo; <i>language</i> 
+<br/><i>language</i> ::= {a--z}<sup>+</sup> {&lsquo;-&rsquo; {a--z0--9}<sup>+</sup>}*, comforming to <a 
+href="ftp://ftp.isi.edu/in-notes/bcp/bcp47.txt">IETF BCP 47</a> 
+<br/><i>lang-tag</i> ::= &lsquo;:&rsquo; {a--z}<sup>+</sup> {&lsquo;-&rsquo; {a--zA--Z0--9}<sup>+</sup>}*, comforming to <a 
+href="ftp://ftp.isi.edu/in-notes/bcp/bcp47.txt">IETF BCP 
+47</a><br/><i>datatypeString</i> ::= <i>string</i> &lsquo;^^&rsquo; <i>datatype</i> 
+<br/><i>datatype</i> ::= <i>symbol</i> - &lsquo;cl:nil&rsquo; - &lsquo;t&rsquo;, comforming to xsd 
+datatype (see <a 
+href="datatype.html#SWCLOSdatatype">Section 
+6</a>)<br/><i>nform</i> ::= <i>name</i> | &lsquo;(&rsquo; <i>ws</i>* &lsquo;:name&rsquo; <i>ws</i><sup>+</sup> <i>name</i> <i>ws</i>* &lsquo;)&rsquo; 
+<br/><i>role</i> ::= <i>symbol</i> - &lsquo;cl:nil&rsquo; - &lsquo;t&rsquo; <br/><i>type-tag</i> ::= 
+<i>symbol</i> - &lsquo;cl:nil&rsquo; - &lsquo;t&rsquo; <br/><i>symbol</i> ::= <i>qname</i> | 
+<i>unexported-qname</i> <br/><i>qname</i> ::= [<i>prefixName</i> &lsquo;:&rsquo;] <i>name</i> 
+<br/><i>unexported-qname</i> ::= <i>prefixName</i> &lsquo;::&rsquo; <i>name</i> 
+<br/><i>prefixName</i> ::= {<i>nameStartChar</i> - &lsquo;:&rsquo; - &lsquo;_&rsquo;} <i>nameChar</i>* 
+<br/><i>name</i> ::= <i>nameStartChar</i> <i>nameChar</i>* <br/><i>bname</i> ::= 
+&lsquo;_:&rsquo; <i>name</i> <br/><i>nameStartChar</i> ::= See <a 
+href="http://www.w3.org/TR/xml11/#NT-NameStartChar">XML 1.1 NameStartChar</a>. 
+<br/><i>nameChar</i> ::= See <a 
+href="http://www.w3.org/TR/xml11/#NT-NameChar">XML 1.1 NameChar</a>. 
+<br/><i>string</i> ::= &lsquo;"&rsquo; <i>scharacter</i>* &lsquo;"&rsquo; <br/><i>scharacter</i> ::= 
+{<i>echaracter</i> -- &lsquo;"&rsquo;} | &lsquo;\"&rsquo; <br/><i>echaracter</i> ::= <i>character</i> | 
+&lsquo;#\Tab&rsquo; | &lsquo;#\Newline&rsquo; | &lsquo;#\Return&rsquo; <br/><i>character</i> ::= &lsquo;#\\&rsquo; | {#\Space -- #\[} | 
+{#\] -- #x10FFFF}, up to the limit of UNICODE <br/><i>ws</i> ::= &lsquo;#\Space&rsquo; | &lsquo;#\Tab&rsquo; 
+| &lsquo;#\Newline&rsquo; <br/><i>uri</i> ::= string conformable to <a 
+href="http://www.ietf.org/rfc/rfc1630.txt">URI in W3C</a> <br/><i>datum</i> ::= 
+string or lisp object that conforms to designated datatype<br/><i>number</i> ::= 
+number character sequence in Lisp, cf. <a 
+href="http://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node189.html#SECTION002612000000000000000">Parsing 
+of Numbers and Symbols</a> <br/><br/>
+<p><a id="SWCLOSaddForm" name="SWCLOSaddForm"/>
+<div class="titlebar">
+<div class="defname"><a 
+href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2/doc/overview-rdfs.html#addform">addForm</a> 
+<i>form</i> [<i>role</i>]</div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">typically returns a resource object for <i>form</i>. In the top 
+  level, <i>role</i> is not supplied. Otherwise, <i>role</i> must be supplied in 
+  recursive call with <i>form</i> as <i>role</i>'s filler. <br/>
+  <ul>
+    <li>When <i>form</i> is a lisp number, a lisp string, an instance of 
+    <b>rdf:inLang</b>, and an instance of rdfs:Literal, it is returned. </li>
+    <li>When <i>form</i> is a <a 
+    href="03Resource.htm#SWCLOSiri"><b>uri</b></a>, 
+    it is returned if <i>role</i> is null (at top level), rdf:about, 
+    rdfs:isDefinedBy, or the <i>role</i>'s range is xsd:anyURI or its subtype, 
+    else the uri is converted to the QName symbol and <b>addForm</b> is 
+    recursively called with the converted QName symbol. </li>
+    <li>When <i>form</i> is a symbol, its resource object (symbol value) is 
+    returned if it exists, else the resource is created using the range 
+    entailment rule. </li>
+    <li>When <i>form</i> is a resource object, it is returned. </li>
+    <li>If <i>form</i> is a lang form, the language environment is changed to 
+    the designated language. The scoping of language environment is inside this 
+    function calling. </li>
+    <li>If <i>form</i> is a lang-tag form, an <i>rdf:inLang</i> structure 
+    instance is created and returned. </li>
+    <li>If <i>form</i> is a type-tag form, then <i>datum</i> is interpreted as 
+    <i>type-tag</i> if possible and returns the result, otherwise signals an 
+    error. </li>
+    <li>When this function interprets a slot form or &lsquo;(<i>role</i> 
+    <i>filler</i>)&rsquo;, it recursively calls itself with parameter <i>filler</i> 
+    for <i>form</i> and <i>role</i> for <i>role</i>, and returns the result. </li>
+    <li>Otherwise, this function recursively calls for each of slot forms and 
+    the list of evaluated slots is obtained, then function <b>addObject</b> is 
+    invoked for the class(es) that is/are computed from <i>type-tag</i> and 
+    entailment rules with the evaluated slots. The result of <b>addObject</b> is 
+    returned. </li></ul>A user usually do not use this function directly, instead 
+  a user should use <a 
+  href="RDFSchema.html#SWCLOSdefIndividual"><b>defIndividual</b></a> 
+  or <a 
+  href="RDFSchema.html#SWCLOSdefConcept"><b>defConcept</b></a> 
+  (<a 
+  href="RDFSchema.html#SWCLOSdefResource"><b>defResource</b></a>) 
+  or <a 
+  href="RDFSchema.html#SWCLOSdefProperty"><b>defProperty</b></a> 
+  macro for resource definition. <br/>See also <a 
+  href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2/doc/overview-rdfs.html#addForm">addForm</a> 
+  in documentation in doc folder. </div></p>
+<p>
+<a id="SWCLOSget-form" 
+name="SWCLOSget-form"></a>
+<div class="titlebar">
+<div class="defname"><a 
+href="http://www-kasm.nii.ac.jp/~koide/SWCLOS2/doc/overview-rdfs.html#get-form">get-form</a> 
+<i>resource</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">generates and returns the form of <i>resource</i> in S-expression. 
+</div></p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp">Seiji Koide</a>. Copyright 
+(c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 <br/>Copyright (c) 2007-2010 
+Seiji Koide. Oct.2010 <br/></small></i></body></html>

@@ -1,0 +1,863 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0067)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/OWLEntailments.html -->
+<html><head><title>13. OWL Intersection and Union, and the Entailments</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/>
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>13. &nbsp;OWL Axioms and Entailment Rules </h2>
+<h3>13.1 &nbsp;OWL Axioms </h3>
+<p>The OWL vocabulary is defined in the <a 
+href="http://www.w3.org/2002/07/owl.rdf">OWL definition file</a>. The 
+contents are listed in the table below. In the table, the namespace &lsquo;owl&rsquo; at 
+QNames is omitted. &lsquo;Resource&rsquo; stands for rdfs:Resource, and &lsquo;Property&rsquo; stands 
+for rdf:Property. &lsquo;type&rsquo; stands for rdf:type. &lsquo;subPropertyOf&rsquo; stands for 
+rdfs:subPropertyOf. &lsquo;domain&rsquo; and &lsquo;range&rsquo; stand for rdfs:domain and rdfs:range. 
+&lsquo;List&rsquo; stands for rdf:List.</p>
+<table align="center">
+  <tbody>
+  <tr>
+    <td><b>Table 13.1 &nbsp;The OWL Axioms </b></td></tr></tbody></table>
+<table align="center" border="1">
+  <tbody>
+  <tr bgcolor="#ccffff">
+    <th>OWL Axioms in http://www.w3.org/2002/07/owl.rdf</th></tr>
+  <tr>
+    <td>(rdfs:Class Class (subClassOf rdfs:Class)) </td></tr>
+  <tr>
+    <td>(Class Thing (unionOf Nothing (complementOf Nothing))) </td></tr>
+  <tr>
+    <td>(Class Nothing (complementOf Thing)) </td></tr>
+  <tr>
+    <td>(Property equivalentClass (subPropertyOf subClassOf) (domain Class) 
+      (range Class)) </td></tr>
+  <tr>
+    <td>(Property disjointWith (domain Class) (range Class)) </td></tr>
+  <tr>
+    <td>(Property equivalentProperty (subPropertyOf subPropertyOf)) </td></tr>
+  <tr>
+    <td>(Property sameAs (domain Thing) (range Thing)) </td></tr>
+  <tr>
+    <td>(Property differentFrom (domain Thing) (range Thing)) </td></tr>
+  <tr>
+    <td>(rdfs:Class AllDifferent) </td></tr>
+  <tr>
+    <td>(Property distinctMembers (domain AllDifferent) (range List)) </td></tr>
+  <tr>
+    <td>(Property unionOf (domain Class) (range List)) </td></tr>
+  <tr>
+    <td>(Property intersectionOf (domain Class) (range List)) </td></tr>
+  <tr>
+    <td>(Property complementOf (domain Class) (range Class)) </td></tr>
+  <tr>
+    <td>(Property oneOf (domain Class) (range List)) </td></tr>
+  <tr>
+    <td>(rdfs:Class Restriction (subClassOf Class)) </td></tr>
+  <tr>
+    <td>(Property onProperty (domain Restriction) (range Property)) </td></tr>
+  <tr>
+    <td>(Property allValuesFrom (domain Restriction) (range Class)) </td></tr>
+  <tr>
+    <td>(Property hasValue (domain Restriction)) </td></tr>
+  <tr>
+    <td>(Property someValuesFrom (domain Restriction) (range Class)) </td></tr>
+  <tr>
+    <td>(Property minCardinality (domain Restriction) (range 
+      xsd:nonNegativeInteger)) </td></tr>
+  <tr>
+    <td>(Property maxCardinality (domain Restriction) (range 
+      xsd:nonNegativeInteger)) </td></tr>
+  <tr>
+    <td>(Property cardinality (domain Restriction) (range 
+      xsd:nonNegativeInteger)) </td></tr>
+  <tr>
+    <td>(rdfs:Class ObjectProperty (subClassOf Property)) </td></tr>
+  <tr>
+    <td>(rdfs:Class DatatypeProperty (subClassOf Property)) </td></tr>
+  <tr>
+    <td>(Property inverseOf (domain ObjectProperty) (range ObjectProperty)) 
+  </td></tr>
+  <tr>
+    <td>(rdfs:Class TransitiveProperty (subClassOf ObjectProperty)) </td></tr>
+  <tr>
+    <td>(rdfs:Class SymmetricProperty (subClassOf ObjectProperty)) </td></tr>
+  <tr>
+    <td>(rdfs:Class FunctionalProperty (subClassOf Property)) </td></tr>
+  <tr>
+    <td>(rdfs:Class InverseFunctionalProperty (subClassOf ObjectProperty)) 
+  </td></tr>
+  <tr>
+    <td>(rdfs:Class AnnotationProperty (subClassOf Property)) </td></tr>
+  <tr>
+    <td>(AnnotationProperty rdfs:label) </td></tr>
+  <tr>
+    <td>(AnnotationProperty rdfs:comment) </td></tr>
+  <tr>
+    <td>(AnnotationProperty rdfs:seeAlso) </td></tr>
+  <tr>
+    <td>(AnnotationProperty rdfs:isDefinedBy) </td></tr>
+  <tr>
+    <td>(rdfs:Class Ontology) </td></tr>
+  <tr>
+    <td>(rdfs:Class OntologyProperty (subClassOf Property)) </td></tr>
+  <tr>
+    <td>(Property imports (type OntologyProperty) (domain Ontology) (range 
+      Ontology)) </td></tr>
+  <tr>
+    <td>(Property versionInfo (type AnnotationProperty)) </td></tr>
+  <tr>
+    <td>(Property priorVersion (type OntologyProperty) (domain Ontology) 
+      (range Ontology)) </td></tr>
+  <tr>
+    <td>(Property backwardCompatibleWith 
+      <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(type 
+      OntologyProperty) (domain Ontology) (range Ontology)) </td></tr>
+  <tr>
+    <td>(Property incompatibleWith (type OntologyProperty) (domain Ontology) 
+      (range Ontology)) </td></tr>
+  <tr>
+    <td>(rdfs:Class DeprecatedClass (subClassOf rdfs:Class)) </td></tr>
+  <tr>
+    <td>(rdfs:Class DeprecatedProperty (subClassOf Property)) </td></tr>
+  <tr>
+    <td>(rdfs:Class DataRange) </td></tr></tbody></table>
+<p>However, this is not enough to reason OWL semantics. We have added two axioms 
+to the above definitions in SWCLOS, as follows.</p>
+<table align="center">
+  <tbody>
+  <tr>
+    <td><b>Table 13.2 &nbsp;Additional Axioms </b></td></tr></tbody></table>
+<table align="center" border=1>
+  <tbody>
+  <tr bgcolor="#ccffff">
+    <th>name</th>
+    <th>Additional OWL Axioms</th></tr>
+  <tr>
+    <td><b>axiom1</b></td>
+    <td>(Class Thing (subClassOf Resource))</td></tr>
+  <tr>
+    <td><b>axiom2</b></td>
+    <td>(rdfs:Class Class (subClassOf Thing))</td></tr></tbody></table>
+<p><b>Axiom1</b> enables owl:Thing to inherit slot definitions from 
+rdfs:Resource instances, i.e., rdfs:label, rdfs:comment, etc. <b>Axiom2</b> is 
+crucial to treat OWL classes as individual. Namely, it enables OWL classes to 
+have slots for instances of owl:Thing, i.e., owl:sameAs, owl:differentFrom, 
+etc.</p>
+<h3>13.2 &nbsp;OWL Semantics and Entailment Rules </h3>
+<p>To realize OWL semantics as an extension of RDFS, we developed the OWL module 
+that is loaded after RDFS modules in SWCLOS. The OWL module reads up the <a 
+href="http://www.w3.org/2002/07/owl.rdf">the OWL definition file</a>, and 
+defines many functions that implement the OWL entailment rules on top of 
+RDFS/RDF semantics. In this section, such entailment rules are explained.</p>
+<p>The complete set of entailment rules in OWL is unknown. Table 13.3 shows 
+entailment rules in OWL which is disclosed by ter Horst <a 
+href="http://www.springerlink.com/content/366474250nl35412/">[Horst]</a>. These 
+rules are realized in OWL module. In addition, we have implemented some extra 
+entailment rules shown in Table 13.4</p>
+<table align="center">
+  <tbody>
+  <tr>
+    <td><b>Table 13.3 &nbsp;Entailment Rules by ter Horst <a 
+      href="http://www.springerlink.com/content/366474250nl35412/">[Horst]</a></b></td></tr></tbody></table>
+<table align="center" border=1>
+  <tbody>
+  <tr bgcolor="#ccffff">
+    <td><b>name</b></td>
+    <td><b>If</b></td>
+    <td><b>Then</b></td>
+    <td><b>note</b></td></tr>
+  <tr>
+    <td><b>rdfp1</b></td>
+    <td><i>p</i> type FunctionalProperty .<br/><i>u p v .</i><br/><i>u p w 
+    .</i></td>
+    <td><i>v</i> sameAs <i>w</i> .</td>
+    <td>functional property</td></tr>
+  <tr>
+    <td><b>rdfp2</b></td>
+    <td><i>p</i> type InverseFunctionalProperty .<br/><i>u p w .</i><br/><i>v p w 
+      .</i></td>
+    <td><i>u</i> sameAs <i>v</i> .
+    <td>inverse functional property</td></td></tr>
+  <tr>
+    <td><b>rdfp3</b></td>
+    <td><i>p</i> type SymmetricProperty .<br/><i>v p w .</i></td>
+    <td><i>w p v .</i></td>
+    <td>symmetric property</td></tr>
+  <tr>
+    <td><b>rdfp4</b></td>
+    <td><i>p</i> type TransitiveProperty .<br/><i>u p v .</i><br/><i>v p w 
+    .</i></td>
+    <td><i>u p w .</i></td>
+    <td>transitive property</td></tr>
+  <tr>
+    <td><b>rdfp5a</b></td>
+    <td><i>v p w .</i></td>
+    <td><i>v</i> sameAs <i>v</i> .</td>
+    <td rowspan="2">self-evident sameAs</td></tr>
+  <tr>
+    <td><b>rdfp5b</b></td>
+    <td><i>v p w .</i></td>
+    <td><i>w</i> sameAs <i>w</i> .</td></tr>
+  <tr>
+    <td><b>rdfp6</b></td>
+    <td><i>v</i> sameAs <i>w</i> .</td>
+    <td><i>w</i> sameAs <i>v</i> .</td>
+    <td>reflexive sameAs</td></tr>
+  <tr>
+    <td><b>rdfp7</b></td>
+    <td><i>u</i> sameAs <i>v</i> .<br/><i>v</i> sameAs <i>w</i> .</td>
+    <td><i>u</i> sameAs <i>w</i> .</td>
+    <td>transitive sameAs</td></tr>
+  <tr>
+    <td><b>rdfp8ax</b></td>
+    <td><i>p</i> inverseOf <i>q</i> .<br/><i>v p w .</i></td>
+    <td><i>w q v .</i> </td>
+    <td rowspan="2">inverse of property</td></tr>
+  <tr>
+    <td><b>rdfp8bx</b></td>
+    <td><i>p</i> inverseOf <i>q</i> .<br/><i>v q w .</i></td>
+    <td><i>w p v .</i> </td></tr>
+  <tr>
+    <td><b>rdfp9</b></td>
+    <td><i>v</i> type Class .<br/><i>v</i> sameAs <i>w</i> . </td>
+    <td><i>v</i> subClassOf <i>w</i> .</td>
+    <td>subsumption on <br/>same classes</td></tr>
+  <tr>
+    <td><b>rdfp10</b></td>
+    <td><i>p</i> type Property .<br/><i>p</i> sameAs <i>q</i> .</td>
+    <td><i>p</i> subPropertyOf <i>q</i> .</td>
+    <td>subsumption <br/>on same properties</td></tr>
+  <tr>
+    <td><b>rdfp11</b></td>
+    <td><i>u p v .</i><br/><i>u</i> sameAs <i>u'</i> .<br/><i>v</i> sameAs 
+      <i>v'</i> .</td>
+    <td><i>u' p v' .</i></td>
+    <td>property extension <br/>through sameAs</td></tr>
+  <tr>
+    <td><b>rdfp12a</b></td>
+    <td><i>v</i> equivalentClass <i>w</i> .</td>
+    <td><i>v</i> subClassOf <i>w</i> .</td>
+    <td rowspan="2">subsumption on <br/>equivalentClass</td></tr>
+  <tr>
+    <td><b>rdfp12b</b></td>
+    <td><i>v</i> equivalentClass <i>w</i> .</td>
+    <td><i>w</i> subClassOf <i>v</i> .</td></tr>
+  <tr>
+    <td><b>rdfp12c</b></td>
+    <td><i>v</i> subClassOf <i>w</i> .<br/><i>w</i> subClassOf <i>v</i> .</td>
+    <td><i>v</i> equivalentClass <i>w</i> .</td>
+    <td>equivalency from <br/>subsumption classes</td></tr>
+  <tr>
+    <td><b>rdfp13a</b></td>
+    <td><i>v</i> equivalentPropety <i>w</i> .</td>
+    <td><i>v</i> subPropertyOf <i>w</i> .</td>
+    <td rowspan="2">subsumption on <br/>equivalent property</td></tr>
+  <tr>
+    <td><b>rdfp13b</b></td>
+    <td><i>v</i> equivalentPropety <i>w</i> .</td>
+    <td><i>w</i> subPropertyOf <i>v</i> .</td></tr>
+  <tr>
+    <td><b>rdfp13c</b></td>
+    <td><i>v</i> subPropertyOf <i>w</i> .<br/><i>w</i> subPropertyOf <i>v</i> 
+    .</td>
+    <td><i>v</i> equivalentProperty <i>w</i> .</td>
+    <td>equivalency from <br/>subsumption properties</td></tr>
+  <tr>
+    <td><b>rdfp14a</b></td>
+    <td><i>v</i> hasValue <i>w</i> .<br/><i>v</i> onProperty <i>p</i> .<br/><i>u 
+      p w</i> .</td>
+    <td><i>u</i> type <i>v</i> .</td>
+    <td>filler restriction entailment</td></tr>
+  <tr>
+    <td><b>rdfp14bx</b></td>
+    <td><i>v</i> hasValue <i>w</i> .<br/><i>v</i> onProperty <i>p</i> 
+      .<br/><i>u</i> type <i>v</i> .</td>
+    <td><i>u p w</i> .</td>
+    <td>hasValue definition</td></tr>
+  <tr>
+    <td><b>rdfp15</b></td>
+    <td><i>v</i> someValuesFrom <i>w</i> .<br/><i>v</i> onProperty <i>p</i> 
+      .<br/><i>u p x</i> .<br/><i>x</i> type <i>w</i> .</td>
+    <td><i>u</i> type <i>v</i> .</td>
+    <td>full existential <br/>restriction entailment</td></tr>
+  <tr>
+    <td><b>rdfp16</b></td>
+    <td><i>v</i> allValuesFrom <i>w</i> .<br/><i>v</i> onProperty <i>p</i> 
+      .<br/><i>u</i> type <i>v</i> .<br/><i>u p x</i> .</td>
+    <td><i>x</i> type <i>w</i> .</td>
+    <td>allvaluesfrom definition</td></tr></tbody></table>
+<p>The <b>rule1a</b> and <b>rule1b</b> is an alternative of <a 
+href="http://www.w3.org/TR/rdf-mt/#rulerdfs4"><b>rdfs4a</b> and 
+<b>rdfs4b</b></a> in the W3C RDF Semantics document. The other rules are 
+explained in the next succeeding sub-subsections.</p>
+<table align="center">
+  <tbody>
+  <tr>
+    <td><b>Table 13.4 &nbsp;Additional Entailment Rules </b></td></tr></tbody></table>
+<table align="center" border="1">
+  <tbody>
+  <tr bgcolor="#ccffff">
+    <td><b>name </b></td>
+    <td><b>If</b></td>
+    <td><b>Then</b></td>
+    <td><b>note</b></td></tr>
+  <tr>
+    <td><b>rule1a</b></td>
+    <td><i>v p w</i> .</td>
+    <td>v type Thing .</td>
+    <td rowspan="2">default top in OWL</td></tr>
+  <tr>
+    <td><b>rule1b</b></td>
+    <td><i>v p w</i> .</td>
+    <td>w type Thing .</td></tr>
+  <tr>
+    <td><b>rule2a</b></td>
+    <td><i>u</i> intersectionOf { <i>v</i> ... } .</td>
+    <td><i>v</i> type Class .</td>
+    <td rowspan="2">default metaclass for <br/>intersection and union list</td></tr>
+  <tr>
+    <td><b>rule2b</b></td>
+    <td><i>u</i> unionOf { <i>v</i> ... } .</td>
+    <td><i>v</i> type Class .</td></tr>
+  <tr>
+    <td><b>rule3</b></td>
+    <td><i>u</i> distinctMembers {<i>v</i> ... } .</td>
+    <td><i>v</i> type Thing .</td>
+    <td>default class for distincts</td></tr>
+  <tr>
+    <td><b>rule4</b></td>
+    <td><i>u</i> disjointWith <i>v</i> .<br/><i>u'</i> subClassOf <i>u</i> 
+      .<br/><i>v'</i> subClassOf <i>v</i> .</td>
+    <td><i>u'</i> disjointWith <i>v'</i> .</td>
+    <td>permeation of disjointness</td></tr>
+  <tr>
+    <td><b>rule5</b></td>
+    <td><i>u</i> complementOf <i>v</i> .</td>
+    <td><i>v</i> complementOf <i>u</i> .</td>
+    <td>reflexive complementOf .</td></tr>
+  <tr>
+    <td><b>rule6</b></td>
+    <td><i>u</i> complementOf <i>v</i> .</td>
+    <td><i>u</i> disjointWith <i>v</i> .</td>
+    <td>disjoint complementOf .</td></tr>
+  <tr>
+    <td><b>rule7</b></td>
+    <td><i>u</i> oneOf { <i>x</i> ... } .</td>
+    <td><i>x</i> type <i>u</i> .</td>
+    <td>oneOf entailment</td></tr>
+  <tr>
+    <td><b>rule8</b></td>
+    <td><i>p</i> type SymmetricProperty .<br/><i>p</i> domain <i>C</i> 
+      .<br/><i>p</i> range <i>D</i> .</td>
+    <td><i>C</i> equivalentClass <i>D</i> .</td>
+    <td>domain/range equivalency <br/>by SymmetricProperty</td></tr>
+  <tr>
+    <td><b>rule9</b></td>
+    <td><i>p</i> equivalentProperty <i>q</i> .</td>
+    <td><i>q</i> equivalentProperty <i>p</i> .</td>
+    <td>reflexive equivalentProperty</td></tr>
+  <tr>
+    <td><b>rule10</b></td>
+    <td><i>p</i> equivalentProperty <i>q</i> .<br/><i>q</i> equivalentProperty 
+      <i>r</i> .</td>
+    <td><i>p</i> equivalentProperty <i>r</i> .</td>
+    <td>transitive equivalentProperty</td></tr>
+  <tr>
+    <td><b>rule11a</b></td>
+    <td><i>p</i> equivalentProperty <i>q</i> .<br/><i>p</i> domain <i>u</i> 
+.</td>
+    <td><i>q</i> domain <i>u</i> .</td>
+    <td>domain by equivalentProperty</td></tr>
+  <tr>
+    <td><b>rule11b</b></td>
+    <td><i>p</i> equivalentProperty <i>q</i> .<br/><i>p</i> range <i>u</i> .</td>
+    <td><i>q</i> range <i>u</i> .</td>
+    <td>range by equivalentProperty</td></tr>
+  <tr>
+    <td><b>rule12a</b></td>
+    <td><i>p</i> inverseOf <i>q</i> .<br/><i>p</i> domain <i>u</i> .</td>
+    <td><i>q</i> domain <i>u</i> .</td>
+    <td>domain by inverseOf</td></tr>
+  <tr>
+    <td><b>rule12b</b></td>
+    <td><i>p</i> inverseOf <i>q</i> .<br/><i>p</i> range <i>u</i> .</td>
+    <td><i>q</i> range <i>u</i> .</td>
+    <td>range by inverseOf</td></tr>
+  <tr>
+    <td><b>rule13</b></td>
+    <td><i>x</i> differentFrom <i>y</i> .</td>
+    <td><i>y</i> differentFrom <i>x</i> .</td>
+    <td>reflexive differentFrom</td></tr>
+  <tr>
+    <td><b>rule14</b></td>
+    <td><i>u</i> intersectionOf { <i>v</i> <i>w</i> } .<br/><i>x</i> type 
+      <i>v</i> .<br/><i>x</i> type <i>w</i> .</td>
+    <td><i>x</i> type <i>u</i> .</td>
+    <td>intersection entailment</td></tr></tbody></table>
+<p>In the case of no interpretation for a set of input assertions, it is called 
+clash or unsatisfiable. We summarized unsatisfiability conditions in <b>Table 
+13.5</b>.</p>
+<table align="center">
+  <tbody>
+  <tr>
+    <td><b>Table 13.5 &nbsp;Unsatisfiability Rules </b></td></tr></tbody></table>
+<table align="center" border=1>
+  <tbody>
+  <tr bgcolor="#ccffff">
+    <th>name </th>
+    <th>Unsatisfiable Conditions</th></tr>
+  <tr>
+    <td><b>oneof-condition-unsatisfiable</b></td>
+    <td><i>u</i> oneOf { <i>x</i><sub>i</sub> ... } .<br/><i>y</i> type <i>u</i> 
+      .<br/><i>y</i> differentFrom <i>x</i><sub>i</sub> . ( 1 &le; <i>i</i> &le; <i></i>n )</td></tr>
+  <tr>
+    <td><b>sameas-condition-unsatisfiable</b> 
+      or<br/><b>differentfrom-condition-unsatisfiable</b></td>
+    <td><i>x</i> sameAs <i>y</i> .<br/><i>x</i> differentFrom <i>y</i> .</td></tr>
+  <tr>
+    <td><b>disjointwith-condition-unsatisfiable</b> 
+      or<br/><b>equivalentclass-condition-unsatisfiable</b></td>
+    <td><i>u</i> disjointWith <i>v</i> .<br/><i>u</i> equivalentOf <i>v</i> 
+  .</td></tr>
+  <tr>
+    <td><b>disjoint-instances-condition-unsatisfiable</b></td>
+    <td><i>u</i> disjointWith <i>v</i> .<br/><i>x</i> type <i>u</i> 
+      .<br/><i>x</i> type <i>v</i> .</td></tr>
+  <tr>
+    <td><b>domain-condition-unsatisfiable</b></td>
+    <td><i>u</i> disjointWith <i>v</i> .<br/><i>x</i> domain <i>u</i> 
+      .<br/><i>x</i> domain <i>v</i> .</td></tr>
+  <tr>
+    <td><b>range-condition-unsatisfiable</b></td>
+    <td><i>u</i> disjointWith <i>v</i> .<br/><i>x</i> range <i>u</i> 
+      .<br/><i>x</i> range <i>v</i> .</td></tr>
+  <tr>
+    <td><b>complementof-condition-unsatiafiable</b></td>
+    <td><i>u</i> complementOf <i>v</i> .<br/><i>x</i> type <i>u</i> 
+      .<br/><i>x</i> type <i>v</i> .</td></tr></tbody></table>
+<h4>13.2.1 &nbsp;Intersection of Concepts (owl:intersectionOf) </h4>
+<p>The intersection of concepts is represented by owl:intersectionOf property in 
+OWL. In Wine Ontology, DryRedWine is defined as an intersection of DryWine and 
+RedWine. Figure 13.1 shows the concept intersection of DryWine and RedWine. The 
+class DryWine stands for a set of DryWine individuals and the class RedWine 
+stands for a set of RedWine individuals. So, the class DryRedWine represents an 
+intersection of the two sets of individuals. Therefore, the class DryRedWine 
+turns a subclass of DryWine class and RedWine class. </p>
+<code>gx-user(11): (get-form vin:DryRedWine)<br/>(owl:Class 
+vin:DryRedWine (owl:intersectionOf vin:DryWine vin:RedWine))<br/>gx-user(12): 
+(subtypep vin:DryRedWine vin:DryWine)<br/>t<br/>t<br/>gx-user(13): (subtypep 
+vin:DryRedWine vin:RedWine)<br/>t<br/>t<br/></code><br/>
+<p align="center"><img alt="Intersection of DryWine and RedWine" 
+src="FIGURES/intersectionOf.bmp" border="0"/> </p>
+<p align="center"><a id="figure13.1" name="figure13.1"><b>Figure 13.1 
+Intersection of DryWine and RedWine </b></a></p>
+<p>In SWCLOS, the values of owl:intersectionOf slot are automatically placed 
+into the class-direct-superclasses list of subjective class metaobject. In the 
+above example, vin:DryWine and vin:RedWine are placed into the 
+class-direct-superclasses list of vin:DryRedWine.</p>
+<p>The range of owl:intersectionOf is defined as rdf:List in the axioms. Then, 
+we added <b>rule2a</b> for the member element of collection on 
+owl:intersectionOf.</p>
+<p>As described at Section 12.5, owl:intersectionOf is complete in definition. 
+Therefore, if something is known as an individual of DryWine and RedWine, then 
+it is concluded that the thing is an individual of DryRedWine. See <b>rule14</b> 
+and the following demonstration.</p>
+<blockquote><code>gx(14): (defIndividual MyWine (rdf:type 
+  vin:DryWine))<br/>#&lt;vin:DryWine MyWine&gt;<br/>gx(15): (defIndividual MyWine 
+  (rdf:type vin:RedWine))<br/>#&lt;vin:DryRedWine 
+MyWine&gt;<br/></code></blockquote><br/>
+<h4>13.2.2 &nbsp;Union of Concepts (owl:unionOf) </h4>
+<p>Contrary to the intersection, the union of concepts makes subclasses of union 
+members. See <b>Fig. 13.2</b>, where Fruit is defined as union of SweetFruit and 
+NonSweetFruit in Food Ontology. Note that if food:SweetFruit is disjoint with 
+food:NonSweetFruit, there is no overlapping portion. So, <b>Fig. 13.2</b> should 
+be redrawn.</p>&lt;
+<code>gx-user(15): (get-form 
+food:Fruit)<br/>(owl:Class food:Fruit (owl:unionOf food:SweetFruit 
+food:NonSweetFruit))<br/>gx-user(16): (subtypep food:SweetFruit 
+food:Fruit)<br/>t<br/>t<br/>gx-user(17): (subtypep food:NonSweetFruit 
+food:Fruit)<br/>t<br/>t<br/></code><br/>
+<p align="center"><img alt="Union of SweetFruit and NonSweetFruit" 
+src="FIGURES/unionOf.bmp" border="0"/> </p>
+<p align="center"><a id="figure13.2" name="figure13.2"><b>Figure 13.2 
+Union of SweetFruit and NonSweetFruit </b><br/>There is no overlap exactly, when 
+SweetFruit and NonSweetFruit are disjoint. </a></p>
+<p>In SWCLOS, the subjective class metaobject is automatically placed into the 
+class-direct-superclasses of each class in the values of property owl:unionOf. 
+In the example above, food:Fruit is placed into the class-direct-superclasses 
+list of food:SweetFruit and food:NonSweetFruit.</p>
+<p>As well as owl:intersectionOf, we added <b>rule2b</b> for the element of the 
+collection on owl:unionOf.</p>
+<h4>13.2.3 &nbsp;Negation of Concept(owl:complementOf) </h4>
+<p>The negation of a concept stands for all individuals in the universe with the 
+exception of the individuals of the concept. The owl:complementOf is a reflexive 
+relation. Namely, if a concept <i>C</i> is a negation of concept <i>D</i>, then 
+<i>D</i> is also a negation of <i>C</i>. See <b>rule5</b> in Table 13.4. In 
+SWCLOS, the inverse relation of negation is also registered into the negated 
+class object.</p>
+<p>Furthermore, a concept is disjoint with its negation. See <b>rule6</b>. In 
+SWCLOS, the negation results to register the disjoint relation each other in 
+both concept objects.</p>
+<code>gx-user(4): (get-form 
+food:NonConsumableThing)<br/>(owl:Class food:NonConsumableThing (owl:complementOf 
+food:ConsumableThing))<br/>gx-user(5): (defConcept 
+food::PlasticSample<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:subClassOf 
+food:NonConsumableThing))<br/>#&lt;rdfs:Class 
+food:PlasticSample&gt;<br/>gx-user(6): (defIndividual 
+food::PlasticChineseNoodle<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+food::PlasticSample))<br/>#&lt;food:PlasticSample 
+food:PlasticChineseNoodle&gt;<br/>gx-user(7): (typep food::PlasticChineseNoodle 
+food:ConsumableThing)<br/>nil<br/>t<br/>gx-user(8): (typep 
+food::PlasticChineseNoodle food:EdibleThing)<br/>nil<br/>t<br/>gx-user(9): 
+(disjoint-p food::PlasticSample food:EdibleThing)<br/>t<br/>t<br/></code><br/>
+<h4>13.2.4 &nbsp;Instance Enumeration for Concept(owl:oneOf) </h4>
+<p>Using owl:oneOf, a concept may be defined as the enumeration of individuals. 
+For example, WineColor is defined as a subclass of WineDescriptor and a concept 
+whose individuals are only Red, White, and Rose. See <b>rule7</b> in Table 13.4. 
+</p><code>gx-user(2): (defpackage vin)<br/>#&lt;The vin 
+package&gt;<br/>gx-user(3): (defConcept 
+vin::WineColor<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:subClassOf 
+vin::WineDescriptor)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:oneOf 
+vin::Red vin::Rose vin::White))<br/>Warning: Range entailX1 by 
+rdfs:subClassOf:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vin::WineDescriptor 
+rdf:type rdfs:Class.<br/>#&lt;rdfs:Class vin:WineColor&gt;<br/>gx-user(4): 
+vin:Red<br/>#&lt;vin:WineColor vin:Red&gt;<br/>gx-user(5): 
+vin:Rose<br/>#&lt;vin:WineColor vin:Rose&gt;<br/>gx-user(6): 
+vin:White<br/>#&lt;vin:WineColor vin:White&gt;<br/>gx-user(7): (typep vin:Red 
+vin:WineDescriptor)<br/>t<br/>t<br/></code><br/>
+<p>The definition of owl:oneOf is also the complete definition. So, typically 
+the subject of owl:oneOf should be defined just once and not be multiply 
+defined. However, in this version the multiple definition of owl:oneOf can be 
+accepted with warning. See the followings. </p><code>gx-user(8): (defConcept vin:WineColor 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:oneOf 
+vin:Red vin:Rose Green))<br/>Warning: (#&lt;vin:WineColor Green&gt;) is added to 
+owl:oneOf value 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(#&lt;vin:WineColor 
+vin:Red&gt; #&lt;vin:WineColor vin:Rose&gt; 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&lt;vin:WineColor 
+vin:White&gt;) of #&lt;rdfs:Class vin:WineColor&gt;.<br/>#&lt;rdfs:Class 
+vin:WineColor&gt;<br/></code><br/>
+<p>If the same members are enumerated in multiple definitions, it is accepted 
+and does not cause any effect. If the disjoint members are enumerated, SWCLOS 
+signals an alarm. See <b>oneof-condition-unsatisfiable</b> in Table 13.5.</p>
+<h4>13.2.5 &nbsp;Functional Property(owl:FunctionalProperty) </h4>
+<p>An instance of owl:FunctionalProperty entails that objects in triples are the 
+same, if the subjects in triples are the same. See the rule <b>rdfp1</b> in 
+Table 13.3 that is by ter Horst.</p><code>gx-user(5): 
+(defProperty hasband (rdf:type 
+owl:ObjectProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+owl:FunctionalProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:domain 
+Woman)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:range 
+Man))<br/>Warning: Range entailX3 by rdfs:domain: Woman rdf:type 
+rdfs:Class.<br/>Warning: Range entailX3 by rdfs:range: Man rdf:type 
+rdfs:Class.<br/>Warning: Multiple classing 
+with<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(#&lt;rdfs:Class 
+owl:ObjectProperty&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&lt;rdfs:Class 
+owl:FunctionalProperty&gt;) 
+for<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&lt;owl:ObjectProperty 
+hasband&gt;<br/>#&lt;owl:ObjectProperty.0 hasband&gt;<br/>gx-user(6): 
+(defIndividual MarieTherese (hasband LouisXIVdeFrance))<br/>Warning: Range 
+entailX3 by hasband: LouisXIVdeFrance rdf:type Man.<br/>#&lt;Woman 
+MarieTherese&gt;<br/>gx-user(7): (defIndividual MarieTherese (hasband 
+Roi-Soleil))<br/>Warning: Range entailX3 by hasband: Roi-Soleil rdf:type 
+Man.<br/>#&lt;Woman MarieTherese&gt;<br/>gx-user(8): (-&gt; MarieTherese 
+hasband)<br/>(#&lt;Man Roi-Soleil&gt; #&lt;Man 
+LouisXIVdeFrance&gt;)<br/>gx-user(9): (owl-same-p LouisXIVdeFrance 
+Roi-Soleil)<br/>t<br/></code><br/>
+<p>In SWCLOS, the inverse of owl:FunctionalProperty is registered to the object, 
+and the predicate <b>owl-same-p</b> and <b>equivalent-property-p</b> use the 
+registered information.</p>
+<h4>13.2.6 &nbsp;Inverse Functional Property(owl:InverseFunctionalProperty) 
+</h4>
+<p>An instance of owl:InverseFunctionalProperty entails that subjects in triples 
+are the same, if the objects in triples are the same. See the rule <b>rdfp2</b> 
+in Table 13.3. </p>
+<p>As well as owl:FunctionalProperty, the inverse of 
+owl:InverseFunctionalProperty is registered to the object, and the predicate 
+<b>owl-same-p</b> and <b>equivalent-property-p</b> use the registered 
+information.</p><code>gx-user(2): (defProperty hasWife 
+(rdf:type 
+owl:ObjectProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+owl:InverseFunctionalProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:domain 
+Man)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:range 
+Woman))<br/>Warning: Range entailX3 by rdfs:domain: Man rdf:type 
+rdfs:Class.<br/>Warning: Range entailX3 by rdfs:range: Woman rdf:type 
+rdfs:Class.<br/>#&lt;owl:InverseFunctionalProperty hasWife&gt;<br/>gx-user(3): 
+(defIndividual Bill (hasWife Hillary))<br/>Warning: Range entailX3 by hasWife: 
+Hillary rdf:type Woman.<br/>#&lt;Man Bill&gt;<br/>gx-user(4): (defIndividual 
+42ndPresident (hasWife Hillary))<br/>#&lt;Man 42ndPresident&gt;<br/>gx-user(5): 
+(owl-same-p Bill 42ndPresident)<br/>t<br/></code><br/>
+<h4>13.2.7 &nbsp;Symmetric Property(owl:SymmetricProperty) </h4>
+<p>An instance of owl:SymmetricProperty entails the reflexive relation of 
+subject and object in triple. See the rule <b>rdfp3</b> in Table 13.3. </p>
+<p>In SWCLOS, the reflexive relation of symmetric property is automatically 
+added into memory. Namely, the subject in triple is added to the role value of 
+the object's predicate.</p><code>gx-user(2): (defpackage 
+vin)<br/>#&lt;The vin package&gt;<br/>gx-user(3): (defProperty vin::adjacentRegion 
+(rdf:type 
+owl:ObjectProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+owl:SymmetricProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:domain 
+vin::Region)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:range 
+vin::Region))<br/>Warning: Range entailX3 by rdfs:domain: vin::Region rdf:type 
+rdfs:Class.<br/>Warning: #&lt;rdfs:Class vin:Region&gt; rdf:type 
+owl:Class<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;by 
+owl:SymmetricProperty entailment.<br/>#&lt;owl:SymmetricProperty 
+vin:adjacentRegion&gt;<br/>gx-user(4): (defIndividual vin::MendocinRegion 
+(rdf:type 
+vin:Region)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vin::locatedIn 
+vin::CaliforniaRegion)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vin:adjacentRegion 
+vin::SonomaRegion))<br/>Warning: Entail by rdf1: vin::locatedIn rdf:type 
+rdf:Property.<br/>Warning: Range entailX3 by vin:adjacentRegion: 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vin::SonomaRegion 
+rdf:type vin:Region.<br/>#&lt;vin:Region vin:MendocinRegion&gt;<br/>gx-user(5): 
+(slot-value vin:MendocinRegion 'vin:adjacentRegion)<br/>#&lt;vin:Region 
+vin:SonomaRegion&gt;<br/>gx-user(6): (slot-value vin:SonomaRegion 
+'vin:adjacentRegion)<br/>#&lt;vin:Region 
+vin:MendocinRegion&gt;<br/></code><br/>
+<h4>13.2.8 &nbsp;Transitive Property(owl:TransitiveProperty) </h4>
+<p>An instance of owl:TransitiveProperty entails the transitivity upon the 
+property. For example, vin:SonomaRegion is located in vin:CaliforniaRegion and 
+vin:CaliforniaRegion is located in vin:USRegion, then vin:SonomaRegion is 
+located in vin:USRegion. See the rule <b>rdfp4</b> in Table 13.3. </p>
+<p>In SWCLOS, the transitivity is unified to the subsumption notion. The 
+predicate <b>subsumed-p</b> is also effect to the transitivity relation. See the 
+following demonstration, after loading Wine Ontology.</p>
+<code>gx-user(7): (defProperty vin:locatedIn (rdf:type 
+owl:ObjectProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdf:type 
+owl:TransitiveProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:domain 
+owl:Thing)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rdfs:range 
+vin:Region))<br/>#&lt;owl:TransitiveProperty vin:locatedIn&gt;<br/>gx-user(8): 
+(defIndividual 
+vin::SantaCruzMountainsRegion<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vin:locatedIn 
+vin::CaliforniaRegion))<br/>Warning: Range entailX4 by 
+vin:locatedIn:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&lt;|rdfs:Resource| 
+vin:CaliforniaRegion&gt; rdf:type vin:Region.<br/>#&lt;owl:Thing 
+vin:SantaCruzMountainsRegion&gt;<br/>gx-user(9): (defIndividual 
+vin:CaliforniaRegion (rdf:type 
+vin:Region)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vin:locatedIn 
+vin::USRegion))<br/>Warning: Range entailX3 by vin:locatedIn: vin::USRegion 
+rdf:type vin:Region.<br/>#&lt;vin:Region vin:CaliforniaRegion&gt;<br/>gx-user(10): 
+(subsumed-p vin::SantaCruzMountainsRegion 
+vin:USRegion)<br/>t<br/>t<br/></code><br/>
+<h4>13.2.9 &nbsp;Equivalency for Individuals(owl:sameAs) </h4>
+<p>The property owl:sameAs is used to represent the equivalency of two 
+individuals. In OWL Full, the class can be also captured as individual. 
+Therefore, it is applicable to classes. See the rule <b>rdfp5</b>, <b>rdfp6</b>, 
+<b>rdfp7</b>, and <b>rdfp9</b>, <b>rdfp10</b>, <b>rdfp11</b> in Table 13.3. In 
+Semantic Webs, we do not stand on Unique Name Assumption, which is usually taken 
+in computer languages. Namely, two different URIs may denote the same thing or 
+may not. The statement of owl:sameAs means the two URIs can be captured as the 
+same thing.</p>
+<p>The relation of owl:sameAs is reflexive and transitive. It implies that 
+owl:sameAs makes groups among related entities. In SWCLOS, all members of a 
+group are registered to each member object. The predicate <b>owl-same-p</b> uses 
+this registered information to check whether two objects are the same or not. 
+See the following demonstration, after loading Wine Ontology.</p>
+<blockquote><code>gx-user(4): (owl-same-p food:Red 
+  vin:Red)<br/>t<br/>gx-user(5): (owl-same-p vin:Red 
+food:Red)<br/>t<br/></code></blockquote><br/>
+<h4>13.2.10 &nbsp;Difference for Individuals(owl:differentFrom) </h4>
+<p>The property owl:differentFrom is used to denote the difference of two 
+individuals. In OWL Full, the class is also captured as individual. Therefore, 
+it is applicable to classes. In non-Unique Name Assumption of Semantic Webs, two 
+different URIs may be the same through owl:sameAs statements. Contrary, 
+owl:differentFrom states that two URIs are different and cannot be captured as 
+the same thing.</p>
+<p>The relation of owl:differentFrom is pairwise and reflexive. See <b>rule7</b> 
+in Table 13.4. In SWCLOS, each object has the information of difference on the 
+object. The owl:differentFrom property and owl:AllDifferent statements create 
+this information. The predicate <b>owl-different-p</b> uses this information. 
+See the following demonstration for Wine Ontology.</p>
+<blockquote><code>gx-user(17): (owl-different-p vin:Dry 
+  vin:OffDry)<br/>t<br/>t<br/>gx-user(18): (owl-different-p vin:OffDry 
+  vin:Dry)<br/>t<br/>t<br/>gx-user(19): (owl-different-p vin:DAnjou 
+  vin:Cotturi)<br/>t<br/>t<br/>gx-user(20): (owl-different-p vin:Cotturi 
+  vin:DAnjou)<br/>t<br/>t<br/></code></blockquote><br/>
+<h4>13.2.11 &nbsp;Inverse Relation of Property(owl:inverseOf) </h4>
+<p>owl:inverseOf takes two object properties as subject and object in triple, 
+and defines the two is in the inverse relation. See <b>rdfp8ax</b> and 
+<b>rdfp8bx</b> in Table 13.3.</p>
+<p>SWCLOS provides two slot value accessors, '<b>-&gt;</b>' and <b>get-value</b> 
+that facilitate getting slot value(s) through owl:inverseOf 
+functionality.</p><code>gx-user(8): (defProperty hasChild 
+(rdf:type 
+owl:ObjectProperty)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:inverseOf 
+hasParent))<br/>Warning: Range entailX3 by 
+owl:inverseOf:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasParent 
+rdf:type owl:ObjectProperty.<br/>#&lt;owl:ObjectProperty 
+hasChild&gt;<br/>gx-user(9): (defIndividual LeopoldMozart (rdf:type 
+Musician)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(hasChild 
+AmadeusMozart))<br/>Warning: Range entail by rdf:type: Musician rdf:type 
+rdfs:Class.<br/>#&lt;Musician LeopoldMozart&gt;<br/>gx-user(10): (-&gt; 
+AmadeusMozart hasParent)<br/>#&lt;Musician LeopoldMozart&gt;<br/></code><br/>
+<h4>13.2.12 &nbsp;Equivalency for Classes(owl:equivalentClass) </h4>
+<p>The property owl:equivalentClass is used to represent the equivalency of two 
+classes as class. Namely, the equivalent classes share exactly the same set of 
+individuals. See the rule <b>rdfp12</b>.</p><code>gx-user(14): 
+(get-form food:Wine)<br/>(owl:Class food:Wine (owl:equivalentClass 
+vin:Wine))<br/>gx-user(15): (owl-equivalent-p food:Wine 
+vin:Wine)<br/>t<br/></code><br/>
+<h4>13.2.13 &nbsp;Difference for Classes(owl:disjointWith) </h4>
+<p>The property owl:disjointWith is used to represent the difference of two 
+classes as class. Namely two classes never share any individual as a member of 
+class. If two classes are disjoint, then each subclasses of the classes also 
+disjoint. See <b>rule7</b> in Table 13.4. </p>
+<code>gx-user(18): (get-form food:NonSweetFruit)<br/>(owl:Class 
+food:NonSweetFruit<br/>&nbsp;&nbsp;(rdf:about<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#NonSweetFruit&gt;)<br/>&nbsp;&nbsp;(rdfs:subClassOf 
+food:EdibleThing) (owl:disjointWith food:SweetFruit))<br/>gx-user(19): 
+(disjoint-p food:SweetFruit food:NonSweetFruit)<br/>t<br/>t<br/></code><br/>
+<h4>13.2.14 &nbsp;Value Restriction(owl:allValuesFrom) </h4>
+<p>The value restriction plays a role of constraint for the instance slot value. 
+See <b>rdfp16</b> in Table 13.3. SWCLOS entails that a filler that is restricted 
+by owl:allValuesFrom should be an instance of the constraint.</p>
+<code>gx-user(2): (get-form vin:Wine)<br/>(owl:Class 
+vin:Wine<br/>&nbsp;&nbsp;(rdf:about<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#Wine&gt;)<br/>&nbsp;&nbsp;(rdfs:label 
+(:en "wine") (:fr "vin"))<br/>&nbsp;&nbsp;(rdfs:subClassOf 
+food:PotableLiquid<br/>&nbsp;&nbsp;&nbsp;&nbsp;(owl:Restriction (owl:onProperty 
+vin:hasMaker)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:cardinality 
+"1"^^xsd:nonNegativeInteger))<br/>&nbsp;&nbsp;(owl:Restriction (owl:onProperty 
+vin:hasMaker)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:allValuesFrom 
+vin:Winery))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:Restriction 
+(owl:onProperty 
+vin:locatedIn)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:someValuesFrom 
+vin:Region))))<br/>gx-user(3): (defIndividual MyHomeMadeWine (rdf:type 
+vin:Wine)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(vin:hasMaker 
+MyHome))<br/>#&lt;vin:Wine MyHomeMadeWine&gt;<br/>gx-user(4): 
+MyHome<br/>#&lt;vin:Winery MyHome&gt;<br/></code><br/>
+<h4>13.2.15 &nbsp;Full Existential Restriction(owl:someValuesFrom) </h4>
+<p>On the other hand, the full existential restriction, <b>rdfp15</b> in Table 
+13.3, does not entail anything useful results about the filler type in rigorous 
+Open Word Assumption. We cannot conclude unsatisfiability even if an individual 
+does not have the restricted filler on the role of the full existential 
+quantification, because there may be a piece of such knowledge anywhere in the 
+Web World. Moreover, the filler whose type is different from one that is 
+directed for the filler is acceptable. However, we set a frag to switch between 
+Open World Assumption and Closed World Assumption, and then it is set to Closed 
+World Assumption as default. This advanced topic is described in one of Japanese 
+papers and Phd. thesis.</p>
+<p>Note that we can conclude unsatisfiability for the value restriction 
+(owl:allValuesFrom), if an individual has a role of the value restriction and 
+one of the values does not satisfy the restriction, even in the open world. 
+However, you should note on owl:allValuesFrom that an individual that has no 
+slots on the value restriction property is also satisfiable for the directed 
+class. </p>
+<h4>13.2.16 &nbsp;Filler Restriction(owl:hasValue) </h4>
+<p>The hasValue restriction directs for individuals to have at least one 
+designated value (not class restriction) as slot value. It is rephrased that if 
+a concept has a filler restriction on a role, the individuals must have the same 
+filler on the role at least one. However, this involves the same problem for 
+rigorous Open World Assumption as the full existential restriction mentioned 
+above. Moreover, this implies the same entailment for the subject entity as the 
+full existential restriction mentioned above, for the constraint of filler 
+itself instead of filler class. See <b>rdfp14bx</b> and <b>rdfp14a</b> in Table 
+13.3.</p>
+<code>gx-user(2): (get-form 
+vin:TableWine)<br/>(owl:Class 
+vin:TableWine<br/>&nbsp;&nbsp;(rdf:about<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#TableWine&gt;)<br/>&nbsp;&nbsp;(owl:intersectionOf 
+vin:Wine<br/>&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValueRestriction (owl:onProperty 
+vin:hasSugar)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValue 
+vin:Dry))))<br/>gx-user(3): (get-form vin:DryWine)<br/>(owl:Class 
+vin:DryWine<br/>&nbsp;&nbsp;(owl:intersectionOf 
+vin:Wine<br/>&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValueRestriction (owl:onProperty 
+vin:hasSugar)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(owl:hasValue 
+vin:Dry))))<br/>gx-user(4): (get-form 
+vin:MariettaOldVinesRed)<br/>(vin:RedTableWine 
+vin:MariettaOldVinesRed<br/>&nbsp;&nbsp;(vin:hasMaker 
+vin:Marietta)<br/>&nbsp;&nbsp;(vin:hasFlavor 
+vin:Moderate)<br/>&nbsp;&nbsp;(vin:hasBody 
+vin:Medium)<br/>&nbsp;&nbsp;(vin:locatedIn 
+vin:SonomaRegion)<br/>&nbsp;&nbsp;(vin:hasColor 
+vin:Red)<br/>&nbsp;&nbsp;(vin:hasSugar vin:Dry))<br/>gx-user(5): (typep 
+vin:MariettaOldVinesRed vin:TableWine)<br/>t<br/>t<br/>gx-user(6): (typep 
+vin:MariettaOldVinesRed vin:DryWine)<br/>t<br/>t<br/></code><br/>
+<p>In this demonstration, DryWine and TableWine is defined to have the filler 
+restriction of Dry, and MariettaOldVinesRed has a filler Dry for role hasSugar, 
+then SWCLOS can conclude it is a TableWine and a DryWine, too. </p>
+<p>We would like to claim that correct but harsh treatment often tends to 
+produce no results. Rigorous Open Word Assumption will often not produce useful 
+results. You may make your owl rule for the full existential quantification and 
+make a balance between Open World Assumption vs. Closed World Assumption. For 
+example, you might want to close the world around you when you felt making an 
+ontology completed, and you might want to check the unsatisfiability of the full 
+existential quantification. We say that it is a sort of auto-epistemic logic. 
+The latest SWCLOS provides such pedantic function, but it should be discussed 
+later as a more advanced topic.</p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp?subject=SWCLOS">Seiji 
+Koide</a>. Copyright (c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 
+<br/>Copyright (c) 2007-2010 Seiji Koide. Oct.2010 <br/></small></i></body></html>

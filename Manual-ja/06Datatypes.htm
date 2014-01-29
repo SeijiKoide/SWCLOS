@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0061)http://www-kasm.nii.ac.jp/~koide/SWCLOS2/Manual/datatype.html -->
+<html><head><title>String, Number, Datatype, and Lang</title>
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta http-equiv="Content-Style-Type" content="text/css"/><!-- copy and paste into every html files this link and style for css -->
+<style type="text/css">
+p.justify {
+	TEXT-ALIGN: justify
+}
+body {
+	FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 5%; COLOR: black; MARGIN-RIGHT: 5%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+	BORDER-RIGHT: 1px; BORDER-TOP: 1px; FONT-SIZE: 10pt; BORDER-LEFT: 1px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; TEXT-ALIGN: center; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+	MARGIN-LEFT: -5%; MARGIN-RIGHT: -5%
+}
+.moreindent {
+	MARGIN-LEFT: 5%; MARGIN-RIGHT: 5%
+}
+.box {
+	BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+	FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+	FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+	FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+	
+}
+ul {
+	LIST-STYLE-TYPE: disc
+}
+dt {
+	FONT-WEIGHT: bold
+}
+a:link {
+	COLOR: rgb(0,0,255)
+}
+a:hover {
+	COLOR: rgb(255,0,0)
+}
+pre {
+	MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+	FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+	TEXT-ALIGN: right
+}
+div.titlebar {
+	PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+	MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+
+<meta content="MSHTML 6.00.2900.6003" name="GENERATOR"/></head>
+<body>
+<h2>6. &nbsp;String, Number, Datatype, and Lang<a id="SWCLOSdatatype" name="SWCLOSdatatype"/></h2>
+<h3>6.1 &nbsp;Literal</h3>
+<p>The string and number that appear in RDF are called <i>literal</i>. Every 
+literal in RDF is an instance of rdfs:Literal. The class rdf:XMLLiteral is a 
+subclass of rdfs:Literal and a class of all XML Schema data, which includes 
+xsd:string and xsd:decimal and so on. It implies that every XML Schema data is 
+also an instance of rdfs:Literal, and every literal is also an instance of 
+rdfs:Resource, because rdfs:Literal is a subclass of rdfs:Resource. </p>
+<code>gx-user(11): (subtypep xsd:string 
+rdfs:Literal)<br/>t<br/>t<br/>gx-user(12): (typep "this is a string." 
+rdfs:Literal)<br/>t<br/>t<br/>gx-user(13): (typep "this is an XML string."@en 
+rdf:XMLLiteral)<br/>t<br/>t<br/>gx-user(14): (typep 1.23 
+rdfs:Literal)<br/>t<br/>t<br/>gx-user(15): (typep 1.23 
+xsd:float)<br/>t<br/>t<br/>gx-user(16): (typep 1.23 
+rdfs:Literal)<br/>t<br/>t<br/>gx-user(17): (typep "1.23"^^xsd:float 
+xsd:float)<br/>t<br/>t<br/>gx-user(18): (typep "1.23"^^xsd:float 
+rdfs:Literal)<br/>t<br/>t<br/>gx-user(19): (typep "this is a string." 
+rdfs:Resource)<br/>t<br/>t<br/>gx-user(20): (typep 1.23 
+rdfs:Resource)<br/>t<br/>t<br/></code>
+<p>Note that <b>gx:typep</b> and <b>gx:subtypep</b> are used in the above 
+demonstration. SWCLOS can accept language-taged string as shown in line number 
+13, and xsd-typed data notation as shown in line number 17 and 18 through 
+special reader macro rdf::read-string for succeeding character '@' and double 
+characters '^^' after a string, respectively, instead of Common Lisp original 
+reader macro for string. In read-eval-print loop (REPL) of lisp, a lexical token 
+of string is read, the evaluation immediately returns the string object, if it 
+is a plane string, then it is printed by lisp system as string so that the same 
+character sequence as input is printed. As well as plane string, a 
+language-taged string is read in SWCLOS's REPL. Then, the reader macro makes a 
+form that creates an instance of <b>rdf:inLang</b> structure and hands it to the 
+eval function in REPL. So, the lisp system returns an instance of 
+<b>rdf:inLang</b> structure. Similarly, for a string with xsd-type,</p>
+<blockquote><code>gx-user(8): (quote "This is a 
+  test."@en)<br/>(@ "This is a test." "en")<br/>gx-user(9): (eval '"This is a 
+  test."@en)<br/>"This is a test."@en<br/>gx-user(10): "This is a 
+  test."@en<br/>"This is a test."@en<br/>gx-user(11): (quote 
+  "1.23"^^xsd:float)<br/>(^^ "1.23" xsd:float)<br/>gx-user(12): (eval 
+  '"1.23"^^xsd:float)<br/>"1.23"^^xsd:float<br/>gx-user(13): 
+  "1.23"^^xsd:float<br/>"1.23"^^xsd:float<br/></code></blockquote>
+<p>Method <b>value-of</b> allows users to get mapped value in lisp.
+</p>
+<code>gx-user(15): (value-of 
+  "1.23"^^xsd:float)<br/>1.23<br/></code>
+<p><a id="SWCLOS@" name="SWCLOS@"/>
+<div class="titlebar">
+<div class="defname">@ <i>content lang</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">makes an instance of <b>rdf:inLang</b> and returns it. 
+  <i>content</i> must be a string. <i>lang</i> may be a string, or a symbol. 
+</div></p>
+<p><a id="SWCLOS^^" name="SWCLOS^^"/>
+<div class="titlebar">
+<div class="defname">^^ <i>value type</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">creates an instance of XML data type <i>type</i> with <i>value</i> 
+  and returns it. <i>value</i> is a string or a lisp data that conforms to 
+  <i>type</i>. <i>type</i> may be an CLOS object or a symbol. </div></p>
+<p><a id="SWCLOSvalue-of" name="SWCLOSvalue-of"/>
+<div class="titlebar">
+<div class="defname">value-of <i>datum</i></div>
+<div class="deftype">[Method]</div></div>
+<div class="defdescribe">When <i>datum</i> is an instance of rdf:XMLLiteral, this method 
+  returns the value of <i>datum</i>. </div></p>
+<h3>6.2 &nbsp;XSD Datatypes in SWCLOS</h3>
+<p>In RDF semantics, <a href="http://www.w3.org/TR/rdf-mt/#XSDtable">specific 
+ones out of built-in datatypes in XML Schema</a> are introduced in RDF. In 
+SWCLOS, further limited numbers of datatypes out of datatypes in RDF are defined 
+as lisp datatypes as follows. </p>
+<table cellpadding="5" summary="This table lists xsd types in lisp." border="1" rules="all">
+  <tbody>
+  <tr>
+    <th>Lisp Type</th>
+    <th>Definition in Lisp</th>
+    <th>Ex. in S-expression</th></tr>
+  <tr>
+    <td valign="middle">xsd:unsignedByte</td>
+    <td valign="middle">(cl:unsigned-byte 8)</td>
+    <td valign="middle">255</td></tr>
+  <tr>
+    <td valign="middle">xsd:unsignedShort</td>
+    <td valign="middle">(cl:unsigned-byte 16)</td>
+    <td valign="middle">65535</td></tr>
+  <tr>
+    <td valign="middle">xsd:unsignedInt</td>
+    <td valign="middle">(cl:unsigned-byte 32)</td>
+    <td valign="middle">4294967295</td></tr>
+  <tr>
+    <td valign="middle">xsd:unsignedLong</td>
+    <td valign="middle">(cl:unsigned-byte 64)</td>
+    <td valign="middle">18446744073709551615</td></tr>
+  <tr>
+    <td valign="middle">xsd:nonNegativeInteger</td>
+    <td valign="middle">cl:unsigned-byte</td>
+    <td valign="middle">0</td></tr>
+  <tr>
+    <td valign="middle">xsd:byte</td>
+    <td valign="middle">(cl:signed-byte 8)</td>
+    <td valign="middle">127</td></tr>
+  <tr>
+    <td valign="middle">xsd:short</td>
+    <td valign="middle">(cl:signed-byte 16)</td>
+    <td valign="middle">32767</td></tr>
+  <tr>
+    <td valign="middle">xsd:int</td>
+    <td valign="middle">(cl:signed-byte 32)</td>
+    <td valign="middle">2147483647</td></tr>
+  <tr>
+    <td valign="middle">xsd:long</td>
+    <td valign="middle">(cl:signed-byte 64)</td>
+    <td valign="middle">9223372036854775807</td></tr>
+  <tr>
+    <td valign="middle">xsd:integer</td>
+    <td valign="middle">cl:integer</td>
+    <td valign="middle">1234567890</td></tr>
+  <tr>
+    <td valign="middle">xsd:positiveInteger</td>
+    <td valign="middle">(cl:integer 1 *)</td>
+    <td valign="middle">1</td></tr>
+  <tr>
+    <td valign="middle">xsd:nonPositiveInteger</td>
+    <td valign="middle">(cl:integer * 0)</td>
+    <td valign="middle">0</td></tr>
+  <tr>
+    <td valign="middle">xsd:negativeInteger</td>
+    <td valign="middle">(cl:integer cl:* -1)</td>
+    <td valign="middle">-1</td></tr>
+  <tr>
+    <td valign="middle">xsd:float</td>
+    <td valign="middle">cl:single-float</td>
+    <td valign="middle">1.0</td></tr>
+  <tr>
+    <td valign="middle">xsd:double</td>
+    <td valign="middle">cl:double-float</td>
+    <td valign="middle">1.0d0</td></tr>
+  <tr>
+    <td valign="middle">xsd:decimal</td>
+    <td valign="middle">cl:rational</td>
+    <td valign="middle">(rational 1.0)</td></tr>
+  <tr>
+    <td valign="middle">xsd:string</td>
+    <td valign="middle">cl:string</td>
+    <td valign="middle">"string?"</td></tr>
+  <tr>
+    <td valign="middle">xsd:boolean</td>
+    <td valign="middle">(cl:member xsd:true xsd:false)</td>
+    <td valign="middle">xsd:false</td></tr>
+  <tr>
+    <td valign="middle">xsd:anyURI</td>
+    <td valign="middle">net.uri:uri</td>
+    <td valign="middle">(uri "http://somewhere/")</td></tr>
+  <tr>
+    <td valign="middle">xsd:anySimpleType</td>
+    <td valign="middle">(or xsd:boolean xsd:anyURI xsd:string xsd:float 
+      xsd:double xsd:decimal)</td>
+    <td valign="middle">"simple-type?"</td></tr></tbody></table>
+<p>Therefore, you may check a lisp datum in S-expression against the xsd types 
+defined as lisp type as follows.</p>
+<blockquote><code>gx-user(7): (cl:typep 1 
+  'xsd:positiveInteger)<br/>t<br/>gx-user(8): (cl:typep 1 
+  'xsd:nonNegativeInteger)<br/>t<br/>gx-user(9): (cl:typep 1 
+  'xsd:integer)<br/>t<br/>gx-user(10): (cl:typep 1 'xsd:int)<br/>t<br/>gx-user(11): 
+  (cl:typep 1 'xsd:decimal)<br/>t<br/>gx-user(12): (cl:typep 1 
+  'xsd:unsignedByte)<br/>t<br/>gx-user(13): (cl:typep 1 
+  'xsd:anySimpleType)<br/>t<br/></code></blockquote>
+<p>Moreover, each xsd type in lisp has an RDF datatype object as symbol value of 
+the datatype, and <b>gx:typep</b> interprets a datum in lisp not only as lisp 
+datatype but also as RDF datatype, if it is a plane literal (non-typed-literal) 
+or a lisp datum. </p>
+<blockquote><code>gx-user(14): 
+  xsd:positiveInteger<br/>#&lt;rdfs:Datatype 
+  xsd:positiveInteger&gt;<br/>gx-user(15): xsd:integer<br/>#&lt;rdfs:Datatype 
+  xsd:integer&gt;<br/>gx-user(16): (typep 1 
+  xsd:positiveInteger)<br/>t<br/>t<br/>gx-user(17): (typep 1 
+  xsd:nonNegativeInteger)<br/>t<br/>t<br/>gx-user(18): (typep 1 
+  xsd:integer)<br/>t<br/>t<br/>gx-user(19): (typep 1 
+  xsd:int)<br/>t<br/>t<br/>gx-user(20): (typep 1 
+  xsd:decimal)<br/>t<br/>t<br/>gx-user(21): (typep 1 
+  xsd:unsignedByte)<br/>t<br/>t<br/>gx-user(22): (typep 1 
+  xsd:anySimpleType)<br/>t<br/></code></blockquote>
+<p>On the other hand, a typed literal in RDF is mapped to an instance of RDF 
+data type class in SWCLOS, and each typed-data instance is also interpreted by 
+<b>gx:typep</b> as follows.</p>
+<blockquote><code>gx-user(8): (typep "1"^^xsd:integer 
+  xsd:integer)<br/>t<br/>t<br/>gx-user(9): (typep "1"^^xsd:integer 
+  xsd:positiveInteger)<br/>nil<br/>t<br/>gx-user(10): (typep 
+  "1"^^xsd:positiveInteger xsd:integer)<br/>t<br/>t<br/>gx-user(11): (typep 
+  "1"^^xsd:positiveInteger xsd:positiveInteger)<br/>t<br/>t<br/></code></blockquote>
+<p>Note that xsd:integer subsumes xsd:positiveInteger, so that 
+"1"^^positiveInteger is an instance of xsd:positiveInteger and xsd:integer, too, 
+but "1"^^integer is not an instance of xsd:positiveInteger, although the values 
+of both in the value space are equal.</p>
+<p>Every datatype is an instance of rdfs:Datatype. Note that rdf:XMLLiteral and 
+xsd:integer, etc. are a class. So, rdfs:Datatype is a metaclass. </p>
+<blockquote><code>gx-user(21): (typep xsd:integer 
+  rdfs:Datatype)<br/>t<br/>t<br/>gx-user(22): (typep rdf:XMLLiteral 
+  rdfs:Datatype)<br/>t<br/>t<br/>gx-user(23): (strict-class-p 
+  xsd:integer)<br/>t<br/>gx-user(24): (rdf-metaclass-p 
+  rdfs:Datatype)<br/>t<br/></code></blockquote>
+<p>Function <b>datatype?</b> checks whether it is an XSD datatype or not for a 
+symbol parameter, and <b>datatype-p</b> checks for a datatype object (an 
+instance of rdfs:Datatype).</p>
+<blockquote><code>gx-user(31): (datatype? 
+  'xsd:integer)<br/>t<br/>gx-user(32): (datatype-p 
+xsd:integer)<br/>t<br/></code></blockquote>
+<p><a id="SWCLOSdatatype?" name="SWCLOSdatatype?"/>
+<div class="titlebar">
+<div class="defname">datatype? <i>symbol</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This predicate returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a> 
+  if <i>symbol</i> is bound, and the symbol-value is an instance of 
+  rdfs:Datatype. </div></p>
+<p><a id="SWCLOSdatatype-p" name="SWCLOSdatatype-p"/>
+<div class="titlebar">
+<div class="defname">datatype-p <i>x</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">This predicate returns <a 
+  href="http://www.franz.com/support/documentation/8.0/ansicl/glossary/t.htm#true">true</a> 
+  if <i>x</i> an instance of rdfs:Datatype. </div></p>
+<h3>6.3 &nbsp;xml:lang in SWCLOS</h3>
+<p>The <a 
+href="http://www.w3.org/TR/2004/REC-rdf-syntax-grammar-20040210/#section-Syntax-languages">xml:lang</a> 
+attribute in RDF syntax can be used on any node element or property element in 
+RDF/XML syntax to indicate that the included content is in the given language. 
+See the following example, which is taken from W3C <a 
+href="http://www.w3.org/TR/rdf-syntax-grammar/#section-Syntax-languages">RDF/XML 
+Syntax Specification (Revised)</a>. </p>
+<p class="box"><code>&lt;?xml version="1.0" 
+encoding="utf-8"?&gt;<br/>&lt;rdf:RDF 
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmlns:dc="http://purl.org/dc/elements/1.1/"&gt;<br/>&nbsp;&nbsp;&lt;rdf:Description 
+rdf:about="http://www.w3.org/TR/rdf-syntax-grammar"&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;dc:title&gt;RDF/XML 
+Syntax Specification 
+(Revised)&lt;/dc:title&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;dc:title 
+xml:lang="en"&gt;RDF/XML Syntax Specification 
+(Revised)&lt;/dc:title&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;dc:title 
+xml:lang="en-US"&gt;RDF/XML Syntax Specification 
+(Revised)&lt;/dc:title&gt;<br/>&nbsp;&nbsp;&lt;/rdf:Description&gt;<br/><br/>&nbsp;&nbsp;&lt;rdf:Description 
+rdf:about="http://example.org/buecher/baum" 
+xml:lang="de"&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;dc:title&gt;Der 
+Baum&lt;/dc:title&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;dc:description&gt;Das Buch ist 
+au&szlig;ergew&ouml;hnlich&lt;/dc:description&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;dc:title 
+xml:lang="en"&gt;The 
+Tree&lt;/dc:title&gt;<br/>&nbsp;&nbsp;&lt;/rdf:Description&gt;<br/>&lt;/rdf:RDF&gt;<br/></code></p>
+<p>In reading RDF/XML forms, the xml:lang attribute on node elements is parsed 
+as it is an attribute. The xml:lang attribute on property element is transformed 
+as if it envelopes the role value as sub-role. Therefore, the above RDF/XML 
+forms are interpreted and transformed to the following S-expressions. </p>
+<p class="box"><code>(rdf:Description (rdf:about &lt;uri 
+http://www.w3.org/TR/rdf-syntax-grammar&gt;)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dc:title 
+"RDF/XML Syntax Specification 
+(Revised)")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dc:title 
+(:en "RDF/XML Syntax Specification 
+(Revised)"))<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dc:title 
+(:en-us "RDF/XML Syntax Specification (Revised)")))<br/>(rdf:Description 
+(rdf:about &lt;uri 
+http://example.org/buecher/baum&gt;)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xml:lang 
+:de)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dc:title 
+"Der 
+Baum")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dc:description 
+"Das Buch ist 
+au&szlig;ergew&ouml;hnlich")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(dc:title 
+(:en "The Tree")))<br/></code></p>
+<p>SWCLOS keeps and maintains the language environment according to the order 
+and the nest structure of RDF/XML language designation. Therefore, at the second 
+rdf:Description form in the above example, the German environment is set up at 
+the language tag ':de' at first, then the English environment is established in 
+the German environment at the ':en' envelope. As a result, We obtain the 
+followings. </p>
+<code>gx-user(9): (read-rdf-file #'addRdfXml 
+"example08.rdf")<br/>Warning: Entail by rdf1: dc:title rdf:type 
+rdf:Property.<br/>Warning: Entail by rdf1: dc:description rdf:type 
+rdf:Property.<br/>:done<br/>gx-user(10): (slot-value 
+&lt;&lt;http://www.w3.org/TR/rdf-syntax-grammar&gt;&gt; 'dc:title)<br/>("RDF/XML 
+Syntax Specification (Revised)"<br/>"RDF/XML Syntax Specification 
+(Revised)"@en<br/>"RDF/XML Syntax Specification (Revised)"@en-US)<br/>gx-user(11): 
+(slot-value &lt;&lt;http://example.org/buecher/baum&gt;&gt; 'dc:title)<br/>("Der 
+Baum"@de "The Tree"@en)<br/>gx-user(12): (slot-value 
+&lt;&lt;http://example.org/buecher/baum&gt;&gt; 'dc:description)<br/>"Das Buch 
+ist au&szlig;ergew&ouml;hnlich"@de<br/></code>
+<p>Where such an expression as <code>"Der Baum"@de</code> and 
+<code>"The Tree"@en</code> is an instance of <b>rdf:inLang</b> structure, 
+which is printed as it looks like a lexcal form of plain literal with language 
+option. See <a 
+href="http://www.loc.gov/standards/iso639-2/php/code_list.php">ISO 639-1 alpha-2 
+language code</a> about the optional lang code.</p>
+<p><a id="SWCLOSinLang" name="SWCLOSinLang"/>
+<div class="titlebar">
+<div class="defname">rdf:inLang</div>
+<div class="deftype">[Structure]</div></div>
+<div class="defdescribe">A structure for plain literal with language option. The instance 
+  has two values for lang slot and content slot. Lisp prints this object like 
+  plain literal with option, <b><i>content</i>@<i>lang</i></b>. 
+</div></p>
+<p><a id="SWCLOSlang?" name="SWCLOSlang?"/>
+<div class="titlebar">
+<div class="defname">lang? <i>x</i></div>
+<div class="deftype">[Function]</div></div>
+<div class="defdescribe">returns true if <i>x</i> is the keyword symbol that matches one of 
+  the <a href="http://www.loc.gov/standards/iso639-2/php/code_list.php">ISO 
+  639-1 alpha-2 language code</a>. </div></p>
+<hr/>
+<i><small>Author: <a href="mailto:koide@nii.ac.jp">Seiji Koide</a>. Copyright 
+(c) 2005, 2006 GALAXY EXPRESS CORPORATION. Feb. 2006 <br/>Copyright (c) 2007-2010 
+Seiji Koide. Oct.2010 <br/></small></i></body></html>

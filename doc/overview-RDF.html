@@ -1,0 +1,2491 @@
+<HTML>
+<HEAD>
+<TITLE>RDF System</TITLE> 
+<META http-equiv="Content-Type" content="text/html">
+<META http-equiv="Content-Style-Type" content="text/css">
+<link href="overview.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+p {
+        text-indent: 0;
+}
+p.justify {
+        TEXT-ALIGN: justify
+}
+body {
+        FONT-SIZE: 10pt; BACKGROUND: white; MARGIN-LEFT: 3%; COLOR: black; MARGIN-RIGHT: 3%; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-ALIGN: justify
+}
+table {
+        BORDER-RIGHT: 0px; FONT-SIZE: 10pt; BORDER-LEFT: 0px; BORDER-BOTTOM: 1px; FONT-FAMILY: Verdana, Arial, sans-serif; BORDER-COLLAPSE: collapse; cellspacing: 0; cellpadding: 0
+}
+td {
+        BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+th {
+        BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: #808080; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #808080; PADDING-BOTTOM: 5px; VERTICAL-ALIGN: middle; BORDER-TOP-COLOR: #808080; PADDING-TOP: 5px; BORDER-COLLAPSE: collapse; BORDER-RIGHT-WIDTH: 0px; BORDER-RIGHT-COLOR: #808080; empty-cells: show
+}
+.noindent {
+        MARGIN-LEFT: -3%; MARGIN-RIGHT: -3%
+}
+.moreindent {
+        MARGIN-LEFT: 3%; MARGIN-RIGHT: 3%
+}
+.box {
+        BORDER-RIGHT: 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; BORDER-LEFT: 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: 1px solid; BACKGROUND-COLOR: #f0f0f0; page-break-inside: avoid
+}
+h1.title {
+        FONT-WEIGHT: bold; FONT-SIZE: 160%
+}
+h1 {
+        FONT-WEIGHT: bold; FONT-SIZE: 130%
+}
+h2 {
+        FONT-WEIGHT: bold; FONT-SIZE: 105%
+}
+h3 {
+        FONT-WEIGHT: bold; FONT-SIZE: 100%
+}
+h4 {
+        FONT-SIZE: 100%; FONT-STYLE: italic
+}
+h5 {
+        
+}
+ul {
+        LIST-STYLE-TYPE: disc
+}
+dt {
+        FONT-WEIGHT: bold
+}
+a:link {
+        COLOR: rgb(0,0,255)
+}
+a:hover {
+        COLOR: rgb(255,0,0)
+}
+pre {
+        MARGIN-TOP: 1px; FONT-SIZE: 10pt; MARGIN-BOTTOM: 1px; FONT-FAMILY: monospace
+}
+div.defname {
+        FONT-WEIGHT: bold; FLOAT: left; TEXT-ALIGN: left
+}
+div.deftype {
+        TEXT-ALIGN: right
+}
+div.titlebar {
+        PADDING-RIGHT: 0.1em; PADDING-LEFT: 0.1em; PADDING-BOTTOM: 0.1em; PADDING-TOP: 0.1em; BACKGROUND-COLOR: #f0f0f0
+}
+div.defdescribe {
+        MARGIN: 1px 0px 10px 80px; TEXT-ALIGN: justify
+}
+/* Reference style by Seiji */
+.refhead { FONT-WEIGHT: bold }
+.refbody { MARGIN-LEFT: 10px }
+</style>
+</HEAD> 
+<BODY bgcolor="#ffffff"> 
+
+<H1>SWCLOS: A Semantic Web Reasoner on CLOS</H1>
+<H2>RDF Subsystem</H2>
+<P>
+This subsystem provides the tools for RDF/XML parser. After loading this module, 
+load the RDFS module to clasify things in RDFS semantics.
+
+<P><HR size=3>
+<UL>
+<LI><A HREF="#RDF/Utils.cl"><B>Utils.cl</B></A>  Utilities for SWCLOS and Rbase from AIMA and others
+<LI><A HREF="#RDF/RdfIO.cl"><B>RdfIO.cl</B></A>  Rdf I/O module
+<LI><A HREF="#RDF/IRI.cl"><B>IRI.cl</B></A>  IRI module
+<LI><A HREF="#RDF/packages.cl"><B>packages.cl</B></A>  Packages in RDFS System
+<LI><A HREF="#RDF/Xml.cl"><B>Xml.cl</B></A>  XML 1.1
+<LI><A HREF="#RDF/rdferror.cl"><B>rdferror.cl</B></A>  Condition and Error Handling module
+<LI><A HREF="#RDF/NameSpace.cl"><B>NameSpace.cl</B></A>  NameSpace module
+<LI><A HREF="#RDF/Literal.cl"><B>Literal.cl</B></A>  Literal in Rbase System
+<LI><A HREF="#RDF/RDFShare.cl"><B>RDFShare.cl</B></A>  Rdf Share module
+<LI><A HREF="#RDF/Rdf.cl"><B>Rdf.cl</B></A>  Rdf module
+<LI><A HREF="#RDF/RdfReader.cl"><B>RdfReader.cl</B></A>  RDF/XML parser module
+<LI><A HREF="#RDF/node.cl"><B>node.cl</B></A> 
+</UL>
+
+<A NAME="RDF/Utils.cl"><HR>
+<H2>File <A HREF="../RDF\Utils.cl">RDF\Utils.cl</A></H2></A>
+<P>
+<H2> Utilities for SWCLOS and Rbase from AIMA and others</H2>
+ Utilities in this file are taken from AIMA and redefined in package gx.
+<P><HR WIDTH=80% ALIGN=left><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="mkatom"><A HREF="../RDF\Utils.cl"><B>mkatom</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If <I>x</I> is an atom, return it; otherwise if one length list, return the element, else returns <I>x</I></TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="mklist"><A HREF="../RDF\Utils.cl"><B>mklist</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If <I>x</I> is a list, return it; otherwise return a singleton list, (<I>x</I>).</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="mappend"><A HREF="../RDF\Utils.cl"><B>mappend</B></A></A> <I>fn</I> <I>&rest</I> <I>lists</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Apply <I>fn</I> to respective elements of list(s), and append results.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="set-equalp"><A HREF="../RDF\Utils.cl"><B>set-equalp</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> is equal as set, the test function is equalp.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="set-eq"><A HREF="../RDF\Utils.cl"><B>set-eq</B></A></A> <I>x</I> <I>y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> and <I>y</I> is equal as set, the test function is eq.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="length>1"><A HREF="../RDF\Utils.cl"><B>length>1</B></A></A> <I>list</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list of 2 or more elements?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="length=1"><A HREF="../RDF\Utils.cl"><B>length=1</B></A></A> <I>list</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list of exactly one element?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="length=2"><A HREF="../RDF\Utils.cl"><B>length=2</B></A></A> <I>list</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list of exactly two elements?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="starts-with"><A HREF="../RDF\Utils.cl"><B>starts-with</B></A></A> <I>list</I> <I>element</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this a list that starts with the given element?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="last1"><A HREF="../RDF\Utils.cl"><B>last1</B></A></A> <I>list</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return the last element of a list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="last2"><A HREF="../RDF\Utils.cl"><B>last2</B></A></A> <I>lst</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return the last two element of a list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="reuse-cons"><A HREF="../RDF\Utils.cl"><B>reuse-cons</B></A></A> <I>x</I> <I>y</I> <I>x-y</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Return (cons x y), or reuse x-y if it is equal to (cons x y)</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Delay Evaluation from OnLisp</H2>
+<P>
+ Delay mechanism is copied from ``On Lisp'' by Paul Graham.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="unforced"><A HREF="../RDF\Utils.cl"><B>unforced</B></A></A> </TH>
+<TD align="right">[constant]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="delay"><A HREF="../RDF\Utils.cl"><B>delay</B></A></A> <I>forced</I> <I>closure</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="delay"><A HREF="../RDF\Utils.cl"><B>delay</B></A></A> <I>expr</I></TH>
+<TD align="right">[macro]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="force"><A HREF="../RDF\Utils.cl"><B>force</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="delay-role-p"><A HREF="../RDF\Utils.cl"><B>delay-role-p</B></A></A> <I>role</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="set-delay-role"><A HREF="../RDF\Utils.cl"><B>set-delay-role</B></A></A> <I>role</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<H2> And Others, from Winston's Lisp.</H2>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="squash"><A HREF="../RDF\Utils.cl"><B>squash</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>flattens a nested list <I>x</I> and returns a list that includes only atoms.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> String Pattern</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="match"><A HREF="../RDF\Utils.cl"><B>match</B></A></A> <I>source</I> <I>target</I> <I>&optional</I> <I>start</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>compares <I>source</I> string to <I>target</I> string starting <I>start</I> in <I>target</I>.
+   and all characters in <I>source</I> are matched to <I>target</I> in order, returns true.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="substitute-pattern"><A HREF="../RDF\Utils.cl"><B>substitute-pattern</B></A></A> <I>new</I> <I>old</I> <I>sequence</I> <I>&key</I> <I>start</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="duplicate-p"><A HREF="../RDF\Utils.cl"><B>duplicate-p</B></A></A> <I>list</I> <I>&key</I> <I>test</I> <I>key</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="null-string-p"><A HREF="../RDF\Utils.cl"><B>null-string-p</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Seiji Koide Nov-15-2010
+<P>
+<A NAME="RDF/RdfIO.cl"><HR>
+<H2>File <A HREF="../RDF\RdfIO.cl">RDF\RdfIO.cl</A></H2></A>
+<P>
+<H2> Rdf I/O module</H2>
+<P>
+ IT Program Project in Japan: 
+    Building Operation-Support System for Large-scale System using IT.
+<P>
+ This code was encoded by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2002, 2004 
+    Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2010
+    Seiji Koide
+<P><HR WIDTH=80% ALIGN=left><P>
+<P>
+ The line number of input stream is counted and used in error messages.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*line-number*"><A HREF="../RDF\RdfIO.cl"><B>*line-number*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>line number, starting from one, zero is just a flag that indicates no RDF/XML parser input.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*line-pos*"><A HREF="../RDF\RdfIO.cl"><B>*line-pos*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>current line position, starting from zero</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*pos*"><A HREF="../RDF\RdfIO.cl"><B>*pos*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>current position, starting from zero</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="line-count"><A HREF="../RDF\RdfIO.cl"><B>line-count</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> RDF input functions are hidden from user's view.</H2>
+<P>
+ To parsing XML documents, dedicated input functions are developed. 
+ The motivation of this development is as follows. The transition machine is usually modeled 
+ for parsing the syntax of languages. However, the expression of the syntax specification of a 
+ particular language and the transition machine for the language is very different and difficult 
+ to imagine one to another. On the other hand, Ratfor and C (maybe) language need only one 
+ character peeking to parse them. Generally, any number of peeking allows us to parse any context 
+ free language. For XML parsing, in the experience, nine peeking characters is enough to parse 
+ XML for "&lt;![CDATA[", maybe. 
+<P>
+ These special functions allow programmers to peek any numbers of characters in the stream.
+ These functions are very useful to parse XML documents without state transition mechanism. 
+ We can decide what kind of data comes up next by peeking a number of characters. 
+<P>
+ If you want to show what characters remain in the buffer, use the command <B>expose-buf</B> without 
+ parameters. The buffer has two pointers to the start and the end of sequence of characters.
+<BR>
+<UL>
+<LI>((#\null) #\null) indicates null list.
+<LI>((a b c #\null) #\null) indicates three characters 'a', 'b', and 'c' in buffer.
+</UL>
+<BR>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="assert-pattern"><A HREF="../RDF\RdfIO.cl"><B>assert-pattern</B></A></A> <I>pattern</I> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>asserts that input from <I>stream</I> matches to <I>pattern</I>. 
+   <I>pattern</I> is a string. This function eats up all characters 
+   that equal to pattern. In case of mismatch, an error occurs.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-quoted-string"><A HREF="../RDF\RdfIO.cl"><B>read-quoted-string</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a quoted string from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-pattern-delimited-string"><A HREF="../RDF\RdfIO.cl"><B>parse-pattern-delimited-string</B></A></A> <I>pattern</I> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads input character from <I>stream</I> until the occurence of
+   <I>pattern</I> and returns it as string. <I>pattern</I> is not eaten.
+   one character at least should stand before <I>pattern</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Seiji Koide Sep-13-2008
+<P>
+<A NAME="RDF/IRI.cl"><HR>
+<H2>File <A HREF="../RDF\IRI.cl">RDF\IRI.cl</A></H2></A>
+<P>
+<H2> IRI module</H2>
+<P>
+<P>
+<H2> IRI in SWCLOS and Rbase system</H2>
+<P>
+ Every uri for RDF is globally unique in the WWW. Therefore, a uri in SWCLOS must 
+ be unique. The uniqueness of uri is assured by interning a uri. 
+<P>
+ A triple subject/predicate/object in RDF is embodied as CLOSobject/slotname/slotvalue
+ in SWCLOS, and subjective CLOSobject is bound to the subjective uri. Precisely, 
+ a subjective uri is an instance of class <B>iri</B> in SWCLOS and Rbase that is subclass 
+ of <I>net.uri:uri</I> in ACL library. 
+<P>
+ Read macro `&lt;' reads a uri string and produces an <B>iri</B>.
+ A uri reference is internalized to an instance of class <B>iri</B>.
+ An instance of class <B>iri</B> is externalized (printed by `%W') as the same 
+ appearance of input uri data.
+<PRE><CODE>
+ &lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;    -&gt; 
+                                   &lt;http://www.w3.org/2000/01/rdf-schema#Resource&gt;
+ rdfs:Resource (if defined as node)                 -&gt; rdfs:Resource
+ (eq &lt;http://somewhere&gt; &lt;http://somewhere&gt;)         -&gt; true
+ (eq &lt;http://some%20where&gt; &lt;http://some%20where&gt;)   -&gt; true
+ (eq &lt;http://somewhere&gt; &lt;http://some%20where&gt;)      -&gt; false
+</CODE></PRE><P>
+<P>
+ An instance of <B>iri</B> has an extra slot for value just like QName. <B>iri-boundp</B> and 
+ <B>iri-value</B> is available for an <B>iri</B> just like <B>boundp</B> and <B>symbol-value</B>.
+<P>
+ Two trailing characters '&lt;&lt;' returns a value bound to the <B>iri</B>.
+ See, reader macro <I>gx::double-angle-bracket-reader</I>.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri"><A HREF="../RDF\IRI.cl"><B>iri</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>iri in SWCLOS and Rbase that is a subclass of net.uri:uri and able to bind a value to, 
+just like lisp symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:iri"><A HREF="../RDF\IRI.cl"><B>print-object</B></A></A> <I>(iri
+                                                                                                        iri)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-boundp"><A HREF="../RDF\IRI.cl"><B>iri-boundp</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is <I>x</I> a uri and bound at its value slot?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-value:string"><A HREF="../RDF\IRI.cl"><B>iri-value</B></A></A> <I>(str
+                                                                                                     string)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns bound value of iri value from <I>str</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%iri-value"><A HREF="../RDF\IRI.cl"><B>%iri-value</B></A></A> <I>uri</I></TH>
+<TD align="right">[macro]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This macro should be used by programmers, when <I>uri</I> is definitely <I>uri</I> here.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-p"><A HREF="../RDF\IRI.cl"><B>iri-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is <I>x</I> an instance of iri?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> IRI Escaping</H2>
+<P>
+ See, rfc2396 for URI escaping
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-reserved-char-p"><A HREF="../RDF\IRI.cl"><B>iri-reserved-char-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>char</I> reserved for iri?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-marked-char-p"><A HREF="../RDF\IRI.cl"><B>iri-marked-char-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>char</I> marked for iri?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-delimiter-p"><A HREF="../RDF\IRI.cl"><B>iri-delimiter-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-unwise-p"><A HREF="../RDF\IRI.cl"><B>iri-unwise-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-escape"><A HREF="../RDF\IRI.cl"><B>iri-escape</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function performs Percent-Encoding. Namely, RESERVED CHARACTERS, DELIMITERS, and UNWISE 
+   CHARACTERS for URI that is contained in <I>str</I> are escaped with percent(%) character to a triplet 
+   of <I>% HEXDIG HEXDIG&gt;. Spaces and newlines are removed from <str</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%iri-escape-for-delimiter"><A HREF="../RDF\IRI.cl"><B>%iri-escape-for-delimiter</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>escapes uri delimiter char in <I>str</I> before making uri.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%iri-escape"><A HREF="../RDF\IRI.cl"><B>%iri-escape</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>encodes the uri reserved characters to hexadecimals.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri-de-escape"><A HREF="../RDF\IRI.cl"><B>iri-de-escape</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function decodes Percent-Encoding to characters.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> URI APIs fixes</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="null-iri-p"><A HREF="../RDF\IRI.cl"><B>null-iri-p</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>uri</I> is nil, null string, or <I>uri</I> is a uri and its rendered string is null.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> IRI Methods</H2>
+<P>
+ Three methods are defined for generic function <B>iri</B>: when <I>thing</I> is a iri (instance of 
+ class iri), its interned value is returned. When <I>thing</I> is a string, <B>intern-uri</B> 
+ is applied to create a interned uri from the string. 
+<P>
+ A uri is always interned for a given uri string, because the uniqueness is required for uri 
+ to be bound to a value. This notion is the same as lisp symbol.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri:iri"><A HREF="../RDF\IRI.cl"><B>iri</B></A></A> <I>(thing
+                                                                                      iri)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns interned <I>thing</I> for class <I>gx:iri</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri:uri"><A HREF="../RDF\IRI.cl"><B>iri</B></A></A> <I>(thing
+                                                                                      uri)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>change class <I>net.uri:uri</I> of <I>thing</I> to <B>iri</B> and returns interned <I>thing</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ See also, 
+ &lt;a href='http://www.franz.com/support/documentation/8.1/doc/operators/uri/parse-uri.htm&gt;parse-uri'&lt;/a&gt;
+ in ACL document.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri:string"><A HREF="../RDF\IRI.cl"><B>iri</B></A></A> <I>(thing
+                                                                                         string)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>when iri host exists but no iri path on the iri in <I>thing</I>, this method adds '/' to iri path. 
+   This is required for the namespace interning.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="iri:t"><A HREF="../RDF\IRI.cl"><B>iri</B></A></A> <I>(thing
+                                                                                    t)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>signals an error.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ To list all iris for resource, call <B>list-all-entity-uris</B>. See gxutils module.
+<P>
+<P>
+ Seiji Koide Nov-15-2010
+<P>
+<A NAME="RDF/packages.cl"><HR>
+<H2>File <A HREF="../RDF\packages.cl">RDF\packages.cl</A></H2></A>
+<P>
+<H2> Packages in RDFS System</H2>
+<P>
+ This module defines basic symbols in xml, xsd, rdf, rdfs, and owl package.
+ Those symbols are exported so as to be QNames.
+<A NAME="RDF/Xml.cl"><HR>
+<H2>File <A HREF="../RDF\Xml.cl">RDF\Xml.cl</A></H2></A>
+<P>
+<H2> XML 1.1</H2>
+<P>
+ IT Program Project in Japan: 
+    Building Operation-Support System for Large-scale System using IT
+<P>
+ This code was encoded by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2002, 2003, 2004
+    Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008, 2010
+    Seiji Koide
+<P>
+ This file provides xml and xsd name space, and xsd datatypes in lisp. The data types as 
+ resource objects that wrap lisp data are defined in RdfsKernel and RdfsCore file.
+<BR>
+<P>
+<P><HR WIDTH=80% ALIGN=left><P>
+<P>
+<H2> XML Built-in Datatypes</H2>
+<BR>
+ Followings shows xsd type subtype relation, cf. http://www.w3.org/TR/2001/REC-xmlschema-2-20010502.
+<PRE><CODE>
+ xsd:anySimpleType
+       |
+       +- xsd:boolean
+       +-xsd:anyURI
+       +-xsd:string
+       +-xsd:float
+       +-xsd:double
+       +-xsd:decimal -+- xsd:integer +- xsd:long -- xsd:int -- xsd:short -- xsd:byte
+                                     +-xsd:nonPositiveInteger -- xsd:negativeInteger
+                                     +-xsd:nonNegativeInteger --+
+                                                                |
+       +--------------------------------------------------------+
+       +-- xsd:positiveInteger
+       +-- xsd:unsignedLong - xsd:unsignedInt - xsd:unsignedShort - xsd:unsignedByte
+</CODE></PRE><P>
+ Note that type hierarchy of number in Lisp is as follows.
+<PRE><CODE>
+ cl:number -+- cl:real -+- cl:rational -+- cl:integer -+- cl:bignum
+            |           |               |              +- cl:fixnum -- cl:bit
+            |           |               +- cl:ratio
+            |           |
+            |           +- cl:float -+- cl:short-float
+            |                        +- cl:single-float
+            |                        +- cl:double-float
+            |                        +- cl:long-float
+            +- cl:complex
+</CODE></PRE><P>
+ In Lisp, an input token is internalized to a lisp object in read process of REPL. 
+ For instance, a token that eveloped by double quotations is converted to a lisp 
+ string object typed to cl:string. A token '1' is converted to an object of lisp 
+ typed to cl:fixnum. A greater number expression than <B>most-positive-fixnum</B> in lisp 
+ is internalized to an object typed to cl:bignum. In RDF semantics, a string and 
+ integer denotes itself in the RDF universe like lisp. Note that RDF semantics does 
+ not have the notion of internalization and externalization. We mapped the denotation 
+ of plane literal of rdf:Literal to internalized data object in lisp, and the 
+ denotation of xsd typed data to an instance object of xsd datatype. Note also that 
+ Java provides automatic data conversion between raw data and wrapped object data 
+ (boxing and unboxing). In SWCLOS, the function <B>value-of</B> is used to get 
+ internalized lisp data from wrapping xsd object.
+<P>
+<H2> Mapping from Common Lisp Datatypes to RDF Datatypes</H2>
+<P>
+ There is no complex number in xsd. Therefore, we ignore cl:complex.
+<BR>
+<UL>
+<LI>cl:single-float is mapped to xsd:float.
+<LI>cl:double-float is mapped to xsd:double.
+<LI>cl:integer is mapped to xsd:integer.
+<LI>The range of cl:bignum and cl:fixnum is mapped to the range of xsd:long, xsd:int,
+   xsd:short, and xsd:byte according to the definition of range of each datatype.
+<LI>cl:rational is mapped to xsd:decimal.
+</UL>
+<BR>
+ The mapping of xsd:decimal is not straightforward. It may be lexically expressed by 
+ an integer, or any number of decimal digits with a point and succeeding any number 
+ of fractional digits. If the number of digits is finite (it is so in practice), the 
+ xsd:decimal value range is included in cl:rational? in Common Lisp. If the number of 
+ digits could be infinite, the xsd:decimal value range is equivalent to cl:rational. 
+ Therefore, xsd:decimal is mapped to cl:rational. However, lisp internalizes simple 
+ input number expressions of digits with a point to an appropriate cannonical value, 
+ e.g., bignum or float. Then, you need to explicitly designate a rational value like 
+ ``(rational nnn.mmm)'' if you want to set it as type xsd:decimal instead of xsd:float. 
+ Note also a float number has a limit for the precision. See the followings.
+<PRE><CODE>
+ cg-user(22): 1000000.1
+ 1000000.1
+ cg-user(23): 100000000.1
+ 1.0e+8
+ cg-user(24): (rational 1000000.1)
+ 8000001/8
+ cg-user(25): (rational 100000000.1)
+ 100000000
+</CODE></PRE><P>
+<P>
+ The followings are examples of xsd data types. All of following forms return true.
+<PRE><CODE>
+ (cl:typep 1 'xsd:positiveInteger)
+ (cl:typep -1 'xsd:negativeInteger)
+ (cl:typep 0 'xsd:nonNegativeInteger)
+ (cl:typep 0 'xsd:nonPositiveInteger)
+ (cl:typep 32767 'xsd:short)
+ (cl:typep 32768 'xsd:int)
+ (cl:typep 2147483647 'xsd:int)
+ (cl:typep 2147483648 'xsd:long)
+ (cl:typep 9223372036854775807 'xsd:long)
+ (cl:typep 9223372036854775808 'xsd:integer)
+ (cl:typep 1 'xsd:decimal)
+ (cl:typep 1.0e0 'xsd:float)
+ (cl:typep 1.0d0 'xsd:double)
+ (cl:typep (rational 1) 'xsd:decimal)
+ (cl:typep (rational 0.000001) 'xsd:decimal)
+ (cl:typep 0.000001 'xsd:float)
+ (cl:typep "string?" 'xsd:string)
+ (cl:typep (iri "http://somewhere") 'xsd:anyURI)
+ (cl:typep 'xsd:false 'xsd:boolean)
+</CODE></PRE><P>
+ See also function <B>type-of</B> in GxType module.
+ See also GxType module with respect to the lexical space representation.
+ See also <B>disjoint-p</B> on the discussion on disjointness of xsd datatypes.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="unsignedbyte"><A HREF="../RDF\Xml.cl"><B>unsignedByte</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>0 &lt;= x &lt;= 255</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="unsignedshort"><A HREF="../RDF\Xml.cl"><B>unsignedShort</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>0 &lt;= x &lt;= 65535</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="unsignedint"><A HREF="../RDF\Xml.cl"><B>unsignedInt</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>0 &lt;= x &lt;= 4294967295</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="unsignedlong"><A HREF="../RDF\Xml.cl"><B>unsignedLong</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>0 &lt;= x &lt;= 18446744073709551615</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="byte"><A HREF="../RDF\Xml.cl"><B>byte</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>-128 &lt;= x &lt;= 127</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="short"><A HREF="../RDF\Xml.cl"><B>short</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>-32768 &lt;= x &lt;= 32767</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="int"><A HREF="../RDF\Xml.cl"><B>int</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>-2147483648 &lt;= x &lt;= 2147483647</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="long"><A HREF="../RDF\Xml.cl"><B>long</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>-9223372036854775808 &lt;= x &lt;= 9223372036854775807</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="integer"><A HREF="../RDF\Xml.cl"><B>integer</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>any number of digits without point but with or without + or -</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="positiveinteger"><A HREF="../RDF\Xml.cl"><B>positiveInteger</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>integer greater than 0</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="nonpositiveinteger"><A HREF="../RDF\Xml.cl"><B>nonPositiveInteger</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>integer smaller than 1</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="negativeinteger"><A HREF="../RDF\Xml.cl"><B>negativeInteger</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>integer smaller than 0</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="nonnegativeinteger"><A HREF="../RDF\Xml.cl"><B>nonNegativeInteger</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>integer greater than -1</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="float"><A HREF="../RDF\Xml.cl"><B>float</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>floating point number in lisp</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="double"><A HREF="../RDF\Xml.cl"><B>double</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>double floating point number in lisp</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="decimal"><A HREF="../RDF\Xml.cl"><B>decimal</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>rational number in lisp, which should be revised in future.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="string"><A HREF="../RDF\Xml.cl"><B>string</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>string in lisp</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="boolean"><A HREF="../RDF\Xml.cl"><B>boolean</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>xsd:true or xsd:false</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="anyuri"><A HREF="../RDF\Xml.cl"><B>anyURI</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>net.uri:rui in ACL</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="anysimpletype"><A HREF="../RDF\Xml.cl"><B>anySimpleType</B></A></A> </U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>xsd:boolean, xsd:anyURI, xsd:string, xsd:float, xsd:double, or xsd:decimal</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Seiji Koide Sep-11-2008
+<P>
+<A NAME="RDF/rdferror.cl"><HR>
+<H2>File <A HREF="../RDF\rdferror.cl">RDF\rdferror.cl</A></H2></A>
+<P>
+<H2> Condition and Error Handling module</H2>
+<P>
+ This code is written by Seiji Koide.
+<BR>
+ Copyright (c) 2007 Seiji Koide
+<P><HR WIDTH=80% ALIGN=left><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*all-quiet*"><A HREF="../RDF\rdferror.cl"><B>*all-quiet*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*saved-warnings*"><A HREF="../RDF\rdferror.cl"><B>*saved-warnings*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="quiet-warning-handler"><A HREF="../RDF\rdferror.cl"><B>quiet-warning-handler</B></A></A> <I>c</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="with-quiet-warnings"><A HREF="../RDF\rdferror.cl"><B>with-quiet-warnings</B></A></A> <I>&body</I> <I>forms</I></TH>
+<TD align="right">[macro]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*undo*"><A HREF="../RDF\rdferror.cl"><B>*undo*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*undo-stack*"><A HREF="../RDF\rdferror.cl"><B>*undo-stack*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*undoed-operations*"><A HREF="../RDF\rdferror.cl"><B>*undoed-operations*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="undoable-by-domain-condition-handler"><A HREF="../RDF\rdferror.cl"><B>undoable-by-domain-condition-handler</B></A></A> <I>condition</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="with-undoable"><A HREF="../RDF\rdferror.cl"><B>with-undoable</B></A></A> <I>&body</I> <I>forms</I></TH>
+<TD align="right">[macro]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> Undoable Objects and Classes</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="undoable-metaclass"><A HREF="../RDF\rdferror.cl"><B>undoable-metaclass</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="undoable-class"><A HREF="../RDF\rdferror.cl"><B>undoable-class</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shared-initialize:undoable-class"><A HREF="../RDF\rdferror.cl"><B>shared-initialize</B></A></A> <I>(instance
+                                                                                                                                  undoable-class)</I> <I>slot-names</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<A NAME="RDF/NameSpace.cl"><HR>
+<H2>File <A HREF="../RDF\NameSpace.cl">RDF\NameSpace.cl</A></H2></A>
+<P>
+<H2> NameSpace module</H2>
+<P>
+ IT Program Project in Japan: 
+    Building Operation-Support System for Large-scale System using IT
+<P>
+ This module is separated from RDFShare module for more efficient modularity.
+<P>
+ Copyright (c) 2002, 2004 by Galaxy Express Corporation
+<P>
+ Copyright (c) 2007, 2008, 2010 Seiji Koide
+<P>
+<P><HR WIDTH=80% ALIGN=left><P>
+<P>
+<H2> URI in SWCLOS and Turtle System</H2>
+<P>
+<H2> URI APIs fixes</H2>
+<P>
+ Note that method <I>gx:iri</I> always interns <I>thing</I>, but <I>gx:parse-iri</I> does not intern it.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-iri"><A HREF="../RDF\NameSpace.cl"><B>parse-iri</B></A></A> <I>thing</I> <I>&rest</I> <I>args</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>when uri host exists but no uri path on <I>thing</I>, this method adds '/' to uri path. 
+   This is required for the namespace interning. See also, 
+   <I>a href='http://www.franz.com/support/documentation/8.1/doc/operators/uri/parse-uri.htm'</I>parse-uri<I>/a</I>
+   in ACL document.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> OntologySpace and NameSpaces</H2>
+<P>
+ XML namespaces provide a simple method for qualifying element and attribute names in XML 
+ documents by associating them with URI references that provides namespaces for the names. 
+ QNames are used for element names instead of URIs, and NSAttNames are used for namespace 
+ declaration. See the details in &lt;http://www.w3.org/TR/xml-names/&gt;.
+<P>
+ A QName consists of Prefix and LocalPart. The Prefix is associated to a namespace URI, QNames 
+ that share the same Prefix belong to the namespace, and the uniqueness of a LocalPart in the 
+ namespace supports the global uniqueness of QName in the WWW. 
+ This machinery is very similar to interning mechanism of lisp symbol in package, 
+ which consists of a symbol name and package, where a symbol name is unique in the 
+ package. Thus, the QName is implemented as exported lisp symbol, and the namespace 
+ is implemented as lisp package. The packages for QNames are associated to the mamesapce URIs.
+<P>
+ In most cases, the mapping from a uri to a QName is algorithmically decidable. However, 
+ there may be cases that system cannot decide how a uri should be mapped to a QName. 
+ In such a case, a user must provide the mapping rule or the function giving each mapping 
+ by replying the query from system one by one. Therefore, we need a maintenance device to 
+ keep irregular mapping for such cases. All name spaces that related to XML namespace URIs 
+ are installed into global variable <B>*NameSpaces*</B>.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*namespaces*"><A HREF="../RDF\NameSpace.cl"><B>*NameSpaces*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>hasharray where a uri part associated to Prefix is interned. This space ensures the uniqueness 
+of a Prefix associated uri by interning it. See <B>make-uri-space</B> in Allegro Common Lisp documentation.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ All namespaces in system are listed by <B>list-all-uri-namedspaces</B>. See gxutil module.
+<P>
+<P>
+ A vocabulary URI in a namespace may be converted to a corresponding QName, in which 
+ a Prefix part is associated to the namespace URI, and a LocalPart is assocated to the 
+ vocabulary in the namespace. The namespace on Prefix can be shared among URIs that 
+ have the same Prefix so that LocalPart has a unique entry in the namedspace on Prefix. 
+ This machinery is very similar to interning mechanism of lisp symbol in package, 
+ which consists of a symbol name and package, where a symbol name is unique in the 
+ package. Thus, the QName is implemented as exported lisp symbol, and the namespace 
+ is implemented as lisp package. 
+<P>
+ <I>uri-namedspace</I> is a subclass of <I>net.uri:uri</I> which has two extra slots, <I>package</I> 
+ and <I>env</I>. <I>package</I> value keeps a package associated to a URI namespace. In case 
+ of regular mapping from URIs to QNames, no device for mapping from a local part 
+ of URI to a symbol name is needed, because SWCLOS provides such regular mapping.
+ However, in case of irregular mapping, the mapping from a full URI to a LocalPart 
+ in the namespace or a full URI to a symbol name in the package is needed.
+ This book-keeping is done for irregular mapping in the environment slot of 
+ <I>uri-namedspace</I>.
+ Followings provide such a mapping device and the uri namespace functionality.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="uri-namedspace"><A HREF="../RDF\NameSpace.cl"><B>uri-namedspace</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>A subclass of <I>net.uri:uri</I>. This instance has extra two slots, i.e., an associated symbol 
+package slot and uri to symbol name mapping environment slot.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="set-uri-namedspace"><A HREF="../RDF\NameSpace.cl"><B>set-uri-namedspace</B></A></A> <I>prefix-uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>after interning <I>prefix-uri</I> to <B>*NameSpaces*</B>, change the class of <I>prefix-uri</I> from <I>net.uri:uri</I> 
+   to <I>uri-namedspace</I>. After that, symbol to uri mapping can be placed in this namespace.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="get-uri-namedspace"><A HREF="../RDF\NameSpace.cl"><B>get-uri-namedspace</B></A></A> <I>prefix-uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>retrieves a uri-namedspace on <I>prefix-uri</I> from <B>*NameSpaces*</B> by interning it.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="set-uri-namedspace-from-pkg"><A HREF="../RDF\NameSpace.cl"><B>set-uri-namedspace-from-pkg</B></A></A> <I>pkg</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>supposing <I>pkg</I> has a documentation that is the same string as rendered <I>prefix-uri</I>, 
+   sets the <I>prefix-uri</I> as uri-namedspace, and puts this <I>pkg</I> into uri-namedspace-package slot.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="uri2package"><A HREF="../RDF\NameSpace.cl"><B>uri2package</B></A></A> <I>prefix-uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a package associated to <I>prefix-uri</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="uri2env"><A HREF="../RDF\NameSpace.cl"><B>uri2env</B></A></A> <I>prefix-uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a LocalPart-symbol-name association list from <I>prefix-uri</I>.
+   Note that the return value is null if there is no irregular mapping 
+   from uri to QName and no mapping given by replying a query.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ The first thing to be done is, in spite that whether the mapping is regular or 
+ irregular, to divide a uri into a Prefix part and a LocalPart part. In regular 
+ mapping, a full URI with fragment is parted into a fragmentless URI and a fragment.
+ The fragmentless URI is associated to Prefix of QName or package in lisp, and 
+ the fragment turns out a LocalPart of QName or symbol name in lisp.
+<P>
+ For a URI without fragment, a function bound to global variable 
+ <B>*uri2symbol-name-mapping-fun*</B> and <B>*uri2symbol-package-mapping-fun*</B> are
+ invoked if the system requires a corresponding QName or a package for a URI.
+ Users can bind their own functions to these variables in order to apply to 
+ application oriented irregular mappings. However, two functions 
+ <B>default-uri2symbol-name-mapping-fun</B> and <B>default-uri2symbol-package-mapping-fun</B>
+ are bound as default. See <B>default-uri2symbol-name-mapping-fun</B> and <B>%%uri2symbol</B>
+ for the details.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*uri2symbol-name-mapping-fun*"><A HREF="../RDF\NameSpace.cl"><B>*uri2symbol-name-mapping-fun*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>a function to be invoked when uri to symbol name mapping is irregular.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*uri2symbol-package-mapping-fun*"><A HREF="../RDF\NameSpace.cl"><B>*uri2symbol-package-mapping-fun*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>a function to be invoked when uri to symbol package mapping is irregular.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="uri2symbol"><A HREF="../RDF\NameSpace.cl"><B>uri2symbol</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>uri</I> to a QName symbol. If irregular mapping has been established, 
+   the mapping is reused. When <I>uri</I> is a string, recursively calls with uri of <I>uri</I>.
+   If <I>uri</I> is regular, namely a uri with fragment, <B>%uri2symbol</B> is used, else 
+   <B>irregular-name&pkg</B> is used. When <I>uri</I> is nil, nil is returned.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%uri2symbol"><A HREF="../RDF\NameSpace.cl"><B>%uri2symbol</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>in case of <I>uri</I> with fragment, mapping is regular. Then, <I>uri</I> without fragment is Prefix part and fragment of <I>uri</I> 
+   is LocalPart part of <I>uri</I>. This function returns the QName of <I>uri</I> without consulting the LocalPart environment in .
+   its namespace. If there is no package information on <I>uri</I> without fragment part, a function bound to 
+   <B>*uri2symbol-package-mapping-fun*</B> is invoked. Note that uri-namedspace-env is unused in this regular case.
+   Note that QName symbol is automatically exported in this function.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="irregular-name&pkg"><A HREF="../RDF\NameSpace.cl"><B>irregular-name&pkg</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>when the mapping is irregular, this function is called. 
+   Firstly, a function bound to <B>*uri2symbol-name-mapping-fun*</B> is invoked with <I>uri</I> argument. 
+   If it gives a symbol then the symbol is returned. 
+   If it gives a string, the string is used as symbol name in a package that is obtained from <I>uri</I> through <B>uri2package</B> or 
+   from a function bound to <B>*uri2symbol-package-mapping-fun*</B>. 
+   When the package is newly obtained from <B>*uri2symbol-package-mapping-fun*</B>, the package is associated this <I>uri</I> itself. 
+   Then, in the worst case, each irregular <I>uri</I> has its own namespace, as system cannot know general rules from one by one Q&A. 
+   You had better provide a smarter application-oriented function on <B>*uri2symbol-name-mapping-fun*</B>
+   that provides always an appropriate QName.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Mapping URI to package and symbol, ID to symbol, anonymousID to symbol</H2>
+<P>
+<H2> Query for Users</H2>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ask-user-for-string"><A HREF="../RDF\NameSpace.cl"><B>ask-user-for-string</B></A></A> <I>prompt</I> <I>string1</I> <I>option1</I> <I>option2</I> <I>prompt2</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function is used in <B>ask-user-package-name</B> and <B>ask-user-symbol-name</B>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="default-uri2symbol-package-mapping-fun"><A HREF="../RDF\NameSpace.cl"><B>default-uri2symbol-package-mapping-fun</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function is bound to <B>*uri2symbol-name-mapping-fun*</B> as default. This function just makes a query for users.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="default-uri2symbol-name-mapping-fun"><A HREF="../RDF\NameSpace.cl"><B>default-uri2symbol-name-mapping-fun</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function is bound to <B>*uri2symbol-package-mapping-fun*</B> as default. If <I>uri</I> has a uri path, 
+   then the returned value of <B>%%uri2symbol</B> is returned. Othewise a query is made for users.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%%uri2symbol"><A HREF="../RDF\NameSpace.cl"><B>%%uri2symbol</B></A></A> <I>uri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Even if <I>uri</I> has no fragment, plausible separation is done by this function. In short, 
+   the file name or the most subfolder of <I>uri</I> path is taken as symbol name, and the remaining part 
+   of <I>uri</I> path is taken for namespace (package) association. If you can find some application specific rules 
+   for making QName, you had better program it as well as this function does.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Note that PrefixedAttName declaration in XML documents set the namespace with NCname (Prefix) 
+ and property value (associated prefix-uri). Note that DefaultAttName declaration in XML 
+ documents set the default namespace. See Rdf module.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*default-namespace*"><A HREF="../RDF\NameSpace.cl"><B>*default-namespace*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Default name space URI for XML parsing in current time. This value is set by <I>read-rdf-from-http</I> and <B>read-rdf-file</B>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*base-uri*"><A HREF="../RDF\NameSpace.cl"><B>*base-uri*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Base URI that is indicated in XML file. This value is set by <I>read-rdf-from-http</I>, <B>read-rdf-file</B>, and <B>read-rdf-from-string</B>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="qname2prefixedname"><A HREF="../RDF\NameSpace.cl"><B>QName2PrefixedName</B></A></A> <I>QName</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>QName</I> to PrefixedName string. <I>QName</I> should be a lisp symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="qname2unprefixedname"><A HREF="../RDF\NameSpace.cl"><B>QName2UnPrefixedName</B></A></A> <I>QName</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>QName</I> to UnPrefixedName string. <I>QName</I> should be a lisp symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="export-as-qname"><A HREF="../RDF\NameSpace.cl"><B>export-as-QName</B></A></A> <I>symbol</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>export this <I>symbol</I> as QName. The symbol-package of <I>symbol</I> is stored 
+   into the related uri namespace.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="qnamestring2symbol"><A HREF="../RDF\NameSpace.cl"><B>QNameString2symbol</B></A></A> <I>QName</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>QName</I> string to a lisp symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="symbol2qnamestring"><A HREF="../RDF\NameSpace.cl"><B>symbol2QNameString</B></A></A> <I>symbol</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>symbol</I> to QName string in the current namespace.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Symbol to URI</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="symbol2uri"><A HREF="../RDF\NameSpace.cl"><B>symbol2uri</B></A></A> <I>symbol</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>symbol</I> to its associated uri. The symbol package affects.
+   The namespace uri should has been registered and documented in package.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> NodeID</H2>
+<P>
+ A nodeID is an exorted symbol in package "_".  See the following example.
+<PRE><CODE>
+ (nodeID2symbol "abc")      -&gt; _:abc
+ (make-unique-nodeID "abc") -&gt; _:abc0
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="nodeid?"><A HREF="../RDF\NameSpace.cl"><B>nodeID?</B></A></A> <I>name</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this <I>name</I> a nodeID?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="nodeid2symbol"><A HREF="../RDF\NameSpace.cl"><B>nodeID2symbol</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>simply transforms <I>str</I> to a exported symbol in anonymous node package :_
+   and returns it.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-unique-nodeid"><A HREF="../RDF\NameSpace.cl"><B>make-unique-nodeID</B></A></A> <I>str</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>makes a unique node ID from <I>str</I>. Namely, adds numbers at the end of <I>str</I> and makes unique symbol.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name-ontology"><A HREF="../RDF\NameSpace.cl"><B>name-ontology</B></A></A> <I>ontouri</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>transforms <I>ontouri</I> to special symbol of which string is equal to <I>ontouri</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Seiji Koide Nov-15-2010
+<P>
+<A NAME="RDF/Literal.cl"><HR>
+<H2>File <A HREF="../RDF\Literal.cl">RDF\Literal.cl</A></H2></A>
+<P>
+<H2> Literal in Rbase System</H2>
+<P>
+<P>
+<H2> Plane Literal</H2>
+<P>
+ A plane literal without language tag is internalized to string in lisp.
+ A plane literal with language tag is internalized to an instance of class rdf:inLang.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="lang?"><A HREF="../RDF\Literal.cl"><B>lang?</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>x</I> is 2-letter language code as keyword symbol, e.g., :ja for Japanese, :en for English.
+   See http://www.loc.gov/standards/iso639-2/php/code_list.php, but :en-US also accepted.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Plane Literal with Lang</H2>
+ A Lang object has <B>lang</B> and <B>content</B>.
+ It is print out such as "Vine@fr".
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="inlang"><A HREF="../RDF\Literal.cl"><B>inLang</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-object:inlang"><A HREF="../RDF\Literal.cl"><B>print-object</B></A></A> <I>(object
+                                                                                                               inLang)</I> <I>stream</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="equals:inlang"><A HREF="../RDF\Literal.cl"><B>equals</B></A></A> <I>(obj1
+                                                                                                   inLang)</I> <I>(obj2
+                                                                                                                   inLang)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Two plane literal with lang are equal if langs are equal and contents are equal.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="@"><A HREF="../RDF\Literal.cl"><B>@</B></A></A> <I>content</I> <I>lang</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns an instance of rdf:inLang structure. <I>content</I> must be a string.
+   the string of <I>lang</I> may be any string or symbol and it must designate language tag.</TD>
+</TR></TBODY></TABLE></DIV> 
+<A NAME="RDF/RDFShare.cl"><HR>
+<H2>File <A HREF="../RDF\RDFShare.cl">RDF\RDFShare.cl</A></H2></A>
+<P>
+<H2> Rdf Share module</H2>
+<P>
+ IT Program Project in Japan: 
+    Building Operation-Support System for Large-scale System using IT
+<P>
+ This module is separated from original Rdf module in order to separate sharable parts from Rdf module.
+<P>
+ Copyright (c) 2002, 2004 by Galaxy Express Corporation
+<P>
+ Copyright (c) 2007, 2008 Seiji Koide
+<P>
+<P><HR WIDTH=80% ALIGN=left><P>
+<P>
+<H2> Sharable Functions for XML 1.1 or 1.0 and NameSpace</H2>
+<P>
+ In the followings, each specification from XML 1.1 (http://www.w3.org/TR/xml11/)
+ or 1.0 (http://www.w3.org/TR/xml/) or Namespaces in XML 1.1 (http://www.w3.org/TR/xml-names11/) 
+ is listed before the definition in Lisp.
+<PRE><CODE>
+ [4]    NameStartChar    ::=
+         ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x2FF] | 
+         [#x370-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | 
+         [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | 
+         [#x10000-#xEFFFF] 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="namestartchar-p"><A HREF="../RDF\RDFShare.cl"><B>NameStartChar-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>char</I> is a NameStartChar.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ Namespaces[6]    NCNameStartChar    ::=    NameStartChar - ':'  
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ncnamestartchar-p"><A HREF="../RDF\RDFShare.cl"><B>NCNameStartChar-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>char</I> is an NCNameStartChar.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [4a]    NameChar    ::=
+          NameStartChar | "-" | "." | [0-9] | #xB7 | [#x0300-#x036F] |
+          [#x203F-#x2040] 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="namechar-p"><A HREF="../RDF\RDFShare.cl"><B>NameChar-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>char</I> is a NameChar.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ Namespaces[5]    NCNameChar    ::=    NameChar - ':' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ncnamechar-p"><A HREF="../RDF\RDFShare.cl"><B>NCNameChar-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>char</I> is an NCNameChar.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [81]    EncName    ::=    [A-Za-z] ([A-Za-z0-9._] | '-')* 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="encname-p"><A HREF="../RDF\RDFShare.cl"><B>EncName-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>char</I> is an EncName.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [5]    Name    ::=    NameStartChar (NameChar)* 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-name"><A HREF="../RDF\RDFShare.cl"><B>read-Name</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a name from <I>stream</I> and returns it as string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%read-name"><A HREF="../RDF\RDFShare.cl"><B>%read-Name</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a name from <I>stream</I> and returns characters in list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [4]    NCName    ::=    NCNameStartChar NCNameChar* /* An XML Name, minus the ":" */ 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-ncname"><A HREF="../RDF\RDFShare.cl"><B>read-NCName</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a NCname from <I>stream</I> and returns it as string. The token must be NCName.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%read-ncname"><A HREF="../RDF\RDFShare.cl"><B>%read-NCName</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a NCName from <I>stream</I> and returns chars in list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-quoted-ncname"><A HREF="../RDF\RDFShare.cl"><B>read-quoted-NCName</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a quoted NCName from <I>stream</I> and returns the NCName as string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [7]    Nmtoken    ::=    (NameChar)+ 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-nmtoken"><A HREF="../RDF\RDFShare.cl"><B>read-Nmtoken</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a Nmtoken from <I>stream</I> and returns it as string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%read-nmtoken"><A HREF="../RDF\RDFShare.cl"><B>%read-Nmtoken</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a Nmtoken from <I>stream</I> and returns chars in list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [81]    EncName    ::=    [A-Za-z] ([A-Za-z0-9._] | '-')* 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-encname"><A HREF="../RDF\RDFShare.cl"><B>read-EncName</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a EncName from <I>stream</I> and returns it as string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%read-encname"><A HREF="../RDF\RDFShare.cl"><B>%read-EncName</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a EncName from <I>stream</I> and returns chars in list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ [14]    CharData    ::=    [&lt;&]* - ([&lt;&]* ']]&gt;' [&lt;&]*) 
+ [18]    CDSect    ::=    CDStart CData CDEnd  
+ [19]    CDStart    ::=    '&lt;![CDATA[' 
+ [20]    CData    ::=    (Char* - (Char* ']]&gt;' Char*))  
+ [21]    CDEnd    ::=    ']]&gt;' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="cdstart-p"><A HREF="../RDF\RDFShare.cl"><B>CDStart-p</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Does CDStart characters come from <I>stream</I> next?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-cdata-to-cdend"><A HREF="../RDF\RDFShare.cl"><B>read-CData-to-CDEnd</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads string from <I>stream</I> up to CDEnd, and returns CData.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Read-entity-decls</H2>
+<P>
+ <B>read-entity-decls</B> tranforms a sequence of characters from stream that are declared as character 
+ entity to the designated character. For example,
+<BR>
+<UL>
+<LI>&amp;amp; -> '&amp;'
+<LI>&amp;lt;  -> '&lt;'
+<LI>&amp;gt;  -> '&gt;'
+<LI>&amp;apos; -> "'"
+<LI>&amp;quot; -> '&quot;'
+</UL>
+<BR>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*entity-decls*"><A HREF="../RDF\RDFShare.cl"><B>*entity-decls*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>storage for entity-decls</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-entity-decls"><A HREF="../RDF\RDFShare.cl"><B>read-entity-decls</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads entity delcs and returns mapped char. This function should be called just after '&'.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [25]    Eq    ::=    S? '=' S? 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-eq"><A HREF="../RDF\RDFShare.cl"><B>read-Eq</B></A></A> <I>stream</I> <I>&key</I> <I>format-control</I> <I>format-arguments</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads Eq and returns character '='</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [23]    XMLDecl    ::=    '&lt;?xml' VersionInfo EncodingDecl? SDDecl? S? '?&gt;' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-xmldecl"><A HREF="../RDF\RDFShare.cl"><B>read-XMLDecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads XMLDecl just after '&lt;?xml'.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [24]    VersionInfo    ::=
+                      S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"') 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-versioninfo"><A HREF="../RDF\RDFShare.cl"><B>parse-VersionInfo</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<PRE><CODE>
+ [80]    EncodingDecl    ::=
+                         S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" ) 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="encodingdecl?"><A HREF="../RDF\RDFShare.cl"><B>EncodingDecl?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if character sequence 'enconding' is detected from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-encodingdecl"><A HREF="../RDF\RDFShare.cl"><B>read-EncodingDecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads EncodingDecl and returns EncName that follows '='.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [32]    SDDecl    ::=    S 'standalone' Eq (("'" ('yes' | 'no') "'") |
+                          ('"' ('yes' | 'no') '"'))  
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="sddecl?"><A HREF="../RDF\RDFShare.cl"><B>SDDecl?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if character sequence 'standalone' is detected from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-sddecl"><A HREF="../RDF\RDFShare.cl"><B>read-SDDecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Not Yet implemented.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Comment</H2>
+<PRE><CODE>
+  [15]    Comment    ::=    '&lt;!--' ((Char - '-') | ('-' (Char - '-')))* '--&gt;' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="comment?"><A HREF="../RDF\RDFShare.cl"><B>Comment?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if character sequence '<I>!--' is detected from <stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-comment"><A HREF="../RDF\RDFShare.cl"><B>read-Comment</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads commented string from <I>stream</I> using <B>parse-pattern-delimited-string</B>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ In SWCLOS, comment is a structure that has slot <I>body</I>.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="comment"><A HREF="../RDF\RDFShare.cl"><B>comment</B></A></A> <I>body</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-comment"><A HREF="../RDF\RDFShare.cl"><B>print-comment</B></A></A> <I>r</I> <I>s</I> <I>k</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>prints out Comment string. This function is not intended to be used by user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-comment"><A HREF="../RDF\RDFShare.cl"><B>parse-Comment</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads Comment from <I>stream</I> and returns a comment structure.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [11]    SystemLiteral    ::=    ('"' [^"]* '"') | ("'" [^']* "'") 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-systemliteral"><A HREF="../RDF\RDFShare.cl"><B>read-SystemLiteral</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads SystemLiteral and returns the string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [13]    PubidChar    ::=    #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%] 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="pubidchar-p"><A HREF="../RDF\RDFShare.cl"><B>PubidChar-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>char</I> is a PubidChar.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [12]    PubidLiteral    ::=    '"' PubidChar* '"' | "'" (PubidChar - "'")* "'" 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-pubidliteral"><A HREF="../RDF\RDFShare.cl"><B>read-PubidLiteral</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads PubidLiteral from <I>stream</I> and returns the string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [75]    ExternalID    ::=    'SYSTEM' S SystemLiteral | 'PUBLIC' S PubidLiteral S SystemLiteral 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="externalid?"><A HREF="../RDF\RDFShare.cl"><B>ExternalID?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is the next pattern in <I>stream</I> SYSTEM or PUBLIC?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-externalid"><A HREF="../RDF\RDFShare.cl"><B>parse-ExternalID</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>If the next pattern is SYSTEM or PUBLIC, then reads and parse the ExternalID from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [29]    markupdecl    ::=    elementdecl | AttlistDecl | EntityDecl | 
+                              NotationDecl | PI | Comment 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="markupdecl?"><A HREF="../RDF\RDFShare.cl"><B>markupdecl?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>this function only detects EntityDecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-markupdecl"><A HREF="../RDF\RDFShare.cl"><B>parse-markupdecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>this function only parses EntityDecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [28b]    intSubset    ::=    (markupdecl | DeclSep)* 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="intsubset?"><A HREF="../RDF\RDFShare.cl"><B>intSubset?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if intSubset is detected from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-intsubset"><A HREF="../RDF\RDFShare.cl"><B>parse-intSubset</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads markupdecl or Comment and parse it.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [28a]    DeclSep    ::=    PEReference | S 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="declsep?"><A HREF="../RDF\RDFShare.cl"><B>DeclSep?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if PEReference is detected.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [28]    doctypedecl    ::=
+             '&lt;!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '&gt;' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-doctypedecl"><A HREF="../RDF\RDFShare.cl"><B>read-doctypedecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads doctypedecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [6]     QName            ::=    PrefixedName 
+                                 | UnprefixedName 
+ [6a]    PrefixedName     ::=    Prefix ':' LocalPart  
+ [6b]    UnprefixedName   ::=    LocalPart  
+ [7]     Prefix           ::=    NCName 
+ [8]     LocalPart        ::=    NCName 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-qnamestring"><A HREF="../RDF\RDFShare.cl"><B>read-QNameString</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a Qname from <I>stream</I> and returns it as string. The first token in <I>stream</I> must be NCName.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="peep-qnamestring"><A HREF="../RDF\RDFShare.cl"><B>peep-QNameString</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>peeps QName in <I>stream</I> and returns the string. The first token in <I>stream</I> must be NCName.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-qname"><A HREF="../RDF\RDFShare.cl"><B>read-QName</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a Qname from <I>stream</I> and returns it as symbol if possible. The first token in <I>stream</I> must 
+be NCName. If there is no package named Prefix, the package is created. If QName has no Prefix, 
+LocalPart is interned in <B>*default-namespace*</B> package, or <B>*base-uri*</B> package. If no Prefix and 
+no <B>*default-namespace*</B> and no <B>*base-uri*</B>, the string is returned.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<PRE><CODE>
+ [70]    EntityDecl   ::=    GEDecl | PEDecl 
+ [71]    GEDecl       ::=    '&lt;!ENTITY' S Name S EntityDef S? '&gt;' 
+ [72]    PEDecl       ::=    '&lt;!ENTITY' S '%' S Name S PEDef S? '&gt;' 
+ [73]    EntityDef    ::=    EntityValue | (ExternalID NDataDecl?) 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="entitydecl?"><A HREF="../RDF\RDFShare.cl"><B>EntityDecl?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if EntityDecl is detected from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-entitydecl"><A HREF="../RDF\RDFShare.cl"><B>parse-EntityDecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads EntityDecl from <I>stream</I> and registers the declaration.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Peeping File Coding</H2>
+<P>
+ Even though a file includes the character encoding information in XMLDecl part, 
+ we cannot know it without opening and peeping it.
+ The following functions allow us to peep a file, looking for character encoding.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="peep-xmldecl-code-from-file"><A HREF="../RDF\RDFShare.cl"><B>peep-XMLDecl-code-from-file</B></A></A> <I>file</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>peeps <I>file</I> and returns a character code declared in XMLDecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="peep-xmldecl-code-from-string"><A HREF="../RDF\RDFShare.cl"><B>peep-XMLDecl-code-from-string</B></A></A> <I>rdf-string</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>peeps <I>rdf-string</I> and returns a character code declared in XMLDecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%peep-xmldecl-code"><A HREF="../RDF\RDFShare.cl"><B>%peep-XMLDecl-code</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>peeps <I>stream</I> and returns a character code declared in XMLDecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Data Type duration</H2>
+<P>
+ PnYnMnDTnHnMnS, ex. P1Y2M3DT10H30M
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-as-duration"><A HREF="../RDF\RDFShare.cl"><B>parse-as-duration</B></A></A> <I>str</I> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-duration"><A HREF="../RDF\RDFShare.cl"><B>parse-duration</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="double-angle-bracket-reader"><A HREF="../RDF\RDFShare.cl"><B>double-angle-bracket-reader</B></A></A> <I>stream</I> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+ Seiji Koide Sep-13-2008
+<P>
+<A NAME="RDF/Rdf.cl"><HR>
+<H2>File <A HREF="../RDF\Rdf.cl">RDF\Rdf.cl</A></H2></A>
+<P>
+<H2> Rdf module</H2>
+<P>
+ IT Program Project in Japan: 
+    Building Operation-Support System for Large-scale System using IT
+<P>
+ This code was encoded by Seiji Koide at Galaxy Express Corporation, Japan.
+ for the realization of the MEXT IT Program in Japan.
+<P>
+ Copyright (c) 2002, 2004 
+    Galaxy Express Corporation
+<BR>
+ Copyright (c) 2007, 2008
+    Seiji Koide
+<P>
+<P><HR WIDTH=80% ALIGN=left><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rdf-parse-error"><A HREF="../RDF\Rdf.cl"><B>rdf-parse-error</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="no-eq-error"><A HREF="../RDF\Rdf.cl"><B>no-Eq-error</B></A></A> </TH>
+<TD align="right">[condition]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P>
+<H2> XML Structures in RDF and Parser</H2>
+<P>
+ RDF/XML file contents can be read and transformed into Lisp structures of XMLDecl, doctypedecl, 
+ Comment, RDF, rdf:Description, and prop. For example, in the followings, <B>parse-rdf</B> returns 
+ a list that includes a structure of XMLDecl and RDF. Those structure printing functions 
+ print structures like XML serialized.
+<PRE><CODE>
+ :cd C:\allegro-projects\SWCLOS\RDFS\           -&gt; C:\allegro-projects\SWCLOS\RDFS\
+ (with-open-file (p "Intro.rdf") (parse-rdf p)) -&gt;
+ (&lt;?xml version="1.0" ?&gt; 
+ &lt;rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:gxpr="http://galaxy-express.co.jp/MEXT/RDF/0.1/Prolog#"
+          xmlns="http://galaxy-express.co.jp/MEXT/RDF/0.1/Prolog#"&gt;
+   &lt;rdf:Property rdf:ID="likes"/&gt;
+   &lt;rdf:Description rdf:ID="Kim"&gt;
+     &lt;gxpr:likes rdf:resource="#Robin" /&gt;
+   &lt;/rdf:Description&gt;
+   &lt;rdf:Description rdf:ID="Sandy"&gt;
+      &lt;gxpr:likes rdf:resource="#Lee" /&gt;
+      &lt;gxpr:likes rdf:resource="#Kim" /&gt;
+   &lt;/rdf:Description&gt;
+   &lt;rdf:Description rdf:ID="Robin"&gt;
+     &lt;gxpr:likes rdf:resource="#cats" /&gt;
+   &lt;/rdf:Description&gt;
+ &lt;/rdf:RDF&gt;)
+</CODE></PRE><P>
+<P>
+<H2> XMLDecl</H2>
+ XMLDecl is composed of version, encoding, and stadalone slots.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="xmldecl"><A HREF="../RDF\Rdf.cl"><B>XMLDecl</B></A></A> <I>version</I> <I>encoding</I> <I>standalone</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-xmldecl"><A HREF="../RDF\Rdf.cl"><B>print-XMLDecl</B></A></A> <I>r</I> <I>s</I> <I>k</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>prints out XMLDecl string that contains version of <I>r</I>, encoding of <I>r</I>, 
+   and standalone of <I>r</I> to stream <I>s</I>.  This function is not intended to be used by user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Doctypedecl</H2>
+ doctypedecl is a structure that has slot <B>name</B>, <I>external</I>, and <B>values</B>.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="doctypedecl"><A HREF="../RDF\Rdf.cl"><B>doctypedecl</B></A></A> <I>name</I> <I>external</I> <I>values</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-doctypedecl"><A HREF="../RDF\Rdf.cl"><B>print-doctypedecl</B></A></A> <I>r</I> <I>s</I> <I>k</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>a doctypedecl is printed in abreviated form '#<I>doctypedecl ... </I>'. 
+   This function is not intended to be used by user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> RDF Structures</H2>
+ An RDF structure has slots <I>att&vals</I> and <I>body</I>.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="rdf"><A HREF="../RDF\Rdf.cl"><B>RDF</B></A></A> <I>att&vals</I> <I>body</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-rdf"><A HREF="../RDF\Rdf.cl"><B>print-RDF</B></A></A> <I>r</I> <I>s</I> <I>k</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>prints out an RDF structure <I>r</I>. This function is not intended to be used by user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Description</H2>
+ An RDF structure includes one description that contains nested elements.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="description"><A HREF="../RDF\Rdf.cl"><B>Description</B></A></A> <I>tag</I> <I>att&vals</I> <I>elements</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-description"><A HREF="../RDF\Rdf.cl"><B>print-Description</B></A></A> <I>r</I> <I>s</I> <I>k</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>prints out a Description <I>r</I>. This function is not intended to be used by user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Property</H2>
+ A structure property has <B>name</B>, <I>att&val</I>, and <I>value</I>.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TD><U><A NAME="prop"><A HREF="../RDF\Rdf.cl"><B>prop</B></A></A> <I>name</I> <I>att&vals</I> <I>value</I></U></TD>
+<TD align="right">[type]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="print-prop"><A HREF="../RDF\Rdf.cl"><B>print-prop</B></A></A> <I>p</I> <I>s</I> <I>k</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>prints out a property <I>p</I>. This function is not intended to be used by user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Parser</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-xmldecl"><A HREF="../RDF\Rdf.cl"><B>parse-XMLDecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads XMLDecl and returns XMLDecl structure. This function should be called 
+  just after '&lt;?xml '</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-doctypedecl"><A HREF="../RDF\Rdf.cl"><B>parse-doctypedecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads doctypedecl from <I>stream</I> and returns it as structure.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-rdfdecl"><A HREF="../RDF\Rdf.cl"><B>parse-RDFdecl</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads RDF/XML from <I>stream</I> and returns RDF structure.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-description"><A HREF="../RDF\Rdf.cl"><B>parse-Description</B></A></A> <I>stream</I> <I>&optional</I> <I>depth</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads and parses a description from <I>stream</I> and returns a text or a structure Description.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-property"><A HREF="../RDF\Rdf.cl"><B>parse-property</B></A></A> <I>stream</I> <I>depth</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads from <I>stream</I> and parse a property element, and returns a property structure.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Reader</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-description"><A HREF="../RDF\Rdf.cl"><B>read-Description</B></A></A> <I>stream</I> <I>&optional</I> <I>depth</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a description from <I>stream</I> and returns tag, attributes, and contents.
+   Note that contents are a list of instances of property structure.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-property"><A HREF="../RDF\Rdf.cl"><B>read-property</B></A></A> <I>stream</I> <I>depth</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads a property from <I>stream</I> and returns tag, attributes, and its contents.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-attribute-in-rdf"><A HREF="../RDF\Rdf.cl"><B>read-Attribute-in-RDF</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a list of Name symbol and attribute value.</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ [66]    CharRef    ::=    '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-charref"><A HREF="../RDF\Rdf.cl"><B>read-CharRef</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads CharRef from <I>stream</I> and returns a translated character</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ [68]    EntityRef    ::=    '&' Name ';' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-entityref"><A HREF="../RDF\Rdf.cl"><B>read-EntityRef</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads EntityRef and returns a translated string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ [69]    PEReference    ::=    '%' Name ';' 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-pereference"><A HREF="../RDF\Rdf.cl"><B>read-PEReference</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Not implemented yet. reads PEReference and returns a translated string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ [67]    Reference    ::=    EntityRef | CharRef 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-reference"><A HREF="../RDF\Rdf.cl"><B>read-Reference</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads EntityRef or CharRef from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ [10]    AttValue    ::=    '"' ([^&lt;&"] | Reference)* '"'  
+                         |  "'" ([^&lt;&'] | Reference)* "'" 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-attvalue"><A HREF="../RDF\Rdf.cl"><B>read-AttValue</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads AttValue from <I>stream</I> and returns the string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-uri"><A HREF="../RDF\Rdf.cl"><B>read-URI</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads URI string from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%read-uri"><A HREF="../RDF\Rdf.cl"><B>%read-URI</B></A></A> <I>stream</I> <I>q</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="white-space-p"><A HREF="../RDF\Rdf.cl"><B>white-space-p</B></A></A> <I>decl</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is this decl is all white space?.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="skip-pattern-delimited-string"><A HREF="../RDF\Rdf.cl"><B>skip-pattern-delimited-string</B></A></A> <I>pattern</I> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>just skips and discards <I>pattern</I> in <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Parsing Attribute</H2>
+<P>
+<PRE><CODE>
+ namespace[1]    NSAttName         ::=    PrefixedAttName | DefaultAttName 
+ namespace[2]    PrefixedAttName   ::=    'xmlns:' NCName 
+ namespace[3]    DefaultAttName    ::=    'xmlns' 
+ namespace[15]   Attribute         ::=    NSAttName Eq AttValue | QName Eq AttValue 
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-attribute-in-description"><A HREF="../RDF\Rdf.cl"><B>read-Attribute-in-Description</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a list of Name symbol and attribute value.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-attribute-in-property"><A HREF="../RDF\Rdf.cl"><B>read-Attribute-in-property</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a list of Name symbol and attribute value.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Element in XML</H2>
+<PRE><CODE>
+ [39]    element       ::=    EmptyElemTag | STag content ETag 
+ namespace[14]    EmptyElemTag  ::=    '&lt;' QName (S Attribute)* S? '/&gt;' 
+ namespace[12]    STag          ::=    '&lt;' QName (S Attribute)* S? '&gt;'
+ [43] content ::= CharData? ((element | Reference | CDSect | PI | Comment) CharData?)* 
+</CODE></PRE><P>
+<P>
+ Read-element in XML general is defined as above. However, a Description element (node element)
+ and a property element in RDF must be alternately appear in XML nest structure. See, 
+ http://www.w3.org/TR/rdf-syntax-grammar/#example1. 
+<P>
+ Therefore, two element reader are coded, dedicated to node elements and property elements repectively.
+ Then, <B>read-STag-or-EmptyElemTag-in-Description</B> calls <B>read-STag-or-EmptyElemTag-in-property</B>, and
+ <B>read-STag-or-EmptyElemTag-in-property</B> calls <B>read-STag-or-EmptyElemTag-in-Description</B>, if the 
+ substructure exists.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-stag-or-emptyelemtag-in-description"><A HREF="../RDF\Rdf.cl"><B>read-STag-or-EmptyElemTag-in-Description</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a start tag and attributes. attributes are a property list.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-stag-or-emptyelemtag-in-property"><A HREF="../RDF\Rdf.cl"><B>read-STag-or-EmptyElemTag-in-property</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a start tag and attributes. attributes are a property list.
+   Note that returned value for tag is a string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<PRE><CODE>
+ namespace[13]    ETag    ::=    '&lt;/' QName S? '&gt;'  
+</CODE></PRE><P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-string-until-etag-with-eat-up"><A HREF="../RDF\Rdf.cl"><B>read-string-until-Etag-with-eat-up</B></A></A> <I>QName</I> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads <I>stream</I> up to Etag of <I>QName</I> and returns the string read.
+   <I>QName</I> must be a string.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="etag-p-with-eat-up"><A HREF="../RDF\Rdf.cl"><B>ETag-p-with-eat-up</B></A></A> <I>STag</I> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>tests a end tag for STag. STag should be a string.
+   This function eats up the end tag with '<I>/' & '</I>', if true.
+   Otherwise it does not eat, and returns false.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-plane-text"><A HREF="../RDF\Rdf.cl"><B>read-plane-text</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-as-datatype"><A HREF="../RDF\Rdf.cl"><B>read-as-datatype</B></A></A> <I>value</I> <I>datatype</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>value</I> is a string. <I>datatype</I> is a symbol that indicates any of xsd:Datatypes. 
+This function creates an instance of <I>datatype</I> from <I>value</I>. 
+Note that white spaces of head and tail of <I>value</I> are trimed and read to a lisp object 
+from <I>value</I>. For example, if <I>datatype</I> is xsd:integer '010' as <I>value</I> is translated to 
+10, an instance of cl:integer, then 10^^xsd:integer is made, in which the value is 10.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="^^"><A HREF="../RDF\Rdf.cl"><B>^^</B></A></A> <I>value</I> <I>type</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>makes an XML typed data with <I>value</I> of <I>type</I>.
+   If <I>value</I> is a string, <B>read-as-datatype</B> is called, otherwise makes typed data of <I>value</I> and <I>type</I>.
+   This function returns an instance of ill-structured-XMLLiteral when <I>value</I> does not comform to <I>type</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rdfdecl?"><A HREF="../RDF\Rdf.cl"><B>RDFdecl?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is RDFdecl opening up?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rdfdeclendp?"><A HREF="../RDF\Rdf.cl"><B>RDFdeclEndp?</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>Is RDFdecl closing?</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-element"><A HREF="../RDF\Rdf.cl"><B>parse-element</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>parses XMLDecl, or doctypedecl, or comment, or RDFdecl.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Producer & Consumer model for RDF parsing</H2>
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-rdf/xml-parser"><A HREF="../RDF\Rdf.cl"><B>make-rdf/xml-parser</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>makes a parser for RDF/XML.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="parse-rdf"><A HREF="../RDF\Rdf.cl"><B>parse-rdf</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>parses RDF/XML from <I>stream</I> and makes the internal representation.
+   This function returns a list of XML structures.
+   Note that *base-uri* and *default-namespace* are updated through 
+   content from <I>stream</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rdf-db-register"><A HREF="../RDF\Rdf.cl"><B>rdf-db-register</B></A></A> <I>name</I> <I>pos</I> <I>depth</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>hook for external database.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rdf-db-open-p"><A HREF="../RDF\Rdf.cl"><B>rdf-db-open-p</B></A></A> </TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>hook for external database.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+ Seiji Koide Sep-13-2008
+<P>
+<A NAME="RDF/RdfReader.cl"><HR>
+<H2>File <A HREF="../RDF\RdfReader.cl">RDF\RdfReader.cl</A></H2></A>
+<P>
+<H2> RDF/XML parser module</H2>
+<P>
+ IT Program Project in Japan: 
+    Building Operation-Support System for Large-scale System using IT
+<P>
+ This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
+ for the realization of the MEXT IT Program in Japan,
+<P>
+ Copyright © 2002,2004 by Galaxy Express Corporation, Japan.
+ Copyright 2008-2009 Seiji Koide.
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-form"><A HREF="../RDF\RdfReader.cl"><B>make-form</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD><I>x</I> may be a null list, string, number, literal, an instance of description, comment, or cons.
+This function returns a S-expression of <I>x</I>. If <I>x</I> is a comment, nil is returned.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="prop-form"><A HREF="../RDF\RdfReader.cl"><B>prop-form</B></A></A> <I>prop</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="description-form"><A HREF="../RDF\RdfReader.cl"><B>Description-form</B></A></A> <I>description</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>generates S-exression of <I>description</I>.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="%description-form"><A HREF="../RDF\RdfReader.cl"><B>%Description-form</B></A></A> <I>class</I> <I>attrs</I> <I>props</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>generates S-expression from <I>class</I>, <I>attrs</I>, and <I>props</I>.
+   <I>class</I> is a QName symbol that indicates type tag in RDF/XML.
+   <I>attrs</I> are a attribute/value list for attributes in RDF/XML.
+   <I>props</I> are a property/value list for properties in RDF/XML.</TD>
+</TR></TBODY></TABLE></DIV> 
+<H2> Producer-Consumer Model</H2>
+ It is much better to incrementaly process data in each small fragment from input stream, without 
+ waiting until whole contents of file are read. In this case, a fragment from input stream is 
+ parsed by a parser and the result is handed to an interpreter that processes parsed data. If two 
+ processes are concurrently cooperate through pipe-like data connection, we call such computation 
+ model producer-consumer model. In Unix, it will be implemented with two processes and pipe. 
+ In Scheme, it will be implemented as coroutine with continuation. Unfortunately, Common Lisp is
+ not equiped such a native model.Then, following <B>make-rdfxml-reader</B> and <B>make-accepter-for-rdf</B> 
+ create a producer and a consumer dedicated to parsing and interpreting RDF file.
+<P>
+<BR>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-rdfxml-reader"><A HREF="../RDF\RdfReader.cl"><B>make-rdfxml-reader</B></A></A> <I>stream</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function creates a creater of a producer in producer-consumer model.
+   The returned function must take a consumer.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Auto-epistemic Local Closed World Assumption</H2>
+<P>
+ Offically, Semantic Webs are regarded as an open world. Namely, it is regarded that you cannot know all 
+ knowledge about the world. The limited capability of agent cannot exhaust almost infinite WWW world.  
+ It is called Open World Assumption (OWA) in Sematic Webs. However, this assumption produces less results 
+ in reasoning, especially with respect to the existential value restriction of property or owl:someValuesFrom. 
+ Rigorous OWA does not infer anything on existential restrictions, even if you add a slot value that does 
+ not satisfy an existenitially restriction into the slot in OWL, because a satisfiable value may be defined at 
+ another place in WWW, where you do not know. 
+<P>
+ Such rigorous OWA is not enjoyable for ontologies that you and your colleague are building. So, we 
+ have introduced the notion of auto-epistemic Local Closed World Assumption. In this idea, an agent 
+ and you can introspectively check their knowledge within their boundaries and be able to intrinsically 
+ world the agent knows, the agent stands at locally closed world around it. This is called 
+ auto-epistemic Local Closed World Assumption. The global variable <B>*autoepistemic-local-closed-world*</B> 
+ is set true as default in SWCLOS, and the satisfiability for existential restriction for slot value 
+ is aggressively checked. Namely, if an existential restriction is not satisfied, 
+ the interpretation is not satisfied. If you want to completely regard Open World Assumption, 
+ set <B>*autoepistemic-local-closed-world*</B> false.
+<P>
+ In the Tableau Method of Description Logics, an instance that satisfies the existential restriction 
+ is virtually created and the satisfiability as a whole ontology is checked. We would like to claim 
+ it is basically the same as setting auto-epistemic Local Closed World Assumption. 
+<P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*autoepistemic-local-closed-world*"><A HREF="../RDF\RdfReader.cl"><B>*autoepistemic-local-closed-world*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>default value is true, namely the world is locally closed within knowledge of agent.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-accepter-for-rdf"><A HREF="../RDF\RdfReader.cl"><B>make-accepter-for-rdf</B></A></A> <I>accepter-fun</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This function creates a creater of a consumer function in producer-consumer model.
+   The returned function must take a producer.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*defined-resources*"><A HREF="../RDF\RdfReader.cl"><B>*defined-resources*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>accumulating list for defined resource with the line where the entity appeared.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*referenced-resources*"><A HREF="../RDF\RdfReader.cl"><B>*referenced-resources*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>accumulating list for referenced resource with the line where the entity appeared.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-rdf-file"><A HREF="../RDF\RdfReader.cl"><B>read-rdf-file</B></A></A> <I>accepter-fun</I> <I>&optional</I> <I>file</I> <I>code</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>reads an rdf <I>file</I> and hands parsed data to <I>accepter-fun</I>. If XMLDecl in <I>file</I> 
+   includes any code statement, it is set as character-code of this <I>file</I>. If no statement
+   for character-code in <I>file</I> and <I>code</I> supplied, then this <I>file</I> is parsed in <I>code</I>.
+   In parsing, QNames of referenced resources and defined resources are stored into 
+   <B>*referenced-resources*</B> and <B>*defined-resources*</B>. At the end this procedure, 
+   the set difference of <B>*referenced-resources*</B> and <B>*defined-resources*</B> is printed.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-rdf-from-string"><A HREF="../RDF\RdfReader.cl"><B>read-rdf-from-string</B></A></A> <I>accepter-fun</I> <I>rdf-string</I> <I>&optional</I> <I>code</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ask-user-rdf-file"><A HREF="../RDF\RdfReader.cl"><B>ask-user-rdf-file</B></A></A> </TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>asks an rdf file to user.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P>
+<H2> Reader Macro '<I></I></H2>
+<P>
+ This mechanism is similar to lisp symbol evaluation, but note that the form is not any 
+ symbol. So, the evaluation for such a form cannot be suppressed, even if you quoted it.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*standard-readtable*"><A HREF="../RDF\RdfReader.cl"><B>*standard-readtable*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="*standard-readtable*"><A HREF="../RDF\RdfReader.cl"><B>*standard-readtable*</B></A></A> </TH>
+<TD align="right">[variable]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-string"><A HREF="../RDF\RdfReader.cl"><B>read-string</B></A></A> <I>stream</I> <I>closech</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-lang-tag"><A HREF="../RDF\RdfReader.cl"><B>read-lang-tag</B></A></A> <I>stream</I> <I>firstchar</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="lang-tag-char-p"><A HREF="../RDF\RdfReader.cl"><B>lang-tag-char-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="sub-tag-char-p"><A HREF="../RDF\RdfReader.cl"><B>sub-tag-char-p</B></A></A> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="read-type-tag"><A HREF="../RDF\RdfReader.cl"><B>read-type-tag</B></A></A> <I>stream</I> <I>firstchar</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="single-underscore-reader"><A HREF="../RDF\RdfReader.cl"><B>single-underscore-reader</B></A></A> <I>stream</I> <I>char</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<A NAME="RDF/node.cl"><HR>
+<H2>File <A HREF="../RDF\node.cl">RDF\node.cl</A></H2></A>
+<H2> gnode & rdf-node</H2>
+ rdf-node will be a superclass of rdfs:Class. 
+ gnode will be a superclass of rdfs:Resource. 
+ gnode class is needed for registration of class-instance relation. 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="rdf-node"><A HREF="../RDF\node.cl"><B>rdf-node</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This metaclass is node class. This metaclass provides method class-direct-instances</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="gnode"><A HREF="../RDF\node.cl"><B>gnode</B></A></A> </TH>
+<TD align="right">[class]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>This class is needed to maintain mclasses.</TD>
+</TR></TBODY></TABLE></DIV> 
+ An element of direct-instances slot are initially stored by <I>make-instance(rdf-node)</I> method 
+ and maintained by <I>update-instance-for-different-class:after(gnode)</I> which is invoked by 
+ change-class.
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="make-instance:rdf-node"><A HREF="../RDF\node.cl"><B>make-instance</B></A></A> <I>(class
+                                                                                                                rdf-node)</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="shadowed-class-p"><A HREF="../RDF\node.cl"><B>shadowed-class-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns true if <I>x</I> is an instance of shadowed class.
+   shadowed-class is defined at RdfsObjects file.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="update-instance-for-different-class:gnode"><A HREF="../RDF\node.cl"><B>update-instance-for-different-class</B></A></A> <I>(previous
+                                                                                                                                                         gnode)</I> <I>current</I> <I>&rest</I> <I>initargs</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="node-p"><A HREF="../RDF\node.cl"><B>node-p</B></A></A> <I>x</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="bnode-p"><A HREF="../RDF\node.cl"><B>bnode-p</B></A></A> <I>node</I></TH>
+<TD align="right">[function]</TD></TR></TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="ground?:gnode"><A HREF="../RDF\node.cl"><B>ground?</B></A></A> <I>(node
+                                                                                                 gnode)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name:symbol"><A HREF="../RDF\node.cl"><B>name</B></A></A> <I>(node
+                                                                                            symbol)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD></TD>
+</TR></TBODY></TABLE></DIV> <P>
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="name:gnode"><A HREF="../RDF\node.cl"><B>name</B></A></A> <I>(node
+                                                                                           gnode)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>returns a QName or a nodeID of <I>node</I>, if it exists. Otherwise nil.</TD>
+</TR></TBODY></TABLE></DIV> 
+<P><TABLE width="100%" cellpadding="0" frame="below">
+<TR><TH align="left"><A NAME="setf:t"><A HREF="../RDF\node.cl"><B>setf</B></A></A> <I>symbol</I> <I>(node
+                                                                                                     gnode)</I></TH>
+<TD align="right">[method]</TD></TR>
+</TABLE>
+<DIV align="right"><TABLE width="90%" cellpadding="0"><TBODY><TR>
+<TD>exports <I>symbol</I> for QName.</TD>
+</TR></TBODY></TABLE></DIV> 
+<HR>
+<TABLE BORDER=4 CELLPADDING=4 CELLSPACING=0><tr>
+<td> <A HREF="http://www-kasm.nii.ac.jp/~koide/SWCLOS2-en.htm">SWCLOS Home</A>
+<td> <A HREF="../../contact.html">Authors</A>
+<td> <A HREF="overview.html">Lisp Code Overview</A>
+</TABLE>
+</BODY> 
+</HTML>
+ 
