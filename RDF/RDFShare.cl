@@ -177,7 +177,7 @@
               collect c
               do (setq c (getnext-char stream))))
     (putback-char c stream)
-    name))
+    (coerce name 'cl:string)))
 
 (defun read-quoted-NCName (stream)
   "reads a quoted NCName from <stream> and returns the NCName as string."

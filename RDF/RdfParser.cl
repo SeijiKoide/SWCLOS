@@ -777,6 +777,7 @@ from <value>. For example, if <datatype> is xsd:integer '010' as <value> is tran
    This function returns a list of XML structures.
    Note that *base-uri* and *default-namespace* are updated through 
    content from <stream>."
+  (flush-buf)
   (let ((results '()))
     (labels ((accept (element -C-)
                      (when element

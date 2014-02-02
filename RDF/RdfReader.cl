@@ -116,23 +116,24 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                          (net.uri:merge-uris (net.uri:parse-uri about) 
                                              (net.uri:parse-uri
                                               (net.uri:render-uri *base-uri* nil))))
-                        (*default-namespace* (set-uri-namedspace
-                                              (net.uri:merge-uris (net.uri:parse-uri about)
-                                                                  (net.uri:parse-uri
-                                                                   #+:mswindows
-                                                                   (let ((path (pathname *default-namespace*)))
-                                                                     (substitute
-                                                                      #\/ #\\
-                                                                      (namestring
-                                                                       (make-pathname :directory (pathname-directory path)
-                                                                                      :name (pathname-name path)
-                                                                                      :type (pathname-type path)))))
-                                                                   #-:mswindows
-                                                                   (namestring *default-namespace*))
-                                                                  )))
+                        (*default-namespace* (unless (typep *default-namespace* 'uri-namedspace)
+                                               (set-uri-namedspace
+                                                (net.uri:merge-uris (net.uri:parse-uri about)
+                                                                    (net.uri:parse-uri
+                                                                     #+:mswindows
+                                                                     (let ((path (pathname *default-namespace*)))
+                                                                       (substitute
+                                                                        #\/ #\\
+                                                                        (namestring
+                                                                         (make-pathname :directory (pathname-directory path)
+                                                                                        :name (pathname-name path)
+                                                                                        :type (pathname-type path)))))
+                                                                     #-:mswindows
+                                                                     (namestring *default-namespace*))
+                                                                    ))))
                         (t (net.uri:parse-uri about))))
       (remf attrs 'rdf:about))
-    ;(format t "~%about:~S" about)
+    (format t "~%about:~S" about)
     (when id
       (setq id (net.uri:copy-uri (net.uri:parse-uri
                                   (net.uri:render-uri
@@ -157,7 +158,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                   (t (list prop val)))))
     (when lang 
       (setq attrs (cons `(xml:lang ,lang) attrs)))
-    ;(format t "~%attrs:~S" attrs)
+    (format t "~%attrs:~S" attrs)
     ;(when (and (stringp about) (zerop (length about)))
     ;  (setq about *base-uri*))
     (cons class (cond (about (cons `(rdf:about ,about) (append attrs slots)))
