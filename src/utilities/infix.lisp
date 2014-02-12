@@ -1,4 +1,4 @@
-;;;-*- mode: common-lisp; syntax: common-lisp; package: gx; base: 10 -*-
+;;; -*- Mode: common-lisp; syntax: common-lisp; package: gx; base: 10 -*-
 ;;;
 ;;; Infix to Prefix transformation module
 ;;;
@@ -9,14 +9,10 @@
 ;;; -------
 ;;; 2008.03.25    File created.
 
-(defpackage :swp
-  (:shadowing-import-from :gx "type-of" "subtypep" "typep")
-  (:shadowing-import-from :cl "first" "rest" "nil" "member")
-  (:use :common-lisp :gx)
+(cl:defpackage :gx
+  (:shadow nil first rest member type typep type-of subtypep)
+  (:use :common-lisp)
   )
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  ) ; end of eval-when
 
 (in-package :gx)
 
