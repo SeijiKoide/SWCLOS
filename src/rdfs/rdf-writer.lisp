@@ -20,17 +20,6 @@
 ;;
 ;;; ==================================================================================
 
-(provide :rdfwriter)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :gxutils)
-  (require :gxforwardref)
-  )
-
-(defpackage :gx
-  (:export write-resource write-xml *force-recursive-p*
-           write-rdf-all-entities-in write-xml-all-entities-in))
-
 (in-package :gx)
 
 ;;;

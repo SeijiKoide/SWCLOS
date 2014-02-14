@@ -47,22 +47,6 @@
 ;;; inherited to rdfs:Class and rdfsClass. So, subclasses of rdfs:Resource and rdfs:Class, 
 ;;; including rdfs:Class itself can hold their instances.
 
-(cl:provide :rdfboot)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  (require :slotdef)
-  (require :rdfnode)
-) ; end of eval-when
-
-(defpackage :gx
-  (:export |rdfs:Resource| metaRDFSclass rdfsClass *reify-p*
-           nodeID? nodeID2symbol mclasses)
-  (:export property?
-           subPropertyOf)
-  (:export typep class-direct-instances)
-  )
-
 (in-package :gx)
 
 ;;;

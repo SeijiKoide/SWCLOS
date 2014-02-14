@@ -9,19 +9,6 @@
 ;; 2009.09.04    name RDFSclass is changed to _rdfsClass.
 ;; Nov. 2 2007    file created
 
-(provide :gxforwardref)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :gxtype)
-  (require :rdfsobjects)
-  (require :domainrange)
-  (require :rdfskernel)
-  ) ; end of eval-when
-
-(defpackage :gx
-  (:shadow subtypep )
-  (:export ))
-
 (in-package :gx)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

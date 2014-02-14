@@ -17,16 +17,6 @@
 ;; 2008.08.12    Revised based on http://www.w3.org/TR/2004/REC-rdf-syntax-grammar-20040210/
 ;; 2004.05.09    File created and contents are copied from Rdf.cl
 
-(cl:provide :rdfreader)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :rdfparser)
-  )
-
-(cl:defpackage :gx
-  (:export read-rdf-file )
-  )
-
 (in-package :gx)
 
 ;;

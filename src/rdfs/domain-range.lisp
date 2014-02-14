@@ -17,18 +17,6 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :domainrange)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  (require :namespace)
-  (require :rdfboot)
-) ; end of eval-when
-
-(defpackage :gx
-  (:export domain-value get-domain collect-domains domainp rangep range-value get-range collect-ranges
-           *autoepistemic-local-closed-world*))
-
 (in-package :gx)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)

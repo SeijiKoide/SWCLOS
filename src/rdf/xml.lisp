@@ -28,12 +28,6 @@
 ;; 2002.09.04    File created
 ;;; ==================================================================================
 
-(cl:provide :xsd)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  ) ; end of eval-when
-
 (in-package :xsd)
 
 ;;;

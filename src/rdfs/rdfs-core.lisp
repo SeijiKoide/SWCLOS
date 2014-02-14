@@ -17,20 +17,7 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :rdfscore)
-
-(cl:defpackage :gx
-  (:export addObject addForm addInstance addClass defResource defProperty defConcept 
-           defIndividual subproperty-p addRdfXml)
-  )
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :utils)
-  (require :swclospackages)
-  (require :rdfshare)
-  (require :rdfsobjects)
-  (require :domainrange)
-  (require :rdfskernel)
   (copy-readtable rdf::*standard-readtable* cl:*readtable*) ; after RdfsKernel See it.
 ) ; end of eval-when
 

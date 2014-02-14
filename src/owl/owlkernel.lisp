@@ -55,35 +55,7 @@
 ;;; classes in OWL (the extension of owl:Class) inherit the slots of rdf:Resource, rdfs:label, 
 ;;; rdfs:comment, rdf:type, etc. from rdfs:Resource.
 
-(cl:provide :owlkernel)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :rdfscore)
-  )
-
-(defpackage :gx
-  (:use :common-lisp)
-  (:export owl-same-p disjoint-p  
-           owl-class-p owl-thing-p owl-oneof-p
-           ))
-
 (in-package :gx)
-
-(eval-when (:load-toplevel :execute)
-  (defparameter *owl-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (list :absolute "allegro-projects" "SWCLOS" "OWL")))
-  (setf (logical-pathname-translations "OWL")
-    `(("*.*"
-       ,(make-pathname
-         :host (pathname-host *owl-directory*)
-         :device (pathname-device *owl-directory*)
-         :directory (pathname-directory *owl-directory*)
-         :name :wild
-         :type :wild
-         ))))
-  )
 
 ;;;
 ;;;; OWL Property Slot Definition
@@ -842,7 +814,7 @@ and instance of owl:Class."))
 
 (eval-when (:load-toplevel)
   (let ((*default-pathname-defaults* *load-pathname*))
-    (read-rdf-file #'addRdfXml "OWL:OWL.rdf")))
+    (read-rdf-file #'addRdfXml "OWL:owl.rdf")))
 ;;; ==================================================================================
 ;;;
 ;;; Note that 

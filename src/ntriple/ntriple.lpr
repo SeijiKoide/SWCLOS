@@ -3,9 +3,9 @@
 (in-package :cg-user)
 
 (define-project :name :NTriple
-  :modules (list (make-instance 'module :name "ntparser")
+  :modules (list (make-instance 'module :name "nt-parser")
                  (make-instance 'module :name "ntriple")
-                 (make-instance 'module :name "ntwriter"))
+                 (make-instance 'module :name "nt-writer"))
   :projects nil
   :libraries nil
   :distributed-files nil

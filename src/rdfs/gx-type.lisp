@@ -17,26 +17,6 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :gxtype)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  (require :namespace)
-  (require :rdfboot)
-  ) ; end of eval-when
-
-(cl:defpackage :gx
-  (:shadow typep subtypep type-of)
-  (:export rsc-object-p rdf-class-p rdf-metaclass-p strict-class-p rdf-instance-p datatype-p 
-           object? class? metaclass? datatype? resource?
-           typep subtypep rdf-subtypep subsumed-p type-of rdf-equalp value-of 
-           subproperty name
-           collect-all-subs disjoint-p
-           most-specific-concepts
-           *nonUNA* *autoepistemic-local-closed-world*
-           owl-same-p owl-thing-p
-           most-abstract-concepts))
-
 (in-package :gx)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)

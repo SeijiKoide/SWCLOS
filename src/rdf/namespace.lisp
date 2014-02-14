@@ -21,23 +21,6 @@
 ;; 2007.12.18    RdfShare is separated from Rdf module in order to share routines with RDFGate program
 ;;; ==================================================================================
 
-(cl:provide :namespace)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (cl:require :swclospackages)
-  (cl:require :iri)
-  ) ; end of eval-when
-
-(cl:defpackage :gx
-  (:shadow parse-uri type typep value typep)
-  (:import-from :net.uri render-uri uri-fragment copy-uri uri-scheme)
-  (:use :common-lisp :net.uri)
-  (:export iri iri-p iri-value set-uri-namedspace set-uri-namedspace-from-pkg get-uri-namedspace
-           uri-namedspace uri2package uri2env uri2symbol irregular-name&pkg export-as-QName 
-           *base-uri* *default-namespace* symbol2uri name-ontology nodeID? nodeID2symbol 
-           *uri2symbol-name-mapping-fun* *uri2symbol-package-mapping-fun*)
-  )
-
 (in-package :gx)
 
 ;;;

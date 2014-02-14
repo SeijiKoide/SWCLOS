@@ -13,19 +13,6 @@
 ;;; Copyright (c) 2007-2011 Seiji Koide
 ;;; ==================================================================================
 
-(cl:provide :rdfsobjects)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  (require :namespace)
-  (require :rdfboot)
-  (require :gxtype)
-) ; end of eval-when
-
-(defpackage :gx
-  (:export subproperty superproperty-of 
-           @))
-
 (in-package :gx)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)

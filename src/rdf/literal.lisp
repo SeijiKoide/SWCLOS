@@ -7,19 +7,6 @@
 ;; 2010.12.08    This file is copied from Literal in SWCLOS.
 ;;; ==================================================================================
 
-(cl:provide :rdfliteral)
-
-(cl:eval-when (:execute :load-toplevel :compile-toplevel)
-  (cl:require :swclospackages)
-  (cl:require :xsd)
-  ) ; end of eval-when
-
-(cl:defpackage :gx
-  (:shadow uri )
-  (:use :common-lisp)
-  (:export 
-   ))
-
 (in-package :gx)
 
 ;;;

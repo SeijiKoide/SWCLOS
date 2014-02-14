@@ -13,30 +13,6 @@
 ;; -------
 ;;
 
-(cl:provide :gxutils)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :rdfparser)
-  (require :rdfscore)
-  )
-
-(defpackage :gx
-  (:export print-all-entity-uris do-all-entity-uris list-all-entity-uris
-           print-all-entity-iris do-all-entity-iris list-all-entity-iris
-           list-all-uri-namedspaces named-p anonymous-p nodeID-p dph dah get-form list-all-statements get-slots)
-  (:export -> collect-direct-instances-of collect-all-instances-of collect-all-extensions-of
-           all-instances-generator all-extensions-of-generator ; by smh
-           collect-all-supers collect-all-subtypes
-           all-concept-names all-role-names all-individuals
-           get-value put-value list-all-entities-in list-all-resources
-           *autoepistemic-local-closed-world*)
-  )
-(defpackage :gx-user
-  (:shadow change-class subject predicate object type)
-  (:shadowing-import-from :gx type-of typep subtypep)
-  (:use :common-lisp :gx)
-  (:documentation "http://www.galaxy-express.co.jp/semweb/gx-user#"))
-
 (in-package :gx)
 
 ;;;

@@ -17,16 +17,6 @@
 ;; 2008.11.05    File created and slot definition parts are moved here from RDFBoot.
 ;;; ==================================================================================
 
-(cl:provide :slotdef)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-) ; end of eval-when
-
-(defpackage :gx
-  (:export collect-prop-names-from)
-  )
-
 (in-package :gx)
 
 ;;;; Slot definitions for SWCLOS

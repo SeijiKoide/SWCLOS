@@ -12,17 +12,6 @@
 ;; 2009.05.09    File created.
 ;;; ==================================================================================
 
-(cl:provide :rdferror)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :utils)
-  (require :swclospackages)
-) ; end of eval-when
-
-(defpackage :gx
-  (:export quiet-warning-handler with-quiet-warnings
-           ))
-
 (in-package :gx)
 
 ;; These coding is from ANSI Common Lisp manual.

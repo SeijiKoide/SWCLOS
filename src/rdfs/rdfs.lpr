@@ -3,17 +3,17 @@
 (in-package :cg-user)
 
 (define-project :name :RDFS
-  :modules (list (make-instance 'module :name "SlotDef")
-                 (make-instance 'module :name "RDFboot")
-                 (make-instance 'module :name "DomainRange")
-                 (make-instance 'module :name "RdfsKernel")
-                 (make-instance 'module :name "GxType")
-                 (make-instance 'module :name "RdfsObjects")
-                 (make-instance 'module :name "GxForwardRef")
-                 (make-instance 'module :name "RdfsCore")
-                 (make-instance 'module :name "gxutils")
-                 (make-instance 'module :name "rdfwriter")
-                 (make-instance 'module :name "turtleparser"))
+  :modules (list (make-instance 'module :name "slot-def")
+                 (make-instance 'module :name "rdf-boot")
+                 (make-instance 'module :name "domain-range")
+                 (make-instance 'module :name "rdfs-kernel")
+                 (make-instance 'module :name "gx-type")
+                 (make-instance 'module :name "rdfs-objects")
+                 (make-instance 'module :name "gx-forward-ref")
+                 (make-instance 'module :name "rdfs-core")
+                 (make-instance 'module :name "gx-utils")
+                 (make-instance 'module :name "rdf-writer")
+                 (make-instance 'module :name "turtle-parser"))
   :projects (list (make-instance 'project-module :name "../RDF/RDF" :show-modules t))
   :libraries nil
   :editable-files nil

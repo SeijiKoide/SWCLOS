@@ -15,16 +15,6 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :ntriple)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :rdfscore)
-  )
-
-(defpackage :gx
-  (:export defTriple addTriple /. ./ get-triple
-           superclasses-of subclasses-of))
-
 (in-package :gx)
 
 ;;;

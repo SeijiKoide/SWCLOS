@@ -3,17 +3,17 @@
 (in-package :cg-user)
 
 (define-project :name :RDF
-  :modules (list (make-instance 'module :name "Utils")
-                 (make-instance 'module :name "RdfIO")
-                 (make-instance 'module :name "IRI")
+  :modules (list (make-instance 'module :name "utils")
+                 (make-instance 'module :name "rdf-io")
+                 (make-instance 'module :name "iri")
                  (make-instance 'module :name "packages")
-                 (make-instance 'module :name "Xml")
-                 (make-instance 'module :name "rdferror")
-                 (make-instance 'module :name "NameSpace")
-                 (make-instance 'module :name "Literal")
-                 (make-instance 'module :name "RDFShare")
-                 (make-instance 'module :name "RdfParser")
-                 (make-instance 'module :name "RdfReader")
+                 (make-instance 'module :name "xml")
+                 (make-instance 'module :name "rdf-error")
+                 (make-instance 'module :name "namespace")
+                 (make-instance 'module :name "literal")
+                 (make-instance 'module :name "rdf-share")
+                 (make-instance 'module :name "rdf-parser")
+                 (make-instance 'module :name "rdf-reader")
                  (make-instance 'module :name "node"))
   :projects nil
   :libraries nil

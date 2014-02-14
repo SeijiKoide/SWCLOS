@@ -7,10 +7,10 @@
                  (make-instance 'module :name "owlkernel")
                  (make-instance 'module :name "owlsamedifferent")
                  (make-instance 'module :name "owlequivalentdisjoint")
-                 (make-instance 'module :name "NNF")
+                 (make-instance 'module :name "nnf")
                  (make-instance 'module :name "tunify")
                  (make-instance 'module :name "subsume")
-                 (make-instance 'module :name "OWL"))
+                 (make-instance 'module :name "owl"))
   :projects (list (make-instance 'project-module :name "../rdfs/rdfs" :show-modules nil))
   :libraries nil
   :editable-files nil

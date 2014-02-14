@@ -20,25 +20,6 @@
 ;; 2007.12.18    RdfShare is separated from Rdf module in order to share routines with RDFGate program
 ;;; ==================================================================================
 
-(cl:provide :rdfshare)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  (require :rdfio)
-  (require ::namespace)
-  ) ; end of eval-when
-
-(cl:defpackage :gx
-  (:shadow uri parse-uri type typep value)
-  (:import-from :net.uri render-uri uri-fragment copy-uri)
-  (:use :common-lisp :net.uri)
-  (:export *entity-decls* NameStartChar-p NameChar-p NCNameStartChar-p NCNameChar-p
-           make-unique-nodeID
-           parse-iri read-Eq
-           get-uri-namedspace uri-namedspace
-           comment-p)
-  )
-
 (in-package :gx)
 
 (declaim (inline %read-Name %read-NCName %read-Nmtoken %read-EncName 

@@ -34,22 +34,6 @@
 ;; 2002.08.15    File created
 ;;; ==================================================================================
 
-(cl:provide :rdfskernel)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :utils)
-  (require :swclospackages)
-  (require :namespace)
-  (require :rdfboot)
-  ;(require :gxtype)
-  ;(require :rdfsobjects)
-  ;(require :domainrange)
-) ; end of eval-when
-
-(defpackage :gx
-  (:export subproperty 
-           ))
-
 (in-package :gx)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)

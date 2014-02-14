@@ -16,18 +16,7 @@
 ;; -------
 ;; 2010.11.15    File created and error definitions are moved from OWL module
 
-(cl:provide :owlerror)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :rdfscore)
-  )
-
-(defpackage :gx
-  (:use :common-lisp)
-  (:export ))
-
 (in-package :gx)
-
 
 ;;
 ;; Unsatisfiable Error in OWL
