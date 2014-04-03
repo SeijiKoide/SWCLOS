@@ -133,7 +133,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                                                     ))))
                         (t (net.uri:parse-uri about))))
       (remf attrs 'rdf:about))
-    (format t "~%about:~S" about)
+    ;(format t "~%about:~S" about)
     (when id
       (setq id (net.uri:copy-uri (net.uri:parse-uri
                                   (net.uri:render-uri
@@ -158,7 +158,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                   (t (list prop val)))))
     (when lang 
       (setq attrs (cons `(xml:lang ,lang) attrs)))
-    (format t "~%attrs:~S" attrs)
+    ;(format t "~%attrs:~S" attrs)
     ;(when (and (stringp about) (zerop (length about)))
     ;  (setq about *base-uri*))
     (cons class (cond (about (cons `(rdf:about ,about) (append attrs slots)))

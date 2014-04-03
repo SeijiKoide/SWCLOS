@@ -171,7 +171,7 @@
         (t (expand-def '|rdfs:Resource| name args))))
 
 (defun addRdfXml (description)
-  (format t "~%~S" description)
+  ;;(format t "~%~S" description)
   (cond ((Description-p description)
          (let* ((form (Description-form description))
                 (about (second (assoc 'rdf:about (cdr form))))
@@ -472,7 +472,7 @@
                              (change-class (symbol-value name) range))
                             (t (symbol-value name))))
                      ((not (object? name))
-                      (error "Check it!")
+                      ;;(error "Check it!")
                       (warn "Range entailX3 by ~S: ~S rdf:type ~S." role name (name range))
                       (addObject range `((:name ,name))))
                      ((not (cl:typep (symbol-value name) range))
@@ -1109,12 +1109,14 @@
       (cond ((and (null slots) (eq (car classes) (class-of obj)))
              (ensure-multiple-classes classes obj))
             (obj                                                   ; redefine
-             ;(format t "~%Redefining ~S with classes:~S~%    slots:~S in addInstance" name classes slots)
+             (format t "~%Redefining ~S with classes:~S~%    slots:~S in addInstance" name classes slots)
              ;; If name is a blank node ID, definitely it is bound to an default object.
              ;; Therefore the control always falls here, and the object is anonymous.
              (let ((mclasses (substitute rdfs:Resource |rdfs:Resource| (mclasses obj))))
                (cond ((every #'(lambda (cls) (cl:typep obj cls)) classes)
-                      (when initargs (apply #'reinitialize-instance obj initargs))
+                      (when initargs
+                        (format t "~%Reinitializing ~S with ~S" obj initargs)
+                        (apply #'reinitialize-instance obj initargs))
                       obj)
                      ((null (cdr classes)) ; different single class, maybe forward ref to regular def
                       (let ((newcls (car classes)))
@@ -1123,9 +1125,11 @@
                               ((every #'(lambda (old) (cl:subtypep old newcls)) mclasses)
                                 ) ; nothing done
                               ((every #'(lambda (old) (cl:subtypep newcls old)) mclasses)
+                               (format t "~%Changing a class of ~S to ~S." obj newcls)
                                (apply #'change-class obj newcls initargs))
                               (t (let ((shadow (make-shadow (class-of obj)
                                                             (most-specific-concepts (append mclasses classes)))))
+                                   (format t "~%Shadowed class ~S from ~S." shadow (class-of obj))
                                    (apply #'change-class obj shadow initargs))
                                  )))
                       (when initargs (apply #'reinitialize-instance obj initargs))

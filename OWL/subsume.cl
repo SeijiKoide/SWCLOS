@@ -183,95 +183,104 @@
               (remove-if-not #'(lambda (x) (cl:typep x (symbol-value 'owl:cardinalityRestriction))) drestrs)
               (remove-if #'(lambda (x) (cl:typep x (symbol-value 'owl:cardinalityRestriction))) drestrs))))))
 (defun %intersection-restriction-subsumed-p (cslots dprops dcards dcnsts)
-  (loop for prop in dprops
-      always 
-        (flet ((onproperty-p (x) (eq prop (name (onproperty-of x))))
-               (get-maxcard
-                (x)
-                (and x
-                     (or (and (slot-boundp x 'owl:cardinality) (slot-value x 'owl:cardinality))
-                         (and (slot-boundp x 'owl:maxCardinality) (slot-value x 'owl:maxCardinality)))))
-               (get-mincard
-                (x)
-                (and x
-                     (or (and (slot-boundp x 'owl:cardinality) (slot-value x 'owl:cardinality))
-                         (and (slot-boundp x 'owl:minCardinality) (slot-value x 'owl:minCardinality))))))
-          (let ((dcnst (remove-if-not #'onproperty-p dcnsts))
-                (dcard (remove-if-not #'onproperty-p dcards))
-                (cslot (find prop cslots :key #'mop:slot-definition-name))
-                (var (new-variable "gx"))
-                (val2 t))
-            ;(format t "~%dcnst:~S~%dcard:~S~%cslot:~S" dcnst dcard cslot)
-            (cond ((null cslot)
-                   (cond ((null dcard)
-                          (assert (length=1 dcnst))
-                          (setq dcnst (car dcnst))
-                          (etypecase dcnst
-                            (owl:someValuesFromRestriction
-                             (if *autoepistemic-local-closed-world*
-                                 (return-from %intersection-restriction-subsumed-p (values nil t))
-                               (setq val2 (or val2 t))))
-                            (owl:hasValueRestriction
-                             (if *autoepistemic-local-closed-world*
-                                 (return-from %intersection-restriction-subsumed-p (values nil t))
-                               (setq val2 (or val2 t))))
-                            (owl:allValuesFromRestriction (setq val2 (or val2 t)))))
-                         ((length=1 dcard)
-                          (error "Not Yet!")
-                          (setq dcard (car dcard))
-                          (let ((dmax (get-maxcard dcard))
-                                (dmin (get-mincard dcard)))
-                            (let ((cmodels (generate-models-for-susumee-from-slot var prop nil nil nil nil)))
-                              ;(format t "~%cmodels:~S" cmodels)
-                              (when dmax
-                                (setq cmodels
-                                      (loop for model in cmodels
-                                          when (satisfy-max-cardinality dmax model)
-                                          collect model)))
-                              (when dmin
-                                (setq cmodels
-                                      (loop for model in cmodels
-                                          when (satisfy-min-cardinality dmin model)
-                                          collect model)))
-                              (let ((dmodels (create-models-for-subsumer-from-restrictions var prop dmax dmin dcnst nil)))
-                                ;(format t "~%dmodels:~S" dmodels)
-                                (every #'(lambda (dmodel)
-                                           (some #'(lambda (cmodel) (%satisfy-model cmodel dmax dmin dmodel)) cmodels))
-                                       dmodels)))))))
-                  (t (assert (or (null dcard) (length=1 dcard)))
-                     (setq dcard (car dcard))
-                     (let ((cmax (slot-definition-maxcardinality cslot))
-                           (cmin (slot-definition-mincardinality cslot))
-                           (dmax (get-maxcard dcard))
-                           (dmin (get-mincard dcard)))
-                       ;(format t "~%dmax:~S~%dmin:~S" dmax dmin)
-                       (when (and dmax (cl:typep dmax rdf:XMLLiteral))
-                         (setq dmax (value-of dmax)))
-                       (when (and dmin (cl:typep dmin rdf:XMLLiteral))
-                         (setq dmin (value-of dmin)))
-                       (when (and cmax dmax (> cmax dmax))
-                         (return-from %intersection-restriction-subsumed-p (values nil t)))
-                       (when (and cmin dmin (< cmin dmin))
-                         (return-from %intersection-restriction-subsumed-p (values nil t)))
-                       (let ((cmodels (generate-models-for-susumee-from-slot var prop cmax cmin cslot nil)))
-                         ;(format t "~%cmodels:~S" cmodels)
-                         (when dmax
-                           (setq cmodels
-                                 (loop for model in cmodels
-                                     when (satisfy-max-cardinality dmax model)
-                                     collect model)))
-                         (when dmin
-                           (setq cmodels
-                                 (loop for model in cmodels
-                                     when (satisfy-min-cardinality dmin model)
-                                     collect model)))
-                         (let ((dmodels (create-models-for-subsumer-from-restrictions var prop dmax dmin dcnst nil)))
-                           ;(format t "~%dmodels:~S" dmodels)
-                           (every #'(lambda (dmodel)
-                                      (some #'(lambda (cmodel) (%satisfy-model cmodel dmax dmin dmodel))
-                                            cmodels))
-                                  dmodels))))))))))
-
+  "cslots are effective slots for c's instances, dprops are property names for restrictions as intersection at d.
+   dcars are cardinality restrictions on d's properties. dcnsts are non-cardinality restrictions on d's properties."
+  (let ((val2 nil))
+    (values 
+     (loop for prop in dprops
+         always 
+           (flet ((onproperty-p (x) (eq prop (name (onproperty-of x))))
+                  (get-maxcard
+                   (x)
+                   (and x
+                        (or (and (slot-boundp x 'owl:cardinality) (slot-value x 'owl:cardinality))
+                            (and (slot-boundp x 'owl:maxCardinality) (slot-value x 'owl:maxCardinality)))))
+                  (get-mincard
+                   (x)
+                   (and x
+                        (or (and (slot-boundp x 'owl:cardinality) (slot-value x 'owl:cardinality))
+                            (and (slot-boundp x 'owl:minCardinality) (slot-value x 'owl:minCardinality))))))
+             (let ((dcnst (remove-if-not #'onproperty-p dcnsts))
+                   (dcard (remove-if-not #'onproperty-p dcards))
+                   (cslot (find prop cslots :key #'mop:slot-definition-name :test #'(lambda (p1 p2) (or (equal p1 p2))))) ; or subproperty? but not yet
+                   (var (new-variable "gx")))
+               (format t "~%For property ~S in D," prop)
+               (format t "~%  cslot:~S ~%  dcnst:~S~%  dcard:~S" cslot dcnst dcard )
+               (cond ((null cslot)
+                      (cond ((null dcard)
+                             (assert (length=1 dcnst))
+                             (setq dcnst (car dcnst))
+                             (etypecase dcnst
+                               (owl:someValuesFromRestriction
+                                (format t "~%someValuesFromRestriction ~S in autoepistemic local closed world ~S" dcnst *autoepistemic-local-closed-world*)
+                                (if *autoepistemic-local-closed-world*
+                                    (return-from %intersection-restriction-subsumed-p (values nil t))
+                                  (setq val2 (or val2 t))))
+                               (owl:hasValueRestriction
+                                (if *autoepistemic-local-closed-world*
+                                    (return-from %intersection-restriction-subsumed-p (values nil t))
+                                  (setq val2 (or val2 t))))
+                               (owl:allValuesFromRestriction (setq val2 (or val2 t)))))
+                            ((length=1 dcard)
+                             (error "Not Yet!")
+                             (setq dcard (car dcard))
+                             (let ((dmax (get-maxcard dcard))
+                                   (dmin (get-mincard dcard)))
+                               (let ((cmodels (generate-models-for-susumee-from-slot var prop nil nil nil nil)))
+                                 ;(format t "~%cmodels:~S" cmodels)
+                                 (when dmax
+                                   (setq cmodels
+                                         (loop for model in cmodels
+                                             when (satisfy-max-cardinality dmax model)
+                                             collect model)))
+                                 (when dmin
+                                   (setq cmodels
+                                         (loop for model in cmodels
+                                             when (satisfy-min-cardinality dmin model)
+                                             collect model)))
+                                 (let ((dmodels (create-models-for-subsumer-from-restrictions var prop dmax dmin dcnst nil)))
+                                   ;(format t "~%dmodels:~S" dmodels)
+                                   (every #'(lambda (dmodel)
+                                              (some #'(lambda (cmodel) (%satisfy-model cmodel dmax dmin dmodel)) cmodels))
+                                          dmodels)))))))
+                     (t (assert (or (null dcard) (length=1 dcard)))
+                        (setq dcard (car dcard))
+                        (let ((cmax (slot-definition-maxcardinality cslot))
+                              (cmin (slot-definition-mincardinality cslot))
+                              (dmax (get-maxcard dcard))
+                              (dmin (get-mincard dcard)))
+                          ;(format t "~%dmax:~S~%dmin:~S" dmax dmin)
+                          (when (and dmax (cl:typep dmax rdf:XMLLiteral))
+                            (setq dmax (value-of dmax)))
+                          (when (and dmin (cl:typep dmin rdf:XMLLiteral))
+                            (setq dmin (value-of dmin)))
+                          (when (and cmax dmax (> cmax dmax))
+                            (return-from %intersection-restriction-subsumed-p (values nil t)))
+                          (when (and cmin dmin (< cmin dmin))
+                            (return-from %intersection-restriction-subsumed-p (values nil t)))
+                          (let ((cmodels (generate-models-for-susumee-from-slot var prop cmax cmin cslot nil)))
+                            ;(format t "~%cmodels:~S" cmodels)
+                            (when dmax
+                              (setq cmodels
+                                    (loop for model in cmodels
+                                        when (satisfy-max-cardinality dmax model)
+                                        collect model)))
+                            (when dmin
+                              (setq cmodels
+                                    (loop for model in cmodels
+                                        when (satisfy-min-cardinality dmin model)
+                                        collect model)))
+                            (let ((dmodels (create-models-for-subsumer-from-restrictions var prop dmax dmin dcnst nil)))
+                              ;(format t "~%dmodels:~S" dmodels)
+                              (unless
+                                  (every #'(lambda (dmodel)
+                                             (some #'(lambda (cmodel) (%satisfy-model cmodel dmax dmin dmodel))
+                                                   cmodels))
+                                         dmodels)
+                                (return-from %intersection-restriction-subsumed-p (values nil t))))
+                            (setq val2 (or val2 t)))))))))
+     val2)))
+  
 (defun satisfy-max-cardinality (dmax model)
   (format t "~%satisfy-max-cardinality(~S ~S)" dmax model)
   (destructuring-bind (bindings cbindings . roles) model

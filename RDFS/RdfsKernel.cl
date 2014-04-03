@@ -853,6 +853,7 @@ Checks the residual mclasses of all instances of <class>."
 (defmethod change-class ((instance rdfs:Resource) (new-class rdfs:Class) &rest initargs)
   (let ((old-class (class-of instance)))
     (when (eq instance rdfs:Class) (error "Bingo, Check it!"))
+    ;(when (eq old-class new-class) (return-from change-class instance))
     ;(format t "~%Changing class of ~S to ~S~%   with ~S" instance new-class initargs)
     (cond ((and (shadowed-class-p old-class) (not (shadowed-class-p new-class)))
            ;(format t "~%Changing shadowed class of ~S to ~S~%   with initargs:~S" instance new-class initargs)

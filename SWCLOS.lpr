@@ -1,4 +1,4 @@
-;; -*- lisp-version: "9.0 [64-bit Windows *SMP*] (Feb 14, 2013 13:32)"; cg: "9.0"; -*-
+;; -*- lisp-version: "9.0 [64-bit Windows *SMP*] (Mar 30, 2014 8:11)"; cg: "9.0"; -*-
 
 (in-package :cg-user)
 
@@ -6,7 +6,7 @@
   :modules nil
   :projects (list (make-instance 'project-module :name "OWL/OWL" :show-modules t)
                   (make-instance 'project-module :name "NTriple/NTriple" :show-modules
-                                 nil))
+                                 t))
   :libraries nil
   :editable-files nil
   :distributed-files nil
