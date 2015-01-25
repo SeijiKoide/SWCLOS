@@ -73,7 +73,7 @@
   (defparameter *owl-directory*
     (make-pathname :host (pathname-host *load-truename*)
                    :device (pathname-device *load-truename*)
-                   :directory (list :absolute "allegro-projects" "SWCLOS" "OWL")))
+                   :directory (pathname-directory *load-truename*)))
   (setf (logical-pathname-translations "OWL")
     `(("*.*"
        ,(make-pathname
