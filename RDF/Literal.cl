@@ -11,7 +11,7 @@
 
 (cl:eval-when (:execute :load-toplevel :compile-toplevel)
   (cl:require :swclospackages)
-  (cl:require :xsd)
+
   ) ; end of eval-when
 
 (cl:defpackage :gx

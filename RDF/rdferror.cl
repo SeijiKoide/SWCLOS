@@ -15,7 +15,7 @@
 (cl:provide :rdferror)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :utils)
+  (require :swclosutils)
   (require :swclospackages)
 ) ; end of eval-when
 

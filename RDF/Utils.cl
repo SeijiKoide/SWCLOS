@@ -1,10 +1,10 @@
 ;;;-*- Mode: common-lisp; syntax: common-lisp; package: gx; base: 10 -*-
 ;;;
-;;;; Utilities for SWCLOS and Rbase from AIMA and others
+;;;; Utilities for SWCLOS from AIMA and others
 ;;; Utilities in this file are taken from AIMA and redefined in package gx.
 ;;; ==================================================================================
 
-(cl:provide :utils)
+(cl:provide :swclosutils)
 
 (cl:defpackage :gx
   (:use :common-lisp)

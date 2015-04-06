@@ -25,7 +25,7 @@
   )
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :utils)
+  (require :swclosutils)
   (require :swclospackages)
   (require :rdfshare)
   (require :rdfsobjects)

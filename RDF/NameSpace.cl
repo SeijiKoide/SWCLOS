@@ -9,10 +9,11 @@
 ;;;
 ;;; Copyright (c) 2002, 2004 by Galaxy Express Corporation
 ;;;
-;;; Copyright (c) 2007, 2008, 2010 Seiji Koide
+;;; Copyright (c) 2007, 2008, 2010, 2014 Seiji Koide
 ;;;
 ;; History
 ;; -------
+;; 2014.05.21    Find-package-from-namespace is defined.
 ;; 2009.09.10    Some functions are rearanged for turtle.
 ;; 2008.12.11    Structure resource is introduced.
 ;; 2008.09.11    This file is created and the content is moved from RdfShare module.
@@ -35,7 +36,8 @@
   (:export iri iri-p iri-value set-uri-namedspace set-uri-namedspace-from-pkg get-uri-namedspace
            uri-namedspace uri2package uri2env uri2symbol irregular-name&pkg export-as-QName 
            *base-uri* *default-namespace* symbol2uri name-ontology nodeID? nodeID2symbol 
-           *uri2symbol-name-mapping-fun* *uri2symbol-package-mapping-fun*)
+           *uri2symbol-name-mapping-fun* *uri2symbol-package-mapping-fun*
+           find-package-from-namespace)
   )
 
 (in-package :gx)
@@ -272,7 +274,6 @@ package slot and uri to symbol name mapping environment slot.")
     "asks to user package name associated to <uri>."
     (unless force-cancel
       (let ((rendered (net.uri:render-uri uri nil)))
-        (error "Check it")
         (multiple-value-bind (pkg str2 button enter)
             (ask-user-for-string
              "QName prefix"
@@ -424,8 +425,10 @@ package slot and uri to symbol name mapping environment slot.")
              (setq LocalPart (subseq QName (1+ pos)))))
           (t (setq Prefix nil)
              (setq LocalPart QName)))
+    (when (null-string-p LocalPart)   ; needed for turtle reader
+      (error "Not Yet!"))
     (cond (Prefix
-           (setq pkg (find-package Prefix)) ; nicknames availabel
+           (setq pkg (find-package Prefix)) ; nicknames available
            (when (null pkg)
              (warn "There is no package for ~A." Prefix)
              (setq pkg (make-package Prefix :use nil))  ; by smh
@@ -493,35 +496,6 @@ package slot and uri to symbol name mapping environment slot.")
                          (copy-uri (net.uri:parse-uri (concatenate 'cl:string (net.uri:render-uri ns nil) name)))))))
             ))))
 
-;;;
-;;;; NodeID
-;;;
-;;; A nodeID is an exorted symbol in package "_".  See the following example.
-;;; ----------------------------------------------------------------------------------
-;;; (nodeID2symbol "abc")      -> _:abc
-;;; (make-unique-nodeID "abc") -> _:abc0
-;;; ----------------------------------------------------------------------------------
-(defun nodeID? (name)
-  "Is this <name> a nodeID?"
-  (declare (optimize (speed 3) (safety 1)))
-  (and (symbol-package name)
-       (string= "_" (package-name (symbol-package name)))))
-
-(defun nodeID2symbol (str)
-  (declare (optimize (speed 3) (safety 1)))
-  "simply transforms <str> to a exported symbol in anonymous node package :_
-   and returns it."
-  (let ((nodeID (intern str :_)))
-    (export nodeID (find-package :_))
-    nodeID))
-
-(defun make-unique-nodeID (str)
-  (declare (optimize (speed 3) (safety 1)))
-  "makes a unique node ID from <str>. Namely, adds numbers at the end of <str> and makes unique symbol."
-  (let ((symbol (gentemp str :_)))
-    (export symbol (find-package :_))
-    symbol))
-
 (defun name-ontology (ontouri)
   "transforms <ontouri> to special symbol of which string is equal to <ontouri>."
 ;;;  (when (null-iri-p ontouri)
@@ -531,16 +505,15 @@ package slot and uri to symbol name mapping environment slot.")
   ;(format t "~%*default-namespace* = ~S" *default-namespace*)
   ;(format t "~%*base-uri* = ~S" *base-uri*)
   ;(format t "~%ontouri = ~S" ontouri)
-  (when (string= (net.uri:render-uri ontouri nil) (net.uri:render-uri *base-uri* nil))
+  (when (and *base-uri* (string= (net.uri:render-uri ontouri nil) (net.uri:render-uri *base-uri* nil)))
     (let ((pkg (uri-namedspace-package
                 (set-uri-namedspace (format nil "~A#" (net.uri:render-uri ontouri nil))))))
       (unless pkg (setq pkg (uri2package ontouri)))
       (return-from name-ontology (intern "Ontology" pkg))))
-  (when (string= (net.uri:render-uri ontouri nil) (net.uri:render-uri *default-namespace* nil))
+  (when (and *default-namespace* (string= (net.uri:render-uri ontouri nil) (net.uri:render-uri *default-namespace* nil)))
     (let ((pkg (uri-namedspace-package (set-uri-namedspace *default-namespace*))))
       (unless pkg (setq pkg (uri2package ontouri)))
       (return-from name-ontology (intern "Ontology" pkg))))
-  (error "Check it!")
   (let ((pkg (uri2package ontouri)))
     (when (null pkg)
       (setq pkg (funcall *uri2symbol-package-mapping-fun* ontouri)))
@@ -595,8 +568,11 @@ The symbol ~s is not external in the ~a package.")
     )
   )
 
+(defun find-package-from-namespace (namespace)
+  (find namespace (list-all-packages) :test #'string= :key #'(lambda (pkg) (documentation pkg t))))
+  
 ;; End of module
 ;; --------------------------------------------------------------------
 ;;;
-;;; Seiji Koide Nov-15-2010
+;;; Seiji Koide May-21-2014
 ;;;

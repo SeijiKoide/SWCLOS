@@ -1,4 +1,7 @@
-;;;-*- Mode: common-lisp; syntax: common-lisp -*-
+;;;-*- Mode: common-lisp; syntax: common-lisp; package: gx; base: 10 -*-
+;;;
+;;; RDF Node module
+;;;
 
 (cl:provide :rdfnode)
 
@@ -105,3 +108,33 @@
                (setf (slot-value instance 'excl::name) nil))
              (export-as-QName name)
              (setf (symbol-value name) instance))))))
+
+
+;;;
+;;;; NodeID
+;;;
+;;; A nodeID is an exorted symbol in package "_".  See the following example.
+;;; ----------------------------------------------------------------------------------
+;;; (nodeID2symbol "abc")      -> _:abc
+;;; (make-unique-nodeID "abc") -> _:abc0
+;;; ----------------------------------------------------------------------------------
+(defun nodeID? (name)
+  "Is this <name> a nodeID?"
+  (declare (optimize (speed 3) (safety 1)))
+  (and (symbol-package name)
+       (string= "_" (package-name (symbol-package name)))))
+
+(defun nodeID2symbol (str)
+  (declare (optimize (speed 3) (safety 1)))
+  "simply transforms <str> to a exported symbol in anonymous node package :_
+   and returns it."
+  (let ((nodeID (intern str :_)))
+    (export nodeID (find-package :_))
+    nodeID))
+
+(defun make-unique-nodeID (str)
+  (declare (optimize (speed 3) (safety 1)))
+  "makes a unique node ID from <str>. Namely, adds numbers at the end of <str> and makes unique symbol."
+  (let ((symbol (gentemp str :_)))
+    (export symbol (find-package :_))
+    symbol))

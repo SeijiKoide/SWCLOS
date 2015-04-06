@@ -30,7 +30,7 @@
 ;;;
 ;;; A triple subject/predicate/object in RDF is embodied as CLOSobject/slotname/slotvalue
 ;;; in SWCLOS, and subjective CLOSobject is bound to the subjective IRI. Precisely, 
-;;; a subjective IRI is an instance of class <iri> in SWCLOS and Rbase that is a subclass 
+;;; a subjective IRI is an instance of class <iri> in SWCLOS that is a subclass 
 ;;; of <net.uri:uri> in ACL library. 
 ;;;
 ;;; Read macro `\<' reads a uri string and produces an <iri>.
@@ -46,8 +46,8 @@
 ;;; (eq <http://somewhere> <http://some%20where>)      -> false
 ;;; ----------------------------------------------------------------------------------
 ;;;
-;;; An instance of <iri> has an extra slot for value just like QName. <iri-boundp> and 
-;;; <iri-value> is available for an <iri> just like <boundp> and <symbol-value> for symbol.
+;;; An instance of <iri> has an extra slot for its value just like lisp symbol. <iri-boundp> 
+;;; and <iri-value> is used for an <iri> just like <boundp> and <symbol-value> for symbols.
 ;;;
 ;;; Two trailing characters '\<\<' invokes the evaluation of the instance of <iri> and 
 ;;; returns a value bound to the <iri>.
@@ -58,7 +58,7 @@
 
 (defclass iri (net.uri:uri)
   ((value :accessor iri-value))
-  (:documentation "iri in SWCLOS and Rbase that is a subclass of net.uri:uri and able to bind a value to, 
+  (:documentation "iri in SWCLOS that is a subclass of net.uri:uri and able to bind a value to, 
 just like lisp symbol. The accessor <iri-value> allows to get and set the bound value of an <iri>."))
 
 (defmethod print-object ((iri iri) stream)
@@ -194,8 +194,8 @@ just like lisp symbol. The accessor <iri-value> allows to get and set the bound 
 ;;;      (char= char #\`)))
 
 (defun iri-escape-for-symbol-name (symbol-name)
-  "<symbol-name> is a string of symbol. It turns out to iri fragment or a tail of path in IRI. So, it must be
-   escaped for gen-delims characters except #\: and #\@. In this version, a space is also escaped."
+  "<symbol-name> is a string of symbol. It may turn out to iri fragment or a tail of path in IRI. So, 
+it must be escaped for gen-delims characters except #\: and #\@. In this version, a space is also escaped."
   (cond ((and (> (length symbol-name) 5) (string= "http:" (subseq symbol-name 0 5)))
          symbol-name) ; this is for ontology URIs
         (t (flet ((escape-p (c)

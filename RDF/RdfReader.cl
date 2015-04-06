@@ -24,7 +24,7 @@
   )
 
 (cl:defpackage :gx
-  (:export read-rdf-file )
+  (:export read-rdf-file lang-tag-char-p read-lang-tag read-type-tag)
   )
 
 (in-package :gx)

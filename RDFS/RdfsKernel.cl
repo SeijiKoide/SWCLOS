@@ -37,7 +37,7 @@
 (cl:provide :rdfskernel)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :utils)
+  (require :swclosutils)
   (require :swclospackages)
   (require :namespace)
   (require :rdfboot)

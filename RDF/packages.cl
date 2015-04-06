@@ -30,6 +30,11 @@
            "duration-minute" "duration-second")
   (:documentation "http://www.w3.org/2001/XMLSchema#"))
 
+(cl:defpackage :dc
+  (:use ) ; supressing using common lisp package
+  (:export "contributor" "coverage" "creator" "date" "description" "format" "identifier" 
+           "language" "publisher" "relation" "rights" "source" "subject" "title" "type"))
+
 (cl:defpackage :rdf
   (:use ) ; supressing using common lisp package
   (:export about

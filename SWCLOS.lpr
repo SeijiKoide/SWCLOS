@@ -1,12 +1,12 @@
-;; -*- lisp-version: "9.0 [64-bit Windows *SMP*] (Mar 30, 2014 8:11)"; cg: "9.0"; -*-
+;; -*- lisp-version: "9.0 [64-bit Windows *SMP*] (Mar 16, 2015 7:10)"; cg: "9.0"; -*-
 
 (in-package :cg-user)
 
 (define-project :name :SWCLOS
   :modules nil
-  :projects (list (make-instance 'project-module :name "OWL/OWL" :show-modules t)
+  :projects (list (make-instance 'project-module :name "OWL/OWL" :show-modules nil)
                   (make-instance 'project-module :name "NTriple/NTriple" :show-modules
-                                 t))
+                                 nil))
   :libraries nil
   :editable-files nil
   :distributed-files nil
