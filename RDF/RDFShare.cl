@@ -28,7 +28,6 @@
 
 (in-package :gx)
 
-(shadow '(uri parse-uri))
 (export '(*entity-decls* NameStartChar-p NameChar-p NCNameStartChar-p NCNameChar-p
            make-unique-nodeID
            parse-iri read-Eq

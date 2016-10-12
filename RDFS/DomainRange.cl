@@ -438,7 +438,7 @@
                   (t (error "Not Yet!"))))
     (rdf:inLang (cond ((typep value range) value) 
                       (t (error "Not Yet!"))))
-    (net.uri:uri (cond ((typep value range) value)               ; OK
+    (uri (cond ((typep value range) value)               ; OK
                        ((cl:subtypep range rdfs:Resource) value) ; range is owl:Ontology
                        ((typep (iri-value value) range) value)  ; check 
                        ((warn "*** INVALID SLOT VALUE1 ~S FOR ~S ***" value range)

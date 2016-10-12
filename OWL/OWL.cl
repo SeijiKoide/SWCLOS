@@ -75,7 +75,7 @@
          (owl-equalp (symbol-value x) (symbol-value y)))
         ((and (symbolp x) (object? x)) (owl-equalp (symbol-value x) y))
         ((and (symbolp y) (object? y)) (owl-equalp x (symbol-value y)))
-        ((and (net.uri:uri-p x) (net.uri:uri-p y) (uri= x y))) ; or go through next
+        ((and (uri-p x) (uri-p y) (uri= x y))) ; or go through next
         ((and (iri-p x) (iri-p y))                             ; uri-string different but
          (cond ((and *nonUNA* (iri-boundp x) (iri-boundp y))   ; if nonUNA and has value
                 (rdf-equalp (iri-value x) (iri-value y)))      ; then check values

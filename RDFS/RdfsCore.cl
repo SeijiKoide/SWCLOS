@@ -279,7 +279,7 @@
       (cl:string (cond ((property? role)        ; a string denotes itself or typed data if role indicates so.
                         (read-data (get-range-constraint-from role) form))
                        (t (read-in-lang-env form))))
-      (net.uri:uri (assert (and (not (eq role t)) (not (eq role nil))))
+      (uri (assert (and (not (eq role t)) (not (eq role nil))))
                    (cond ((eq role 'rdf:about) (error "Cant happen!")) ; form2slot processes it before falling here
                          ((eq role 'rdf:ID) (error "Cant happen!"))
                          ((eq role 'rdfs:isDefinedBy) form)
@@ -345,7 +345,7 @@
                        ;(format t "~%Domains:~S" domains)
                        (loop for cls in (cdr (assoc 'rdf:type (cdr form)))
                            do (cond ((symbolp cls))
-                                    ((net.uri:uri-p cls) (setq cls (uri2symbol cls)))
+                                    ((uri-p cls) (setq cls (uri2symbol cls)))
                                     ((consp cls) (setq cls (addForm cls 'rdf:type)))
                                     (t (error "Not Yet!")))
                              (unless (or (rdf-class-p cls) (class? cls))
@@ -370,7 +370,7 @@
                                          (let ((cls (cadr (assoc 'rdf:type (cdr form)))))
                                            (etypecase cls
                                              (symbol (symbol-value cls))
-                                             (net.uri:uri (symbol-value (uri2symbol cls)))
+                                             (uri (symbol-value (uri2symbol cls)))
                                              (cons (addForm cls))))
                                        (if domains (car domains) (symbol-value '|rdfs:Resource|))))
                                     ((consp (car form))
@@ -889,15 +889,15 @@
   (setq classes (mklist classes))
   (let ((name (etypecase class
                 (symbol class)
-                (net.uri:uri (uri2symbol class))
+                (uri (uri2symbol class))
                 (rdfs:Resource (name class))))
         (uri (etypecase class
                (symbol (symbol2uri class))
-               (net.uri:uri class)
+               (uri class)
                (rdfs:Resource (iri class))))
         (obj (etypecase class
                (symbol (and (boundp class) (symbol-value class)))
-               (net.uri:uri (iri-value class))
+               (uri (iri-value class))
                (rdfs:Resource class)))
         (initargs
          (loop for slot in islots
@@ -1052,15 +1052,15 @@
   (setq classes (mklist classes))
   (let ((name (etypecase instance
                 (symbol instance)
-                (net.uri:uri (uri2symbol instance))
+                (uri (uri2symbol instance))
                 (rdfs:Resource (name instance))))
         (uri (etypecase instance
                 (symbol (symbol2uri instance))
-                (net.uri:uri instance)
+                (uri instance)
                 (rdfs:Resource (iri instance))))
         (obj (etypecase instance
                (symbol (and (boundp instance) (symbol-value instance)))
-               (net.uri:uri (iri-value instance))
+               (uri (iri-value instance))
                (rdfs:Resource instance)))
         (initargs
          (loop for slot in slots

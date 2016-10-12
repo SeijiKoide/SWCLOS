@@ -109,13 +109,13 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
         (slots (loop for prop in props when (prop-p prop) collect (prop-form prop))))
     (when about
       (setq about (cond (*base-uri*
-                         (net.uri:merge-uris (net.uri:parse-uri about) 
-                                             (net.uri:parse-uri
-                                              (net.uri:render-uri *base-uri* nil))))
+                         (merge-uris (parse-uri about) 
+                                             (parse-uri
+                                              (render-uri *base-uri* nil))))
                         (*default-namespace* (unless (typep *default-namespace* 'uri-namedspace)
                                                (set-uri-namedspace
-                                                (net.uri:merge-uris (net.uri:parse-uri about)
-                                                                    (net.uri:parse-uri
+                                                (merge-uris (parse-uri about)
+                                                                    (parse-uri
                                                                      #+:mswindows
                                                                      (let ((path (pathname *default-namespace*)))
                                                                        (substitute
@@ -127,12 +127,12 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                                                      #-:mswindows
                                                                      (namestring *default-namespace*))
                                                                     ))))
-                        (t (net.uri:parse-uri about))))
+                        (t (parse-uri about))))
       (remf attrs 'rdf:about))
     ;(format t "~%about:~S" about)
     (when id
-      (setq id (net.uri:copy-uri (net.uri:parse-uri
-                                  (net.uri:render-uri
+      (setq id (copy-uri (parse-uri
+                                  (render-uri
                                    (or *base-uri* *default-namespace*) nil))
                                  :fragment id))
       (remf attrs 'rdf:ID))

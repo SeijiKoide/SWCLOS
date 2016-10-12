@@ -506,7 +506,7 @@
          ;; read uriref
          (let ((uriref
                 (single-angle-bracket-reader instr (getnext-char instr))))
-           (unless (net.uri:uri-p uriref)
+           (unless (uri-p uriref)
              (warn (warn "Syntax error: illegal uriref in ~S" line))
              (signal (make-instance 'trepl-newline)))
            uriref))

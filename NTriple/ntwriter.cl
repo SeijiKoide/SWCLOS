@@ -47,14 +47,14 @@
 
 (defun print-uri-form (uri stream)
   (write-char #\< stream)
-  (net.uri:render-uri uri stream)
+  (render-uri uri stream)
   (write-char #\> stream))
 
 (defun write-triple (triple &optional (stream *standard-output*))
   (flet ((write-it (obj)
                    (when (eq obj '|rdfs:Resource|) (setq obj 'rdfs:Resource))
                    (when (eq obj |rdfs:Resource|) (setq obj rdfs:Resource))
-                   (if (net.uri:uri-p obj) (print-uri-form obj stream)
+                   (if (uri-p obj) (print-uri-form obj stream)
                      (let ((uri (get-triple-uri obj)))
                        (cond ((symbolp uri) (prin1 uri stream))
                              (uri (print-uri-form uri stream))

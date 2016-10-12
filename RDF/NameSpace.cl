@@ -29,7 +29,6 @@
 
 (in-package :gx)
 
-(shadow '(type value))
 (export '(iri iri-p iri-value set-uri-namedspace set-uri-namedspace-from-pkg get-uri-namedspace
            uri-namedspace uri2package uri2env uri2symbol irregular-name&pkg export-as-QName 
            *base-uri* *default-namespace* symbol2uri name-ontology nodeID? nodeID2symbol 
@@ -49,13 +48,13 @@
    This is required for the namespace interning. See also, 
    \<a href='http://www.franz.com/support/documentation/8.1/doc/operators/uri/parse-uri.htm'\>parse-uri\</a\>
    in ACL document."
-  (let ((parsed (net.uri:parse-uri thing)))
+  (let ((parsed (parse-uri thing)))
     #-:allegro-v9.0
     (etypecase thing
-      (string (when (char= #\# (last-char thing)) (setf (net.uri:uri-fragment parsed) "")))
-      (net.uri:uri nil)  ; nothing done
+      (string (when (char= #\# (last-char thing)) (setf (uri-fragment parsed) "")))
+      (uri nil)  ; nothing done
       )
-    (cond ((and (net.uri:uri-host parsed) (null (net.uri:uri-path parsed)))
+    (cond ((and (uri-host parsed) (null (uri-path parsed)))
            (copy-uri parsed :path "/"))
           (t parsed))))
 
@@ -105,7 +104,7 @@ of a Prefix associated uri by interning it. See <make-uri-space> in Allegro Comm
 ;;; package. Thus, the QName is implemented as exported lisp symbol, and the namespace 
 ;;; is implemented as lisp package. 
 ;;;
-;;; <uri-namedspace> is a subclass of <net.uri:uri> which has two extra slots, <package> 
+;;; <uri-namedspace> is a subclass of <uri> which has two extra slots, <package> 
 ;;; and <env>. <package> value keeps a package associated to a URI namespace. In case 
 ;;; of regular mapping from URIs to QNames, no device for mapping from a local part 
 ;;; of URI to a symbol name is needed, because SWCLOS provides such regular mapping.
@@ -116,15 +115,15 @@ of a Prefix associated uri by interning it. See <make-uri-space> in Allegro Comm
 ;;; Followings provide such a mapping device and the uri namespace functionality.
 ;;;
 
-(defclass uri-namedspace (net.uri:uri)
+(defclass uri-namedspace (uri)
   ((package :initform nil :accessor uri-namedspace-package)
    (env :initform nil :accessor uri-namedspace-env)) ; env is a uri to symbol-name assoc list for irregular symbol.
-  (:documentation "A subclass of <net.uri:uri>. This instance has extra two slots, i.e., an associated symbol 
+  (:documentation "A subclass of <uri>. This instance has extra two slots, i.e., an associated symbol 
 package slot and uri to symbol name mapping environment slot.")
   )
 
 (defun set-uri-namedspace (prefix-uri)
-  "after interning <prefix-uri> to <*NameSpaces*>, change the class of <prefix-uri> from <net.uri:uri> 
+  "after interning <prefix-uri> to <*NameSpaces*>, change the class of <prefix-uri> from <uri> 
    to <uri-namedspace>. After that, symbol to uri mapping can be placed in this namespace."
   (declare (optimize (speed 3) (safety 1)))
   (cl:change-class (intern-uri (parse-iri prefix-uri) *NameSpaces*) 'uri-namedspace))
@@ -190,7 +189,7 @@ package slot and uri to symbol name mapping environment slot.")
   (etypecase uri
     (null nil)
     (string (uri2symbol (iri uri)))
-    (net.uri:uri (if (uri-fragment uri) (%uri2symbol uri)
+    (uri (if (uri-fragment uri) (%uri2symbol uri)
                    ;; irregular process
                    (irregular-name&pkg uri)))))
 
@@ -240,7 +239,7 @@ package slot and uri to symbol name mapping environment slot.")
                  (unless (uri-namedspace-package uri)
                    (setf (uri-namedspace-package uri) pkg))))
              (when pkg
-               (unless (assoc uri (uri2env uri) :test #'net.uri:uri=)
+               (unless (assoc uri (uri2env uri) :test #'uri=)
                  (setf (uri-namedspace-env uri) (acons uri name (uri2env uri))))
                (shadow name pkg)
                (setq symbol (intern name pkg))
@@ -267,11 +266,11 @@ package slot and uri to symbol name mapping environment slot.")
   (defun ask-user-package-name (uri)
     "asks to user package name associated to <uri>."
     (unless force-cancel
-      (let ((rendered (net.uri:render-uri uri nil)))
+      (let ((rendered (render-uri uri nil)))
         (multiple-value-bind (pkg str2 button enter)
             (ask-user-for-string
              "QName prefix"
-             (car (last (net.uri:uri-parsed-path uri))) "Enter" "Cancel"
+             (car (last (uri-parsed-path uri))) "Enter" "Cancel"
              (format nil "as ~A" rendered))
           (declare (ignore str2 button))
           (cond (enter
@@ -291,7 +290,7 @@ package slot and uri to symbol name mapping environment slot.")
     "asks to user a symbol name associated to <uri>."
     ;; This function is called only uri without fragment.
     (unless force-cancel
-      (let ((rendered (net.uri:render-uri uri nil)))
+      (let ((rendered (render-uri uri nil)))
         (multiple-value-bind (name str2 button enter)
             (ask-user-for-string
              "Symbol name"
@@ -309,7 +308,7 @@ package slot and uri to symbol name mapping environment slot.")
     (when pkg
       (let ((found (find-package pkg)))
         (cond (found 
-               (cond ((string= (documentation found t) (net.uri:render-uri uri nil)) found)
+               (cond ((string= (documentation found t) (render-uri uri nil)) found)
                      ((y-or-n-p "~S is used for ~S~%Use another package name. OK?" found (documentation found t))
                       (default-uri2symbol-package-mapping-fun uri))
                      (t nil)))
@@ -321,7 +320,7 @@ package slot and uri to symbol name mapping environment slot.")
    then the returned value of <%%uri2symbol> is returned. Othewise a query is made for users."
   (cond ((and (uri-path uri) (not (string= (uri-path uri) "/")))
          (%%uri2symbol uri))                                   ; symbol
-        ((cdr (assoc uri (uri2env uri) :test #'net.uri:uri=))) ; string
+        ((cdr (assoc uri (uri2env uri) :test #'uri=))) ; string
         (t (ask-user-symbol-name uri))))                       ; string or nil
 
 (defparameter *file-types*
@@ -481,13 +480,13 @@ package slot and uri to symbol name mapping environment slot.")
              (env (when ns (uri-namedspace-env ns))))
         (or (cdr (assoc symbol env))
             (and ns
-                 (cond ((and (pathname-name (merge-pathnames (net.uri:uri-path ns)))
-                             (null (net.uri:uri-fragment ns)))
+                 (cond ((and (pathname-name (merge-pathnames (uri-path ns)))
+                             (null (uri-fragment ns)))
                         (iri 
-                         (copy-uri (net.uri:parse-uri (net.uri:render-uri ns nil)) :fragment name)))
+                         (copy-uri (parse-uri (render-uri ns nil)) :fragment name)))
                        (t ;; no fragment but name
                         (iri
-                         (copy-uri (net.uri:parse-uri (concatenate 'cl:string (net.uri:render-uri ns nil) name)))))))
+                         (copy-uri (parse-uri (concatenate 'cl:string (render-uri ns nil) name)))))))
             ))))
 
 (defun name-ontology (ontouri)
@@ -499,19 +498,19 @@ package slot and uri to symbol name mapping environment slot.")
   ;(format t "~%*default-namespace* = ~S" *default-namespace*)
   ;(format t "~%*base-uri* = ~S" *base-uri*)
   ;(format t "~%ontouri = ~S" ontouri)
-  (when (and *base-uri* (string= (net.uri:render-uri ontouri nil) (net.uri:render-uri *base-uri* nil)))
+  (when (and *base-uri* (string= (render-uri ontouri nil) (render-uri *base-uri* nil)))
     (let ((pkg (uri-namedspace-package
-                (set-uri-namedspace (format nil "~A#" (net.uri:render-uri ontouri nil))))))
+                (set-uri-namedspace (format nil "~A#" (render-uri ontouri nil))))))
       (unless pkg (setq pkg (uri2package ontouri)))
       (return-from name-ontology (intern "Ontology" pkg))))
-  (when (and *default-namespace* (string= (net.uri:render-uri ontouri nil) (net.uri:render-uri *default-namespace* nil)))
+  (when (and *default-namespace* (string= (render-uri ontouri nil) (render-uri *default-namespace* nil)))
     (let ((pkg (uri-namedspace-package (set-uri-namedspace *default-namespace*))))
       (unless pkg (setq pkg (uri2package ontouri)))
       (return-from name-ontology (intern "Ontology" pkg))))
   (let ((pkg (uri2package ontouri)))
     (when (null pkg)
       (setq pkg (funcall *uri2symbol-package-mapping-fun* ontouri)))
-    (make-symbol (net.uri:render-uri ontouri nil))
+    (make-symbol (render-uri ontouri nil))
     ))
 
 ;

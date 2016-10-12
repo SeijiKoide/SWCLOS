@@ -162,7 +162,7 @@
 
 (cl:deftype boolean () "xsd:true or xsd:false" '(cl:member xsd:true xsd:false))
 
-(cl:deftype anyURI () "net.uri:rui in ACL" 'net.uri:uri)
+(cl:deftype anyURI () "URI" 'uri)
 
 (cl:deftype anySimpleType () "xsd:boolean, xsd:anyURI, xsd:string, xsd:float, xsd:double, or xsd:decimal"
   '(cl:or boolean anyURI string float double decimal))

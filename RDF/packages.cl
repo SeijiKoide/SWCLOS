@@ -19,7 +19,7 @@
 
 (cl:defpackage :xsd
   (:nicknames :xs)
-  (:use ) ; supressing using common lisp package
+  (:use net.uri) ; supressing using common lisp package
   (:export "string" "boolean" "decimal" "float" "double" "dataTime" "time" "date"
            "gYearMonth" "gYear" "gMonthDay" "gDay" "gMonth" "hexBinary" "base64Binary"
            "anyURI" "normallizedString" "token" "language" "NMTOKEN" "Name" "NCName"
@@ -74,7 +74,6 @@
   )
 
 (defpackage :gx
-  (:use :common-lisp :net.uri) ; old: closer-common-lisp & puri
+  (:use :common-lisp :net.uri)
   (:shadow typep subtypep type-of)
-  (:import-from :net.uri render-uri uri-fragment copy-uri uri-scheme)
   (:documentation "http://www.TopOntologies.com/tools/SWCLOS#"))

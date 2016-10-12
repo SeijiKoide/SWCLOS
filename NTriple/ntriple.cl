@@ -369,7 +369,7 @@
 ;;;; <Resource> <Property> <uri>  -->  <Resource> <Property> <iri>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate rdf:Property) (object net.uri:uri))
+(defmethod addTriple ((subject rdfs:Resource) (predicate rdf:Property) (object uri))
   (addTriple subject predicate (iri object)))
 #|
 ;;;
@@ -641,7 +641,7 @@
 ;;;; <t> <Property> <uri>  -->  <t> <Property> <iri>
 ;;;
 
-(defmethod addTriple (subject (predicate rdf:Property) (object net.uri:uri))
+(defmethod addTriple (subject (predicate rdf:Property) (object uri))
   (addTriple subject predicate (iri object)))
 
 ;;;
@@ -676,7 +676,7 @@
 ;;;; t <uri> t  -->  t <symbol> t
 ;;;
 
-(defmethod addTriple (subject (predicate net.uri:uri) object)
+(defmethod addTriple (subject (predicate uri) object)
   (let ((symbol (uri2symbol predicate)))
     (when (or (null symbol) (not (symbolp symbol)))
       (error "predicate in SWCLOS must be turned a QName."))
@@ -687,7 +687,7 @@
 ;;;; <iri> <uri> t  -->  <iri> <symbol> t
 ;;;
 
-(defmethod addTriple ((subject iri) (predicate net.uri:uri) object)
+(defmethod addTriple ((subject iri) (predicate uri) object)
   (let ((symbol (uri2symbol predicate)))
     (when (or (null symbol) (not (symbolp symbol)))
       (error "predicate in SWCLOS must be turned a QName."))
@@ -698,7 +698,7 @@
 ;;;; <uri> t t  -->  <iri> t t
 ;;;
 
-(defmethod addTriple ((subject net.uri:uri) predicate object)
+(defmethod addTriple ((subject uri) predicate object)
   (addTriple (iri subject) predicate object))
 
 ;;

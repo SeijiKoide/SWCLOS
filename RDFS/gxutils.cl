@@ -46,7 +46,7 @@
 
 (defun print-all-entity-uris (&optional (stream t))
   "prints out all entities as uri to <stream>. This function does not print blank nodes."
-  (net.uri:do-all-uris (x) (print x stream)))
+  (do-all-uris (x) (print x stream)))
 
 (defun print-all-entity-iris (&optional (stream t))
   "prints out all entities as iri to <stream>. This function does not print blank nodes."
@@ -54,11 +54,11 @@
 
 (defun do-all-entity-uris (fun)
   "invokes <fun> for all entities as uri. <fun> should be one parameter funcallable object."
-  (net.uri:do-all-uris (x) (funcall fun x)))
+  (do-all-uris (x) (funcall fun x)))
 
 (defun do-all-entity-iris (fun)
   "invokes <fun> for all entities as iri. <fun> should be one parameter funcallable object."
-  (net.uri:do-all-uris (x) (when (typep x 'iri) (funcall fun x))))
+  (do-all-uris (x) (when (typep x 'iri) (funcall fun x))))
 
 (defun list-all-entity-uris ()
   "collects all entities as uri, and returs it. Here, entity means ontologies 
@@ -83,13 +83,13 @@
 (defun list-all-uri-namedspaces ()
   "returns an association list of prefix name (package name) and uri on all ones in the system."
   (let (namespaces)
-    (net.uri:do-all-uris (x *NameSpaces* namespaces)
+    (do-all-uris (x *NameSpaces* namespaces)
       (when (cl:typep x 'uri-namedspace)
         (push x namespaces)))))
 
 (defun do-all-uri-namedspaces (fun)
   "invokes <fun> for all namedspaces. <fun> should be one parameter funcallable object."
-  (net.uri:do-all-uris (x *NameSpaces*)
+  (do-all-uris (x *NameSpaces*)
     (when (cl:typep x 'uri-namedspace)
       (funcall fun x))))
 
@@ -101,7 +101,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
 (defmethod list-all-entities-in ((namespace string) &optional uri?)
   "When <namespace> is a string, recursively called with a uri of <namespace>."
   (list-all-entities-in (iri namespace) uri?))
-(defmethod list-all-entities-in ((namespace net.uri:uri) &optional uri?)
+(defmethod list-all-entities-in ((namespace uri) &optional uri?)
   "When <namespace> is a uri, the related package is retrieved of <namespace>, then recursively called with the package."
   (let ((pkg (uri2package namespace)))
     (when pkg (list-all-entities-in pkg uri?))))
@@ -154,7 +154,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
                                             ; `(,(lang filler) ,(content filler)))
                                             ((typep filler 'xsd:anySimpleType) filler)
                                             ((typep filler rdfs:Literal) filler)
-                                            ((typep filler 'net.uri:uri) filler)
+                                            ((typep filler 'uri) filler)
                                             ((eq role 'rdfs:subClassOf)
                                              (or (and (symbolp filler) filler)
                                                  (and (rdf-class-p filler) (class-name filler))
@@ -524,7 +524,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
   (let ((pkg
          (typecase ns
           (string (uri2package ns))
-          (net.uri:uri (uri2package ns))
+          (uri (uri2package ns))
           (symbol (find-package ns))
           (packagep ns)
           (otherwise (return-from all-concept-names)))))
@@ -541,7 +541,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
            (packagep ns)
            (symbol (find-package ns))
            (uri-namedspace (uri-namedspace-package ns))
-           (net.uri:uri (uri-namedspace-package (get-uri-namedspace ns)))
+           (uri (uri-namedspace-package (get-uri-namedspace ns)))
            (string (uri-namedspace-package (get-uri-namedspace (iri ns))))
            (otherwise (return-from all-role-names)))))
     (loop for x being each external-symbol in pkg
@@ -555,7 +555,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
   (let ((pkg
          (typecase ns
           (string (uri-namedspace-package ns))
-          (net.uri:uri (uri-namedspace-package ns))
+          (uri (uri-namedspace-package ns))
           (symbol (find-package ns))
           (packagep ns)
           (otherwise (return-from all-individuals)))))
@@ -574,7 +574,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
     (symbol )
     (rdfs:Datatype )
     (rdfs:Class )
-    (net.uri:uri (concept-parents (iri-value concept)))
+    (uri (concept-parents (iri-value concept)))
     (consp )))
 
 (defun get-value (object role)
@@ -676,7 +676,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
            (packagep ns)
            (symbol (find-package ns))
            (uri-namedspace (uri-namedspace-package ns))
-           (net.uri:uri (uri-namedspace-package (get-uri-namedspace ns)))
+           (uri (uri-namedspace-package (get-uri-namedspace ns)))
            (string (uri-namedspace-package (get-uri-namedspace (iri ns))))
            (otherwise (return-from lean-p)))))
     (loop for x being each external-symbol in pkg

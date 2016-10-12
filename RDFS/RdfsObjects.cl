@@ -764,7 +764,7 @@ An RDF statement is the statement made by a token of an RDF triple.")
 (defparameter xsd:anyURI
   (mop:ensure-class-using-class () 'xsd:anyURI 
                                 :direct-superclasses '(xsd:anySimpleType)
-                                :form 'net.uri:uri
+                                :form 'uri
                                 :metaclass 'rdfs:Datatype)
   "xsd:anyURI class object")
 (reinitialize-instance xsd:anyURI

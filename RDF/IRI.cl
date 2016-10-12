@@ -5,7 +5,6 @@
 
 (in-package :gx)
 
-(shadow 'uri)
 (export '(iri boundp bound-value iri-escape-for-symbol-name))
 
 ;;;
@@ -22,7 +21,7 @@
 ;;; A triple subject/predicate/object in RDF is embodied as CLOSobject/slotname/slotvalue
 ;;; in SWCLOS, and subjective CLOSobject is bound to the subjective IRI. Precisely, 
 ;;; a subjective IRI is an instance of class <iri> in SWCLOS that is a subclass 
-;;; of <net.uri:uri> in ACL library. 
+;;; of <uri> in ACL library. 
 ;;;
 ;;; Read macro `\<' reads a uri string and produces an <iri>.
 ;;; An IRI reference in files and on listener windows is internalized to an instance of 
@@ -47,9 +46,9 @@
 (eval-when (:execute :compile-toplevel :load-toplevel)
   (proclaim '(inline iri-p boundp iri-value bound-value)))
 
-(defclass iri (net.uri:uri)
+(defclass iri (uri)
   ((value :accessor iri-value))
-  (:documentation "iri in SWCLOS that is a subclass of net.uri:uri and able to bind a value to, 
+  (:documentation "iri in SWCLOS that is a subclass of uri and able to bind a value to, 
 just like lisp symbol. The accessor <iri-value> allows to get and set the bound value of an <iri>."))
 
 (defmethod print-object ((iri iri) stream)
@@ -229,7 +228,7 @@ it must be escaped for gen-delims characters except #\: and #\@. In this version
   (etypecase uri
     (null t)
     (string (string= "" uri))
-    (net.uri:uri (string= "" (net.uri:render-uri uri nil)))))
+    (uri (string= "" (render-uri uri nil)))))
 
 ;;;
 ;;;; IRI Methods
@@ -243,10 +242,10 @@ it must be escaped for gen-delims characters except #\: and #\@. In this version
   "returns interned <thing> for class <gx:iri>."
   (intern-uri thing))
 
-(defmethod iri ((thing net.uri:uri))
-  "change class <net.uri:uri> of <thing> to <iri> and returns interned <thing>."
-  (when (and (net.uri:uri-host thing) (null (net.uri:uri-path thing)))
-    (setf (net.uri:uri-path thing) "/"))
+(defmethod iri ((thing uri))
+  "change class <uri> of <thing> to <iri> and returns interned <thing>."
+  (when (and (uri-host thing) (null (uri-path thing)))
+    (setf (uri-path thing) "/"))
   (unless (cl:typep thing 'iri)
     (change-class thing 'iri))
   (intern-uri thing))
@@ -261,9 +260,9 @@ it must be escaped for gen-delims characters except #\: and #\@. In this version
   "when iri host exists but no iri path on the iri in <thing>, this method adds '/' to iri path. 
    This is required for the namespace interning."
   ;(setq str (substitute-pattern "&" "&#38;" str))   ; "&#38;" is converted to "&"
-  (let ((parsed (net.uri:parse-uri thing :class 'iri)))
-    (when (and (net.uri:uri-host parsed) (null (net.uri:uri-path parsed)))
-      (setf (net.uri:uri-path parsed) "/"))
+  (let ((parsed (parse-uri thing :class 'iri)))
+    (when (and (uri-host parsed) (null (uri-path parsed)))
+      (setf (uri-path parsed) "/"))
 ;;;    (unless (cl:typep parsed 'iri)
 ;;;      (change-class parsed 'iri))
     (intern-uri parsed)

@@ -839,7 +839,7 @@ from <value>. For example, if <datatype> is xsd:integer '010' as <value> is tran
   (cond ((and (consp attvals) (eq (car attvals) 'rdf:datatype))
          (apply accept-fun
                 (list subj (symbol2uri name)
-                         (make-XMLSchema-data (car value) (uri2symbol (net.uri:uri (second attvals)))))))
+                         (make-XMLSchema-data (car value) (uri2symbol (uri (second attvals)))))))
         (t (apply accept-fun (list subj (symbol2uri name) (car value))))))
 
 (declaim (inline EncodingDecl? SDDecl?

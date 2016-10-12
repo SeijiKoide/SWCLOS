@@ -16,8 +16,6 @@
 
 (in-package :gx)
 
-(shadow 'uri)
-
 ;;;
 ;;;; Plane Literal
 ;;;

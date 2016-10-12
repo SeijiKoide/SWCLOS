@@ -148,7 +148,7 @@
   (cond ((equal x y))                      ; cl:strings, symbols, objects, and iri. If both are equal, then equal.
         ((and (numberp x) (numberp y))     ; in case of cl:number, 
          (= x y))                          ; = tests in value space, e.g., 1 and 1.0 is equal
-        ((and (net.uri:uri-p x) (net.uri:uri-p y) (uri= x y))) ; uri-string equal
+        ((and (uri-p x) (uri-p y) (uri= x y))) ; uri-string equal
         ((and (iri-p x) (iri-p y))                             ; uri-string different but
          (cond ((and *nonUNA* (iri-boundp x) (iri-boundp y))   ; if nonUNA and has value
                 (%rdf-equalp (iri-value x) (iri-value y)))     ; then check values
@@ -199,7 +199,7 @@
   (cond ((equal x y))     ; literals, symbols, objects, uris. See rdfp5a, rdfp5b.
         ((and (stringp x) (stringp y)) nil)
         ((and (numberp x) (numberp y)) nil)
-        ((and (net.uri:uri-p x) (net.uri:uri-p y) (net.uri:uri= x y))) ; else next
+        ((and (uri-p x) (uri-p y) (uri= x y))) ; else next
         ;;
         ((%owl-same-p x y pairs))
         ;;
@@ -1359,7 +1359,7 @@ A subclass of this class is a metaclass.")
       (typecase x
         (cl:string t)
         (cl:number t)
-        (net.uri:uri t)
+        (uri t)
         (rdf:inLang t)
         (symbol 
          (when (and (boundp x) (not (eq x (symbol-value x))))
@@ -1508,7 +1508,7 @@ A subclass of this class is a metaclass.")
   (case (cl:type-of x)
     (null 'rdf:List)
     (cons 'rdf:List)
-    (net.uri:uri 'xsd:anyURI)
+    (uri 'xsd:anyURI)
     (iri 'xsd:anyURI)
     (fixnum (cond ((zerop x) 'xsd:byte)
                   ((plusp x)
@@ -1614,7 +1614,7 @@ A subclass of this class is a metaclass.")
 ;;; (typep 1.0d0 xsd:double)
 ;;; (typep "string?" xsd:string)
 ;;; (typep "string?"@en xsd:string)
-;;; (typep (net.uri:uri "http://somewhere") xsd:anyURI)
+;;; (typep (uri "http://somewhere") xsd:anyURI)
 ;;; (typep xsd:false xsd:boolean)
 ;;; (typep 1 xsd:anySimpleType)
 ;;; (typep 1 rdf:XMLLiteral)
@@ -1660,7 +1660,7 @@ A subclass of this class is a metaclass.")
      (typecase object
        (rdfs:Resource (%typep object type))
        ;; resolve for object
-       (net.uri:uri (cond ((string= (name type) "Ontology") (values t t))
+       (uri (cond ((string= (name type) "Ontology") (values t t))
                           ((cl:subtypep (symbol-value 'xsd:anyURI) type) (values t t))
                           ((and (iri-p object) (iri-boundp object))
                            (%typep (iri-value object) type))
