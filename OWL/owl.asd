@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright ｩ 2003, 2004, 2006 by Galaxy Express Corporation
+;;; Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007, 2008, 2009, 2013 Seiji Koide
 
@@ -55,7 +55,7 @@
            :name :wild
            :type :wild
            ))))
-    (load "RDFS:RDFS.asdf"))
+    (load "RDFS:rdfs.asd"))
 )
 
 ;(defmethod source-file-type ((c cl-source-file) (s module)) "cl")
@@ -73,6 +73,7 @@
                 (load-op (load-op "rdfs")))
   :pathname #+(and :asdf (not :asdf2)) (translate-logical-pathname "OWL:")
             #+(and :asdf :asdf2)       nil
+  :default-component-class cl-source-file.cl
   :components
   ((:file "owlerror"              :depends-on ())
    (:file "owlkernel"             :depends-on ())

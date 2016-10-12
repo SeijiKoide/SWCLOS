@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2003, 2004, 2006 by Galaxy Express Corporation
+;;; Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007, 2008, 2009 Seiji Koide
 
@@ -54,10 +54,8 @@
            :name :wild
            :type :wild
            ))))
-    (load "OWL:OWL.asdf"))
+    (load "OWL:owl.asd"))
 )
-
-;(defmethod source-file-type ((c cl-source-file) (s module)) "cl")
 
 (defsystem :swclos
     :name "SWCLOS"
@@ -70,6 +68,7 @@
   :depends-on ("owl")
   :in-order-to ((compile-op (load-op "owl"))  
                 (load-op (load-op "owl")))
+  :default-component-class cl-source-file.cl
   :components
   ((:module "ntriple"
             :components
