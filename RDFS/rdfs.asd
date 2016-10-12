@@ -76,10 +76,13 @@
   :default-component-class cl-source-file.cl
   :components
   ((:file "SlotDef"      :depends-on ())
-   (:file "RDFboot"      :depends-on ("SlotDef"))
+   (:file "RDFboot0"     :depends-on ("SlotDef"))
+   (:file "RDFboot1"     :depends-on ("RDFboot0"))
+   (:file "RDFboot"      :depends-on ("RDFboot1"))
    (:file "DomainRange"  :depends-on ("RDFboot"))
    (:file "RdfsKernel"   :depends-on ("SlotDef" "RDFboot"))
-   (:file "GxType"       :depends-on ("SlotDef" "RDFboot"))
+   (:file "GxType0"      :depends-on ("SlotDef" "RDFboot"))
+   (:file "GxType"       :depends-on ("GxType0"))
    (:file "RdfsObjects"  :depends-on ("RDFboot" "GxType"))
    (:file "GxForwardRef" :depends-on ("GxType" "RdfsObjects" "DomainRange" "RdfsKernel"))
    (:file "RdfsCore"     :depends-on ("DomainRange" "RdfsObjects" "RdfsKernel"))
