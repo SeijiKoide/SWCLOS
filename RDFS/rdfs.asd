@@ -38,7 +38,7 @@
 ) ; end of eval-when
 
 (eval-when (:load-toplevel :execute)
-  (unless (asdf:find-system "rdf" nil)
+  (unless (asdf:find-system "swclos.rdf" nil)
     (defparameter *rdf-directory*
       (merge-pathnames
        (make-pathname
@@ -58,9 +58,7 @@
     (load "RDF:rdf.asd"))
 )
 
-;(defmethod source-file-type ((c cl-source-file) (s module)) "cl")
-
-(defsystem :rdfs
+(defsystem :swclos.rdfs
     :name "SWCLOS RDFS system"
   :author "Seiji Koide <SeijiKoide@aol.com>"
   :maintainer "Seiji Koide <SeijiKoide@aol.com>"
@@ -68,9 +66,9 @@
   :licence "SWCLOS"
   :description "RDFS subsystem of SWCLOS (an OWL Full processor on top of CLOS)."
   :long-description "This code is written at Galaxy Express Corporation, Japan, for the realization of the MEXT IT Program in Japan."
-  :depends-on ("rdf")
-  :in-order-to ((compile-op (load-op "rdf"))  
-                (load-op (load-op "rdf")))
+  :depends-on ("swclos.rdf")
+  :in-order-to ((compile-op (load-op "swclos.rdf"))  
+                (load-op (load-op "swclos.rdf")))
   :pathname #+(and :asdf (not :asdf2)) (translate-logical-pathname "RDFS:")
             #+(and :asdf :asdf2)       nil
   :default-component-class cl-source-file.cl
@@ -94,7 +92,7 @@
 (in-package #:cl-user)
 
 (format t "~%;;To compile, execute these forms:~%~s~%"
-  '(asdf:operate 'asdf:compile-op :rdfs))
+  '(asdf:operate 'asdf:compile-op :swclos.rdfs))
 
 (format t "~%;;To load, execute these forms:~%~s~%"
-  '(asdf:operate 'asdf:load-op :rdfs))
+  '(asdf:operate 'asdf:load-op :swclos.rdfs))

@@ -37,7 +37,7 @@
          ))))
 ) ; End of eval-when
 
-(defsystem :rdf
+(defsystem :swclos.rdf
     :name "SWCLOS RDF subsystem"
   :author "Seiji Koide <koide@nii.ac.jp>"
   :maintainer "Seiji Koide <koide@nii.ac.jp>"
@@ -67,7 +67,7 @@
 (in-package #:cl-user)
 
 (format t "~%;; To compile RDF module, execute these forms:~%;; ~s~%"
-  '(asdf:operate 'asdf:compile-op :rdf))
+  '(asdf:operate 'asdf:compile-op :swclos.rdf))
 
 (format t "~%;; To load RDF module, execute these forms:~%;; ~s~%"
-  '(asdf:operate 'asdf:load-op :rdf))
+  '(asdf:operate 'asdf:load-op :swclos.rdf))

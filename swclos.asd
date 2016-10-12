@@ -37,7 +37,7 @@
 ) ; end of eval-when
 
 (eval-when (:load-toplevel :execute)
-  (unless (asdf:find-system "owl" nil)
+  (unless (asdf:find-system "swclos.owl" nil)
     (defparameter *owl-directory*
       (merge-pathnames
        (make-pathname
@@ -65,9 +65,9 @@
   :licence "SWCLOS"
   :description "SWCLOS is an OWL Full processor on top of CLOS."
   :long-description "This code is written at Galaxy Express Corporation, Japan, for the realization of the MEXT IT Program in Japan, and is maintained by Seiji Koide."
-  :depends-on ("owl")
-  :in-order-to ((compile-op (load-op "owl"))  
-                (load-op (load-op "owl")))
+  :depends-on ("swclos.owl")
+  :in-order-to ((compile-op (load-op "swclos.owl"))  
+                (load-op (load-op "swclos.owl")))
   :default-component-class cl-source-file.cl
   :components
   ((:module "ntriple"
@@ -81,13 +81,13 @@
 (describe (asdf:find-system :swclos))
 (format t "===============================================~%")
 (format t "~%;;To compile, execute these forms:~%~s or~%~s or~%~s or~%~s"
-  '(asdf:operate 'asdf:compile-op :rdf)
-  '(asdf:operate 'asdf:compile-op :rdfs)
-  '(asdf:operate 'asdf:compile-op :owl)
+  '(asdf:operate 'asdf:compile-op :swclos.rdf)
+  '(asdf:operate 'asdf:compile-op :swclos.rdfs)
+  '(asdf:operate 'asdf:compile-op :swclos.owl)
   '(asdf:operate 'asdf:compile-op :swclos))
 
 (format t "~%;;To load, execute these forms:~%~s or~%~s or~%~s or~%~s"
-  '(asdf:operate 'asdf:load-op :rdf)
-  '(asdf:operate 'asdf:load-op :rdfs)
-  '(asdf:operate 'asdf:load-op :owl)
+  '(asdf:operate 'asdf:load-op :swclos.rdf)
+  '(asdf:operate 'asdf:load-op :swclos.rdfs)
+  '(asdf:operate 'asdf:load-op :swclos.owl)
   '(asdf:operate 'asdf:load-op :swclos))
