@@ -10,16 +10,9 @@
 ;; -------
 ;; 2009.11.03    File created and subsumed-p part is moved here from leanOWL.
 
-(cl:provide :subsume)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  )
-
-(defpackage :gx
-  (:use :common-lisp)
-  (:export subsumed-p ))
-
 (in-package :gx)
+
+(export 'subsumed-p)
 
 ;;;
 ;;;; Subsumption 

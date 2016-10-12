@@ -61,13 +61,10 @@
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:use :common-lisp)
-  (:export owl-same-p disjoint-p  
-           owl-class-p owl-thing-p owl-oneof-p
-           ))
-
 (in-package :gx)
+
+(export '(owl-same-p disjoint-p  
+          owl-class-p owl-thing-p owl-oneof-p))
 
 (eval-when (:load-toplevel :execute)
   (defparameter *owl-directory*
@@ -302,7 +299,7 @@ and instance of owl:Class."))
               (name (slot-value obj 'owl:onProperty))
               (slot-exists-p obj 'owl:allValuesFrom))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "ÅÕ~S.~S"
+           (format stream "ÔøΩÔøΩ~S.~S"
              (name (slot-value obj 'owl:onProperty))
              (or (name (slot-value obj 'owl:allValuesFrom))
                  (get-form (slot-value obj 'owl:allValuesFrom))))))
@@ -319,7 +316,7 @@ and instance of owl:Class."))
               (name (slot-value obj 'owl:onProperty))
               (slot-exists-p obj 'owl:someValuesFrom))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "ÅŒ~S.~S"
+           (format stream "ÔøΩÔøΩ~S.~S"
              (name (slot-value obj 'owl:onProperty))
              (or (name (slot-value obj 'owl:someValuesFrom))
                  :anonymous))))
@@ -336,7 +333,7 @@ and instance of owl:Class."))
               (name (slot-value obj 'owl:onProperty))
               (slot-exists-p obj 'owl:hasValue))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "~SÅﬂ{~S}"
+           (format stream "~SÔøΩÔøΩ{~S}"
              (name (slot-value obj 'owl:onProperty))
              (cond ((slot-boundp obj 'owl:hasValue)
                     (let ((x (slot-value obj 'owl:hasValue)))
@@ -361,11 +358,11 @@ and instance of owl:Class."))
          (print-unreadable-object (obj stream :type nil)
            (prin1 (name (slot-value obj 'owl:onProperty)) stream)
            (and (slot-boundp obj 'owl:minCardinality)
-                (format stream "ÅÜ ~S" (slot-value obj 'owl:minCardinality)))
+                (format stream "ÔøΩÔøΩ ~S" (slot-value obj 'owl:minCardinality)))
            (and (slot-boundp obj 'owl:cardinality)
                 (format stream "= ~S" (slot-value obj 'owl:cardinality)))
            (and (slot-boundp obj 'owl:maxCardinality)
-                (format stream "ÅÖ ~S" (slot-value obj 'owl:maxCardinality)))))
+                (format stream "ÔøΩÔøΩ ~S" (slot-value obj 'owl:maxCardinality)))))
         (t (call-next-method))))
 
 (defun owl-cardinality-p (x) (cl:typep x owl:cardinalityRestriction))
