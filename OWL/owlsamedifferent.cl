@@ -16,18 +16,13 @@
 ;; -------
 ;; 2010.11.15    File created and same/different parts are moved from OWL module
 
-(cl:provide :owlsamedifferent)
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:use :common-lisp)
-  (:export owl-same-p 
-           ))
-
 (in-package :gx)
+
+(export 'owl-same-p)
 
 ;;;
 ;;;; Functional Property
@@ -431,3 +426,5 @@
 ;;;
 ;;; Seiji Koide Nov-15-2010
 ;;;
+
+(cl:provide :owlsamedifferent)

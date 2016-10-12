@@ -17,13 +17,6 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :rdfscore)
-
-(cl:defpackage :gx
-  (:export addObject addForm addInstance addClass defResource defProperty defConcept 
-           defIndividual subproperty-p addRdfXml)
-  )
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :swclosutils)
   (require :swclospackages)
@@ -35,6 +28,9 @@
 ) ; end of eval-when
 
 (in-package :gx)
+
+(export '(add-Object add-Form add-Instance add-Class def-Resource def-Property def-Concept 
+           def-Individual subproperty-p add-Rdf-Xml))
 
 (declaim (inline create-slot slot-role slot-forms slot-filler get-filler))
 
@@ -1493,3 +1489,5 @@
 ;;;
 ;;; Seiji Koide Aug-04-2009
 ;;;
+
+(cl:provide :rdfscore)

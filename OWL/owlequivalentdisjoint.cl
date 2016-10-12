@@ -16,18 +16,13 @@
 ;; -------
 ;; 2010.11.15    File created and same/different parts are moved from OWL module
 
-(cl:provide :owlequivalentdisjoint)
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:use :common-lisp)
-  (:export owl-same-p 
-           ))
-
 (in-package :gx)
+
+(export 'owl-same-p)
 
 ;;;
 ;;;; Equivalency as Class
@@ -853,3 +848,5 @@ instersection, then returns false."
                   (t (values nil nil))))
              ))))
 )
+
+(cl:provide :owlequivalentdisjoint)

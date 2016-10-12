@@ -8,8 +8,8 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan,
 ;;;
-;;; Copyright © 2002,2004 by Galaxy Express Corporation, Japan.
-;;; Copyright 2008-2009 Seiji Koide.
+;;; Copyright (c) 2002,2004 by Galaxy Express Corporation, Japan.
+;;; Copyright (c) 2008-2009 Seiji Koide.
 ;;;
 ;; History
 ;; -------
@@ -17,17 +17,13 @@
 ;; 2008.08.12    Revised based on http://www.w3.org/TR/2004/REC-rdf-syntax-grammar-20040210/
 ;; 2004.05.09    File created and contents are copied from Rdf.cl
 
-(cl:provide :rdfreader)
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :rdfparser)
   )
 
-(cl:defpackage :gx
-  (:export read-rdf-file lang-tag-char-p read-lang-tag read-type-tag)
-  )
-
 (in-package :gx)
+
+(export '(read-rdf-file lang-tag-char-p read-lang-tag read-type-tag))
 
 ;;
 ;; Description structure to S-expression form
@@ -479,3 +475,5 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 
 ;; End of module
 ;; --------------------------------------------------------------------
+
+(cl:provide :rdfreader)

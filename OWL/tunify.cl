@@ -13,14 +13,9 @@
 ;; -------
 ;; 2008.02.04    File created.
 
-(cl:defpackage :gx
-  (:export "+no-bindings+" "subst-bindings" "unify")
-  )
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  ) ; end of eval-when
-
 (in-package :gx)
+
+(export '(+no-bindings+ subst-bindings unify))
 
 (defconstant +fail+ nil
   "Indicates unification failure")

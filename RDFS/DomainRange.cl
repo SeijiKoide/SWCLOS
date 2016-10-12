@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2002-2005 Galaxy Express Corporation
+;;; Copyright (c) 2002-2005 Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007 Seiji Koide
 ;;
@@ -25,11 +25,10 @@
   (require :rdfboot)
 ) ; end of eval-when
 
-(defpackage :gx
-  (:export domain-value get-domain collect-domains domainp rangep range-value get-range collect-ranges
-           *autoepistemic-local-closed-world*))
-
 (in-package :gx)
+
+(export '(domain-value get-domain collect-domains domainp rangep range-value get-range collect-ranges
+           *autoepistemic-local-closed-world*))
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (setf (uri-namedspace-package (set-uri-namedspace "http://www.w3.org/2001/XMLSchema#"))

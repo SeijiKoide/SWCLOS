@@ -14,13 +14,9 @@
 
   ) ; end of eval-when
 
-(cl:defpackage :gx
-  (:shadow uri )
-  (:use :common-lisp)
-  (:export 
-   ))
-
 (in-package :gx)
+
+(shadow 'uri)
 
 ;;;
 ;;;; Plane Literal

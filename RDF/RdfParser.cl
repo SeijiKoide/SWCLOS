@@ -33,20 +33,13 @@
   (require :rdfshare)
   ) ; end of eval-when
 
-(cl:defpackage :gx
-  (:shadow uri parse-uri type typep value)
-  (:import-from :net.uri render-uri uri-fragment copy-uri)
-  (:use :common-lisp :net.uri)
-  (:export *NameSpaces* *default-namespace* *base-uri* set-uri-namedspace
+(in-package :gx)
+
+(export '(*NameSpaces* *default-namespace* *base-uri* set-uri-namedspace
            name uri2symbol line Description-p Description-tag Description-att&vals Description-elements
            parse-rdf lang content
-           typep 
            parse-XMLDecl read-AttValue read-plane-text
-           read-as-datatype ^^)
-  (:documentation "http://www.TopOntologies.com/tools/SWCLOS#")
-  )
-
-(in-package :gx)
+           read-as-datatype ^^))
 
 (define-condition rdf-parse-error (error)
   ()

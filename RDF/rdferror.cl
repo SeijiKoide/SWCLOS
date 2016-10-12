@@ -19,11 +19,9 @@
   (require :swclospackages)
 ) ; end of eval-when
 
-(defpackage :gx
-  (:export quiet-warning-handler with-quiet-warnings
-           ))
-
 (in-package :gx)
+
+(export '(quiet-warning-handler with-quiet-warnings))
 
 ;; These coding is from ANSI Common Lisp manual.
 (defvar *all-quiet* nil)

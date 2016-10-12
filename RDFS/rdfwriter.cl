@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan,
 ;;;
-;;; Copyright © 2004 by Galaxy Express Corporation
+;;; Copyright (c) 2004 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2008 Seiji Koide
 ;;
@@ -27,11 +27,10 @@
   (require :gxforwardref)
   )
 
-(defpackage :gx
-  (:export write-resource write-xml *force-recursive-p*
-           write-rdf-all-entities-in write-xml-all-entities-in))
-
 (in-package :gx)
+
+(export '(write-resource write-xml *force-recursive-p*
+          write-rdf-all-entities-in write-xml-all-entities-in))
 
 ;;;
 ;;;; RDF Writer

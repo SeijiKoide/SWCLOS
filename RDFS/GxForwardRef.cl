@@ -18,10 +18,6 @@
   (require :rdfskernel)
   ) ; end of eval-when
 
-(defpackage :gx
-  (:shadow subtypep )
-  (:export ))
-
 (in-package :gx)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

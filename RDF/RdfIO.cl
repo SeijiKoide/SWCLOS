@@ -25,15 +25,10 @@
 ;; 2002.08.15    File created
 ;;; ==================================================================================
 
-(cl:provide :rdfio)
-
-(cl:defpackage :gx
-  (:use :common-lisp)
-  (:export *line-number* *line-pos* *pos* expose-buf skipbl read-pattern-p skip-pattern 
-           match-pattern-p peeknext-char getnext-char get-line)
-  )
-
 (in-package :gx)
+
+(export '(*line-number* *line-pos* *pos* expose-buf skipbl read-pattern-p skip-pattern 
+           match-pattern-p peeknext-char getnext-char get-line))
 
 ;;;
 ;;; The line number of input stream is counted and used in error messages.
@@ -127,8 +122,8 @@
       (declare (optimize (speed 3) (safety 1)))
       (loop for i fixnum from (length (car xlist)) to (length pattern)
           do (xput (read-char stream)))
-      (loop for char1 character across (the simple-string pattern)
-          for char2 character in (car xlist)
+      (loop for char1 of-type character across (the simple-string pattern)
+          for char2 of-type character in (car xlist)
           always (char= char1 char2)))
     (defun skip-pattern (pattern stream)
       (declare (ignore stream) (optimize (speed 3) (safety 1)))
@@ -136,8 +131,8 @@
       (loop for i fixnum from 1 to (length pattern) do (xpop)))
     (defun read-pattern-p (pattern stream)
       (declare (optimize (speed 3) (safety 1)))
-      (loop for char1 character across (the simple-string pattern)
-          for char2 character = (getnext-char stream)
+      (loop for char1 of-type character across (the simple-string pattern)
+          for char2 of-type character = (getnext-char stream)
           always (char= char1 char2)))
     ;;[3]    S    ::=    (#x20 | #x9 | #xD | #xA)+ 
     (defun space-p (stream)
@@ -207,3 +202,5 @@
 ;;;
 ;;; Seiji Koide Sep-13-2008
 ;;;
+
+(cl:provide :rdfio)

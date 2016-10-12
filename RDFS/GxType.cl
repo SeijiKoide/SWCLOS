@@ -17,27 +17,17 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :gxtype)
+(in-package :gx)
 
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  (require :swclospackages)
-  (require :namespace)
-  (require :rdfboot)
-  ) ; end of eval-when
-
-(cl:defpackage :gx
-  (:shadow typep subtypep type-of)
-  (:export rsc-object-p rdf-class-p rdf-metaclass-p strict-class-p rdf-instance-p datatype-p 
+(export '(rsc-object-p rdf-class-p rdf-metaclass-p strict-class-p rdf-instance-p datatype-p 
            object? class? metaclass? datatype? resource?
-           typep subtypep rdf-subtypep subsumed-p type-of rdf-equalp value-of 
+           rdf-subtypep subsumed-p rdf-equalp value-of 
            subproperty name
            collect-all-subs disjoint-p
            most-specific-concepts
            *nonUNA* *autoepistemic-local-closed-world*
            owl-same-p owl-thing-p
            most-abstract-concepts))
-
-(in-package :gx)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (setf (uri-namedspace-package (set-uri-namedspace "http://www.w3.org/2001/XMLSchema#"))
@@ -877,9 +867,9 @@ A subclass of this class is a metaclass.")
 
 ;;;
 ;;; From range constraints, C(y) comes up as this role extension R(x,y), here x is subjective object, and x is slot value.
-;;; From allValuesFrom,  ÅÕR(x,y)->C(y) comes up as this role extension R(x,y).
-;;; From someValuesFrom, ÅŒR(x,y)^C(y)  comes up as this role extension R(x,y).
-;;; From hasValue, R:b,  ÅŒR(x,b)       comes up as this role extension R(x,b).
+;;; From allValuesFrom,  R(x,y)->C(y) comes up as this role extension R(x,y).
+;;; From someValuesFrom, R(x,y)^C(y)  comes up as this role extension R(x,y).
+;;; From hasValue, R:b,  R(x,b)       comes up as this role extension R(x,b).
 ;;;
 #+never
 (defun %strict-subtype-p-for-slotd-type (c1 c2)
@@ -898,31 +888,31 @@ A subclass of this class is a metaclass.")
          (etypecase c1
            (forall (etypecase c2
                      (forall (subsumed-p (forall-filler c1) (forall-filler c2))) ; 
-                     (exists nil)       ; c2 remains    ÅÕR(x,y)->C(y) vs. ÅŒR(x,y)^D(y)
-                     (fills                                            ; ÅÕR(x,y)->C(y) vs. ÅŒR(x,{b})
-                      (if (typep (fills-filler c2) (forall-filler c1)) ; b Å∏ C
+                     (exists nil)       ; c2 remains    R(x,y)->C(y) vs. R(x,y)^D(y)
+                     (fills                                            ; R(x,y)->C(y) vs. R(x,{b})
+                      (if (typep (fills-filler c2) (forall-filler c1)) ; b . C
                           t nil))
-                     (rdfs:Class                           ; ÅÕR(x,y)->C(y) vs. R(x,y)^D(y)
+                     (rdfs:Class                           ; R(x,y)->C(y) vs. R(x,y)^D(y)
                       nil)))             ; c2 remains
            (exists (etypecase c2
                      (exists (subsumed-p (exists-filler c1) (exists-filler c2)))
                      (forall nil)        ; c2 remains then both remains
-                     (fills (if (typep (fills-filler c2) (exists-filler c1)) ; ÅŒR(x,y)^C(y) vs. ÅŒR(x,{b})
+                     (fills (if (typep (fills-filler c2) (exists-filler c1)) ; R(x,y)^C(y) vs. R(x,{b})
                                     t nil))
                      (rdfs:Class nil)))
            (fills (etypecase c2
                         (fills (subsumed-p (fills-filler c1) (fills-filler c2)))    ; sub object remains
-                        (forall nil)                                              ; ÅŒR(x,{a}) vs. ÅÕR(x,y)->D(y)
-                        (exists (if (typep (fills-filler c1) (exists-filler c2)) ; ÅŒR(x,{a}) vs. ÅŒR(x,y)^D(y)
+                        (forall nil)                                              ; R(x,{a}) vs. R(x,y)->D(y)
+                        (exists (if (typep (fills-filler c1) (exists-filler c2)) ; R(x,{a}) vs. R(x,y)^D(y)
                                     t nil))
-                        (rdfs:Class nil)))                                        ; ÅŒR(x,{a}) vs. {a}Å∏D
+                        (rdfs:Class nil)))                                        ; R(x,{a}) vs. {a}.D
            (rdfs:Class (etypecase c2
-                         (forall (if (subsumed-p c1 (forall-filler c2))  ; C(y) ? D(y) for ÅÕR(x,y)->D(y)
+                         (forall (if (subsumed-p c1 (forall-filler c2))  ; C(y) ? D(y) for R(x,y)->D(y)
                                      t nil))
-                         (exists (if (subsumed-p c1 (exists-filler c2))  ; C(y) ? D(y) for ÅŒR(x,y)^D(y)
+                         (exists (if (subsumed-p c1 (exists-filler c2))  ; C(y) ? D(y) for R(x,y)^D(y)
                                      t nil))
-                         (fills nil)                              ; ÅŒR(x,{b}) vs. bÅ∏C
-                         (rdfs:Class (error "Cant happen!"))))))))
+                         (fills nil)                              ; R(x,{b}) vs. b.C
+                         (rdfs:Class (error "Can't happen!"))))))))
 
 (defun strict-subsumed-p (c1 c2)
   (and (not (owl-same-p c1 c2))
@@ -993,6 +983,8 @@ A subclass of this class is a metaclass.")
                                           (otherwise x)))
                                        (t x))))
              (cl:subtypep (normal-type type1) (normal-type type2))))))
+
+(export 'subtypep)
 
 (defun subsumed-p (type1 type2)
   "This is a hook for OWL. It is same as <rdf-subtypep> in RDFS."
@@ -1635,6 +1627,8 @@ A subclass of this class is a metaclass.")
                      ((shadowed-class-p (class-of x)) (mapcar #'name (mclasses x)))
                      (t (cl:type-of x))))))
 
+(export 'type-of)
+
 ;;;
 ;;;; Type Predicate
 ;;;
@@ -1798,6 +1792,8 @@ A subclass of this class is a metaclass.")
     (otherwise  (%typep object type))
     ))
 
+(export 'typep)
+
 (defun %typep (object type)
   "<object> and <type> is an object in RDF universe."
   (declare (optimize (speed 3) (safety 0)))
@@ -1932,3 +1928,5 @@ A subclass of this class is a metaclass.")
 
 ;; End of module
 ;; --------------------------------------------------------------------
+
+(cl:provide :gxtype)

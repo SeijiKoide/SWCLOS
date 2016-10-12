@@ -8,12 +8,10 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2002-2005 Galaxy Express Corporation
+;;; Copyright (c) 2002-2005 Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007-2011 Seiji Koide
 ;;; ==================================================================================
-
-(cl:provide :rdfsobjects)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :swclospackages)
@@ -22,11 +20,9 @@
   (require :gxtype)
 ) ; end of eval-when
 
-(defpackage :gx
-  (:export subproperty superproperty-of 
-           @))
-
 (in-package :gx)
+
+(export '(subproperty superproperty-of @))
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (setf (uri-namedspace-package (set-uri-namedspace "http://www.w3.org/2001/XMLSchema#"))
@@ -983,3 +979,5 @@ more items in it.")
 
 ;; End of module
 ;; --------------------------------------------------------------------
+
+(cl:provide :rdfsobjects)

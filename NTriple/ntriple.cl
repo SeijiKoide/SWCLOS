@@ -5,7 +5,7 @@
 ;;; IT Program Project in Japan: 
 ;;;          Building Operation-Support System for Large-scale System using IT
 ;;;
-;;; Copyright © 2003 by Galaxy Express Corporation
+;;; Copyright (c) 2003 by Galaxy Express Corporation
 ;;;
 ;; History
 ;; -------
@@ -21,11 +21,10 @@
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:export defTriple addTriple /. ./ get-triple
-           superclasses-of subclasses-of))
-
 (in-package :gx)
+
+(export '(defTriple addTriple /. ./ get-triple
+           superclasses-of subclasses-of))
 
 ;;;
 ;;;; defTriple

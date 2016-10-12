@@ -3,19 +3,10 @@
 ;;;; IRI module
 ;;;
 
-(cl:provide :iri)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-
-  ) ; end of eval-when
-
-(cl:defpackage :gx
-  (:shadow uri )
-  (:use :common-lisp :net.uri)
-  (:export "iri" "boundp" "bound-value" "iri-escape-for-symbol-name"
-   ))
-
 (in-package :gx)
+
+(shadow 'uri)
+(export '(iri boundp bound-value iri-escape-for-symbol-name))
 
 ;;;
 ;;;; IRI in SWCLOS system
@@ -291,3 +282,5 @@ it must be escaped for gen-delims characters except #\: and #\@. In this version
 ;;;
 ;;; Seiji Koide Nov-15-2010
 ;;;
+
+(cl:provide :iri)

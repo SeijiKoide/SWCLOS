@@ -55,15 +55,24 @@
   (require :rdfnode)
 ) ; end of eval-when
 
-(defpackage :gx
-  (:export |rdfs:Resource| metaRDFSclass rdfsClass *reify-p*
-           nodeID? nodeID2symbol mclasses)
-  (:export property?
-           subPropertyOf)
-  (:export typep class-direct-instances)
-  )
-
 (in-package :gx)
+
+(export '(|rdfs:Resource| metaRDFSclass rdfsClass *reify-p*
+          nodeID? nodeID2symbol mclasses))
+(export '(property? subPropertyOf class-direct-instances))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defmethod validate-superclass ((class rdf-node)
+				  (superclass standard-class))
+    t))
+
+;;; To be re-defined in GxType.cl
+(defun typep (obj type &optional env)
+  (cl:typep obj type env))
+(defun subtypep (sub super &optional env)
+  (cl:subtypep sub super env))
+(defun type-of (object)
+  (cl:type-of object))
 
 ;;;
 ;;;; First of all, 
@@ -459,3 +468,5 @@ This property may be used to indicate an RDF vocabulary in which a resource is d
 ;;;
 ;;; Seiji Koide Nov-15-2010
 ;;;
+
+(cl:provide :rdfboot)

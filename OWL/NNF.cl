@@ -10,11 +10,9 @@
 ;; 2008.08.18    move-not-inwards, conjunction, disjunction, make-exp, op, args, arg1, arg2 are moved to GxType
 ;; 2008.03.15    File created.
 
-(cl:defpackage :gx
-  (:export "variable?")
-  )
-
 (in-package :gx)
+
+(export 'variable?)
 
 ;;.............................................................................................
 ;;
@@ -165,3 +163,5 @@
            (values (cdr sk) (intern (subseq skstr 1 (position #\_ skstr))))))
         (t (let ((skstr (string sk)))
              (values nil (intern (subseq skstr 1 (position #\_ skstr))))))))
+
+(cl:provide :nnf)

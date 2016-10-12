@@ -22,10 +22,6 @@
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:use :common-lisp)
-  (:export            ))
-
 (in-package :gx)
 
 ;;; <owl-equalp> checks the equality of objects in OWL, namely it returns t, if 

@@ -28,8 +28,6 @@
 ;; 2002.09.04    File created
 ;;; ==================================================================================
 
-(cl:provide :xsd)
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :swclospackages)
   ) ; end of eval-when
@@ -256,3 +254,5 @@
 ;;;
 ;;; Seiji Koide Sep-11-2008
 ;;;
+
+(cl:provide :xsd)

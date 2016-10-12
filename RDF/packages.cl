@@ -32,8 +32,8 @@
 
 (cl:defpackage :dc
   (:use ) ; supressing using common lisp package
-  (:export "contributor" "coverage" "creator" "date" "description" "format" "identifier" 
-           "language" "publisher" "relation" "rights" "source" "subject" "title" "type"))
+  (:export #:contributor #:coverage #:creator #:date #:description #:format #:identifier
+           #:language #:publisher #:relation #:rights #:source #:subject #:title #:type))
 
 (cl:defpackage :rdf
   (:use ) ; supressing using common lisp package
@@ -72,3 +72,9 @@
              )
   ;; documentation is supplied from OWL.RDF file.
   )
+
+(defpackage :gx
+  (:use :common-lisp :net.uri) ; old: closer-common-lisp & puri
+  (:shadow typep subtypep type-of)
+  (:import-from :net.uri render-uri uri-fragment copy-uri uri-scheme)
+  (:documentation "http://www.TopOntologies.com/tools/SWCLOS#"))

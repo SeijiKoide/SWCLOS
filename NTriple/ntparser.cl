@@ -8,21 +8,20 @@
 ;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;; for the realization of the MEXT IT Program in Japan,
 ;;
-;; Copyright © 2003, by Galaxy Express Corporation
+;; Copyright ï¿½ 2003, by Galaxy Express Corporation
 ;;
 ;; History
 ;; -------
 ;; 2004.12.10    N-Triple parsing modified adapting <http://www.w3.org/TR/2004/REC-rdf-testcases-20040210/>
 ;; 2003.05.10    File created
 
-(defpackage :gx
-    (:export read-NTriple-file addTriple-from-file))
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :uri)
   ) ; end of eval-when
 
 (in-package :gx)
+
+(export '(read-NTriple-file addTriple-from-file))
 
 ;;
 ;; Name space is mapped to a lisp package.
