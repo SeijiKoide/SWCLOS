@@ -56,17 +56,17 @@
 
 (defpackage :owl
     (:use ) ; supressing using common lisp package
-    (:export Class Thing Nothing Restriction onProperty allValuesFrom someValuesFrom hasValue
-             minCardinality maxCardinality cardinality
-             allValuesFromRestriction someValuesFromRestriction hasValueRestriction 
-             cardinalityRestriction Ontology
-             oneOf differentFrom sameAs AllDifferent distinctMembers equivalentClass
-             TransitiveProperty ObjectProperty DatatypeProperty FunctionalProperty 
-             InverseFunctionalProperty SymmetricProperty inverseOf
-             intersectionOf unionOf disjointWith complementOf equivalentProperty
-             describe-slot-constraint 
-             DataRange DeprecatedProperty DeprecatedClass incompatibleWith backwardCompatibleWith
-             priorVersion versionInfo imports OntologyProperty AnnotationProperty
+    (:export "Class" "Thing" "Nothing" "Restriction" "onProperty" "allValuesFrom" "someValuesFrom" "hasValue"
+             "minCardinality" "maxCardinality" "cardinality"
+             "allValuesFromRestriction" "someValuesFromRestriction" "hasValueRestriction"
+             "cardinalityRestriction" "Ontology"
+             "oneOf" "differentFrom" "sameAs" "AllDifferent" "distinctMembers" "equivalentClass"
+             "TransitiveProperty" "ObjectProperty" "DatatypeProperty" "FunctionalProperty"
+             "InverseFunctionalProperty" "SymmetricProperty" "inverseOf"
+             "intersectionOf" "unionOf" "disjointWith" "complementOf" "equivalentProperty"
+             "describe-slot-constraint"
+             "DataRange" "DeprecatedProperty" "DeprecatedClass" "incompatibleWith" "backwardCompatibleWith"
+             "priorVersion" "versionInfo" "imports" "OntologyProperty" "AnnotationProperty"
              )
   ;; documentation is supplied from OWL.RDF file.
   )

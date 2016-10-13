@@ -93,8 +93,8 @@ rdfs:|Resource|.")
 ;;; This method is customized to return an appropriate slot definition class in SWCLOS, i.e., 
 ;;; <Property-direct-slot-definition> or <OwlProperty-direct-slot-definition>. Namely, if an 
 ;;; indicator in initargs is not a keyword, it must be a property name. The name of rdf, rdfs, 
-;;; and owl propertes are embeded in this routine. In other case, if the domain includes 'owl:Restriction', 
-;;; then Property-direct-slot-definition is returned. If the property is an instance of 'owl:ObjectProperty', 
+;;; and owl propertes are embeded in this routine. In other case, if the domain includes 'owl:|Restriction|', 
+;;; then Property-direct-slot-definition is returned. If the property is an instance of 'owl:|ObjectProperty|', 
 ;;; then OwlProperty-direct-slot-definition is returned, else if the defalut value is returned.
 
 (defmethod mop:direct-slot-definition-class ((class rdfs:|Class|) &rest initargs)
@@ -108,28 +108,28 @@ rdfs:|Resource|.")
       ((rdf:|type| rdfs:|subClassOf| rdfs:|label| rdfs:|isDefinedBy| rdfs:|comment| 
                  rdfs:|domain| rdfs:|range| rdfs:|subPropertyOf| rdfs:|member| rdf:|value| 
                  rdf:|first| rdf:|rest| rdf:|object| rdf:|subject| rdf:|predicate|  
-                 owl:oneOf owl:intersectionOf owl:unionOf 
-                 owl:allValuesFrom owl:hasValue owl:someValuesFromRestriction 
-                 owl:cardinality owl:maxCardinality owl:minCardinality
-                 owl:onProperty owl:distinctMembers owl:differentFrom owl:sameAs 
-                 owl:equivalentProperty owl:equivalentClass 
-                 owl:complementOf owl:disjointWith
-                 owl:inverseOf)           ; Note owl:inverseOf is an instance of rdf:Property
+                 owl:|oneOf| owl:|intersectionOf| owl:|unionOf| 
+                 owl:|allValuesFrom| owl:|hasValue| owl:|someValuesFromRestriction| 
+                 owl:|cardinality| owl:|maxCardinality| owl:|minCardinality|
+                 owl:|onProperty| owl:|distinctMembers| owl:|differentFrom| owl:|sameAs| 
+                 owl:|equivalentProperty| owl:|equivalentClass| 
+                 owl:|complementOf| owl:|disjointWith|
+                 owl:|inverseOf|)           ; Note owl:|inverseOf| is an instance of rdf:Property
        (find-class 'gx::Property-direct-slot-definition))
       (otherwise
        (cond ((property? (getf initargs :name))
               (let* ((prop (symbol-value (getf initargs :name)))
                      (domains (and (slot-boundp prop 'rdfs:|domain|) (slot-value prop 'rdfs:|domain|))))
                 (cond ((and (consp domains)
-                            (member 'owl:Restriction domains :key #'name))
+                            (member 'owl:|Restriction| domains :key #'name))
                        (find-class 'gx::Property-direct-slot-definition))
-                      ((and domains (eq (class-name domains) 'owl:Restriction)
+                      ((and domains (eq (class-name domains) 'owl:|Restriction|)
                        (find-class 'gx::Property-direct-slot-definition)))
-                      ((and (find-class 'owl:ObjectProperty nil) (cl:typep prop 'owl:ObjectProperty))
+                      ((and (find-class 'owl:|ObjectProperty| nil) (cl:typep prop 'owl:|ObjectProperty|))
                        (find-class 'OwlProperty-direct-slot-definition))
                       (t (find-class *default-slot-definition-class*)))))
              (t ;; non-keyword symbol should be a role name.
-              (cond ((cl:typep (symbol-value (getf initargs :name)) 'owl:ObjectProperty)
+              (cond ((cl:typep (symbol-value (getf initargs :name)) 'owl:|ObjectProperty|)
                      (find-class 'OwlProperty-direct-slot-definition))
                     (t (find-class *default-slot-definition-class*)))))))))
 
@@ -157,14 +157,14 @@ rdfs:|Resource|.")
 ;;; notion of disjointness is taken care for not only OWL universe but also RDF universe. In 
 ;;; SWCLOS, the clash by disjointness is directed as follows.
 ;;; ----------------------------------------------------------------------------------
-;;; (defConcept C1 (rdfs:|subClassOf| (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:|decimal|))))
-;;; (defConcept C2 (rdfs:|subClassOf| (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:|float|))))
-;;; (defConcept C3 (rdfs:|subClassOf| (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:|integer|))))
-;;; (defConcept C4 (rdfs:|subClassOf| (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:|short|))))
+;;; (defConcept C1 (rdfs:|subClassOf| (owl:|Restriction| (owl:|onProperty| s)
+;;;                                    (owl:|allValuesFrom| xsd:|decimal|))))
+;;; (defConcept C2 (rdfs:|subClassOf| (owl:|Restriction| (owl:|onProperty| s)
+;;;                                    (owl:|allValuesFrom| xsd:|float|))))
+;;; (defConcept C3 (rdfs:|subClassOf| (owl:|Restriction| (owl:|onProperty| s)
+;;;                                    (owl:|allValuesFrom| xsd:|integer|))))
+;;; (defConcept C4 (rdfs:|subClassOf| (owl:|Restriction| (owl:|onProperty| s)
+;;;                                    (owl:|allValuesFrom| xsd:|short|))))
 ;;; (defConcept C5 (rdfs:|subClassOf| C4 C2))
 ;;; (mop:slot-definition-type (car (mop:compute-slots C5)))
 ;;; -> Error: Disjoint pair #<forall s xsd:|short|> and #<forall s xsd:|float|> found in slot 
@@ -226,8 +226,8 @@ rdfs:|Resource|.")
 ;;; ----------------------------------------------------------------------------------
 
 ;;;
-;;; Note that the domain and range of owl:equivalentProperty is rdf:Property rather than 
-;;; owl:ObjectProperty.
+;;; Note that the domain and range of owl:|equivalentProperty| is rdf:Property rather than 
+;;; owl:|ObjectProperty|.
 ;;;
 
 (defparameter rdf:|Property|

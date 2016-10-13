@@ -217,7 +217,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 ;;; Offically, Semantic Webs are regarded as an open world. Namely, it is regarded that you cannot know all 
 ;;; knowledge about the world. The limited capability of agent cannot exhaust almost infinite WWW world.  
 ;;; It is called Open World Assumption (OWA) in Sematic Webs. However, this assumption produces less results 
-;;; in reasoning, especially with respect to the existential value restriction of property or owl:someValuesFrom. 
+;;; in reasoning, especially with respect to the existential value restriction of property or owl:|someValuesFrom|. 
 ;;; Rigorous OWA does not infer anything on existential restrictions, even if you add a slot value that does 
 ;;; not satisfy an existenitially restriction into the slot in OWL, because a satisfiable value may be defined at 
 ;;; another place in WWW, where you do not know. 
@@ -284,12 +284,12 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
             xsd:|short| xsd:|byte| xsd:|nonNegativeInteger| xsd:|positiveInteger| 
             xsd:|nonPositiveInteger| xsd:|negativeInteger|
             xsd:|duration|
-            owl:DataRange owl:DeprecatedProperty owl:DeprecatedClass owl:incompatibleWith owl:backwardCompatibleWith
-                         owl:priorVersion owl:versionInfo owl:imports owl:OntologyProperty owl:Ontology 
-                         owl:AnnotationProperty owl:InverseFunctionalProperty owl:FunctionalProperty owl:SymmetricProperty 
-                         owl:TransitiveProperty owl:inverseOf owl:DatatypeProperty owl:ObjectProperty 
-                         owl:cardinality owl:maxCardinality owl:minCardinality owl:someValuesFrom owl:hasValue 
-                         owl:allValuesFrom owl:onProperty )))
+            owl:|DataRange| owl:|DeprecatedProperty| owl:|DeprecatedClass| owl:|incompatibleWith| owl:|backwardCompatibleWith|
+            owl:|priorVersion| owl:|versionInfo| owl:|imports| owl:|OntologyProperty| owl:|Ontology| 
+            owl:|AnnotationProperty| owl:|InverseFunctionalProperty| owl:|FunctionalProperty| owl:|SymmetricProperty| 
+            owl:|TransitiveProperty| owl:|inverseOf| owl:|DatatypeProperty| owl:|ObjectProperty| 
+            owl:|cardinality| owl:|maxCardinality| owl:|minCardinality| owl:|someValuesFrom| owl:|hasValue| 
+            owl:|allValuesFrom| owl:|onProperty|)))
   )
 
 (defun read-rdf-file (accepter-fun &optional (file (ask-user-rdf-file)) (code :default))

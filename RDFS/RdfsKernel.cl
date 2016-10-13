@@ -610,7 +610,7 @@ of this <instance> property."
                  (let ((oldval (and (slot-exists-p instance role)  ; when ordinal property
                                     (slot-boundp instance role)
                                     (slot-value instance role))))
-                   (cond ((eq role 'owl:oneOf)
+                   (cond ((eq role 'owl:|oneOf|)
                           (when oldval
                             (let ((diff (set-difference filler oldval :test #'owl-same-p)))
                               (when diff

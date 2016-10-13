@@ -57,12 +57,12 @@
   "If both <x> and <y> have an intersection of concepts and two sets of intersection are 
 equivalent as class, then <x> and <y> is equivalent as class. If either or neither has an 
 instersection, then returns false."
-  (when (and (slot-exists-p x 'owl:intersectionOf)    ;added for Hotz's project 
-             (slot-exists-p y 'owl:intersectionOf)    ;added for Hotz's project 
-             (slot-boundp x 'owl:intersectionOf)
-             (slot-boundp y 'owl:intersectionOf))
-    (let ((interx (slot-value x 'owl:intersectionOf))
-          (intery (slot-value y 'owl:intersectionOf)))
+  (when (and (slot-exists-p x 'owl:|intersectionOf|)    ;added for Hotz's project 
+             (slot-exists-p y 'owl:|intersectionOf|)    ;added for Hotz's project 
+             (slot-boundp x 'owl:|intersectionOf|)
+             (slot-boundp y 'owl:|intersectionOf|))
+    (let ((interx (slot-value x 'owl:|intersectionOf|))
+          (intery (slot-value y 'owl:|intersectionOf|)))
       (let ((xsupers (remove-if #'owl-restriction-p interx))
             (ysupers (remove-if #'owl-restriction-p intery))
             (xrestrictions (remove-if-not #'owl-restriction-p interx))
@@ -75,19 +75,19 @@ instersection, then returns false."
 (defun %union-equivalent (x y)
   "If both <x> and <y> have an union of concepts and two sets of union are equivalent as class, 
    then <x> and <y> is equivalent as class."
-  (when (and (slot-boundp x 'owl:unionOf)
-             (slot-boundp y 'owl:unionOf))
-    (let ((unionx (slot-value x 'owl:unionOf))
-          (uniony (slot-value y 'owl:unionOf)))
+  (when (and (slot-boundp x 'owl:|unionOf|)
+             (slot-boundp y 'owl:|unionOf|))
+    (let ((unionx (slot-value x 'owl:|unionOf|))
+          (uniony (slot-value y 'owl:|unionOf|)))
       (and (subsetp unionx uniony :test #'owl-equivalent-p)
            (subsetp uniony unionx :test #'owl-equivalent-p)))))
 
 (defun %complemently-equal (x y)
   ;; if both complements are set equal, then equal.
-  (cond ((and (slot-boundp x 'owl:complementOf)
-              (slot-boundp y 'owl:complementOf))
-         (let ((xcomplement (slot-value x 'owl:complementOf))
-               (ycomplement (slot-value y 'owl:complementOf)))
+  (cond ((and (slot-boundp x 'owl:|complementOf|)
+              (slot-boundp y 'owl:|complementOf|))
+         (let ((xcomplement (slot-value x 'owl:|complementOf|))
+               (ycomplement (slot-value y 'owl:|complementOf|)))
            (%owl-equivalent-p-without-complements xcomplement ycomplement)))
         ((and (slot-boundp x 'complement-class)
               (slot-boundp y 'complement-class))
@@ -110,30 +110,30 @@ instersection, then returns false."
     (flet ((value-eql (c1 c2)
                       (and (eql (class-of c1) (class-of c2))
                            (etypecase c1
-                             (owl:allValuesFromRestriction
+                             (owl:|allValuesFromRestriction|
                               (set-equal-with-equivalent-p
-                               (mklist (slot-value c1 'owl:allValuesFrom))
-                               (mklist (slot-value c2 'owl:allValuesFrom))))
-                             (owl:someValuesFromRestriction
+                               (mklist (slot-value c1 'owl:|allValuesFrom|))
+                               (mklist (slot-value c2 'owl:|allValuesFrom|))))
+                             (owl:|someValuesFromRestriction|
                               (set-equal-with-equivalent-p
-                               (mklist (slot-value c1 'owl:someValuesFrom))
-                               (mklist (slot-value c2 'owl:someValuesFrom))))
-                             (owl:hasValueRestriction
+                               (mklist (slot-value c1 'owl:|someValuesFrom|))
+                               (mklist (slot-value c2 'owl:|someValuesFrom|))))
+                             (owl:|hasValueRestriction|
                               (set-equal-with-same-p
-                               (mklist (slot-value c1 'owl:hasValue))
-                               (mklist (slot-value c2 'owl:hasValue))))
-                             (owl:cardinalityRestriction
-                              (let ((c1max (or (get-slot-value c1 'owl:cardinality)
-                                               (get-slot-value c1 'owl:maxCardinality)
+                               (mklist (slot-value c1 'owl:|hasValue|))
+                               (mklist (slot-value c2 'owl:|hasValue|))))
+                             (owl:|cardinalityRestriction|
+                              (let ((c1max (or (get-slot-value c1 'owl:|cardinality|)
+                                               (get-slot-value c1 'owl:|maxCardinality|)
                                                most-positive-fixnum))
-                                    (c1min (or (get-slot-value c1 'owl:cardinality)
-                                               (get-slot-value c1 'owl:minCardinality)
+                                    (c1min (or (get-slot-value c1 'owl:|cardinality|)
+                                               (get-slot-value c1 'owl:|minCardinality|)
                                                most-negative-fixnum))
-                                    (c2max (or (get-slot-value c2 'owl:cardinality)
-                                               (get-slot-value c2 'owl:maxCardinality)
+                                    (c2max (or (get-slot-value c2 'owl:|cardinality|)
+                                               (get-slot-value c2 'owl:|maxCardinality|)
                                                most-positive-fixnum))
-                                    (c2min (or (get-slot-value c2 'owl:cardinality)
-                                               (get-slot-value c2 'owl:minCardinality)
+                                    (c2min (or (get-slot-value c2 'owl:|cardinality|)
+                                               (get-slot-value c2 'owl:|minCardinality|)
                                                most-negative-fixnum)))
                                 ;; equality at cardinalities
                                 (setq c1min (value-of c1min))
@@ -141,7 +141,7 @@ instersection, then returns false."
                                 (setq c1max (value-of c1max))
                                 (setq c2max (value-of c2max))
                                 (and (= c1min c2min) (= c1max c2max))))))))
-      (and (eq (slot-value c1 'owl:onProperty) (slot-value c2 'owl:onProperty))
+      (and (eq (slot-value c1 'owl:|onProperty|) (slot-value c2 'owl:|onProperty|))
            (value-eql c1 c2)             ;if empty t
            ))))
 
@@ -166,7 +166,7 @@ instersection, then returns false."
                ((and (owl-restriction-p x) (owl-restriction-p y))
                 (%owl-restriction-equal x y))
                ((and (owl-oneof-p x) (owl-oneof-p y))
-                (%oneof-equivalent (slot-value x 'owl:oneOf) (slot-value y 'owl:oneOf)))
+                (%oneof-equivalent (slot-value x 'owl:|oneOf|) (slot-value y 'owl:|oneOf|)))
                ((%intersection-equivalent x y)) ; if intersection slot is equal, then equivalent
                ((%union-equivalent x y))        ; if unionOf slot is equal, then equivalent
                ((%owl-equivalent-p x y))
@@ -210,7 +210,7 @@ instersection, then returns false."
                ((and (owl-restriction-p x) (owl-restriction-p y))
                 (%owl-restriction-equal x y))
                ((and (owl-oneof-p x) (owl-oneof-p y))
-                (%oneof-equivalent (slot-value x 'owl:oneOf) (slot-value y 'owl:oneOf)))
+                (%oneof-equivalent (slot-value x 'owl:|oneOf|) (slot-value y 'owl:|oneOf|)))
                ((%intersection-equivalent x y)) ; if intersection slot is equal, then equivalent
                ((%union-equivalent x y))        ; if unionOf slot is equal, then equivalent
                ((%owl-equivalent-p x y))
@@ -244,7 +244,7 @@ instersection, then returns false."
 |#
 
 (defun %owl-equivalent-p (x y)
-  "checks owl:equivalentOf."
+  "checks owl:|equivalentOf|."
   (cond ((intersection (%equivalent-classes-of x) (%equivalent-classes-of y) ; seiji 2009.01.11
                        :test #'%owl-equivalent-p-without-equivalents)
          t)
@@ -265,7 +265,7 @@ instersection, then returns false."
                ((and (owl-restriction-p x) (owl-restriction-p y))
                 (%owl-restriction-equal x y))
                ((and (owl-oneof-p x) (owl-oneof-p y))
-                (%oneof-equivalent (slot-value x 'owl:oneOf) (slot-value y 'owl:oneOf)))
+                (%oneof-equivalent (slot-value x 'owl:|oneOf|) (slot-value y 'owl:|oneOf|)))
                ((%intersection-equivalent x y)) ; if intersection slot is equal, then equivalent
                ((%union-equivalent x y))        ; if unionOf slot is equal, then equivalent
   ;;;;;;;;;;;  ((%owl-equivalent-p x y))
@@ -298,7 +298,7 @@ instersection, then returns false."
                ((and (owl-restriction-p x) (owl-restriction-p y))
                 (%owl-restriction-equal x y))
                ((and (owl-oneof-p x) (owl-oneof-p y))
-                (%oneof-equivalent (slot-value x 'owl:oneOf) (slot-value y 'owl:oneOf)))
+                (%oneof-equivalent (slot-value x 'owl:|oneOf|) (slot-value y 'owl:|oneOf|)))
                ((%intersection-equivalent x y)) ; if intersection slot is equal, then equivalent
                ((%union-equivalent x y))        ; if unionOf slot is equal, then equivalent
                ((%owl-equivalent-p x y))
@@ -394,8 +394,8 @@ instersection, then returns false."
                   (%intersection-disjoint-p (intersection-of c1) (intersection-of c2))
                 (when val2 (return-from %owl-disjoint-p (values val1 val2))))))
         ((and (owl-oneof-p c1) (owl-oneof-p c2))
-         (let ((c1-ones (slot-value c1 'owl:oneOf))
-               (c2-ones (slot-value c2 'owl:oneOf)))
+         (let ((c1-ones (slot-value c1 'owl:|oneOf|))
+               (c2-ones (slot-value c2 'owl:|oneOf|)))
            (cond ((intersection c1-ones c2-ones :test #'%owl-same-p)
                   (values nil t))
                  (t (values t t)))))
@@ -419,29 +419,29 @@ instersection, then returns false."
 (defun simple-disjoint-pair-p-in-supers (c1 c2)
   "This predicate cannot be applicable to slot type option."
   (typecase c1
-    (owl:allValuesFromRestriction
+    (owl:|allValuesFromRestriction|
      (typecase c2
-       (owl:allValuesFromRestriction
+       (owl:|allValuesFromRestriction|
         (simple-disjoint-pair-p-in-supers
-         (slot-value c1 'owl:allValuesFrom)
-         (slot-value c2 'owl:allValuesFrom)))
+         (slot-value c1 'owl:|allValuesFrom|)
+         (slot-value c2 'owl:|allValuesFrom|)))
        (otherwise nil)))
-    (owl:someValuesFromRestriction 
+    (owl:|someValuesFromRestriction| 
      (typecase c2
-       (owl:someValuesFromRestriction
+       (owl:|someValuesFromRestriction|
         #| for pizza.owl FruttiDiMare
         (simple-disjoint-pair-p-in-supers
-         (slot-value c1 'owl:someValuesFrom)
-         (slot-value c2 'owl:someValuesFrom))
+         (slot-value c1 'owl:|someValuesFrom|)
+         (slot-value c2 'owl:|someValuesFrom|))
         |#
         nil)
        (otherwise nil)))
-    (owl:hasValueRestriction nil)
+    (owl:|hasValueRestriction| nil)
     (otherwise 
      (typecase c2
-       (owl:allValuesFromRestriction )
-       (owl:someValuesFromRestriction )
-       (owl:hasValueRestriction )
+       (owl:|allValuesFromRestriction| )
+       (owl:|someValuesFromRestriction| )
+       (owl:|hasValueRestriction| )
        (otherwise 
         (or (and (slot-exists-p c1 'disjoint-classes) (slot-boundp c1 'disjoint-classes)
                  (member c2 (slot-value c1 'disjoint-classes)))
@@ -501,15 +501,15 @@ instersection, then returns false."
                (values nil val2))))))
 
 (defun %restriction-disjoint-p (c1 c2)
-  (let ((role1 (name (slot-value c1 'owl:onProperty)))
-        (role2 (name (slot-value c2 'owl:onProperty))))
+  (let ((role1 (name (slot-value c1 'owl:|onProperty|)))
+        (role2 (name (slot-value c2 'owl:|onProperty|))))
     (unless (equivalent-property-p role1 role2)
       (return-from %restriction-disjoint-p (values nil nil)))
     ;; compare only if role1 and role2 is equivalent.
-    (cond ((cl:typep c1 owl:hasValueRestriction)
-           (cond ((cl:typep c2 owl:someValuesFromRestriction) (values t t))
-                 ((cl:typep c2 owl:allValuesFromRestriction) (values t t))
-                 ((cl:typep c2 owl:hasValueRestriction)
+    (cond ((cl:typep c1 owl:|hasValueRestriction|)
+           (cond ((cl:typep c2 owl:|someValuesFromRestriction|) (values t t))
+                 ((cl:typep c2 owl:|allValuesFromRestriction|) (values t t))
+                 ((cl:typep c2 owl:|hasValueRestriction|)
                   (some #'(lambda (fil1)
                             (some #'(lambda (fil2)
                                       (cond ((multiple-value-bind (val1 val2)
@@ -519,13 +519,13 @@ instersection, then returns false."
                                                    (values val1 val2)))))
                                             ;; else nothing done
                                             ))
-                                  (mklist (slot-value c2 'owl:hasValue))))
-                        (mklist (slot-value c1 'owl:hasValue))))
+                                  (mklist (slot-value c2 'owl:|hasValue|))))
+                        (mklist (slot-value c1 'owl:|hasValue|))))
                  ((error "Cant happen"))))
-          ((cl:typep c1 owl:someValuesFromRestriction)
-           (cond ((cl:typep c2 owl:hasValueRestriction) (values t t))
-                 ((cl:typep c2 owl:allValuesFromRestriction) (values t t))
-                 ((cl:typep c2 owl:someValuesFromRestriction)
+          ((cl:typep c1 owl:|someValuesFromRestriction|)
+           (cond ((cl:typep c2 owl:|hasValueRestriction|) (values t t))
+                 ((cl:typep c2 owl:|allValuesFromRestriction|) (values t t))
+                 ((cl:typep c2 owl:|someValuesFromRestriction|)
                   (some #'(lambda (fil1)
                             (some #'(lambda (fil2) 
                                       (cond ((owl-equivalent-p fil1 fil2)
@@ -537,21 +537,21 @@ instersection, then returns false."
                                                  (return-from %restriction-disjoint-p
                                                    (values val1 val2)))))))
                                   ;; else nothing done
-                                  (mklist (slot-value c2 'owl:someValuesFrom))))
-                        (mklist (slot-value c1 'owl:someValuesFrom))))
+                                  (mklist (slot-value c2 'owl:|someValuesFrom|))))
+                        (mklist (slot-value c1 'owl:|someValuesFrom|))))
                  ((error "Cant happen"))))
-          ((cl:typep c1 owl:allValuesFromRestriction)
-           (cond ((cl:typep c2 owl:hasValueRestriction) (values t t))
-                 ((cl:typep c2 owl:someValuesFromRestriction) (values t t))
-                 ((cl:typep c2 owl:allValuesFromRestriction)
+          ((cl:typep c1 owl:|allValuesFromRestriction|)
+           (cond ((cl:typep c2 owl:|hasValueRestriction|) (values t t))
+                 ((cl:typep c2 owl:|someValuesFromRestriction|) (values t t))
+                 ((cl:typep c2 owl:|allValuesFromRestriction|)
                   (if (every #'(lambda (fil1)
                                  (every #'(lambda (fil2)
                                             (when (%owl-disjoint-p fil1 fil2)
                                               (return-from %restriction-disjoint-p
                                                 (values t t)))
                                             (owl-equivalent-p fil1 fil2))
-                                        (mklist (slot-value c2 'owl:allValuesFrom))))
-                             (mklist (slot-value c1 'owl:allValuesFrom)))
+                                        (mklist (slot-value c2 'owl:|allValuesFrom|))))
+                             (mklist (slot-value c1 'owl:|allValuesFrom|)))
                       (values nil t)
                     (values nil nil)))
                  ((error "Cant happen"))))
@@ -578,10 +578,10 @@ instersection, then returns false."
         ((and (eq c t) d) (values nil t))
         ((eq c rdfs:|Resource|) (values nil t)) ; in RDF universe
         ((eq d rdfs:|Resource|) (values nil t))
-        ((eq d owl:Nothing) (values t t))     ; owl:Nothing shares no instances with any class.
-        ((eq c owl:Nothing) (values t t))
-        ((and (eq c owl:Thing) (owl-class-p d)) (values nil t)) ; owl:Thing subsumes owl classes
-        ((and (owl-class-p c) (eq d owl:Thing)) (values nil t))
+        ((eq d owl:|Nothing|) (values t t))     ; owl:Nothing shares no instances with any class.
+        ((eq c owl:|Nothing|) (values t t))
+        ((and (eq c owl:|Thing|) (owl-class-p d)) (values nil t)) ; owl:Thing subsumes owl classes
+        ((and (owl-class-p c) (eq d owl:|Thing|)) (values nil t))
         ((and (consp c) (consp d))
          (case (op c)
            (and (case (op d)
