@@ -32,8 +32,8 @@
 
 (cl:defpackage :dc
   (:use ) ; supressing using common lisp package
-  (:export #:contributor #:coverage #:creator #:date #:description #:format #:identifier
-           #:language #:publisher #:relation #:rights #:source #:subject #:title #:type))
+  (:export "contributor" "coverage" "creator" "date" "description" "format" "identifier"
+           "language" "publisher" "relation" "rights" "source" "subject" "title" "type"))
 
 (cl:defpackage :rdf
   (:use ) ; supressing using common lisp package
@@ -49,9 +49,9 @@
 
 (cl:defpackage :rdfs
   (:use ) ; supressing using common lisp package
-  (:export Resource Class subClassOf subPropertyOf seeAlso domain range
-           isDefinedBy range domain Literal Container label comment member
-           ContainerMembershipProperty Datatype)
+  (:export "Resource" "Class" "subClassOf" "subPropertyOf" "seeAlso" "domain" "range"
+           "isDefinedBy" "range" "domain" "Literal" "Container" "label" "comment" "member"
+           "ContainerMembershipProperty" "Datatype")
   (:documentation "http://www.w3.org/2000/01/rdf-schema#"))
 
 (defpackage :owl

@@ -233,7 +233,7 @@ which work as the constraint for settable number of values."))
   "returns true if <name> is an rdf property name"
   (declare (inline))
   (case name
-    ((rdfs:subClassOf rdfs:label rdfs:comment rdfs:isDefinedBy rdfs:domain rdfs:range rdfs:subPropertyOf)
+    ((rdfs:|subClassOf| rdfs:|label| rdfs:|comment| rdfs:|isDefinedBy| rdfs:|domain| rdfs:|range| rdfs:|subPropertyOf|)
      t)
     (otherwise 
      (and (boundp name) (cl:typep (symbol-value name) 'rdf:|Property|)))))

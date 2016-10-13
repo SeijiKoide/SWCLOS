@@ -40,7 +40,7 @@
 
 (defun dont-expand-p (resource)
   (and (not *force-recursive-p*)
-       (cl:typep resource rdfs:Resource)
+       (cl:typep resource rdfs:|Resource|)
        (or (and (slot-boundp resource 'rdf:|about|) (slot-value resource 'rdf:|about|))
            (and (name resource) (not (nodeID? (name resource)))))))
 
@@ -65,7 +65,7 @@
                        append 
                          (typecase filler
                            (symbol (list (symbol-package filler)))
-                           (rdfs:Resource
+                           (rdfs:|Resource|
                             (cond (*force-recursive-p*
                                    (collect-used-packaged-from (list filler)))
                                   (t nil))))))))
@@ -130,7 +130,7 @@
     (setq slots (remove-if #'(lambda (slot) (null (cdr slot))) slots))
     (cond ((null slots) (write-about= resource s))
           (t (write-char #\< s)
-             (cond ((eq class 'rdfs:Resource)
+             (cond ((eq class 'rdfs:|Resource|)
                     (write 'rdf:|Description| :stream s))
                    ((eq class '|rdfs:Resource|)
                     (write 'rdf:|Description| :stream s))
@@ -161,7 +161,7 @@
              (pprint-newline :mandatory s)
              (write-char #\< s)
              (write-char #\/ s)
-             (cond ((eq class 'rdfs:Resource)
+             (cond ((eq class 'rdfs:|Resource|)
                     (write 'rdf:|Description| :stream s))
                    ((eq class '|rdfs:Resource|)
                     (write 'rdf:|Description| :stream s))
@@ -181,7 +181,7 @@
   (cond ((rsc-object-p resource)
          (cond ((anonymous-p resource)
                 (write-char #\< s)
-                (write 'rdfs:subClassOf :stream s)
+                (write 'rdfs:|subClassOf| :stream s)
                 (write-char #\> s)
                 (pprint-indent :block 2 s)
                 (pprint-newline :mandatory s)
@@ -193,9 +193,9 @@
                 (pprint-newline :mandatory s)
                 (write-char #\< s)
                 (write-char #\/ s)
-                (write 'rdfs:subClassOf :stream s)
+                (write 'rdfs:|subClassOf| :stream s)
                 (write-char #\> s))
-               (t (write-resource= 'rdfs:subClassOf resource s))))
+               (t (write-resource= 'rdfs:|subClassOf| resource s))))
         ((object? resource)
          (write-slot-subclassof (symbol-value resource) s))
         ((error "Cant happen in WRITE-SLOT-SUBCLASSOF ~S" resource))))
@@ -204,12 +204,12 @@
   (let ((role (car slot))
         (resources (cdr slot)))
     (case role
-      ((rdf:|type| rdfs:subPropertyOf)
+      ((rdf:|type| rdfs:|subPropertyOf|)
        (pprint-logical-block (s resources)
          (loop (write-resource= role (pprint-pop) s)
                (pprint-exit-if-list-exhausted)
                (pprint-newline :mandatory s))))
-      (rdfs:subClassOf
+      (rdfs:|subClassOf|
        (pprint-logical-block (s resources)
          (loop (write-slot-subclassof (pprint-pop) s)
                (pprint-exit-if-list-exhausted)
@@ -247,7 +247,7 @@
                                  (write-char #\> s)
                                  (typecase (content resource)
                                    (uri (princ (content resource) s))
-                                   (rdfs:Resource (pprint-indent :block 2 s)
+                                   (rdfs:|Resource| (pprint-indent :block 2 s)
                                                   (pprint-newline :mandatory s)
                                                   (write-resource (content resource) s)
                                                   (pprint-indent :block 0 s)
@@ -296,7 +296,7 @@
     (uri (write-char #\< s)
                  (render-uri resource s)
                  (write-char #\> s))
-    (rdfs:Resource (cond ((dont-expand-p resource)
+    (rdfs:|Resource| (cond ((dont-expand-p resource)
                           (write-about= resource s))
                          (t (write-resource resource s))))
     (otherwise (write resource :stream s))))

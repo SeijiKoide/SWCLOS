@@ -120,42 +120,42 @@ Note that it is not cared that symbols are bound to resource objects or not."))
 
 (defun named-p (resource)
   (typecase resource
-    (rdfs:Class (not (not (class-name resource))))
+    (rdfs:|Class| (not (not (class-name resource))))
     (rdf:|Property| (not (not (name resource))))
-    (rdfs:Resource
+    (rdfs:|Resource|
      (not (not (slot-value resource 'excl::name))))))
 
 (defun anonymous-p (resource)
   (typecase resource
-    (rdfs:Class (not (class-name resource)))
+    (rdfs:|Class| (not (class-name resource)))
     (rdf:|Property| (not (name resource)))
-    (rdfs:Resource
+    (rdfs:|Resource|
      (or (not (slot-exists-p resource 'excl::name))
          (not (slot-value resource 'excl::name))))))
 #|
 (defun nodeID-p (resource)
-  (and (cl:typep resource rdfs:Resource)
+  (and (cl:typep resource rdfs:|Resource|)
        (gx::name resource)
        (symbol-package (gx::name resource))
        (string= "_" (package-name (symbol-package (gx::name resource))))))
 |#
 (defun get-form (resource)
   (when (null resource) (return-from get-form))
-  (assert (typep resource rdfs:Resource))
+  (assert (typep resource rdfs:|Resource|))
   `(,(or (type-tag resource) (type-of resource))
       ,@(unless (anonymous-p resource) (list (name resource)))
       ,@(when (and (slot-boundp resource 'rdf:|about|) (slot-value resource 'rdf:|about|))
           `((rdf:|about| ,(slot-value resource 'rdf:|about|))))
       ,@(loop for (role . fillers) in (get-slots resource)
-           ; unless (eq role 'rdfs:label)
+           ; unless (eq role 'rdfs:|label|)
             collect (cons role 
                           (loop for filler in fillers
                               collect (cond ;((cl:typep filler 'rdf:|inLang|)
                                             ; `(,(lang filler) ,(content filler)))
                                             ((typep filler 'xsd:|anySimpleType|) filler)
-                                            ((typep filler rdfs:Literal) filler)
+                                            ((typep filler rdfs:|Literal|) filler)
                                             ((typep filler 'uri) filler)
-                                            ((eq role 'rdfs:subClassOf)
+                                            ((eq role 'rdfs:|subClassOf|)
                                              (or (and (symbolp filler) filler)
                                                  (and (rdf-class-p filler) (class-name filler))
                                                  (get-form filler)))
@@ -178,10 +178,10 @@ Note that it is not cared that symbols are bound to resource objects or not."))
    is not a resource.")
   )
 
-(defmethod get-slots ((obj rdfs:Class))
+(defmethod get-slots ((obj rdfs:|Class|))
   (slots-of obj))
 
-(defmethod get-slots ((obj rdfs:Resource))
+(defmethod get-slots ((obj rdfs:|Resource|))
   (slots-of obj))
 
 (defmethod get-slots ((obj symbol))
@@ -193,12 +193,12 @@ Note that it is not cared that symbols are bound to resource objects or not."))
   nil)
 
 (defun make-anonymous-label (ins)
-  (make-symbol (concatenate 'string "an-anonymous-" (string (slot-value (class-of ins) 'rdfs:label)))))
+  (make-symbol (concatenate 'string "an-anonymous-" (string (slot-value (class-of ins) 'rdfs:|label|)))))
 
 (defun mop-specs (mop)
   "mop-specs <mop>
    returns a list of direct specials of <mop>."
-  (cond ((typep mop 'rdfs:Class)
+  (cond ((typep mop 'rdfs:|Class|)
          (mop:class-direct-subclasses mop))
         (t nil)))
 
@@ -230,12 +230,12 @@ Note that it is not cared that symbols are bound to resource objects or not."))
       collect it))
 
 (defmethod get-about-slot ((mop rdf:|Property|))
-  (when (get (slot-value mop 'rdfs:label) 'rdf:|about|)
-    (list (list 'rdf:|about| (get (slot-value mop 'rdfs:label) 'rdf:|about|)))))
+  (when (get (slot-value mop 'rdfs:|label|) 'rdf:|about|)
+    (list (list 'rdf:|about| (get (slot-value mop 'rdfs:|label|) 'rdf:|about|)))))
 
-(defmethod get-about-slot ((mop rdfs:Resource))
-  (when (and (slot-exists-p mop 'rdfs:label) (slot-boundp mop 'rdfs:label) (get (slot-value mop 'rdfs:label) 'rdf:|about|))
-    (list (list 'rdf:|about| (get (slot-value mop 'rdfs:label) 'rdf:|about|)))))
+(defmethod get-about-slot ((mop rdfs:|Resource|))
+  (when (and (slot-exists-p mop 'rdfs:|label|) (slot-boundp mop 'rdfs:|label|) (get (slot-value mop 'rdfs:|label|) 'rdf:|about|))
+    (list (list 'rdf:|about| (get (slot-value mop 'rdfs:|label|) 'rdf:|about|)))))
 
 (defun path-filler (mop path)
   "path-filler <mop> <path>
@@ -262,10 +262,10 @@ Note that it is not cared that symbols are bound to resource objects or not."))
                  (setq role (symbol-value role)))
                (cond ((gx::subproperty-p role rdf:|type|)
                       (path-filler (constraint-filter (type-of mop) type) (cdr path)))
-                     ((gx::subproperty-p role rdfs:subClassOf)
-                      (path-filler (constraint-filter (slot-value mop 'rdfs:subClassOf) type) (cdr path)))
-                     ((gx::subproperty-p role rdfs:label)
-                      (path-filler (constraint-filter (slot-value mop 'rdfs:label) type) (cdr path)))
+                     ((gx::subproperty-p role rdfs:|subClassOf|)
+                      (path-filler (constraint-filter (slot-value mop 'rdfs:|subClassOf|) type) (cdr path)))
+                     ((gx::subproperty-p role rdfs:|label|)
+                      (path-filler (constraint-filter (slot-value mop 'rdfs:|label|) type) (cdr path)))
                      (t (let ((vals (get-value mop role)))
                           (path-filler (constraint-filter vals type) (cdr path))))))))))
 
@@ -322,34 +322,34 @@ Note that it is not cared that symbols are bound to resource objects or not."))
 (defmethod collect-direct-subtypes ((class symbol))
   (collect-direct-subtypes (symbol-value class)))
 
-(defmethod collect-direct-subtypes ((class rdfs:Class))
+(defmethod collect-direct-subtypes ((class rdfs:|Class|))
   (mop:class-direct-subclasses class))
 
 (defmethod collect-all-subtypes ((class symbol))
   (collect-all-subtypes (symbol-value class)))
 
-(defmethod collect-all-subtypes ((class rdfs:Class))
+(defmethod collect-all-subtypes ((class rdfs:|Class|))
   (remove-duplicates 
    (append (collect-direct-subtypes class)
            (loop for sub in (mop:class-direct-subclasses class)
-               append (cond ((eq sub (find-class 'rdfsClass)) (list rdfs:Class))
+               append (cond ((eq sub (find-class 'rdfsClass)) (list rdfs:|Class|))
                             (t (collect-all-subtypes sub)))))))
 
 (defmethod collect-all-subsumed-types ((class symbol))
   (collect-all-subsumed-types (symbol-value class)))
 
-(defmethod collect-all-subsumed-types ((class rdfs:Class))
+(defmethod collect-all-subsumed-types ((class rdfs:|Class|))
   (collect-all-subtypes class))
 
 (defmethod collect-direct-instances-of ((class symbol)) ;smh
   (collect-direct-instances-of (symbol-value class)))
-(defmethod collect-direct-instances-of ((class rdfs:Class)) ;smh
+(defmethod collect-direct-instances-of ((class rdfs:|Class|)) ;smh
   (class-direct-instances class))
 
 (defmethod all-instances-generator ((class symbol)) ; added smh
   (all-instances-generator (symbol-value class)))
 
-(defmethod all-instances-generator ((class rdfs:Class)) ; added smh
+(defmethod all-instances-generator ((class rdfs:|Class|)) ; added smh
   (let ((pending-classes (list class))
         (pending-instances nil))
     (flet ((generator ()
@@ -365,7 +365,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
 ;; See OWL module file for all-instances-generator method
 
 (defun collect-all-supers (class)
-  (cond ((eq class rdfs:Resource) (list class))
+  (cond ((eq class rdfs:|Resource|) (list class))
         ((eq class |rdfs:Resource|) (list class))
         (t (let ((supers (reduce #'union
                                  (mapcar #'collect-all-supers (mop:class-direct-superclasses class)))))
@@ -468,10 +468,10 @@ Note that it is not cared that symbols are bound to resource objects or not."))
                  append (%%list-all-resources sub))))))
 )
 
-(defconstant *system-resources* (%%list-all-resources rdfs:Resource))
+(defconstant *system-resources* (%%list-all-resources rdfs:|Resource|))
 
 (defun list-all-resources (&optional with-system-rsc-object-p)
-  (%list-all-resources rdfs:Resource with-system-rsc-object-p))
+  (%list-all-resources rdfs:|Resource| with-system-rsc-object-p))
 (defun %list-all-resources (root with-system-rsc-object-p)
   (case (class-name root)
     ((rdfsClass rdf-node) nil)
@@ -560,20 +560,20 @@ Note that it is not cared that symbols are bound to resource objects or not."))
           (packagep ns)
           (otherwise (return-from all-individuals)))))
     (labels ((%all-individuals (cls)
-                               (when (and (not (eql cls (load-time-value (find-class 'rdfs:Class))))
+                               (when (and (not (eql cls (load-time-value (find-class 'rdfs:|Class|))))
                                           (not (eql cls (load-time-value (find-class 'rdfsClass)))))
                                  (append (remove-if-not #'(lambda (obj) (or (anonymous-p obj)
                                                                             (eql (symbol-package (name obj)) pkg)))
                                                         (class-direct-instances cls))
                                          (loop for sub in (mop:class-direct-subclasses cls)
                                              append (%all-individuals sub))))))
-      (%all-individuals (load-time-value (find-class 'rdfs:Resource))))))
+      (%all-individuals (load-time-value (find-class 'rdfs:|Resource|))))))
 
 (defun concept-parents (concept)
   (etypecase concept
     (symbol )
-    (rdfs:Datatype )
-    (rdfs:Class )
+    (rdfs:|Datatype| )
+    (rdfs:|Class| )
     (uri (concept-parents (iri-value concept)))
     (consp )))
 
@@ -619,23 +619,23 @@ Note that it is not cared that symbols are bound to resource objects or not."))
 ;; put-value
 ;;
 
-(defmethod put-value ((object rdfs:Class) (role (eql rdf:|type|)) value)
+(defmethod put-value ((object rdfs:|Class|) (role (eql rdf:|type|)) value)
   (declare (ignore value))
   (error "Not Yet!"))
 
-(defmethod put-value ((object rdfs:Class) (role (eql rdfs:subClassOf)) value)
+(defmethod put-value ((object rdfs:|Class|) (role (eql rdfs:|subClassOf|)) value)
   (declare (ignore value))
   (error "Not Yet!"))
 
-(defmethod put-value ((object rdfs:Resource) (role (eql rdf:|type|)) value)
+(defmethod put-value ((object rdfs:|Resource|) (role (eql rdf:|type|)) value)
   (declare (ignore value))
   (error "Not Yet!"))
 
-(defmethod put-value ((object rdfs:Resource) (role (eql rdfs:subClassOf)) value)
+(defmethod put-value ((object rdfs:|Resource|) (role (eql rdfs:|subClassOf|)) value)
   (declare (ignore value))
   (error "Not Yet!"))
 
-(defmethod put-value ((object rdfs:Resource) (role rdf:|Property|) value)
+(defmethod put-value ((object rdfs:|Resource|) (role rdf:|Property|) value)
   (let ((pname (name role)))
     (if (slot-exists-p object pname)
         (if (slot-boundp object pname)
@@ -656,7 +656,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
                           :subject-type ,(class-of object))))
         (setf (slot-value object pname) value)))))
 
-(defmethod put-value ((object rdfs:Resource) (role symbol) value)
+(defmethod put-value ((object rdfs:|Resource|) (role symbol) value)
   (cond ((keywordp role) (error "Illegal property designated:~S" role))
         ((property? role) (put-value object (symbol-value role) value))
         (t (warn "Entail by rdfs1: ~S rdf:|type| rdf:|Property|." role)

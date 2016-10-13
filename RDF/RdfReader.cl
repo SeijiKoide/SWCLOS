@@ -37,7 +37,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     (string (list x))
     (number (list x))
     (xsd:|anySimpleType| (list x))
-    (rdfs:Literal (list x))
+    (rdfs:|Literal| (list x))
     (rdf:|Description| (list (Description-form x)))
     (comment nil) ; depress comment
     (cons (mapcan #'make-form x))))
@@ -148,7 +148,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                      (cond ((null range) (list prop val))
                                            ((and (symbolp range)
                                                  (boundp range)
-                                                 (cl:typep (symbol-value range) 'rdfs:Datatype))
+                                                 (cl:typep (symbol-value range) 'rdfs:|Datatype|))
                                             (list prop (read-as-datatype val range)))
                                            (t (list prop val)))))
                                   (t (list prop val)))))
@@ -274,10 +274,10 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 (eval-when (:execute :load-toplevel)
   (setq *defined-resources*
         (mapcar #'(lambda (x) `(,x line nil))
-          '(rdfs:Resource rdfs:Literal rdf:|Property| rdfs:label 
-            rdfs:comment rdfs:isDefinedBy rdfs:domain rdfs:range rdfs:subClassOf 
-            rdfs:subPropertyOf rdfs:seeAlso rdfs:isDefinedBy rdfs:Class rdf:|type| rdfs:Container 
-            rdf:|predicate| rdf:|subject| rdf:|object| rdf:|Statement| rdfs:Datatype rdf:|XMLLiteral| 
+          '(rdfs:|Resource| rdfs:|Literal| rdf:|Property| rdfs:|label| 
+            rdfs:|comment| rdfs:|isDefinedBy| rdfs:|domain| rdfs:|range| rdfs:|subClassOf| 
+            rdfs:|subPropertyOf| rdfs:|seeAlso| rdfs:|isDefinedBy| rdfs:|Class| rdf:|type| rdfs:|Container| 
+            rdf:|predicate| rdf:|subject| rdf:|object| rdf:|Statement| rdfs:|Datatype| rdf:|XMLLiteral| 
             rdf:|List| rdf:|nil| rdf:|first| rdf:|rest| rdf:|value| xsd:|anySimpleType| xsd:|boolean| 
             xsd:|anyURI| xsd:|string| xsd:|float| xsd:|double| xsd:|unsignedByte| xsd:|unsignedShort|  
             xsd:|unsignedInt| xsd:|unsignedLong| xsd:|decimal| xsd:|integer| xsd:|long| xsd:|int| 

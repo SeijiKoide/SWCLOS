@@ -751,7 +751,7 @@
                         (return (values nil known))))
               (not (let ((ty2 (arg1 type2)))
                      (cond ((owl-equivalent-p type1 ty2) (values nil t)) ; x and (not x), disjoint
-                           ((owl-equivalent-p type1 rdfs:Resource) (values t t))
+                           ((owl-equivalent-p type1 rdfs:|Resource|) (values t t))
                            ;;    type1 is included in t2, disjoint
                            ((subsumed-p type1 ty2) (values nil t)) 
                            ;;    (not ty2) = (not type1) U (type1 - ty2)
@@ -773,7 +773,7 @@
                      (t (values nil nil))))
               (not (let ((ty1 (arg1 type1)))
                      (cond ((owl-equivalent-p ty1 type2) (values nil t)) ; (not x) and x, disjoint
-                           ((owl-equivalent-p type2 rdfs:Resource) (values t t))
+                           ((owl-equivalent-p type2 rdfs:|Resource|) (values t t))
                            ;;       (not ty1) = (not type2) U (type2 - ty1)
                            ((subsumed-p ty1 type2) (values nil t))
                            ((subsumed-p type2 ty1) (values nil t))  ; disjoint

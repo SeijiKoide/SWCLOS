@@ -177,26 +177,26 @@
     (owl:intersectionOf Person
                         (owl:Restriction (owl:onProperty hasMedicalBranch)
                                          (owl:someValuesFrom MedicalBranch))))
-(defConcept Doctor* (rdfs:subClassOf Person))
-(defProperty hasMedicalBranch (rdfs:domain Doctor*) (rdfs:range MedicalBranch))
+(defConcept Doctor* (rdfs:|subClassOf| Person))
+(defProperty hasMedicalBranch (rdfs:|domain| Doctor*) (rdfs:|range| MedicalBranch))
 (defConcept Employee
     (owl:intersectionOf Person
                         (owl:Restriction (owl:onProperty hasSalary)
                                          (owl:someValuesFrom Salary))))
-(defConcept Employee* (rdfs:subClassOf Person))
-(defProperty hasSalary (rdfs:domain Employee*) (rdfs:range Salary))
+(defConcept Employee* (rdfs:|subClassOf| Person))
+(defProperty hasSalary (rdfs:|domain| Employee*) (rdfs:|range| Salary))
 (defConcept Employer
     (owl:intersectionOf Person
                         (owl:Restriction (owl:onProperty hasEmployee)
                                          (owl:someValuesFrom Employee)))
   (owl:disjointWith Employee))
-(defConcept Employer* (rdfs:subClassOf Person))
-(defProperty hasEmployee (rdfs:domain Employer*) (rdfs:range Employee))
+(defConcept Employer* (rdfs:|subClassOf| Person))
+(defProperty hasEmployee (rdfs:|domain| Employer*) (rdfs:|range| Employee))
 
 (defConcept DoctorAndEmployee
     (owl:intersectionOf Employee Doctor))
 (defConcept DoctorAndEmployee* (rdf:|type| owl:Class)
-    (rdfs:subClassOf Employee* Doctor*))
+    (rdfs:|subClassOf| Employee* Doctor*))
 
 (subsumed-p DoctorAndEmployee Doctor)
 (subsumed-p DoctorAndEmployee* Doctor*)
@@ -223,8 +223,8 @@
 (disjoint-p DoctorAndEmployee DoctorAndEmployer)
 
 (defConcept AlbeitDoctor* (rdf:|type| owl:Class)
-  (rdfs:subClassOf Doctor))
-(defProperty hasSalary (rdfs:domain AlbeitDoctor*) (rdfs:range Salary))
+  (rdfs:|subClassOf| Doctor))
+(defProperty hasSalary (rdfs:|domain| AlbeitDoctor*) (rdfs:|range| Salary))
 
 (subsumed-p AlbeitDoctor* DoctorAndEmployee)
 (subsumed-p DoctorAndEmployee AlbeitDoctor*)
@@ -294,7 +294,7 @@
     (owl:intersectionOf ParentOfEmployee ParentOfEmployer ParentOfDoctor))
 (defConcept IntersectOfParentOfEmployeeAndParentOfEmployerInheritParentOfDoctor
     (owl:intersectionOf ParentOfEmployee ParentOfEmployer)
-  (rdfs:subClassOf ParentOfDoctor))
+  (rdfs:|subClassOf| ParentOfDoctor))
 
 (subsumed-p IntersectOfParentsOfEmployeeAndParentsOfDoctor ParentOfDoctorAndEmployee) -> nil
 (subsumed-p IntersectOfParentOfEmployeeParentOfEmployerParentOfDoctor ParentOfDoctorAndEmployee)
@@ -343,8 +343,8 @@
 
 (subsumed-p IntersectionOfOneChildParentOfEmployeeAndParentOfEmployer ParentOfEmployee)
 
-(defConcept Lawyer (rdfs:subClassOf Person))
-(defConcept PatentAttorney (rdfs:subClassOf Person))
+(defConcept Lawyer (rdfs:|subClassOf| Person))
+(defConcept PatentAttorney (rdfs:|subClassOf| Person))
 
 (defConcept ParentOfLawyer
     (owl:intersectionOf Person
@@ -679,7 +679,7 @@
 (defmethod shared-initialize :before ((class owl:Class) slot-names &rest initargs
                                       &key (name nil))
   ;(format t "~%SHARED-INITIALIZE:BEFORE(owl:Class) ~S ~S ~S" class slot-names initargs)
-  (let ((supers (append (mklist (getf initargs 'rdfs:subClassOf))
+  (let ((supers (append (mklist (getf initargs 'rdfs:|subClassOf|))
                         (getf initargs 'owl:intersectionOf))))
     (when supers
       (check-simple-disjoint-pair-p-in-supers name supers))
@@ -703,7 +703,7 @@
 ;;; So, direct-superclasses is set by <reinitialize-instance> in <ensure-class>
 ;;; after <change-class>. The following routine is prepared only for direct 
 ;;; invocation of <change-class> by users.
-(defmethod update-instance-for-different-class ((previous rdfs:Class) (current owl:Class)
+(defmethod update-instance-for-different-class ((previous rdfs:|Class|) (current owl:Class)
                                                 &rest initargs)
   "ensures owl:Thing as superclasses in OWL universe. This routine is effective
    only if a user designates :direct-superclasses but no inheritance of owl:Thing."
@@ -722,12 +722,12 @@
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
          )
         (t ;; first or redefinition
-         (with-slots (rdfs:subClassOf owl:intersectionOf owl:unionOf owl:equivalentClass 
+         (with-slots (rdfs:|subClassOf| owl:intersectionOf owl:unionOf owl:equivalentClass 
                                       owl:disjointWith owl:complementOf)
              class
            ;; see also ensure-meta-absts-using-class class for subclasses and intersections
-           (when (and (slot-boundp class 'rdfs:subClassOf) rdfs:subClassOf)
-             (check-intersection-refining-for-subclasses class (mklist rdfs:subClassOf))
+           (when (and (slot-boundp class 'rdfs:|subClassOf|) rdfs:|subClassOf|)
+             (check-intersection-refining-for-subclasses class (mklist rdfs:|subClassOf|))
              (when (mop:class-direct-subclasses class)
                (check-union-refining-for-subclasses class (mop:class-direct-subclasses class))))
            (when (and (slot-boundp class 'owl:intersectionOf) owl:intersectionOf)
@@ -795,7 +795,7 @@
                                    do (pushnew ov (slot-value val 'same-as))
                                      (pushnew val (slot-value ov 'same-as)))))))))))
 
-(defmethod shared-initialize :after ((instance rdfs:Resource) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance rdfs:|Resource|) slot-names &rest initargs)
   "book-keeping for reification"
   (let ((args (copy-list initargs)))
     (let ((changed (remf args :direct-slots)))
@@ -806,8 +806,8 @@
              )
             (t                                        ; first or redefinition
              (typecase instance
-               (rdfs:Literal nil)
-               (rdfs:Datatype nil)
+               (rdfs:|Literal| nil)
+               (rdfs:|Datatype| nil)
                (rdf:|Statement| nil)
                (rdf:|List| nil)
                (t 
@@ -1222,8 +1222,8 @@
 ;;
 
 (defun owl-complement-p (c d)
-  (cond ((eq c rdfs:Resource) (values nil nil))
-        ((eq d rdfs:Resource) (values nil nil))
+  (cond ((eq c rdfs:|Resource|) (values nil nil))
+        ((eq d rdfs:|Resource|) (values nil nil))
         ((not (slot-exists-p c 'equivalent-classes)) (values nil nil)) ; not OWL, return
         ((not (slot-exists-p d 'equivalent-classes)) (values nil nil)) ; not OWL, return
         ((values (some #'(lambda (cc)
@@ -1297,7 +1297,7 @@
                                                  ;:initform hasvalues :initfunction initfun
                                                  ))
                    (t (case name
-                        ((rdfs:range)
+                        ((rdfs:|range|)
                          (push (make-instance 'gx::Property-direct-slot-definition
                                  :name name :initargs `(,name)
                                  :type (make-instance 'fills
@@ -1339,7 +1339,7 @@
                                                          :filler somevalues
                                                          :subject-type class)))
                    (t (case name
-                        ((rdfs:range)
+                        ((rdfs:|range|)
                          (push (make-instance 'gx::Property-direct-slot-definition
                                  :name name :initargs `(,name)
                                  :type (make-instance 'exists
@@ -1398,7 +1398,7 @@
                                                            :filler allvalues
                                                            :subject-type class)))
                      (t (case name
-                          ((rdfs:range)
+                          ((rdfs:|range|)
                            (push (make-instance 'gx::Property-direct-slot-definition
                                    :name name :initargs `(,name)
                                    :type (make-instance 'forall
@@ -1522,13 +1522,13 @@
                        (eql instance (slot-value inv 'inverse-inverse-of))))
            ;(format t "~%REINITIALIZE ~S :inverse-inverse-of ~S" inv instance)
            (reinitialize-instance inv :inverse-inverse-of instance)
-           (let ((inv-domain (and (slot-boundp inv 'rdfs:domain) (slot-value inv 'rdfs:domain)))
+           (let ((inv-domain (and (slot-boundp inv 'rdfs:|domain|) (slot-value inv 'rdfs:|domain|)))
                  ; inv-domain = ub:Organization
-                 (inv-range (and (slot-boundp inv 'rdfs:range) (slot-value inv 'rdfs:range))))
+                 (inv-range (and (slot-boundp inv 'rdfs:|range|) (slot-value inv 'rdfs:|range|))))
              ; inv-range = ub:Person
              (when (or inv-range inv-domain)
                ;(format t "~%REINITIALIZE ~S rdfs:domain ~S rdfs:range ~S" instance inv-range (or inv-domain t))
-               (reinitialize-instance instance 'rdfs:domain inv-range 'rdfs:range (or inv-domain t))
+               (reinitialize-instance instance 'rdfs:|domain| inv-range 'rdfs:|range| (or inv-domain t))
                ; slot ub:memberOf for ub:Person
                (mop:finalize-inheritance inv-range)
                ))))))
@@ -1536,7 +1536,7 @@
 ;; rule8 by seiji
 (defmethod shared-initialize :after ((instance owl:SymmetricProperty) slot-names &rest initargs)
   (declare (ignore slot-names))
-  (when (or (getf initargs 'rdfs:domain) (getf initargs 'rdfs:range))
+  (when (or (getf initargs 'rdfs:|domain|) (getf initargs 'rdfs:|range|))
     (let ((domain (domain-value instance))
           (range (range-value instance)))
       (when (and domain range)
@@ -1550,7 +1550,7 @@
 
 (excl:without-redefinition-warnings
 (defmethod domain-value ((property rdf:|Property|))
-  (flet ((get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain))))
+  (flet ((get-dom (p) (and (slot-boundp p 'rdfs:|domain|) (slot-value p 'rdfs:|domain|))))
     (mkatom (mappend #'(lambda (p) (mklist (get-dom p))) (equivalent-property-of property)))))
 )
 
@@ -1561,8 +1561,8 @@
   ;; rule12 by seiji
   (flet ((%get-inv (p) (and (slot-boundp p 'owl:inverseOf) (slot-value p 'owl:inverseOf)))
          (%get-inv-inv (p) (and (slot-boundp p 'inverse-inverse-of) (slot-value property 'inverse-inverse-of)))
-         (get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain)))
-         (get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
+         (get-dom (p) (and (slot-boundp p 'rdfs:|domain|) (slot-value p 'rdfs:|domain|)))
+         (get-ran (p) (and (slot-boundp p 'rdfs:|range|) (slot-value p 'rdfs:|range|))))
     (let* ((inv (or (%get-inv property) (%get-inv-inv property)))
            (inv-range (and inv
                            (mappend #'(lambda (p) (mklist (get-ran p)))
@@ -1573,15 +1573,15 @@
 
 (excl:without-redefinition-warnings
 (defmethod range-value ((property rdf:|Property|))
-  (flet ((get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
+  (flet ((get-ran (p) (and (slot-boundp p 'rdfs:|range|) (slot-value p 'rdfs:|range|))))
     (mkatom (mappend #'(lambda (p) (mklist (get-ran p))) (equivalent-property-of property)))))
 )
 
 (defmethod range-value ((property owl:ObjectProperty))
   (flet ((%get-inv (p) (and (slot-boundp p 'owl:inverseOf) (slot-value p 'owl:inverseOf)))
          (%get-inv-inv (p) (and (slot-boundp p 'inverse-inverse-of) (slot-value property 'inverse-inverse-of)))
-         (get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain)))
-         (get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
+         (get-dom (p) (and (slot-boundp p 'rdfs:|domain|) (slot-value p 'rdfs:|domain|)))
+         (get-ran (p) (and (slot-boundp p 'rdfs:|range|) (slot-value p 'rdfs:|range|))))
     (let* ((inv (or (%get-inv property) (%get-inv-inv property)))
            (inv-domain (and inv
                             (mappend #'(lambda (p) (mklist (get-dom p)))
@@ -1838,7 +1838,7 @@
 ;;
 
 (defmethod (setf mop:slot-value-using-class)
-    ((value Property-direct-slot-definition) (class rdfs:Class) (object owl:Restriction) slotd)
+    ((value Property-direct-slot-definition) (class rdfs:|Class|) (object owl:Restriction) slotd)
   ;(format t "~%Setf Slot-value-using-class with ~S to ~S ~S" value object slotd)
   (error "Bingo")
   (let ((slot-name (mop:slot-definition-name slotd))
@@ -1877,12 +1877,12 @@
 ;; Additional Useful Axioms
 ;;
 #+:slot-value-for-metaclass
-(defConcept owl:DatatypeProperty (rdf:|type| rdfs:Class)
-  (rdfs:subClassOf (owl:Restriction (owl:onProperty rdfs:range)
-                                    (owl:allValuesFrom rdfs:Datatype))))
+(defConcept owl:DatatypeProperty (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| (owl:Restriction (owl:onProperty rdfs:|range|)
+                                    (owl:allValuesFrom rdfs:|Datatype|))))
 #+:slot-value-for-metaclass
-(defConcept owl:ObjectProperty (rdf:|type| rdfs:Class)
-  (rdfs:subClassOf (owl:Restriction (owl:onProperty rdfs:range)
+(defConcept owl:ObjectProperty (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| (owl:Restriction (owl:onProperty rdfs:|range|)
                                     (owl:allValuesFrom owl:Class))))
 |#
 

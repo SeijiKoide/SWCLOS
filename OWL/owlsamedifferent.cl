@@ -28,11 +28,11 @@
 ;;;; Functional Property
 ;;;
 
-;;; owl:FunctionalProperty is an instance of rdfs:Class.
+;;; owl:FunctionalProperty is an instance of rdfs:|Class|.
 ;;; ----------------------------------------------------------------------------------
-;;; (rdfs:Class owl:FunctionalProperty
-;;;             (rdfs:label "FunctionalProperty")
-;;;             (rdfs:subClassOf rdf:|Property|))
+;;; (rdfs:|Class| owl:FunctionalProperty
+;;;             (rdfs:|label| "FunctionalProperty")
+;;;             (rdfs:|subClassOf| rdf:|Property|))
 ;;; ----------------------------------------------------------------------------------
 ;;; owl:FunctionalProperty does not belong to OWL universe, and an instance of 
 ;;; owl:FunctionalProperty may not belong to OWL universe.
@@ -70,14 +70,14 @@
 
 ;;;
 ;;;; Inverse Functional Property
-;;; owl:InverseFunctionalProperty is an instance of rdfs:Class.
+;;; owl:InverseFunctionalProperty is an instance of rdfs:|Class|.
 ;;; ----------------------------------------------------------------------------------
-;;; (rdfs:Class owl:InverseFunctionalProperty
-;;;             (rdfs:label "InverseFunctionalProperty")
-;;;             (rdfs:subClassOf owl:ObjectProperty))
+;;; (rdfs:|Class| owl:InverseFunctionalProperty
+;;;             (rdfs:|label| "InverseFunctionalProperty")
+;;;             (rdfs:|subClassOf| owl:ObjectProperty))
 ;;; ----------------------------------------------------------------------------------
 ;;; An instance of owl:InversefunctionalProperty may not be an instance of 
-;;; owl:ObjectProperty. Then, the range value may not be owl:Thing and may be rdfs:Literal.
+;;; owl:ObjectProperty. Then, the range value may not be owl:Thing and may be rdfs:|Literal|.
 
 (defun inverse-functional-property-p (obj)
   "Is this <obj> an instance of owl:InverseFunctionalProperty?"
@@ -190,7 +190,7 @@
         ((iri-p y) (definitely-owl-same-p x (iri-value y) pairs))))
 
 (excl:without-redefinition-warnings
-(defmethod %owl-same-p ((x rdfs:Resource) (y rdfs:Resource) &optional pairs)
+(defmethod %owl-same-p ((x rdfs:|Resource|) (y rdfs:|Resource|) &optional pairs)
   "Non-resolution version. This is used in <owl-equalp> and <owl-equivalent-p>."
   (declare (optimize (speed 3) (safety 0)))
   (cond ((definitely-%owl-same-p x y pairs))
@@ -248,7 +248,7 @@
                ((and (name x) (name y))
                 (if (eql (name x) (name y)) (values nil t) (values t t)))  ; <--
                (t nil)))                                                   ; <--
-        ((and (typep x rdfs:Literal) (typep y rdfs:Literal))
+        ((and (typep x rdfs:|Literal|) (typep y rdfs:|Literal|))
          ;; fall here when not equal
          t)
         (t nil)))
@@ -265,7 +265,7 @@
            (values t t)))
         ((and (owl-thing-p x) (owl-thing-p y))
          (definitely-%%owl-different-p x y))
-        ((and (typep x rdfs:Literal) (typep y rdfs:Literal))
+        ((and (typep x rdfs:|Literal|) (typep y rdfs:|Literal|))
          ;; fall here when not equal
          (values t t))
         (t (values nil nil))))
@@ -314,7 +314,7 @@
                       (t (if (eql (name x) (name y)) (values nil t) (values t t)))))
                (t (rdf-graph-different-p x y))))
         ;;
-        ((and (typep x rdfs:Literal) (typep y rdfs:Literal))
+        ((and (typep x rdfs:|Literal|) (typep y rdfs:|Literal|))
          (values t t))
         ((and (rsc-object-p x) (rsc-object-p y))
          (cond ((and (name x) (name y))
@@ -351,7 +351,7 @@
              (if (equalp (value-of x) (value-of y))    ; equalp treats 1 and 1.0
                  nil t)
            t))   ; disjoint data type
-        ((and (typep x rdfs:Literal) (typep y rdfs:Literal))
+        ((and (typep x rdfs:|Literal|) (typep y rdfs:|Literal|))
          t)
         ((and (owl-restriction-p x) (owl-restriction-p y))
          (if (%owl-restriction-equal x y)

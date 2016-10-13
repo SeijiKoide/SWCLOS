@@ -82,14 +82,14 @@
 ;;;; <Class> rdf:type <Class> --> <Class> rdf:type <Class>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Class) (predicate (eql rdf:|type|)) (object rdfs:Class))
+(defmethod addTriple ((subject rdfs:|Class|) (predicate (eql rdf:|type|)) (object rdfs:|Class|))
   (cond ((rdf-metaclass-p object)
          (cond ((typep subject object)
                 (addClass (list (class-of subject)) subject '() `((rdf:|type| ,object))))
                (t (addClass (list object) subject '() `((rdf:|type| ,object))))))
         (t (warn "Entail in ~S rdf:type ~S:~%..... ~S rdfs:subClassOf rdfs:Class." 
              subject object object)
-           (addClass (class-of object) object `(,rdfs:Class) '())
+           (addClass (class-of object) object `(,rdfs:|Class|) '())
            (cond ((typep subject object)
                   (addClass (list (class-of subject)) subject '() `((rdf:|type| ,object))))
                  (t (addClass (list object) subject '() `((rdf:|type| ,object))))))))
@@ -98,7 +98,7 @@
 ;;;; <Resource> rdf:type <Class> --> <Resource> rdf:type <Class>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate (eql rdf:|type|)) (object rdfs:Class))
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate (eql rdf:|type|)) (object rdfs:|Class|))
   (assert (not (rdf-metaclass-p subject)))
   (cond ((typep subject object) subject)
         (t (addClass (list object) subject '() `((rdf:|type| ,object))))))
@@ -107,7 +107,7 @@
 ;;;; <Resource> rdf:type t --> <Resource> rdf:type <Resource>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate (eql rdf:|type|)) object)
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate (eql rdf:|type|)) object)
   (cond ((object? object)
          (addTriple subject predicate (symbol-value object)))
         (t (let ((range (get-range predicate))) ;range == rdfs:Class
@@ -116,11 +116,11 @@
              (addTriple object rdf:|type| range)
              (addTriple subject predicate (symbol-value object))))))
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate (eql rdf:|type|)) (object rdfs:Resource))
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate (eql rdf:|type|)) (object rdfs:|Resource|))
   (assert (strict-class-p object))
   (warn "Entail in ~S rdf:type ~S:~%..... ~S rdfs:subClassOf rdfs:Class." 
     subject object object subject)
-  (addClass rdfs:Class object `(,rdfs:Class) '())
+  (addClass rdfs:|Class| object `(,rdfs:|Class|) '())
   (addClass (list object) subject '() '()))
 
 ;;;
@@ -162,7 +162,7 @@
 ;;;; <symbol> rdf:type <Class>
 ;;;
 
-(defmethod addTriple ((subject symbol) (predicate (eql rdf:|type|)) (object rdfs:Class))
+(defmethod addTriple ((subject symbol) (predicate (eql rdf:|type|)) (object rdfs:|Class|))
   "This form is turned out to an <addClass> form, due to predicate rdf:type."
   (cond ((and (boundp subject) (typep (symbol-value subject) object))
          (symbol-value subject))
@@ -174,7 +174,7 @@
 ;;;; <iri> rdf:type <Class>
 ;;;
 
-(defmethod addTriple ((subject iri) (predicate (eql rdf:|type|)) (object rdfs:Class))
+(defmethod addTriple ((subject iri) (predicate (eql rdf:|type|)) (object rdfs:|Class|))
   "This form is turned out to an <addClass> form, due to predicate rdf:type.
    <subject> as iri is stored into rdf:about slot."
   (cond ((iri-boundp subject)
@@ -189,19 +189,19 @@
 ;;;; <t> rdfs:subClassOf <t>
 ;;;
 
-(defmethod addTriple (subject (predicate (eql rdfs:subClassOf)) object)
+(defmethod addTriple (subject (predicate (eql rdfs:|subClassOf|)) object)
   (error "Triple input error: ~S ~S ~S." subject predicate object))
 
 ;;;
 ;;;; <Class> rdfs:subClassOf <Class>
 ;;;
 
-(defmethod superclasses-of ((object rdfs:Class))
+(defmethod superclasses-of ((object rdfs:|Class|))
   (mop:class-direct-superclasses object))
-(defmethod subclasses-of ((object rdfs:Class))
+(defmethod subclasses-of ((object rdfs:|Class|))
   (mop:class-direct-subclasses object))
 
-(defmethod addTriple ((subject rdfs:Class) (predicate (eql rdfs:subClassOf)) (object rdfs:Class))
+(defmethod addTriple ((subject rdfs:|Class|) (predicate (eql rdfs:|subClassOf|)) (object rdfs:|Class|))
   ;; if subject is already subclass of object, nothing done.
   (if (cl:subtypep subject object) subject
     (let ((supers (superclasses-of subject)))
@@ -212,20 +212,20 @@
 ;;;; <Resource> rdfs:subClassOf <Resource>  -->  <Class> rdfs:subClassOf <Class>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate (eql rdfs:subClassOf)) (object rdfs:Resource))
-  (unless (rdf-class-p subject) (change-class subject rdfs:Class))
-  (unless (rdf-class-p object) (change-class object rdfs:Class))
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate (eql rdfs:|subClassOf|)) (object rdfs:|Resource|))
+  (unless (rdf-class-p subject) (change-class subject rdfs:|Class|))
+  (unless (rdf-class-p object) (change-class object rdfs:|Class|))
   (addTriple subject predicate object))
 
 ;;;
-;;;; <symbol> rdfs:subClassOf <Resource>  -->  <Class> rdfs:subClassOf <Resource>
+;;;; <symbol> rdfs:|subClassOf| <Resource>  -->  <Class> rdfs:|subClassOf| <Resource>
 ;;;
 
-(defmethod addTriple ((subject symbol) (predicate (eql rdfs:subClassOf)) (object rdfs:Class))
+(defmethod addTriple ((subject symbol) (predicate (eql rdfs:|subClassOf|)) (object rdfs:|Class|))
   (cond ((object? subject)
          (addTriple (symbol-value subject) predicate object))
         (t (let ((domain (get-domain predicate)))
-             (warn "Entail in ~S rdfs:subClassOf ~S:~%..... ~S rdf:type ~S." 
+             (warn "Entail in ~S rdfs:|subClassOf| ~S:~%..... ~S rdf:type ~S." 
                subject object subject (name domain))
              (addTriple subject rdf:|type| domain)
              (addTriple (symbol-value subject) predicate object)))))
@@ -234,7 +234,7 @@
 ;;;; <iri> rdfs:subClassOf <Resource>  -->  <Class> rdfs:subClassOf <Resource>
 ;;;
 
-(defmethod addTriple ((subject iri) (predicate (eql rdfs:subClassOf)) (object rdfs:Class))
+(defmethod addTriple ((subject iri) (predicate (eql rdfs:|subClassOf|)) (object rdfs:|Class|))
   (cond ((and (iri-boundp subject) (iri-value subject))
          (addTriple (iri-value subject) predicate object))
         (t (let ((domain (get-domain predicate)))
@@ -247,7 +247,7 @@
 ;;;; <symbol> rdfs:subClassOf <symbol>  -->  <symbol> rdfs:subClassOf <Class>
 ;;;
 
-(defmethod addTriple ((subject symbol) (predicate (eql rdfs:subClassOf)) (object symbol))
+(defmethod addTriple ((subject symbol) (predicate (eql rdfs:|subClassOf|)) (object symbol))
   (cond ((property? object)
          (error "Range violation: ~S for rdfs:subClassOf range." (symbol-value object)))
         ((object? object)
@@ -262,7 +262,7 @@
 ;;;; <iri> rdfs:subClassOf <iri>  -->  <iri> rdfs:subClassOf <Class>
 ;;;
 
-(defmethod addTriple ((subject iri) (predicate (eql rdfs:subClassOf)) (object iri))
+(defmethod addTriple ((subject iri) (predicate (eql rdfs:|subClassOf|)) (object iri))
   (cond ((and (iri-boundp subject) (property-p (iri-value object)))
          (error "Range violation: ~S for rdfs:subClassOf range." (iri-value object)))
         ((iri-value object)
@@ -277,7 +277,7 @@
 ;;;; <t> rdfs:subPropertyOf <t>
 ;;;
 
-(defmethod addTriple (subject (predicate (eql rdfs:subPropertyOf)) object)
+(defmethod addTriple (subject (predicate (eql rdfs:|subPropertyOf|)) object)
   (error "Triple input error: ~S ~S ~S." subject predicate object))
 
 ;;;
@@ -291,18 +291,18 @@
   (let ((l (remove-duplicates absts)))    ; eql should be assured
     (set-difference l l :test #'strict-abst-property-p)))
 
-(defmethod addTriple ((subject rdf:|Property|) (predicate (eql rdfs:subPropertyOf)) (object rdf:|Property|))
+(defmethod addTriple ((subject rdf:|Property|) (predicate (eql rdfs:|subPropertyOf|)) (object rdf:|Property|))
   ;; if subject is already subproperty of object, nothing done.
   (if (subproperty-p subject object) subject
-    (let ((supers (slot-value subject 'rdfs:subPropertyOf)))
+    (let ((supers (slot-value subject 'rdfs:|subPropertyOf|)))
       (setq supers (most-specific-property (cons object supers)))
-      (addInstance (class-of subject) subject `((rdfs:subPropertyOf ,@supers))))))
+      (addInstance (class-of subject) subject `((rdfs:|subPropertyOf| ,@supers))))))
 
 ;;;
 ;;;; <symbol> rdfs:subPropertyOf <Property>  -->  <Resource> rdfs:subPropertyOf <Property>
 ;;;
 
-(defmethod addTriple ((subject symbol) (predicate (eql rdfs:subPropertyOf)) (object rdf:|Property|))
+(defmethod addTriple ((subject symbol) (predicate (eql rdfs:|subPropertyOf|)) (object rdf:|Property|))
   (cond ((object? subject)
          (addTriple (symbol-value subject) predicate object))
         (t (let ((domain (get-domain predicate)))
@@ -315,7 +315,7 @@
 ;;;; <iri> rdfs:subPropertyOf <Property>  -->  <Resource> rdfs:subPropertyOf <Property>
 ;;;
 
-(defmethod addTriple ((subject iri) (predicate (eql rdfs:subPropertyOf)) (object rdf:|Property|))
+(defmethod addTriple ((subject iri) (predicate (eql rdfs:|subPropertyOf|)) (object rdf:|Property|))
   (cond ((and (iri-boundp subject) (iri-value subject))
          (addTriple (iri-value subject) predicate object))
         (t (let ((domain (get-domain predicate)))
@@ -328,7 +328,7 @@
 ;;;; <symbol> rdfs:subPropertyOf <symbol> -->  <symbol> rdfs:subPropertyOf <Resource>
 ;;;
 
-(defmethod addTriple ((subject symbol) (predicate (eql rdfs:subPropertyOf)) (object symbol))
+(defmethod addTriple ((subject symbol) (predicate (eql rdfs:|subPropertyOf|)) (object symbol))
   (cond ((property? object)
          (addTriple subject predicate (symbol-value object)))
         ((object? object)
@@ -343,7 +343,7 @@
 ;;;; <Resource> <Property> <symbol>  -->  <Resource> <Property> <Resource>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate rdf:|Property|) (object symbol))
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate rdf:|Property|) (object symbol))
   (cond ((object? object)
          (addTriple subject predicate (symbol-value object)))
         (t (let ((range (or (get-range predicate) |rdfs:Resource|)))
@@ -356,7 +356,7 @@
 ;;;; <Resource> <Property> <iri>  -->  <Resource> <Property> <Resource>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate rdf:|Property|) (object iri))
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate rdf:|Property|) (object iri))
   (cond ((and (iri-boundp object) (iri-value object))
          (addTriple subject predicate (iri-value object)))
         (t (let ((range (or (get-range predicate) |rdfs:Resource|)))
@@ -369,14 +369,14 @@
 ;;;; <Resource> <Property> <uri>  -->  <Resource> <Property> <iri>
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate rdf:|Property|) (object uri))
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate rdf:|Property|) (object uri))
   (addTriple subject predicate (iri object)))
 #|
 ;;;
 ;;;; <Class> <Property> <t> ; intall with domain checking
 ;;;
 
-(defmethod addTriple ((subject rdfs:Class) (predicate rdf:|Property|) object)
+(defmethod addTriple ((subject rdfs:|Class|) (predicate rdf:|Property|) object)
   (let ((domains (get-domain predicate)))
     (cond ((typep subject domains)
            (addClass (list (class-of subject)) subject '() `((,(name predicate) ,object))))
@@ -392,7 +392,7 @@
 ;;;; <Resource> <Property> <t> ; intall with domain checking
 ;;;
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate rdf:|Property|) object)
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate rdf:|Property|) object)
   ;(format t "~%Adding ~S ~S ~S ." subject predicate object)
   (let ((name (if (anonymous-p subject) (make-unique-nodeID "aa") (name subject)))
         (domains (get-domain predicate)))
@@ -409,7 +409,7 @@
              "CHECK DOMAIN of ~S to ~#[ none~; ~S~; ~S and ~S~:;~@{~#[~; and~] ~S~^,~}~]."
              :format-arguments `(,subject ,@(mapcar #'get-form (cdr domains))))))))
 
-(defmethod addTriple ((subject rdfs:Resource) (predicate rdfs:Resource) object)
+(defmethod addTriple ((subject rdfs:|Resource|) (predicate rdfs:|Resource|) object)
   (addTriple subject (change-class predicate rdf:|Property|) object))
 
 (defun collect-domaind (slots)
@@ -432,15 +432,15 @@
              subject (name predicate) object subject (name domain))
            (addTriple subject rdf:|type| domain)
            (addTriple (symbol-value subject) predicate object))
-          ((typep object rdfs:Resource)
+          ((typep object rdfs:|Resource|)
            (warn "Entail in ~S ~S ~S:~%..... ~S rdf:type rdfs:Resource."
              subject (name predicate) object subject)
            (addTriple subject rdf:|type| |rdfs:Resource|)
            (addTriple (symbol-value subject) predicate object))
           ((error "NOT YET")))))
 
-(defmethod addTriple ((subject symbol) (predicate rdfs:Resource) object)
-  (addTriple subject (change-class predicate rdfs:Resource) object))
+(defmethod addTriple ((subject symbol) (predicate rdfs:|Resource|) object)
+  (addTriple subject (change-class predicate rdfs:|Resource|) object))
 
 ;;;
 ;;;; <iri> <Property> <t>  -->  <Resource> <Property> <t>
@@ -455,15 +455,15 @@
              subject (name predicate) object subject (name domain))
            (addTriple subject rdf:|type| domain)
            (addTriple (iri-value subject) predicate object))
-          ((typep object rdfs:Resource)
+          ((typep object rdfs:|Resource|)
            (warn "Entail in ~S ~S ~S:~%..... ~S rdf:type rdfs:Resource."
              subject (name predicate) object subject)
            (addTriple subject rdf:|type| |rdfs:Resource|)
            (addTriple (iri-value subject) predicate object))
           ((error "NOT YET")))))
 
-(defmethod addTriple ((subject iri) (predicate rdfs:Resource) object)
-  (addTriple subject (change-class predicate rdfs:Resource) object))
+(defmethod addTriple ((subject iri) (predicate rdfs:|Resource|) object)
+  (addTriple subject (change-class predicate rdfs:|Resource|) object))
 
 ;;;
 ;;;; <symbol> <Property> <number>  -->  <Resource> <Property> <number>
@@ -705,7 +705,7 @@
 ;; Invalid Statements
 ;;
 
-(defmethod addTriple ((subject symbol) (predicate (eql rdf:|type|)) (object rdfs:Resource))
+(defmethod addTriple ((subject symbol) (predicate (eql rdf:|type|)) (object rdfs:|Resource|))
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
 
 (defmethod addTriple ((subject (eql 'xsd:|string|)) predicate object)
@@ -805,24 +805,24 @@
 
 #|
 
-(/. xsd:|integer| rdfs:subClassOf xsd:|string|)  -> ERROR
-(/. xsd:|integer| rdfs:subClassOf xsd:|decimal|) -> ERROR
+(/. xsd:|integer| rdfs:|subClassOf| xsd:|string|)  -> ERROR
+(/. xsd:|integer| rdfs:|subClassOf| xsd:|decimal|) -> ERROR
 
-(/. prop1 rdfs:range xsd:|string|)
+(/. prop1 rdfs:|range| xsd:|string|)
 (/. foo prop1 25)                     -> ERROR
 
-(/. prop2 rdfs:range xsd:|integer|)
+(/. prop2 rdfs:|range| xsd:|integer|)
 (/. foo prop2 "25")                   -> 25
 
 (/. prop3 rdf:|type| rdf:|Property|)
-(/. bar rdfs:subClassOf prop3)         -> ERROR
+(/. bar rdfs:|subClassOf| prop3)         -> ERROR
 
 (/. bar rdf:|type| rdf:|Property|)
-(/. bas rdfs:subPropertyOf bar)
-(/. bar rdfs:domain Domain1)
-(/. bas rdfs:domain Domain2)
-(/. bar rdfs:range Range1)
-(/. bas rdfs:range Range2)
+(/. bas rdfs:|subPropertyOf| bar)
+(/. bar rdfs:|domain| Domain1)
+(/. bas rdfs:|domain| Domain2)
+(/. bar rdfs:|range| Range1)
+(/. bas rdfs:|range| Range2)
 (/. baz1 bas baz2)
 
 (defun revert-slot (slotd)
@@ -840,7 +840,7 @@
 
 (defun get-triple (resource)
   (when (null resource) (return-from get-triple))
-  (assert (typep resource rdfs:Resource))
+  (assert (typep resource rdfs:|Resource|))
   (flet ((name-in-get-triple (rsc)
            (cond ((rsc-object-p rsc)
                   (or (name rsc) (slot-value rsc 'rdf:|about|)))
@@ -858,7 +858,7 @@
            append (let ((role (slot-role slot))
                         (forms (slot-forms slot)))
                     (mappend #'(lambda (filler)
-                                 (cond ((typep filler rdfs:Literal)
+                                 (cond ((typep filler rdfs:|Literal|)
                                         `((,subject ,role ,filler)))
                                        ((rsc-object-p filler)
                                         (cond ((named-p filler)

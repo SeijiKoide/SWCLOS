@@ -641,14 +641,14 @@
 
 #|
 (defProperty Knows (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Human))
+  (rdfs:|domain| Human))
 (defResource Human (rdf:|type| owl:Class))
 (defResource Mother (rdf:|type| owl:Class)
-  (rdfs:subClassOf Human))
+  (rdfs:|subClassOf| Human))
 (defResource Pet (rdf:|type| owl:Class)
   (owl:disjointWith Human))
 (defResource Cat (rdf:|type| owl:Class)
-  (rdfs:subClassOf Pet))
+  (rdfs:|subClassOf| Pet))
 (defIndividual John (rdf:|type| Human)
   (Knows Jane))
 (defIndividual Jane (rdf:|type| Human))
@@ -688,17 +688,17 @@
 
 #|
 (defProperty workAt (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Person)
-  (rdfs:range Office))
+  (rdfs:|domain| Person)
+  (rdfs:|range| Office))
 (defProperty liveAt (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Person)
-  (rdfs:range Residence))
+  (rdfs:|domain| Person)
+  (rdfs:|range| Residence))
 (defProperty location (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Building)
-  (rdfs:range Address))
+  (rdfs:|domain| Building)
+  (rdfs:|range| Address))
 
-(defResource Office (rdfs:subClassOf Building))
-(defResource Residence (rdfs:subClassOf Building))
+(defResource Office (rdfs:|subClassOf| Building))
+(defResource Residence (rdfs:|subClassOf| Building))
 
 (defIndividual John (rdf:|type| Person)
   (workAt JohnsOffice)
@@ -817,7 +817,7 @@
 
 #|
 (defProperty locatedIn (rdf:|type| owl:TransitiveProperty)
-  (rdfs:range Region))
+  (rdfs:|range| Region))
 (defIndividual EU (rdf:|type| Region))
 (defIndividual German (rdf:|type| Region)
   (locatedIn EU))
@@ -844,7 +844,7 @@
                       (owl:Restriction (owl:onProperty locatedIn)
                                        (owl:hasValue UK))))
 
-(defResource City (rdfs:subClassOf Region))
+(defResource City (rdfs:|subClassOf| Region))
 
 (defIndividual Frankfurt (rdf:|type| City)
   (hasTrainTo Paris)
@@ -862,18 +862,18 @@
   (locatedIn UK))
 
 (defProperty withVehicle (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Travel)
-  (rdfs:range Vehcle))
+  (rdfs:|domain| Travel)
+  (rdfs:|range| Vehcle))
 (defProperty departFrom (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Travel)
-  (rdfs:range Region))
+  (rdfs:|domain| Travel)
+  (rdfs:|range| Region))
 (defProperty departTo (rdf:|type| owl:ObjectProperty)
-  (rdfs:domain Travel)
-  (rdfs:range Region))
+  (rdfs:|domain| Travel)
+  (rdfs:|range| Region))
 
 (defProperty withTrain (rdf:|type| owl:ObjectProperty)
-  (rdfs:subPropertyOf withVehicle))
+  (rdfs:|subPropertyOf| withVehicle))
 (defResource withAirPlane (rdf:|type| owl:ObjectProperty)
-  (rdfs:subPropertyOf withVehicle))
+  (rdfs:|subPropertyOf| withVehicle))
 
 |#

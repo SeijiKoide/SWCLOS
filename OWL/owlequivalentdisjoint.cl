@@ -576,8 +576,8 @@ instersection, then returns false."
   (cond ((eq c d) (values nil t))
         ((and c (eq d t)) (values nil t))
         ((and (eq c t) d) (values nil t))
-        ((eq c rdfs:Resource) (values nil t)) ; in RDF universe
-        ((eq d rdfs:Resource) (values nil t))
+        ((eq c rdfs:|Resource|) (values nil t)) ; in RDF universe
+        ((eq d rdfs:|Resource|) (values nil t))
         ((eq d owl:Nothing) (values t t))     ; owl:Nothing shares no instances with any class.
         ((eq c owl:Nothing) (values t t))
         ((and (eq c owl:Thing) (owl-class-p d)) (values nil t)) ; owl:Thing subsumes owl classes
@@ -794,8 +794,8 @@ instersection, then returns false."
                        (fills (cond ((typep (fills-filler d) (forall-filler c))
                                          (values nil t))
                                         (t (values nil nil))))
-                       (rdfs:Class (disjoint-p (forall-filler c) d))
-                       (rdfs:Resource (error "Not Yet!"))
+                       (rdfs:|Class| (disjoint-p (forall-filler c) d))
+                       (rdfs:|Resource| (error "Not Yet!"))
                        (t (values nil nil))))
              (exists (typecase d
                        (exists (cond ((%owl-disjoint-p (exists-filler c) (exists-filler d))
@@ -807,11 +807,11 @@ instersection, then returns false."
                        (fills (cond ((typep (fills-filler d) (exists-filler c))
                                          (values nil t))
                                         (t (values nil nil))))
-                       (rdfs:Class (cond ((disjoint-p (exists-filler c) d)
+                       (rdfs:|Class| (cond ((disjoint-p (exists-filler c) d)
                                           (format t "~%disjoint ~S ~S" c d)
                                           (values t t))
                                          (t (values nil nil))))
-                       (rdfs:Resource (error "Not Yet!"))
+                       (rdfs:|Resource| (error "Not Yet!"))
                        (t (values nil nil))))
              (fills (typecase d
                           (fills (disjoint-p (fills-filler c) (fills-filler d)))
@@ -821,30 +821,30 @@ instersection, then returns false."
                           (exists (cond ((typep (fills-filler c) (exists-filler d))
                                          (values nil t))
                                         (t (values nil nil))))
-                          (rdfs:Class (cond ((typep (fills-filler c) d)
+                          (rdfs:|Class| (cond ((typep (fills-filler c) d)
                                              (values nil t))
                                             (t (values nil nil))))
-                          (rdfs:Resource (values nil nil))
+                          (rdfs:|Resource| (values nil nil))
                           (t (values nil nil))))
-             (rdfs:Class (typecase d
+             (rdfs:|Class| (typecase d
                            (forall (disjoint-p c (forall-filler d)))
                            (exists (disjoint-p c (exists-filler d)))
                            (fills (cond ((typep (fills-filler d) c)
                                              (values nil t))
                                             (t (values nil nil))))
-                           (rdfs:Class (error "Cant happen!"))
+                           (rdfs:|Class| (error "Cant happen!"))
                            (t (values nil nil))))
-             (rdfs:Resource (typecase d
+             (rdfs:|Resource| (typecase d
                               (forall (values nil nil))
                               (exists (values nil nil))
                               (fills (values nil nil))
-                              (rdfs:Resource (error "Cant happen!"))
+                              (rdfs:|Resource| (error "Cant happen!"))
                               (t (values nil nil))))
              (t (typecase d
                   (forall (values nil nil))
                   (exists (values nil nil))
                   (fills (values nil nil))
-                  (rdfs:Resource (values nil nil))
+                  (rdfs:|Resource| (values nil nil))
                   (t (values nil nil))))
              ))))
 )
