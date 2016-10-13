@@ -92,7 +92,7 @@
 (defclass rdfsClass (rdf-node) () ; this is redefined later.
   (:metaclass rdf-node))
 
-(defclass rdfs:Class (rdf-node) ()
+(defclass rdfs:|Class| (rdf-node) ()
   (:metaclass rdfsClass))
 
 (cl:provide :rdfboot0)
