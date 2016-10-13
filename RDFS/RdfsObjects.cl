@@ -38,40 +38,40 @@
 ;;
 ;; Instance data for rdfs:Class and rdfs:Resource
 ;;
-;; Up to here, rdfs:Resource, rdfs:Class, rdf:Property, and rdfs:Literal are defined. 
+;; Up to here, rdfs:Resource, rdfs:Class, rdf:|Property|, and rdfs:Literal are defined. 
 ;; Then, slot data for those metaobjects are added by reinitialize-instance.
 
 (reinitialize-instance (load-time-value rdfs:Resource)
-                       'rdf:type rdfs:Class
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Resource"
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#Resource"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#Resource"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:comment "The class resource, everything.")
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Resource) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:Resource) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Resource) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:Resource) 'rdf:|about|))))
   (symbol-value 'rdfs:Resource))
 
 (reinitialize-instance rdfs:Class
-                       'rdf:type rdfs:Class
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Class"
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#Class"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#Class"
                        'rdfs:comment "The class of classes."
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:subClassOf rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Class) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:Class) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Class) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:Class) 'rdf:|about|))))
   (symbol-value 'rdfs:Class))
 
 (reinitialize-instance rdfs:Literal
-                       'rdf:type rdfs:Class
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Literal"
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#Literal"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#Literal"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:comment
                        "The class of literal values, e.g. textual strings and integers."
                        'rdfs:subClassOf rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Literal) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:Literal) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Literal) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:Literal) 'rdf:|about|))))
   (symbol-value 'rdfs:Literal))
 
 ;;;
@@ -168,20 +168,20 @@
 ;; (clos-strict-supertype-p vin:DryWhiteWine vin:WhiteNonSweetWine) -> nil
   
 ;;
-;; rdf:Property Final
+;; rdf:|Property| Final
 ;;
 
-(reinitialize-instance rdf:Property
+(reinitialize-instance rdf:|Property|
                        :direct-slots
                        `((:name rdfs:domain :initargs (rdfs:domain) )
                          (:name rdfs:range :initargs (rdfs:range) )
                          (:name rdfs:subPropertyOf :initform common-lisp:nil
                                 :initfunction ,(load-time-value #'excl::false)
-                                :type rdf:Property :initargs (rdfs:subPropertyOf)
+                                :type rdf:|Property| :initargs (rdfs:subPropertyOf)
                                 :readers (superproperty-of) :writers ((setf superproperty-of)))
                          (:name subproperty :initform common-lisp:nil 
                                 :initfunction ,(load-time-value #'excl::false)
-                                :type rdf:Property :initargs (:subproperty))
+                                :type rdf:|Property| :initargs (:subproperty))
                          (:name slotds :initargs (:slotds) :initform common-lisp:nil
                                 :initfunction ,(load-time-value #'excl::false) )
                          (:name equivs :initargs (:equivs) :initform common-lisp:nil 
@@ -192,104 +192,104 @@
                           :initfunction ,(load-time-value #'excl::false))
                          ))
 
-(reinitialize-instance rdf:Property
-                       'rdf:type rdfs:Class
+(reinitialize-instance rdf:|Property|
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Property"
-                       'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+                       'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
                        'rdfs:comment "The class of RDF properties."
                        'rdfs:subClassOf rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:Property) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:Property) 'rdf:about))))
-  (symbol-value 'rdf:Property))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|Property|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|Property|) 'rdf:|about|))))
+  (symbol-value 'rdf:|Property|))
 
 ;;;
 ;;;; Properties Final
 ;;;
 
 (reinitialize-instance rdfs:label 
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "label"
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:comment "A human-readable name for the subject."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#label"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#label"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:domain rdfs:Resource
                        'rdfs:range rdfs:Literal)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:label) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:label) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:label) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:label) 'rdf:|about|))))
   (symbol-value 'rdfs:label))
 
 (reinitialize-instance rdfs:domain
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "domain"
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:comment "A domain of the subject property."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#domain"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#domain"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
-                       'rdfs:domain rdf:Property
+                       'rdfs:domain rdf:|Property|
                        'rdfs:range rdfs:Class)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:domain) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:domain) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:domain) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:domain) 'rdf:|about|))))
   (symbol-value 'rdfs:domain))
 
 (reinitialize-instance rdfs:range
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "range"
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:comment "A range of the subject property."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#range"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#range"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
-                       'rdfs:domain rdf:Property
+                       'rdfs:domain rdf:|Property|
                        'rdfs:range rdfs:Class)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:range) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:range) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:range) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:range) 'rdf:|about|))))
   (symbol-value 'rdfs:range))
 
 (reinitialize-instance rdfs:comment
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "comment"
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:comment "A description of the subject resource."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#comment"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#comment"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:domain rdfs:Resource
                        'rdfs:range rdfs:Literal)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:comment) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:comment) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:comment) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:comment) 'rdf:|about|))))
   (symbol-value 'rdfs:comment))
 
 (reinitialize-instance rdfs:subClassOf
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "subClassOf"
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:comment "The subject is a subclass of a class."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#subClassOf"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#subClassOf"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:domain rdfs:Class
                        'rdfs:range rdfs:Class)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:subClassOf) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:subClassOf) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:subClassOf) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:subClassOf) 'rdf:|about|))))
   (symbol-value 'rdfs:subClassOf))
 
 (reinitialize-instance rdfs:subPropertyOf
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "subPropertyOf"
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:comment "The subject is a subproperty of a property."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#subPropertyOf"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#subPropertyOf"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
-                       'rdfs:domain rdf:Property
-                       'rdfs:range rdf:Property)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:subPropertyOf) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:subPropertyOf) 'rdf:about))))
+                       'rdfs:domain rdf:|Property|
+                       'rdfs:range rdf:|Property|)
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:subPropertyOf) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:subPropertyOf) 'rdf:|about|))))
   (symbol-value 'rdfs:subPropertyOf))
 
 (defparameter rdfs:seeAlso
-  (make-instance 'rdf:Property
+  (make-instance 'rdf:|Property|
     :name 'rdfs:seeAlso
-    'rdf:type rdf:Property
-    'rdf:about "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+    'rdf:|type| rdf:|Property|
+    'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#seeAlso"
     'rdfs:label "seeAlso"
     'rdfs:comment "Further information about the subject resource."
     'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
@@ -297,137 +297,137 @@
     'rdfs:range rdfs:Resource
     :subproperty `(,rdfs:isDefinedBy))
   "is used to indicate a resource that might provide additional information about the subject resource.")
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:seeAlso) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:seeAlso) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:seeAlso) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:seeAlso) 'rdf:|about|))))
   (symbol-value 'rdfs:seeAlso))
 
 (reinitialize-instance rdfs:isDefinedBy
-                       'rdf:type rdf:Property
+                       'rdf:|type| rdf:|Property|
                        'rdfs:label "isDefinedBy"
                        'rdfs:comment "The definition of the subject resource."
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#isDefinedBy"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:subPropertyOf `(,rdfs:seeAlso)
                        'rdfs:domain rdfs:Resource
                        'rdfs:range rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:isDefinedBy) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:isDefinedBy) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:isDefinedBy) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:isDefinedBy) 'rdf:|about|))))
   (symbol-value 'rdfs:isDefinedBy))
 
-(defparameter rdf:type
-  (make-instance 'rdf:Property
-    :name 'rdf:type
-    'rdf:type rdf:Property
+(defparameter rdf:|type|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|type|
+    'rdf:|type| rdf:|Property|
     'rdfs:label "type"
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
     'rdfs:comment "The subject is an instance of a class."
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:domain rdfs:Resource
     'rdfs:range rdfs:Class)
   "is used to state that a resource is an instance of a class.")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:type) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:type) 'rdf:about))))
-  (symbol-value 'rdf:type))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|type|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|type|) 'rdf:|about|))))
+  (symbol-value 'rdf:|type|))
 
 ;===========================================================================================
-(defparameter rdf:predicate
-  (make-instance 'rdf:Property
-    :name 'rdf:predicate
-    'rdf:type rdf:Property
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"
+(defparameter rdf:|predicate|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|predicate|
+    'rdf:|type| rdf:|Property|
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"
     'rdfs:label "predicate"
     'rdfs:comment "The predicate of the subject RDF statement."
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-    'rdfs:range rdf:Property)
+    'rdfs:range rdf:|Property|)
   "is used to state the predicate of a statement.")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:predicate) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:predicate) 'rdf:about))))
-  (symbol-value 'rdf:predicate))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|predicate|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|predicate|) 'rdf:|about|))))
+  (symbol-value 'rdf:|predicate|))
 
-(defparameter rdf:subject
-  (make-instance 'rdf:Property
-    :name 'rdf:subject
-    'rdf:type rdf:Property
+(defparameter rdf:|subject|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|subject|
+    'rdf:|type| rdf:|Property|
     'rdfs:label "subject"
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"
     'rdfs:comment "The subject of the subject RDF statement."
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:range rdfs:Resource)
   "is used to state the subject of a statement.")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:subject) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:subject) 'rdf:about))))
-  (symbol-value 'rdf:subject))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|subject|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|subject|) 'rdf:|about|))))
+  (symbol-value 'rdf:|subject|))
 
-(defparameter rdf:object
-  (make-instance 'rdf:Property
-    :name 'rdf:object
-    'rdf:type rdf:Property
+(defparameter rdf:|object|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|object|
+    'rdf:|type| rdf:|Property|
     'rdfs:label "object"
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#object"
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#object"
     'rdfs:comment "The object of the subject RDF statement."
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:range rdfs:Resource)
   "is used to state the object of a statement.")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:object) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:object) 'rdf:about))))
-  (symbol-value 'rdf:object))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|object|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|object|) 'rdf:|about|))))
+  (symbol-value 'rdf:|object|))
 
-(defparameter rdf:Statement
-  (defclass rdf:Statement (rdfs:Resource)
+(defparameter rdf:|Statement|
+  (defclass rdf:|Statement| (rdfs:Resource)
     ((excl::name :initarg :name :initform ())
-     (rdf:subject :initarg :subject :accessor rdf:subject)
-     (rdf:predicate :initarg :predicate )
-     (rdf:object :initarg :object ))
+     (rdf:|subject| :initarg :subject :accessor rdf:|subject|)
+     (rdf:|predicate| :initarg :predicate )
+     (rdf:|object| :initarg :object ))
     (:metaclass rdfs:Class))
   "It is intended to represent the class of RDF statements. 
 An RDF statement is the statement made by a token of an RDF triple.")
 
-(reinitialize-instance rdf:Statement
-                       'rdf:type rdfs:Class
+(reinitialize-instance rdf:|Statement|
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Statement"
-                       'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"
+                       'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
                        'rdfs:comment "The class of RDF statements."
                        'rdfs:subClassOf rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:Statement) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:Statement) 'rdf:about))))
-  (symbol-value 'rdf:Statement))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|Statement|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|Statement|) 'rdf:|about|))))
+  (symbol-value 'rdf:|Statement|))
 
-(reinitialize-instance rdf:predicate
-                       'rdfs:domain rdf:Statement)
-(reinitialize-instance rdf:subject
-                       'rdfs:domain rdf:Statement)
-(reinitialize-instance rdf:object
-                       'rdfs:domain rdf:Statement)
+(reinitialize-instance rdf:|predicate|
+                       'rdfs:domain rdf:|Statement|)
+(reinitialize-instance rdf:|subject|
+                       'rdfs:domain rdf:|Statement|)
+(reinitialize-instance rdf:|object|
+                       'rdfs:domain rdf:|Statement|)
 
 ;===========================================================================================
 ;;;
-;;;; rdfs:Datatype, rdf:PlainLiteral, and rdf:XMLLiteral
+;;;; rdfs:Datatype, rdf:|PlainLiteral|, and rdf:|XMLLiteral|
 ;;;
 
 (reinitialize-instance rdfs:Datatype
-                       'rdf:type rdfs:Class
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Datatype"
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#Datatype"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#Datatype"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:comment "The class of RDF datatypes."
                        'rdfs:subClassOf rdfs:Class)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Datatype) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:Datatype) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Datatype) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:Datatype) 'rdf:|about|))))
   (symbol-value 'rdfs:Datatype))
 
-(reinitialize-instance rdf:PlainLiteral
-                       'rdf:type rdfs:Datatype
+(reinitialize-instance rdf:|PlainLiteral|
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "PlainLiteral"
-                       'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral"
+                       'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/TR/rdf-plain-literal/")
                        'rdfs:comment "The class of plain (i.e. untyped) literal values."
                        'rdfs:subClassOf rdfs:Literal)
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:PlainLiteral) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:PlainLiteral) 'rdf:about))))
-  (symbol-value 'rdf:PlainLiteral))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|PlainLiteral|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|PlainLiteral|) 'rdf:|about|))))
+  (symbol-value 'rdf:|PlainLiteral|))
 
-(defmethod print-object ((object rdf:XMLLiteral) stream)
+(defmethod print-object ((object rdf:|XMLLiteral|) stream)
   "This method is not intended to use by programmer. XMLLiteral data is printed as 1^^xsd:|nonNegativeInteger|."
   (format stream "~W^^~S"
     (format nil "~A" (slot-value object 'value))
@@ -443,16 +443,16 @@ An RDF statement is the statement made by a token of an RDF triple.")
     (format nil "~A" (slot-value object 'data))
     (format nil "~A" (class-name (slot-value object 'type)))))
 
-(reinitialize-instance rdf:XMLLiteral
-                       'rdf:type rdfs:Datatype
+(reinitialize-instance rdf:|XMLLiteral|
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "XMLLiteral"
-                       'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+                       'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
                        'rdfs:comment "The class of XML literal values."
                        'rdfs:subClassOf rdfs:Literal)
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:XMLLiteral) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:XMLLiteral) 'rdf:about))))
-  (symbol-value 'rdf:XMLLiteral))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|XMLLiteral|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|XMLLiteral|) 'rdf:|about|))))
+  (symbol-value 'rdf:|XMLLiteral|))
 
 ;;;
 ;;;; Datatype Objects
@@ -475,18 +475,18 @@ An RDF statement is the statement made by a token of an RDF triple.")
 
 (defparameter xsd:|anySimpleType|
   (mop:ensure-class-using-class () 'xsd:|anySimpleType| 
-                                :direct-superclasses '(rdf:XMLLiteral)
+                                :direct-superclasses '(rdf:|XMLLiteral|)
                                 :form '(cl:or xsd:|boolean| xsd:|anyURI| xsd:|string| xsd:|float| xsd:|double| xsd:|decimal|)
                                 :metaclass 'rdfs:Datatype)
   "xsd:|anySimpleType| class object")
 (reinitialize-instance xsd:|anySimpleType|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "anySimpleType"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#anySimpleType"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#anySimpleType"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf rdf:XMLLiteral)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|anySimpleType|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|anySimpleType|) 'rdf:about))))
+                       'rdfs:subClassOf rdf:|XMLLiteral|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|anySimpleType|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|anySimpleType|) 'rdf:|about|))))
   (symbol-value 'xsd:|anySimpleType|))
 
 (defparameter xsd:|decimal|
@@ -496,13 +496,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|decimal| class object")
 (reinitialize-instance xsd:|decimal|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "decimal"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#decimal"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#decimal"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|decimal|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|decimal|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|decimal|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|decimal|) 'rdf:|about|))))
   (symbol-value 'xsd:|decimal|))
 
 (defparameter xsd:|integer|
@@ -510,16 +510,16 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :direct-superclasses '(xsd:|decimal|)
                                 :form 'cl:integer
                                 :metaclass 'rdfs:Datatype
-                                'rdf:about "http://www.w3.org/2001/XMLSchema#integer")
+                                'rdf:|about| "http://www.w3.org/2001/XMLSchema#integer")
   "xsd:|integer| class object")
 (reinitialize-instance xsd:|integer|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "integer"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#integer"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#integer"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|decimal|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|integer|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|integer|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|integer|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|integer|) 'rdf:|about|))))
   (symbol-value 'xsd:|integer|))
 
 (defparameter xsd:|nonPositiveInteger|
@@ -529,13 +529,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|nonPositiveInteger| class object")
 (reinitialize-instance xsd:|nonPositiveInteger|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "nonPositiveInteger"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#nonPositiveInteger"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#nonPositiveInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|integer|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|nonPositiveInteger|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|nonPositiveInteger|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|nonPositiveInteger|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|nonPositiveInteger|) 'rdf:|about|))))
   (symbol-value 'xsd:|nonPositiveInteger|))
 
 (defparameter xsd:|negativeInteger|
@@ -545,13 +545,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|negativeInteger| class object")
 (reinitialize-instance xsd:|negativeInteger|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "negativeInteger"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#negativeInteger"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#negativeInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|nonPositiveInteger|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|negativeInteger|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|negativeInteger|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|negativeInteger|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|negativeInteger|) 'rdf:|about|))))
   (symbol-value 'xsd:|negativeInteger|))
 
 (defparameter xsd:|long|
@@ -561,13 +561,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|long| class object")
 (reinitialize-instance xsd:|long|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "long"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#long"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#long"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|integer|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|long|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|long|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|long|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|long|) 'rdf:|about|))))
   (symbol-value 'xsd:|long|))
 
 (defparameter xsd:|int|
@@ -577,13 +577,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|int| class object")
 (reinitialize-instance xsd:|int|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "int"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#int"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#int"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|long|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|int|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|int|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|int|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|int|) 'rdf:|about|))))
   (symbol-value 'xsd:|int|))
 
 (defparameter xsd:|short|
@@ -592,13 +592,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|short| class object")
 (reinitialize-instance xsd:|short|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "short"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#short"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#short"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|int|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|short|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|short|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|short|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|short|) 'rdf:|about|))))
   (symbol-value 'xsd:|short|))
 
 (defparameter xsd:|byte|
@@ -608,13 +608,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|byte| class object")
 (reinitialize-instance xsd:|byte|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "byte"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#byte"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#byte"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|short|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|byte|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|byte|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|byte|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|byte|) 'rdf:|about|))))
   (symbol-value 'xsd:|byte|))
 
 (defparameter xsd:|nonNegativeInteger|
@@ -624,13 +624,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|nonNegativeInteger| class object")
 (reinitialize-instance xsd:|nonNegativeInteger|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "nonNegativeInteger"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|integer|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|nonNegativeInteger|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|nonNegativeInteger|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|nonNegativeInteger|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|nonNegativeInteger|) 'rdf:|about|))))
   (symbol-value 'xsd:|nonNegativeInteger|))
 
 (defparameter xsd:|positiveInteger|
@@ -640,13 +640,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|positiveInteger| class object")
 (reinitialize-instance xsd:|positiveInteger|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "positiveInteger"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#positiveInteger"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#positiveInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|nonNegativeInteger|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|positiveInteger|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|positiveInteger|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|positiveInteger|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|positiveInteger|) 'rdf:|about|))))
   (symbol-value 'xsd:|positiveInteger|))
 
 (defparameter xsd:|unsignedLong|
@@ -656,13 +656,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|unsignedLong| class object")
 (reinitialize-instance xsd:|unsignedLong|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "unsignedLong"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedLong"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#unsignedLong"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|nonNegativeInteger|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedLong|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|unsignedLong|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedLong|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedLong|) 'rdf:|about|))))
   (symbol-value 'xsd:|unsignedLong|))
 
 (defparameter xsd:|unsignedInt|
@@ -672,13 +672,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|unsignedInt| class object")
 (reinitialize-instance xsd:|unsignedInt|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "unsignedInt"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedInt"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#unsignedInt"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|unsignedLong|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedInt|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|unsignedInt|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedInt|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedInt|) 'rdf:|about|))))
   (symbol-value 'xsd:|unsignedInt|))
 
 (defparameter xsd:|unsignedShort|
@@ -688,13 +688,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|unsignedShort| class object")
 (reinitialize-instance xsd:|unsignedShort|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "unsignedShort"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedShort"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#unsignedShort"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|unsignedInt|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedShort|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|unsignedShort|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedShort|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedShort|) 'rdf:|about|))))
   (symbol-value 'xsd:|unsignedShort|))
 
 (defparameter xsd:|unsignedByte|
@@ -704,13 +704,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|unsignedByte| class object")
 (reinitialize-instance xsd:|unsignedByte|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "unsignedByte"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedByte"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#unsignedByte"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|unsignedShort|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedByte|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|unsignedByte|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedByte|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedByte|) 'rdf:|about|))))
   (symbol-value 'xsd:|unsignedByte|))
 
 (defparameter xsd:|string|
@@ -720,13 +720,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|string| class object")
 (reinitialize-instance (symbol-value 'xsd:|string|)
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "string"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#string"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#string"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|string|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|string|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|string|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|string|) 'rdf:|about|))))
   (symbol-value 'xsd:|string|))
 
 (defparameter xsd:|float|
@@ -736,13 +736,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|float| class object")
 (reinitialize-instance xsd:|float|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "float"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#float"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#float"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|float|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|float|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|float|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|float|) 'rdf:|about|))))
   (symbol-value 'xsd:|float|))
 
 (defparameter xsd:|double|
@@ -752,13 +752,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|double| class object")
 (reinitialize-instance xsd:|double|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "double"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#double"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#double"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|double|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|double|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|double|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|double|) 'rdf:|about|))))
   (symbol-value 'xsd:|double|))
 
 (defparameter xsd:|anyURI|
@@ -768,13 +768,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|anyURI| class object")
 (reinitialize-instance xsd:|anyURI|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "anyURI"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#anyURI"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#anyURI"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|anyURI|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|anyURI|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|anyURI|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|anyURI|) 'rdf:|about|))))
   (symbol-value 'xsd:|anyURI|))
 
 (defparameter xsd:|boolean|
@@ -784,13 +784,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
                                 :metaclass 'rdfs:Datatype)
   "xsd:|boolean| class object")
 (reinitialize-instance xsd:|boolean|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "boolean"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#boolean"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#boolean"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|boolean|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|boolean|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|boolean|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|boolean|) 'rdf:|about|))))
   (symbol-value 'xsd:|boolean|))
 
 (defparameter xsd:|true|
@@ -825,13 +825,13 @@ An RDF statement is the statement made by a token of an RDF triple.")
    :metaclass 'rdfs:Datatype)
   "xsd:|duration| class object")
 (reinitialize-instance xsd:|duration|
-                       'rdf:type rdfs:Datatype
+                       'rdf:|type| rdfs:Datatype
                        'rdfs:label "duration"
-                       'rdf:about "http://www.w3.org/2001/XMLSchema#duration"
+                       'rdf:|about| "http://www.w3.org/2001/XMLSchema#duration"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf xsd:|anySimpleType|)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:|duration|) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:|duration|) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|duration|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'xsd:|duration|) 'rdf:|about|))))
   (symbol-value 'xsd:|duration|))
 
 (defmethod print-object ((obj xsd:|duration|) stream)
@@ -849,80 +849,80 @@ An RDF statement is the statement made by a token of an RDF triple.")
 
 ;===========================================================================================
 
-(reinitialize-instance rdf:List
-                       'rdf:type rdfs:Class
+(reinitialize-instance rdf:|List|
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "List"
-                       'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#List"
+                       'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#List"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
                        'rdfs:comment "The class of RDF Lists."
                        'rdfs:subClassOf rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:List) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:List) 'rdf:about))))
-  (symbol-value 'rdf:List))
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|List|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|List|) 'rdf:|about|))))
+  (symbol-value 'rdf:|List|))
 
-(defparameter rdf:nil
-  (make-instance 'rdf:List
-    :name 'rdf:nil
+(defparameter rdf:|nil|
+  (make-instance 'rdf:|List|
+    :name 'rdf:|nil|
     'rdfs:label "nil"
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:comment
     "The empty list, with no items in it. If the rest of a list is nil then the list has no
 more items in it.")
-  "rdf:List instance")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:nil) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:nil) 'rdf:about))))
-  (symbol-value 'rdf:nil))
+  "rdf:|List| instance")
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|nil|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|nil|) 'rdf:|about|))))
+  (symbol-value 'rdf:|nil|))
 
-(defparameter rdf:first
-  (make-instance 'rdf:Property
-    :name 'rdf:first
-    'rdf:type rdf:Property
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#first"
+(defparameter rdf:|first|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|first|
+    'rdf:|type| rdf:|Property|
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#first"
     'rdfs:label "first"
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:comment "The first item in the subject RDF list."
-    'rdfs:domain rdf:List
+    'rdfs:domain rdf:|List|
     'rdfs:range rdfs:Resource)
-  "rdf:Property instance")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:first) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:first) 'rdf:about))))
-  (symbol-value 'rdf:first))
+  "rdf:|Property| instance")
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|first|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|first|) 'rdf:|about|))))
+  (symbol-value 'rdf:|first|))
 
-(defparameter rdf:rest
-  (make-instance 'rdf:Property
-    :name 'rdf:rest
-    'rdf:type rdf:Property
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"
+(defparameter rdf:|rest|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|rest|
+    'rdf:|type| rdf:|Property|
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"
     'rdfs:label "rest"
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:comment "The rest of the subject RDF list after the first item."
-    'rdfs:domain rdf:List
-    'rdfs:range rdf:List)
-  "rdf:Property instance")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:rest) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:rest) 'rdf:about))))
-  (symbol-value 'rdf:rest))
+    'rdfs:domain rdf:|List|
+    'rdfs:range rdf:|List|)
+  "rdf:|Property| instance")
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|rest|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|rest|) 'rdf:|about|))))
+  (symbol-value 'rdf:|rest|))
 
 ;===========================================================================================
 ;;
-;; rdf:value
+;; rdf:|value|
 ;;
 
-(defparameter rdf:value
-  (make-instance 'rdf:Property
-    :name 'rdf:value
-    'rdf:type rdf:Property
-    'rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
+(defparameter rdf:|value|
+  (make-instance 'rdf:|Property|
+    :name 'rdf:|value|
+    'rdf:|type| rdf:|Property|
+    'rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#value"
     'rdfs:label "value"
     'rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
     'rdfs:comment "Idiomatic property used for structured values."
     'rdfs:domain rdfs:Resource
     'rdfs:range rdfs:Resource)
-  "rdf:Property instance")
-(setf (iri-value (setf (slot-value (symbol-value 'rdf:value) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdf:value) 'rdf:about))))
-  (symbol-value 'rdf:value))
+  "rdf:|Property| instance")
+(setf (iri-value (setf (slot-value (symbol-value 'rdf:|value|) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdf:|value|) 'rdf:|about|))))
+  (symbol-value 'rdf:|value|))
 
 ;===========================================================================================
 ;;;
@@ -935,46 +935,46 @@ more items in it.")
     (:metaclass rdfs:Class))
   "The class of RDF containers.")
 (reinitialize-instance rdfs:Container
-                       'rdf:type rdfs:Class
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Container"
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#Container"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#Container"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:comment "The class of RDF containers."
                        'rdfs:subClassOf rdfs:Resource)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Container) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:Container) 'rdf:about))))
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:Container) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:Container) 'rdf:|about|))))
   (symbol-value 'rdfs:Container))
 
 (defparameter rdfs:member
-  (make-instance 'rdf:Property
+  (make-instance 'rdf:|Property|
     :name 'rdfs:member
-    'rdf:type rdf:Property
-    'rdf:about "http://www.w3.org/2000/01/rdf-schema#member"
+    'rdf:|type| rdf:|Property|
+    'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#member"
     'rdfs:label "member"
     'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
     'rdfs:comment "A member of the subject container."
     'rdfs:domain rdfs:Container                              ; reaxiomatized by Seiji 2008/6/27
     'rdfs:range rdfs:Resource)
-  "rdf:Property instance")
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:member) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:member) 'rdf:about))))
+  "rdf:|Property| instance")
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:member) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:member) 'rdf:|about|))))
   (symbol-value 'rdfs:member))
 
 (defparameter rdfs:ContainerMembershipProperty
-  (defclass rdfs:ContainerMembershipProperty (rdf:Property)
+  (defclass rdfs:ContainerMembershipProperty (rdf:|Property|)
     ()
     (:metaclass rdfs:Class))
   "The class of RDF containers.")
 (reinitialize-instance rdfs:ContainerMembershipProperty
-                       'rdf:type rdfs:Class
+                       'rdf:|type| rdfs:Class
                        'rdfs:label "Container"
-                       'rdf:about "http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty"
+                       'rdf:|about| "http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#")
                        'rdfs:comment "The class of container membership properties, rdf:_1, rdf:_2, ...,
   all of which are sub-properties of 'member'."
-                       'rdfs:subClassOf rdf:Property)
-(setf (iri-value (setf (slot-value (symbol-value 'rdfs:ContainerMembershipProperty) 'rdf:about)
-                   (iri (slot-value (symbol-value 'rdfs:ContainerMembershipProperty) 'rdf:about))))
+                       'rdfs:subClassOf rdf:|Property|)
+(setf (iri-value (setf (slot-value (symbol-value 'rdfs:ContainerMembershipProperty) 'rdf:|about|)
+                   (iri (slot-value (symbol-value 'rdfs:ContainerMembershipProperty) 'rdf:|about|))))
   (symbol-value 'rdfs:ContainerMembershipProperty))
 
 ;; End of module

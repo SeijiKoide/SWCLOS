@@ -104,10 +104,10 @@ rdfs:Resource.")
   (declare (optimize (speed 3) (safety 0)))
   (if (keywordp (car (getf initargs :initargs))) (call-next-method)
     (case (getf initargs :name)
-      ((rdf:about rdf:ID xml:lang) (call-next-method))
-      ((rdf:type rdfs:subClassOf rdfs:label rdfs:isDefinedBy rdfs:comment 
-                 rdfs:domain rdfs:range rdfs:subPropertyOf rdfs:member rdf:value 
-                 rdf:first rdf:rest rdf:object rdf:subject rdf:predicate  
+      ((rdf:|about| rdf:|ID| xml:lang) (call-next-method))
+      ((rdf:|type| rdfs:subClassOf rdfs:label rdfs:isDefinedBy rdfs:comment 
+                 rdfs:domain rdfs:range rdfs:subPropertyOf rdfs:member rdf:|value| 
+                 rdf:|first| rdf:|rest| rdf:|object| rdf:|subject| rdf:|predicate|  
                  owl:oneOf owl:intersectionOf owl:unionOf 
                  owl:allValuesFrom owl:hasValue owl:someValuesFromRestriction 
                  owl:cardinality owl:maxCardinality owl:minCardinality
@@ -230,8 +230,8 @@ rdfs:Resource.")
 ;;; owl:ObjectProperty.
 ;;;
 
-(defparameter rdf:Property
-  (defclass rdf:Property (rdfs:Resource)
+(defparameter rdf:|Property|
+  (defclass rdf:|Property| (rdfs:Resource)
     ((slotds :initarg :slotds :initform ()
              :documentation "slotds keeps <domain property> pair.")
      )                          ; see rdf:Property Final
@@ -241,7 +241,7 @@ rdfs:Resource.")
 has a place holder for all related slot definitions."
   )
 
-(defmethod print-object ((obj rdf:Property) stream)
+(defmethod print-object ((obj rdf:|Property|) stream)
   (cond ((not (slot-exists-p obj 'excl::name))
          (call-next-method))
         ((slot-boundp obj 'excl::name)

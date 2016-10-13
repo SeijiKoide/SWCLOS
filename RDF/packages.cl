@@ -37,16 +37,14 @@
 
 (cl:defpackage :rdf
   (:use ) ; supressing using common lisp package
-  (:export about
-           XMLDatatype 
-           inLang 
-           resource ID parseType datatype nodeID
-           Property List Statement subject predicate object 
-           Bag Seq Alt value li XMLDecl RDF Description type
-           nil first rest XMLLiteral XMLLiteral-equal
-           _1 _2 _3 _4 _5 _6 _7 _8 _9
-           type-p subclass-p
-           PlainLiteral)
+  (:export "about"
+           "XMLDatatype"
+           "inLang"
+           "resource" "ID" "parseType" "datatype" "nodeID"
+           "Property" "List" "Statement" "subject" "predicate" "object" 
+           "Bag" "Seq" "Alt" "value" "li" "XMLDecl" RDF "Description" "type"
+           "nil" "first" "rest" "XMLLiteral" "XMLLiteral-equal" "PlainLiteral"
+           _1 _2 _3 _4 _5 _6 _7 _8 _9)
   (:documentation "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
 
 (cl:defpackage :rdfs

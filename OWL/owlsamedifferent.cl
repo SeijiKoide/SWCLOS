@@ -32,7 +32,7 @@
 ;;; ----------------------------------------------------------------------------------
 ;;; (rdfs:Class owl:FunctionalProperty
 ;;;             (rdfs:label "FunctionalProperty")
-;;;             (rdfs:subClassOf rdf:Property))
+;;;             (rdfs:subClassOf rdf:|Property|))
 ;;; ----------------------------------------------------------------------------------
 ;;; owl:FunctionalProperty does not belong to OWL universe, and an instance of 
 ;;; owl:FunctionalProperty may not belong to OWL universe.
@@ -173,9 +173,9 @@
                   (inverse-functional-property-equal-p
                    x y :test #'(lambda (a b) (definitely-%owl-same-p a b (cons (cons x y) pairs))))))
          t)
-        ((and (cl:typep x 'rdf:inLang) (cl:typep y 'rdf:inLang))
+        ((and (cl:typep x 'rdf:|inLang|) (cl:typep y 'rdf:|inLang|))
          (and (eq (lang x) (lang y)) (equal (content x) (content y))))
-        ((and (cl:typep x 'rdf:XMLLiteral) (cl:typep y 'rdf:XMLLiteral))
+        ((and (cl:typep x 'rdf:|XMLLiteral|) (cl:typep y 'rdf:|XMLLiteral|))
          (and (eq (class-of x) (class-of y)) (equal (value-of x) (value-of y))))))
 )
 

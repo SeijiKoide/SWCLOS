@@ -135,7 +135,7 @@
 ;;;; Description
 ;;; An RDF structure includes one description that contains nested elements.
 
-(defstruct (rdf:Description (:print-function print-Description)) tag att&vals elements)
+(defstruct (rdf:|Description| (:print-function print-Description)) tag att&vals elements)
 (defun print-Description (r s k)
   "prints out a Description <r>. This function is not intended to be used by user."
   (declare (ignore k))
@@ -252,8 +252,8 @@
   "reads a description from <stream> and returns tag, attributes, and contents.
    Note that contents are a list of instances of property structure."
   (multiple-value-bind (tag attributes) (read-STag-or-EmptyElemTag-in-Description stream)
-    #|(let ((about (getf attributes 'rdf:about))
-          (id (getf attributes 'rdf:ID)))
+    #|(let ((about (getf attributes 'rdf:|about|))
+          (id (getf attributes 'rdf:|ID|)))
       (when (and (find-package :db.allegrocache)
                  (gx::rdf-db-open-p))
         (rdf-db-register (or about id) *line-pos* depth)))|#
@@ -280,28 +280,28 @@
            (read-pattern-p ">" stream)
            (skipbl stream)
            (let ((parse nil))
-             (cond ((setq parse (getf attributes 'rdf:parseType))
+             (cond ((setq parse (getf attributes 'rdf:|parseType|))
                     (cond ((string= parse "Resource")
-                           (remf attributes 'rdf:parseType)
+                           (remf attributes 'rdf:|parseType|)
                            (let ((contents (loop until (ETag-p-with-eat-up tag stream)
                                                collect (cond ((Comment? stream) (parse-Comment stream))
                                                              (t (parse-property stream depth)))
                                                do (skipbl stream))))
                              (values (QNameString2symbol tag) attributes
-                                     (list (make-Description :tag 'rdf:Description :elements contents)))))
+                                     (list (make-Description :tag 'rdf:|Description| :elements contents)))))
                           ((string= parse "Literal")
-                           (remf attributes 'rdf:parseType)
+                           (remf attributes 'rdf:|parseType|)
                            (let ((contents (^^ (read-string-until-Etag-with-eat-up tag stream)
-                                               (symbol-value 'rdf:XMLLiteral))))
+                                               (symbol-value 'rdf:|XMLLiteral|))))
                              (values (QNameString2symbol tag) attributes contents)))
                           ((string= parse "Collection")
-                           (remf attributes 'rdf:parseType)
+                           (remf attributes 'rdf:|parseType|)
                            (let ((contents (loop until (ETag-p-with-eat-up tag stream)
                                                collect (cond ((Comment? stream) (parse-Comment stream))
                                                              (t (parse-Description stream (1+ depth))))
                                                do (skipbl stream))))
                              (values (QNameString2symbol tag) attributes contents)))
-                          ((error "Not Yet parseType ~A" (getf attributes 'rdf:parseType)))))
+                          ((error "Not Yet parseType ~A" (getf attributes 'rdf:|parseType|)))))
                    (t (let ((contents (loop until (ETag-p-with-eat-up tag stream)
                                           collect (cond ((Comment? stream) (parse-Comment stream))
                                                         (t (parse-Description stream (1+ depth))))
@@ -525,7 +525,7 @@
           ;; this does not match exact syntax but someone uses it.
           ((match-pattern-p "about" stream)
            (read-QName stream)
-           (setq Name 'rdf:about)
+           (setq Name 'rdf:|about|)
            (read-Eq stream :format-control " after 'about'")
            (list Name (read-URI stream)))
           ((match-pattern-p "rdf:ID" stream)
@@ -535,7 +535,7 @@
           ;; this does not match exact syntax but someone uses it.
           ((match-pattern-p "ID" stream)
            (read-QName stream)
-           (setq Name 'rdf:ID)
+           (setq Name 'rdf:|ID|)
            (read-Eq stream :format-control " after 'ID'")
            (list Name (read-quoted-NCName stream)))
           ((match-pattern-p "rdf:datatype" stream)
@@ -670,11 +670,11 @@
     (string-trim '(#\Space #\Tab #\Newline) (coerce contents 'cl:string))))
 
 (defun read-as-datatype (value datatype)
-  "<value> is a string. <datatype> is a symbol that indicates any of xsd:|Datatypes|. 
+  "<value> is a string. <datatype> is a symbol that indicates any of xsd:Datatypes. 
 This function creates an instance of <datatype> from <value>. 
 Note that white spaces of head and tail of <value> are trimed and read to a lisp object 
-from <value>. For example, if <datatype> is xsd:|integer| '010' as <value> is translated to 
-10, an instance of cl:integer, then 10^^xsd:|integer| is made, in which the value is 10."
+from <value>. For example, if <datatype> is xsd:integer '010' as <value> is translated to 
+10, an instance of cl:integer, then 10^^xsd:integer is made, in which the value is 10."
   (setq value (string-trim '(#\Space #\Tab #\Newline) value))
   (ecase datatype
     ((xsd:|float| xsd:|decimal| xsd:|integer| 
@@ -694,7 +694,7 @@ from <value>. For example, if <datatype> is xsd:|integer| '010' as <value> is tr
                        ((error "Illegal value for datatype ~S:~S" datatype value))))
     (xsd:|duration| (parse-as-duration value nil))
     (xsd:|anySimpleType| (error "Did you define new xsd type?"))
-    (rdf:XMLLiteral (error "Not Yet!"))))
+    (rdf:|XMLLiteral| (error "Not Yet!"))))
 
 (defun ^^ (value type)
   "makes an XML typed data with <value> of <type>.
@@ -837,7 +837,7 @@ from <value>. For example, if <datatype> is xsd:|integer| '010' as <value> is tr
   (%accept-slot subj (prop-name prop) (prop-att&vals prop) (prop-value prop) accept-fun))
 
 (defun %accept-slot (subj name attvals value accept-fun)
-  (cond ((and (consp attvals) (eq (car attvals) 'rdf:datatype))
+  (cond ((and (consp attvals) (eq (car attvals) 'rdf:|datatype|))
          (apply accept-fun
                 (list subj (symbol2uri name)
                          (make-XMLSchema-data (car value) (uri2symbol (uri (second attvals)))))))
@@ -874,7 +874,7 @@ from <value>. For example, if <datatype> is xsd:|integer| '010' as <value> is tr
     (when (consp prop)
       (setq attvals (cdr prop))
       (setq prop (car prop)))
-    (cond ((setq parseType (getf attvals 'rdf:parseType))
+    (cond ((setq parseType (getf attvals 'rdf:|parseType|))
            (cond ((string= parseType "Resource")
                   (make-prop :name prop :att&vals attvals 
                              :value (loop for value in values

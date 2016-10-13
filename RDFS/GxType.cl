@@ -153,7 +153,7 @@
          (cond ((and *nonUNA* (iri-boundp x) (iri-boundp y))   ; if nonUNA and has value
                 (%rdf-equalp (iri-value x) (iri-value y)))     ; then check values
                (t nil)))                                       ; else different uri means different
-        ((and (cl:typep x 'rdf:inLang) (cl:typep y 'rdf:inLang))
+        ((and (cl:typep x 'rdf:|inLang|) (cl:typep y 'rdf:|inLang|))
          ;; see, http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#section-Graph-Literal
          (and (equalp (string (lang x)) (string (lang y))) (string= (content x) (content y))))
         ((and (datatype-p (class-of x)) (datatype-p (class-of y)))   ; "1"^xsd:|integer| /= 1
@@ -258,18 +258,18 @@ cases, each value is compared with each slot name."
          (let ((xfillers (collect-container-members x))
                (yfillers (collect-container-members y)))
            (cond ((and (null xfillers) (null yfillers)) (values t nil))
-                 ((and (cl:typep x (symbol-value 'rdf:Bag)) (cl:typep y (symbol-value 'rdf:Bag)))
+                 ((and (cl:typep x (symbol-value 'rdf:|Bag|)) (cl:typep y (symbol-value 'rdf:|Bag|)))
                   (values
                    (and (subsetp xfillers yfillers :test #'(lambda (xfil yfil) (rdf-equalp xfil yfil)))
                         (subsetp yfillers xfillers :test #'(lambda (yfil xfil) (rdf-equalp yfil xfil))))
                    t))
-                 ((and (%clos-subtype-p x (symbol-value 'rdf:Alt)) (%clos-subtype-p y (symbol-value 'rdf:Alt)))
+                 ((and (%clos-subtype-p x (symbol-value 'rdf:|Alt|)) (%clos-subtype-p y (symbol-value 'rdf:|Alt|)))
                   (values
                    (and (rdf-equalp (car xfillers) (car yfillers))
                         (subsetp (cdr xfillers) (cdr yfillers) :test #'(lambda (xfil yfil) (rdf-equalp xfil yfil)))
                         (subsetp (cdr yfillers) (cdr xfillers) :test #'(lambda (yfil xfil) (rdf-equalp yfil xfil))))
                    t))
-                 ((and (%clos-subtype-p x (symbol-value 'rdf:Seq)) (%clos-subtype-p y (symbol-value 'rdf:Seq)))
+                 ((and (%clos-subtype-p x (symbol-value 'rdf:|Seq|)) (%clos-subtype-p y (symbol-value 'rdf:|Seq|)))
                   (values (every #'rdf-equalp xfillers yfillers) t)))))
         ((owl-equivalent-p (class-of x) (class-of y))
          (let ((graph nil))
@@ -339,18 +339,18 @@ cases, each value is compared with each slot name."
          (let ((xfillers (collect-container-members x))
                (yfillers (collect-container-members y)))
            (cond ((and (null xfillers) (null yfillers)) (values t nil))
-                 ((and (cl:typep x (symbol-value 'rdf:Bag)) (cl:typep y (symbol-value 'rdf:Bag)))
+                 ((and (cl:typep x (symbol-value 'rdf:|Bag|)) (cl:typep y (symbol-value 'rdf:|Bag|)))
                   (values
                    (and (subsetp xfillers yfillers :test #'(lambda (xfil yfil) (rdf-equalp xfil yfil)))
                         (subsetp yfillers xfillers :test #'(lambda (yfil xfil) (rdf-equalp yfil xfil))))
                    t))
-                 ((and (%clos-subtype-p x (symbol-value 'rdf:Alt)) (%clos-subtype-p y (symbol-value 'rdf:Alt)))
+                 ((and (%clos-subtype-p x (symbol-value 'rdf:|Alt|)) (%clos-subtype-p y (symbol-value 'rdf:|Alt|)))
                   (values
                    (and (rdf-equalp (car xfillers) (car yfillers))
                         (subsetp (cdr xfillers) (cdr yfillers) :test #'(lambda (xfil yfil) (rdf-equalp xfil yfil)))
                         (subsetp (cdr yfillers) (cdr xfillers) :test #'(lambda (yfil xfil) (rdf-equalp yfil xfil))))
                    t))
-                 ((and (%clos-subtype-p x (symbol-value 'rdf:Seq)) (%clos-subtype-p y (symbol-value 'rdf:Seq)))
+                 ((and (%clos-subtype-p x (symbol-value 'rdf:|Seq|)) (%clos-subtype-p y (symbol-value 'rdf:|Seq|)))
                   (values (every #'rdf-equalp xfillers yfillers) t)))))
         ((owl-equivalent-p (class-of x) (class-of y))
          (flet ((role-val-equalp (x1 role1 x2 role2)
@@ -1360,7 +1360,7 @@ A subclass of this class is a metaclass.")
         (cl:string t)
         (cl:number t)
         (uri t)
-        (rdf:inLang t)
+        (rdf:|inLang| t)
         (symbol 
          (when (and (boundp x) (not (eq x (symbol-value x))))
            (%instance-p (symbol-value x))))
@@ -1394,11 +1394,11 @@ A subclass of this class is a metaclass.")
 (defun %rdf-property-subtype-p (class)
   "returns true if <x> is an instance of rdf:Property. <x> must be a CLOS object."
   (declare (optimize (speed 3) (safety 0)))
-  (cond ((eq class (load-time-value (find-class 'rdf:Property))))
+  (cond ((eq class (load-time-value (find-class 'rdf:|Property|))))
         ((not (mop:class-finalized-p class))
          (labels ((walk-partial-cpl (c)
                     (let ((supers (mop:class-direct-superclasses c)))
-                      (when (member (load-time-value (find-class 'rdf:Property))
+                      (when (member (load-time-value (find-class 'rdf:|Property|))
                                        supers
                                        :test #'eq)
                         (return-from %rdf-property-subtype-p t))
@@ -1406,7 +1406,7 @@ A subclass of this class is a metaclass.")
            (declare (dynamic-extent #'walk-partial-cpl))
            (walk-partial-cpl class)
            nil))
-        ((member (load-time-value (find-class 'rdf:Property))
+        ((member (load-time-value (find-class 'rdf:|Property|))
                     (mop:class-precedence-list class)
                     :test #'eq)
          t)))
@@ -1480,7 +1480,7 @@ A subclass of this class is a metaclass.")
 ;;;  string       xsd:|string|
 ;;;  fixnum       xsd:|byte|, xsd:|short|, xsd:|int|
 ;;;  bignum       xsd:|int|, xsd:|long|, xsd:|integer|
-;;;  inLang       rdf:XMLLiteral
+;;;  inLang       rdf:|XMLLiteral|
 ;;;  <a shadowed-class> names of multiple classes
 ;;;  <a resource> cl:type-of value
 ;;;  rdfs:Class   rdfs:Class
@@ -1493,12 +1493,12 @@ A subclass of this class is a metaclass.")
 ;;;  (type-of 2147483647)          => xsd:|int|
 ;;;  (type-of 9223372036854775807) => xsd:|long|
 ;;;  (type-of "string?")           => xsd:|string|
-;;;  (type-of "Literal?"@en)       => rdf:XMLLiteral
-;;;  (type-of ())                  => rdf:List
-;;;  (type-of '(a b c))            => rdf:List
-;;;  (type-of xsd:|true|)            => rdf:boolean
-;;;  (type-of rdfs:label)          => rdf:Property
-;;;  (type-of rdf:Property)        => rdfs:Class
+;;;  (type-of "Literal?"@en)       => rdf:|XMLLiteral|
+;;;  (type-of ())                  => rdf:|List|
+;;;  (type-of '(a b c))            => rdf:|List|
+;;;  (type-of xsd:|true|)            => rdf:|boolean|
+;;;  (type-of rdfs:label)          => rdf:|Property|
+;;;  (type-of rdf:|Property|)        => rdfs:Class
 ;;;  (type-of rdfs:Class)          => rdfs:Class
 ;;; ----------------------------------------------------------------------------------
 
@@ -1506,8 +1506,8 @@ A subclass of this class is a metaclass.")
   "extended version of cl:type-of function for RDF(S) and OWL.
    This function returns type(s) of <x> as symbol. See above example."
   (case (cl:type-of x)
-    (null 'rdf:List)
-    (cons 'rdf:List)
+    (null 'rdf:|List|)
+    (cons 'rdf:|List|)
     (uri 'xsd:|anyURI|)
     (iri 'xsd:|anyURI|)
     (fixnum (cond ((zerop x) 'xsd:|byte|)
@@ -1533,7 +1533,7 @@ A subclass of this class is a metaclass.")
     (symbol (cond ((eq x t) 'xsd:|boolean|)
                   ((object? x) (type-of (symbol-value x)))
                   (t (error "Symbol ~S is not defined as QName." x))))
-    (rdf:inLang 'rdf:XMLLiteral)
+    (rdf:|inLang| 'rdf:|XMLLiteral|)
     (rdfs:Resource (cond ((shadowed-class-p (class-of x)) (mapcar #'name (mclasses x)))
                          (t (cl:type-of x))))
     (rdfsClass (cond ((eql x rdfs:Class) 'rdfs:Class)
@@ -1617,10 +1617,10 @@ A subclass of this class is a metaclass.")
 ;;; (typep (uri "http://somewhere") xsd:|anyURI|)
 ;;; (typep xsd:|false| xsd:|boolean|)
 ;;; (typep 1 xsd:|anySimpleType|)
-;;; (typep 1 rdf:XMLLiteral)
+;;; (typep 1 rdf:|XMLLiteral|)
 ;;; (typep "1"^^xsd:|positiveInteger| xsd:|positiveInteger|)
 ;;; (typep "1"^^xsd:|positiveInteger| xsd:|anySimpleType|)
-;;; (typep "1"^^xsd:|positiveInteger| rdf:XMLLiteral)
+;;; (typep "1"^^xsd:|positiveInteger| rdf:|XMLLiteral|)
 ;;; ----------------------------------------------------------------------------------
 ;;;
 ;;; Examples of Literals
@@ -1629,20 +1629,20 @@ A subclass of this class is a metaclass.")
 ;;; (typep 1 rdfs:Resource)
 ;;; (typep "1"^^xsd:|positiveInteger| rdfs:Literal)
 ;;; (typep "1"^^xsd:|positiveInteger| rdfs:Resource)
-;;; (typep "subway"@en rdf:XMLLiteral)
+;;; (typep "subway"@en rdf:|XMLLiteral|)
 ;;; (typep "subway"@en rdfs:Literal)
-;;; (typep rdfs:label rdf:Property)
+;;; (typep rdfs:label rdf:|Property|)
 ;;; ----------------------------------------------------------------------------------
 ;;;
 ;;; Examples of Others
 ;;; ----------------------------------------------------------------------------------
-;;; (typep (list 1 2 3) rdf:List)
-;;; (typep 1 (list 'and xsd:|integer| rdf:XMLLiteral))
+;;; (typep (list 1 2 3) rdf:|List|)
+;;; (typep 1 (list 'and xsd:|integer| rdf:|XMLLiteral|))
 ;;; (typep 1 (list 'or xsd:|integer| xsd:|float|))
-;;; (typep rdf:Property rdfs:Class)
+;;; (typep rdf:|Property| rdfs:Class)
 ;;; (typep rdfs:Class rdfs:Class)
 ;;; (typep rdfs:label rdfs:Resource)
-;;; (typep rdf:Property rdfs:Resource)
+;;; (typep rdf:|Property| rdfs:Resource)
 ;;; (typep rdfs:Class rdfs:Resource)
 ;;; ----------------------------------------------------------------------------------
 
@@ -1726,8 +1726,8 @@ A subclass of this class is a metaclass.")
         ;; falling into here, and check it in OWL semantics
         (%%typep object type)
         )
-       (rdf:inLang (if (cl:subtypep (symbol-value 'xsd:|string|) type) (values t t) (values nil t)))
-       (cons (if (cl:subtypep rdf:List type) (values t t) (values nil t)))
+       (rdf:|inLang| (if (cl:subtypep (symbol-value 'xsd:|string|) type) (values t t) (values nil t)))
+       (cons (if (cl:subtypep rdf:|List| type) (values t t) (values nil t)))
        (cl:string (cond ((and (cl:typep type rdfs:Datatype) (cl:typep object (name type)))
                          (values t t))
                         ((cl:subtypep (symbol-value 'xsd:|string|) type)
@@ -1741,7 +1741,7 @@ A subclass of this class is a metaclass.")
        (otherwise (if (cl:typep object type) (values t t)
                     (if (cl:typep type object) (values nil t)
                       (values nil nil))))))
-    (rdf:inLang         ; type is an instance of rdfs:Literal 
+    (rdf:|inLang|         ; type is an instance of rdfs:Literal 
      (values nil t))
     (rdfs:Resource ; falling here means that type is a strict instance
      (values nil t))

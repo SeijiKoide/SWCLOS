@@ -735,7 +735,7 @@ no <*default-namespace*> and no <*base-uri*>, the string is returned."
                              (setf (iri-value uri) (setq obj (symbol-value symbol))))
                             (t (setf (iri-value uri)
                                  (setq obj (make-instance '|rdfs:Resource| :name symbol)))))
-                      (setf (slot-value obj 'rdf:about) uri)
+                      (setf (slot-value obj 'rdf:|about|) uri)
                       (list 'quote obj)))
                    (t ;; blank node
                     (setf (iri-value uri) (make-instance '|rdfs:Resource|))

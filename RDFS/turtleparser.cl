@@ -605,7 +605,7 @@
         (localn nil))
     (cond ((null prefix)
            (warn "Syntax error: illegal prefix in ~S" line))
-          ((string= prefix "a") 'rdf:type)
+          ((string= prefix "a") 'rdf:|type|)
           ((string= prefix "@prefix") (intern prefix))
           ((string= prefix "@base") (intern prefix))
           ((string= prefix "read") (intern prefix))

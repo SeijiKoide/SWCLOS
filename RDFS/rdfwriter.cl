@@ -41,7 +41,7 @@
 (defun dont-expand-p (resource)
   (and (not *force-recursive-p*)
        (cl:typep resource rdfs:Resource)
-       (or (and (slot-boundp resource 'rdf:about) (slot-value resource 'rdf:about))
+       (or (and (slot-boundp resource 'rdf:|about|) (slot-value resource 'rdf:|about|))
            (and (name resource) (not (nodeID? (name resource)))))))
 
 (defun collect-used-packaged-from (x)
@@ -115,8 +115,8 @@
 (defun write-resource (resource s)
   "prints each element as resource"
   (let ((class (type-of resource))
-        (about (or (and (slot-boundp resource 'rdf:about)
-                        (slot-value resource 'rdf:about))
+        (about (or (and (slot-boundp resource 'rdf:|about|)
+                        (slot-value resource 'rdf:|about|))
                    (and (name resource)
                         (symbol2uri (name resource)))))
         (slots (collect-instance-slots resource)))
@@ -131,16 +131,16 @@
     (cond ((null slots) (write-about= resource s))
           (t (write-char #\< s)
              (cond ((eq class 'rdfs:Resource)
-                    (write 'rdf:Description :stream s))
+                    (write 'rdf:|Description| :stream s))
                    ((eq class '|rdfs:Resource|)
-                    (write 'rdf:Description :stream s))
+                    (write 'rdf:|Description| :stream s))
                    ((owl-restriction-p resource)
                     (princ "owl:Restriction" s))
                    ((atom class)
                     (write class :stream s))
                    (t (write (car class) :stream s)
                       (setq slots
-                            (append (mapcar #'(lambda (cls) (list 'rdf:type (symbol-value cls)))
+                            (append (mapcar #'(lambda (cls) (list 'rdf:|type| (symbol-value cls)))
                                       (cdr class))
                                     slots))))
              (when about
@@ -162,9 +162,9 @@
              (write-char #\< s)
              (write-char #\/ s)
              (cond ((eq class 'rdfs:Resource)
-                    (write 'rdf:Description :stream s))
+                    (write 'rdf:|Description| :stream s))
                    ((eq class '|rdfs:Resource|)
-                    (write 'rdf:Description :stream s))
+                    (write 'rdf:|Description| :stream s))
                    ((owl-restriction-p resource)
                     (princ "owl:Restriction" s))
                    ((atom class)
@@ -174,7 +174,7 @@
 
 (defun collection-p (resources)
   (and (consp resources) (cdr resources)
-       (not (cl:typep (car resources) 'rdf:inLang))
+       (not (cl:typep (car resources) 'rdf:|inLang|))
        ))
 
 (defun write-slot-subclassof (resource s)
@@ -204,7 +204,7 @@
   (let ((role (car slot))
         (resources (cdr slot)))
     (case role
-      ((rdf:type rdfs:subPropertyOf)
+      ((rdf:|type| rdfs:subPropertyOf)
        (pprint-logical-block (s resources)
          (loop (write-resource= role (pprint-pop) s)
                (pprint-exit-if-list-exhausted)
@@ -237,7 +237,7 @@
                   (loop (let ((resource (pprint-pop)))
                           (cond ((datatype-p (class-of resource))
                                  (write-datatype= role resource s))
-                                ((cl:typep resource 'rdf:inLang)
+                                ((cl:typep resource 'rdf:|inLang|)
                                  (write-char #\< s)
                                  (write role :stream s)
                                  (princ " xml:lang=" s)
@@ -303,8 +303,8 @@
 
 (defun write-about= (resource s)
   "prints <TYPE rdf:about='uri' >"
-  (let* ((about (or (and (slot-boundp resource 'rdf:about)
-                         (slot-value resource 'rdf:about))
+  (let* ((about (or (and (slot-boundp resource 'rdf:|about|)
+                         (slot-value resource 'rdf:|about|))
                     (and (name resource)
                          (symbol2uri (name resource))))))
     (when (iri-p about) (setq about (render-uri about nil)))
@@ -325,12 +325,12 @@
     (write-char #\> s)))
 
 (defun write-datatype= (role resource s)
-  "prints <ROLE rdf:datatype='type' >value</ROLE>"
+  "prints <ROLE rdf:|datatype|='type' >value</ROLE>"
   (let ((type (class-name (class-of resource)))
         (value (value-of resource)))
     (write-char #\< s)
     (write role :stream s)
-    (princ " rdf:datatype=" s)
+    (princ " rdf:|datatype|=" s)
     (write-char #\" s)
     (princ (symbol2uri type) s)
     (write-char #\" s)
@@ -344,11 +344,11 @@
 (defun write-resource= (role resource s)
   "prints <ROLE rdf:resource='uri' />"
   (let* ((about (cond ((iri-p resource) resource)
-                      ((slot-boundp resource 'rdf:about)
-                       (slot-value resource 'rdf:about))
+                      ((slot-boundp resource 'rdf:|about|)
+                       (slot-value resource 'rdf:|about|))
                       ((name resource) (symbol2uri (name resource))))))
     (setq about
-          (cond ((stringp about) (slot-value about 'rdf:about))
+          (cond ((stringp about) (slot-value about 'rdf:|about|))
                 ((iri-p about) (render-uri about nil))
                 ((error "Cant happen!"))))
     (when (and about *base-uri*)

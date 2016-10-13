@@ -239,13 +239,13 @@
           ((error "Cant happen!")))))
 
 (defun reify (subject predicate object)
-  (when (not (cl:typep subject rdf:Statement))
-    (unless (loop for stat in (class-direct-instances rdf:Statement)
-                thereis (and (rdf-equalp subject (slot-value stat 'rdf:subject))
-                             (rdf-equalp predicate (slot-value stat 'rdf:predicate))
-                             (rdf-equalp object (slot-value stat 'rdf:object))))
+  (when (not (cl:typep subject rdf:|Statement|))
+    (unless (loop for stat in (class-direct-instances rdf:|Statement|)
+                thereis (and (rdf-equalp subject (slot-value stat 'rdf:|subject|))
+                             (rdf-equalp predicate (slot-value stat 'rdf:|predicate|))
+                             (rdf-equalp object (slot-value stat 'rdf:|object|))))
       ;(format t "~%Making statement:~S ~S ~S" subject predicate object)
-      (make-instance 'rdf:Statement :subject subject :predicate predicate :object object))))
+      (make-instance 'rdf:|Statement| :subject subject :predicate predicate :object object))))
 
 (defmethod shared-initialize :after ((instance rdfs:Resource) slot-names &rest initargs)
   "book-keeping for reification seiji"
@@ -258,8 +258,8 @@
          (typecase instance
            (rdfs:Literal nil)
            (rdfs:Datatype nil)
-           (rdf:Statement nil)
-           (rdf:List nil)
+           (rdf:|Statement| nil)
+           (rdf:|List| nil)
            (otherwise 
             (apply #'book-keeping-for-reification instance slot-names initargs)
             )))))

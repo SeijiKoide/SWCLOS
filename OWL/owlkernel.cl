@@ -235,7 +235,7 @@ and instance of owl:Class."))
 ;;;; Object Property for owl:inverseOf Book-keeping
 ;;;
 
-(defclass owl:ObjectProperty (rdf:Property)
+(defclass owl:ObjectProperty (rdf:|Property|)
   ((inverse-inverse-of :initarg :inverse-inverse-of :initform ())
    )
   (:metaclass rdfs:Class)
@@ -246,7 +246,7 @@ and instance of owl:Class."))
   ;; rule9, rule10
   (or (slot-value c 'equivalent-property) (list c)))
 
-(defmethod change-class :after ((instance rdf:Property) (new-class rdfs:Class) &rest initargs)
+(defmethod change-class :after ((instance rdf:|Property|) (new-class rdfs:Class) &rest initargs)
   "In case that <new-class> is owl:ObjectProperty, the domain of <instance> is retrieved and 
    slot definitions named its domain for <instance> is changed to an instance of 
    <OwlProperty-direct-slot-definition>."
@@ -827,7 +827,7 @@ and instance of owl:Class."))
 ;;; ==================================================================================
 ;;;
 ;;; Note that 
-;;; (rdfs:Class owl:FunctionalProperty (rdfs:subClassOf rdf:Property))
+;;; (rdfs:Class owl:FunctionalProperty (rdfs:subClassOf rdf:|Property|))
 ;;; (rdfs:Class owl:InverseFunctionalProperty  (rdfs:subClassOf owl:ObjectProperty))
 ;;;
 ;;; Then, we add owl:Functional&InverseFunctionalProperty
@@ -921,7 +921,7 @@ and instance of owl:Class."))
     (otherwise 
      (when (boundp role)
        (let ((range (get-range (symbol-value role))))
-         (if (eql range rdf:List) rdfs:Resource range))))))
+         (if (eql range rdf:|List|) rdfs:Resource range))))))
 )
 
 ;;

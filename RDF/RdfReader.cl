@@ -38,7 +38,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     (number (list x))
     (xsd:|anySimpleType| (list x))
     (rdfs:Literal (list x))
-    (rdf:Description (list (Description-form x)))
+    (rdf:|Description| (list (Description-form x)))
     (comment nil) ; depress comment
     (cons (mapcan #'make-form x))))
 
@@ -46,9 +46,9 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
   (let ((name (prop-name prop))
         (atts (prop-att&vals prop))
         (value (prop-value prop)))
-    (let ((resource (getf atts 'rdf:resource))
-          (nodeID (getf atts 'rdf:nodeID))
-          (datatype (getf atts 'rdf:datatype))
+    (let ((resource (getf atts 'rdf:|resource|))
+          (nodeID (getf atts 'rdf:|nodeID|))
+          (datatype (getf atts 'rdf:|datatype|))
           (lang (getf atts 'xml:lang)))
       (cond (nodeID
              (assert (null resource) () "resource cannot be placed with nodeID.")
@@ -102,9 +102,9 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
    <class> is a QName symbol that indicates type tag in RDF/XML.
    <attrs> are a attribute/value list for attributes in RDF/XML.
    <props> are a property/value list for properties in RDF/XML."
-  (let ((about (getf attrs 'rdf:about))
-        (id (getf attrs 'rdf:ID))
-        (nodeID (getf attrs 'rdf:nodeID))
+  (let ((about (getf attrs 'rdf:|about|))
+        (id (getf attrs 'rdf:|ID|))
+        (nodeID (getf attrs 'rdf:|nodeID|))
         (lang (getf attrs 'xml:lang))
         (slots (loop for prop in props when (prop-p prop) collect (prop-form prop))))
     (when about
@@ -128,22 +128,22 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                                                      (namestring *default-namespace*))
                                                                     ))))
                         (t (parse-uri about))))
-      (remf attrs 'rdf:about))
+      (remf attrs 'rdf:|about|))
     ;(format t "~%about:~S" about)
     (when id
       (setq id (copy-uri (parse-uri
                                   (render-uri
                                    (or *base-uri* *default-namespace*) nil))
                                  :fragment id))
-      (remf attrs 'rdf:ID))
+      (remf attrs 'rdf:|ID|))
     (when nodeID
       (setq nodeID (nodeID2symbol nodeID))
-      (remf attrs 'rdf:nodeID))
+      (remf attrs 'rdf:|nodeID|))
     (when lang
       (when (stringp lang) (setq lang (intern lang "keyword")))
       (remf attrs 'xml:lang))
     (setq attrs (loop for (prop val) on attrs by #'cddr
-                    collect (cond ((and (boundp prop) (cl:typep (symbol-value prop) 'rdf:Property))
+                    collect (cond ((and (boundp prop) (cl:typep (symbol-value prop) 'rdf:|Property|))
                                    (let ((range (get-range (symbol-value prop))))
                                      (cond ((null range) (list prop val))
                                            ((and (symbolp range)
@@ -157,8 +157,8 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     ;(format t "~%attrs:~S" attrs)
     ;(when (and (stringp about) (zerop (length about)))
     ;  (setq about *base-uri*))
-    (cons class (cond (about (cons `(rdf:about ,about) (append attrs slots)))
-                      (id (cons `(rdf:ID ,(uri2symbol id)) (append attrs slots)))
+    (cons class (cond (about (cons `(rdf:|about| ,about) (append attrs slots)))
+                      (id (cons `(rdf:|ID| ,(uri2symbol id)) (append attrs slots)))
                       (t (append attrs slots))))))
 
 ;;;; Producer-Consumer Model
@@ -274,11 +274,11 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 (eval-when (:execute :load-toplevel)
   (setq *defined-resources*
         (mapcar #'(lambda (x) `(,x line nil))
-          '(rdfs:Resource rdfs:Literal rdf:Property rdfs:label 
+          '(rdfs:Resource rdfs:Literal rdf:|Property| rdfs:label 
             rdfs:comment rdfs:isDefinedBy rdfs:domain rdfs:range rdfs:subClassOf 
-            rdfs:subPropertyOf rdfs:seeAlso rdfs:isDefinedBy rdfs:Class rdf:type rdfs:Container 
-            rdf:predicate rdf:subject rdf:object rdf:Statement rdfs:Datatype rdf:XMLLiteral 
-            rdf:List rdf:nil rdf:first rdf:rest rdf:value xsd:|anySimpleType| xsd:|boolean| 
+            rdfs:subPropertyOf rdfs:seeAlso rdfs:isDefinedBy rdfs:Class rdf:|type| rdfs:Container 
+            rdf:|predicate| rdf:|subject| rdf:|object| rdf:|Statement| rdfs:Datatype rdf:|XMLLiteral| 
+            rdf:|List| rdf:|nil| rdf:|first| rdf:|rest| rdf:|value| xsd:|anySimpleType| xsd:|boolean| 
             xsd:|anyURI| xsd:|string| xsd:|float| xsd:|double| xsd:|unsignedByte| xsd:|unsignedShort|  
             xsd:|unsignedInt| xsd:|unsignedLong| xsd:|decimal| xsd:|integer| xsd:|long| xsd:|int| 
             xsd:|short| xsd:|byte| xsd:|nonNegativeInteger| xsd:|positiveInteger| 

@@ -82,7 +82,7 @@
                (t nil)))                                    ; else different uri means different
         ((and (iri-p x) (iri-boundp x)) (owl-equalp (iri-value x) y))
         ((and (iri-p y) (iri-boundp y)) (owl-equalp x (iri-value y)))
-        ((and (cl:typep x 'rdf:inLang) (cl:typep y 'rdf:inLang))
+        ((and (cl:typep x 'rdf:|inLang|) (cl:typep y 'rdf:|inLang|))
          ;; see, http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#section-Graph-Literal
          (and (equalp (string (lang x)) (string (lang y))) (string= (content x) (content y))))
         ((and (consp x) (consp y))
@@ -195,7 +195,7 @@
 
 (defConcept DoctorAndEmployee
     (owl:intersectionOf Employee Doctor))
-(defConcept DoctorAndEmployee* (rdf:type owl:Class)
+(defConcept DoctorAndEmployee* (rdf:|type| owl:Class)
     (rdfs:subClassOf Employee* Doctor*))
 
 (subsumed-p DoctorAndEmployee Doctor)
@@ -222,7 +222,7 @@
 (disjoint-p DoctorSelfEmployed DoctorAndEmployer)
 (disjoint-p DoctorAndEmployee DoctorAndEmployer)
 
-(defConcept AlbeitDoctor* (rdf:type owl:Class)
+(defConcept AlbeitDoctor* (rdf:|type| owl:Class)
   (rdfs:subClassOf Doctor))
 (defProperty hasSalary (rdfs:domain AlbeitDoctor*) (rdfs:range Salary))
 
@@ -808,8 +808,8 @@
              (typecase instance
                (rdfs:Literal nil)
                (rdfs:Datatype nil)
-               (rdf:Statement nil)
-               (rdf:List nil)
+               (rdf:|Statement| nil)
+               (rdf:|List| nil)
                (t 
                 (apply #'book-keeping-for-reification instance slot-names args)
                 (let ((name (getf args :name)))
@@ -1549,7 +1549,7 @@
                 ))))))
 
 (excl:without-redefinition-warnings
-(defmethod domain-value ((property rdf:Property))
+(defmethod domain-value ((property rdf:|Property|))
   (flet ((get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain))))
     (mkatom (mappend #'(lambda (p) (mklist (get-dom p))) (equivalent-property-of property)))))
 )
@@ -1572,7 +1572,7 @@
       (mkatom (append domain inv-range)))))
 
 (excl:without-redefinition-warnings
-(defmethod range-value ((property rdf:Property))
+(defmethod range-value ((property rdf:|Property|))
   (flet ((get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
     (mkatom (mappend #'(lambda (p) (mklist (get-ran p))) (equivalent-property-of property)))))
 )
@@ -1779,9 +1779,9 @@
                                 (slot-value r 'owl:cardinality))
                                ((slot-boundp r 'owl:minCardinality)
                                 (slot-value r 'owl:minCardinality)))))
-               (when (and maxr (cl:typep maxr rdf:XMLLiteral))
+               (when (and maxr (cl:typep maxr rdf:|XMLLiteral|))
                  (setq maxr (value-of maxr)))
-               (when (and minr (cl:typep minr rdf:XMLLiteral))
+               (when (and minr (cl:typep minr rdf:|XMLLiteral|))
                  (setq minr (value-of minr)))
                (unless (and (or (null minr) (>= (length slotvalues) minr))
                             (or (null maxr) (<= (length slotvalues) maxr)))
@@ -1877,11 +1877,11 @@
 ;; Additional Useful Axioms
 ;;
 #+:slot-value-for-metaclass
-(defConcept owl:DatatypeProperty (rdf:type rdfs:Class)
+(defConcept owl:DatatypeProperty (rdf:|type| rdfs:Class)
   (rdfs:subClassOf (owl:Restriction (owl:onProperty rdfs:range)
                                     (owl:allValuesFrom rdfs:Datatype))))
 #+:slot-value-for-metaclass
-(defConcept owl:ObjectProperty (rdf:type rdfs:Class)
+(defConcept owl:ObjectProperty (rdf:|type| rdfs:Class)
   (rdfs:subClassOf (owl:Restriction (owl:onProperty rdfs:range)
                                     (owl:allValuesFrom owl:Class))))
 |#

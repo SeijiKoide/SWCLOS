@@ -40,8 +40,8 @@
         ; (name resource))
         ((and (symbolp resource) (object? resource))
          (symbol2uri resource))
-        ((and (rsc-object-p resource) (slot-boundp resource 'rdf:about))
-         (iri (slot-value resource 'rdf:about)))
+        ((and (rsc-object-p resource) (slot-boundp resource 'rdf:|about|))
+         (iri (slot-value resource 'rdf:|about|)))
         ((not (anonymous-p resource))
          (symbol2uri (name resource)))))
 
@@ -71,7 +71,7 @@
       (write-it predicate)
       (write-char #\space stream)
       (typecase object
-        (rdf:XMLLiteral (format stream "~W^^<~A>"
+        (rdf:|XMLLiteral| (format stream "~W^^<~A>"
                           (format nil "~A" (slot-value object 'value))
                           (symbol2uri (class-name (class-of object)))))
         (rdfs:Literal (write object :stream stream))

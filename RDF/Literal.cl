@@ -55,14 +55,14 @@
 ;;; A Lang object has <lang> and <content>.
 ;;; It is print out such as "Vine@fr".
 
-(defclass rdf:inLang ()
+(defclass rdf:|inLang| ()
   ((lang :initarg :lang :accessor lang)
    (content :initarg :content :accessor content)))
 
-(defmethod print-object ((object rdf:inLang) stream)
+(defmethod print-object ((object rdf:|inLang|) stream)
   (format stream "\"~A\"@~A" (content object) (lang object)))
 
-(defmethod equals ((obj1 rdf:inLang) (obj2 rdf:inLang))
+(defmethod equals ((obj1 rdf:|inLang|) (obj2 rdf:|inLang|))
   "Two plane literal with lang are equal if langs are equal and contents are equal." 
   (and (equal (lang obj1) (lang obj2))
        (equal (content obj1) (content obj2))))
@@ -72,6 +72,6 @@
    the string of <lang> may be any string or symbol and it must designate language tag."
   (assert (stringp content))
   ;; lang is internalized downcased keyword
-  (make-instance 'rdf:inLang
+  (make-instance 'rdf:|inLang|
     :lang (intern (string-downcase (string lang)) :keyword)
     :content content))

@@ -102,7 +102,7 @@
 ;;;; Domain Value
 ;;;
 
-(defmethod domain-value ((property rdf:Property))
+(defmethod domain-value ((property rdf:|Property|))
   "retrieve the domain value of <property>, or returns nil if not exists.
    Note that this method is refined for owl:ObjectProperty."
   (and (slot-boundp property 'rdfs:domain) (slot-value property 'rdfs:domain)))
@@ -160,13 +160,13 @@
   "collects domain information from <properties>. A property must be a symbol.
    If anyone in properties is not defined, this function executes rdf1 entaiment rule."
   (loop for role in properties with domains
-      when (and (not (eq role 'rdf:about))
-                (not (eq role 'rdf:ID))
+      when (and (not (eq role 'rdf:|about|))
+                (not (eq role 'rdf:|ID|))
                 (not (eq role 'xml:lang))
                 (not (keywordp role)))
       do (when (not (property? role))
            (warn "Entail by rdf1: ~S rdf:type rdf:Property." role)
-           (set role (make-instance rdf:Property :name role)))
+           (set role (make-instance rdf:|Property| :name role)))
         (setq domains (union (%get-domain (symbol-value role)) domains))
       finally (return domains)))
 
@@ -184,7 +184,7 @@
 ;;;;  Range Value
 ;;;
 
-(defmethod range-value ((property rdf:Property))
+(defmethod range-value ((property rdf:|Property|))
   "retrieve the range value of <property>, or returns nil if not exists.
    This method is refined for owl:ObjectProperty."
   (and (slot-boundp property 'rdfs:range) (slot-value property 'rdfs:range)))
@@ -241,13 +241,13 @@
 (defun collect-ranges (properties)
   "collects range information from <properties>. A property must be a symbol."
   (loop for role in properties with ranges
-      when (and (not (eq role 'rdf:about))
-                (not (eq role 'rdf:ID))
+      when (and (not (eq role 'rdf:|about|))
+                (not (eq role 'rdf:|ID|))
                 (not (eq role 'xml:lang))
                 (not (keywordp role)))
       do (when (not (property? role))
            (warn "Entail by rdf1: ~S rdf:type rdf:Property." role)
-           (set role (make-instance rdf:Property :name role)))
+           (set role (make-instance rdf:|Property| :name role)))
         (setq ranges (union (%get-range (symbol-value role)) ranges))
       finally (return ranges)))
 
@@ -325,7 +325,7 @@
     (null (cond ((and (symbolp value) (object? value)) (symbol-value value))
                 ((consp value)
                  (cond ((lang? (car value))
-                        (make-instance 'rdf:inLang
+                        (make-instance 'rdf:|inLang|
                           :lang (intern (car value) "keyword")
                           :content (cadr value)))
                        (t (loop for fil in value collect (slot-value-range-check role fil range)))))
@@ -348,7 +348,7 @@
             (not (if (slot-value-range-check role value (args range)) nil value))
             (otherwise (slot-value-range-check role value (cons 'and range)))))
     (forall (cond ((consp value)
-                   (cond ((subtypep rdf:List range) value)
+                   (cond ((subtypep rdf:|List| range) value)
                          (t (remove nil
                                     (loop for val in value collect (slot-value-range-check role val range))))))
                   ((and (equivalent-property-p role (forall-role range))
@@ -384,7 +384,7 @@
                   :format-arguments (list value range)))
                (t value)))
     (otherwise (cond ((consp value)
-                      (cond ((subtypep rdf:List range) value)
+                      (cond ((subtypep rdf:|List| range) value)
                             (t (remove nil
                                        (loop for val in value collect (slot-value-range-check role val range))))))
                      (t (%slot-value-range-check role value range))))))
@@ -399,10 +399,10 @@
     (null (cond ((cl:subtypep range 'xsd:|boolean|) value)
                 ((and (symbolp range) (eq range 'xsd:|boolean|)) value)
                 (t value))) ; pass null
-    (cons (cond ((subtypep rdf:List range) value)
+    (cons (cond ((subtypep rdf:|List| range) value)
                 ((lang? (car value))
                  (setq value
-                       (make-instance 'rdf:inLang
+                       (make-instance 'rdf:|inLang|
                          :lang (intern (car value) "keyword")
                          :content (cadr value)))
                  (assert (and range
@@ -436,7 +436,7 @@
                   ((cl:subtypep range 'xsd:|decimal|)
                    (read-from-string value))
                   (t (error "Not Yet!"))))
-    (rdf:inLang (cond ((typep value range) value) 
+    (rdf:|inLang| (cond ((typep value range) value) 
                       (t (error "Not Yet!"))))
     (uri (cond ((typep value range) value)               ; OK
                        ((cl:subtypep range rdfs:Resource) value) ; range is owl:Ontology

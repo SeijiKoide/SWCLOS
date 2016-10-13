@@ -209,7 +209,7 @@
 ;;;   - When rdfs:domain is supplied, the domain constraints are checked for every subject of the extension of this property.
 ;;;   - When rdfs:range is supplied, the range constraints are checked for every object of the extension of this property.
 #|
-(defmethod shared-initialize :around ((instance rdf:Property) slot-names &rest initargs)
+(defmethod shared-initialize :around ((instance rdf:|Property|) slot-names &rest initargs)
   "In order to affect new definition of rdfs:subPropertyOf to inherited domain and range constraints
 in addition to the effect of direct definitions of domain and range in <initargs>, <get-domain> and 
 <get-range> are used and before-value and after-value are compared. If there is any difference, 
@@ -269,7 +269,7 @@ of this <instance> property."
                ))))))
 |#
 
-(defmethod shared-initialize :after ((instance rdf:Property) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance rdf:|Property|) slot-names &rest initargs)
   "After regular processing, property specific procedure is processed here, i.e., book-keeping for 
    super/sub relation maintenance, the equivalent property group maintencne, adding slot definition to 
    the domain class, and finally constraint propergation of domain and range constraints."
@@ -328,7 +328,7 @@ of this <instance> property."
           ; (cond ((property? super)
           ;        (pushnew property (slot-value (symbol-value super) 'subproperty)))
           ;       (t (error "Cant happen! The super property must be instantiated at upper level."))))
-          (rdf:Property 
+          (rdf:|Property| 
            (pushnew property (slot-value super 'subproperty)))
           )))
 
@@ -353,8 +353,8 @@ of this <instance> property."
                         `(:name ,slot-name :initargs (,slot-name)
                                 :documentation "By domain definition of this property"
                                 :subject-type ,domain))
-                       ((eq range rdf:List)
-                        ;; in case of rdf:List, it should be transparent
+                       ((eq range rdf:|List|)
+                        ;; in case of rdf:|List|, it should be transparent
                         `(:name ,slot-name :initargs (,slot-name) :type t
                                 :documentation "By domain definition of this property"
                                 :subject-type ,domain))
@@ -406,8 +406,8 @@ of this <instance> property."
                   (range (get-range instance))
                   (prop-forms
                    (cond (range
-                          (cond ((eq range rdf:List)
-                                 ;; in case of rdf:List, it should be transparent
+                          (cond ((eq range rdf:|List|)
+                                 ;; in case of rdf:|List|, it should be transparent
                                  `(:name ,slot-name :initargs (,slot-name) :type t
                                          :documentation "By domain definition of this property"
                                          :subject-type ,domain))
@@ -553,8 +553,8 @@ of this <instance> property."
 (defun collect-props-from-initargs (initargs)
   (loop for args on initargs by #'cddr
       as role = (car args)
-      when (and (not (eq role 'rdf:about))
-                (not (eq role 'rdf:ID))
+      when (and (not (eq role 'rdf:|about|))
+                (not (eq role 'rdf:|ID|))
                 (not (eq role 'xml:lang))
                 (not (keywordp role)))
       collect role))
@@ -571,7 +571,7 @@ of this <instance> property."
         for val in vals
         append (list role (cond ((keywordp role) (car val))
                                    ((and (property? role)
-                                         (eq (get-range (symbol-value role)) rdf:List))
+                                         (eq (get-range (symbol-value role)) rdf:|List|))
                                     val)
                                    ((null (cdr val)) (car val))
                                    (t val))))))
@@ -780,7 +780,7 @@ Checks the residual mclasses of all instances of <class>."
                       (name class))))))
         (t ;; redefinition
          (case (name class)
-           (rdf:XMLLiteral nil)
+           (rdf:|XMLLiteral| nil)
            (otherwise
             (let* ((datatype (name class))
                    (fname `(excl::deftype-expander ,datatype)))
@@ -1020,13 +1020,13 @@ Checks the residual mclasses of all instances of <class>."
                (cond ((not (member value filler :test #'%owl-same-p))
                       (setq value (cons value filler))
                       (slot-value-with-cardinality-check))
-                     ((eq slot-name 'rdf:type)) ; ignore but no message
+                     ((eq slot-name 'rdf:|type|)) ; ignore but no message
                      (t (ignore-slot-value))))
               ((atom filler)
                (cond ((not (member filler value :test #'%owl-same-p))
                       (setq value (cons filler value))
                       (slot-value-with-cardinality-check))
-                     ((eq slot-name 'rdf:type)) ; ignore but no message                     
+                     ((eq slot-name 'rdf:|type|)) ; ignore but no message                     
                      (t (ignore-slot-value))))
               (t (let ((union (union value filler :test #'%owl-same-p)))
                    (cond ((every #'rdf-instance-p union)

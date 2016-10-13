@@ -325,7 +325,7 @@ absoluteURI ::= character+ with escapes as defined in section URI References
 > (get-form eg:Proposal)
 > (<- eg:Proposal eg:author eg:name)
 > (<- eg:Proposal dc:title)
-> (<- eg:Proposal eg:author rdf:type)
+> (<- eg:Proposal eg:author rdf:|type|)
 |#
 
 ;; End of module
