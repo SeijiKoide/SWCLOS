@@ -392,12 +392,12 @@
   "range is an atom."
   (when (eq value t)
     (return-from %slot-value-range-check
-      (cond ((cl:subtypep range 'xsd:boolean) value)
-            ((and (symbolp range) (eq range 'xsd:boolean)) value)
+      (cond ((cl:subtypep range 'xsd:|boolean|) value)
+            ((and (symbolp range) (eq range 'xsd:|boolean|)) value)
             ((error "Cant happen:t for range ~S" range)))))
   (etypecase value
-    (null (cond ((cl:subtypep range 'xsd:boolean) value)
-                ((and (symbolp range) (eq range 'xsd:boolean)) value)
+    (null (cond ((cl:subtypep range 'xsd:|boolean|) value)
+                ((and (symbolp range) (eq range 'xsd:|boolean|)) value)
                 (t value))) ; pass null
     (cons (cond ((subtypep rdf:List range) value)
                 ((lang? (car value))
@@ -406,7 +406,7 @@
                          :lang (intern (car value) "keyword")
                          :content (cadr value)))
                  (assert (and range
-                              (or (eql range 'xsd:string)
+                              (or (eql range 'xsd:|string|)
                                   (cl:subtypep rdfs:Literal range))))
                  value)
                 (t (remove nil (loop for val in value collect (%slot-value-range-check role val range))))))
@@ -430,10 +430,10 @@
                   ((error "Cant happen!" 1 value range))))  ; by smh
            (t value)))
     (number (cond ((typep value range) value)
-                  ((cl:subtypep range 'xsd:decimal) value)
+                  ((cl:subtypep range 'xsd:|decimal|) value)
                   (t (error "Not Yet!"))))
     (string (cond ((typep value range) value)
-                  ((cl:subtypep range 'xsd:decimal)
+                  ((cl:subtypep range 'xsd:|decimal|)
                    (read-from-string value))
                   (t (error "Not Yet!"))))
     (rdf:inLang (cond ((typep value range) value) 
@@ -475,13 +475,13 @@
                    ;; Still don't handle an or type with more than a single subform. -smh
                    (slot-value-range-check role value (cadr range))) ; by smh
                   ))))
-    (xsd:anySimpleType
+    (xsd:|anySimpleType|
      (format t "~%YYYYES!")
      (cond ((typep value range) value)              ; OK
            ((eq range 'rdfs:Literal) value)
-           ((or (cl:subtypep range 'xsd:decimal)
-                (cl:subtypep range 'xsd:float)
-                (cl:subtypep range 'xsd:double))
+           ((or (cl:subtypep range 'xsd:|decimal|)
+                (cl:subtypep range 'xsd:|float|)
+                (cl:subtypep range 'xsd:|double|))
             (cond ((and (numberp value) (cl:typep value range))
                    value)
                   ((stringp value)
@@ -490,7 +490,7 @@
                          ((error 'invalid-slot-value-for-range
                             :format-control "~S for range ~S"
                             :format-arguments (list value range)))))))
-           ((cl:subtypep range 'xsd:string) value)
+           ((cl:subtypep range 'xsd:|string|) value)
            (t (warn "*** INVALID SLOT VALUE2 ~S FOR ~S ***" value range) value)))
     ))
 

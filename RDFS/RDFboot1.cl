@@ -76,7 +76,7 @@ rdfs:Resource."))
 ;;; phenomenum, |rdfs:Resource| is used instead of rdfs:Resource in forward-referencing. 
 ;;; |rdfs:Resource| prevents to create wasteful slots at rdfs:Resource instances. 
 ;;;
-(defparameter |rdfs:Resource|
+(defparameter |rdfs:Resource| ; note: this symbol is NOT in package "rdfs" but "gx"!
   (defclass |rdfs:Resource| (rdfs:Resource) () (:metaclass rdfs:Class))
   "|rdfs:Resource| is a pseudo rdfs:Resource in order to work around the slot inheritance of temporal definition.
 The rule of rdf4 entails a subject and an object as an instance of rdfs:Resource. However the proactive application of
@@ -158,16 +158,16 @@ rdfs:Resource.")
 ;;; SWCLOS, the clash by disjointness is directed as follows.
 ;;; ----------------------------------------------------------------------------------
 ;;; (defConcept C1 (rdfs:subClassOf (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:decimal))))
+;;;                                    (owl:allValuesFrom xsd:|decimal|))))
 ;;; (defConcept C2 (rdfs:subClassOf (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:float))))
+;;;                                    (owl:allValuesFrom xsd:|float|))))
 ;;; (defConcept C3 (rdfs:subClassOf (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:integer))))
+;;;                                    (owl:allValuesFrom xsd:|integer|))))
 ;;; (defConcept C4 (rdfs:subClassOf (owl:Restriction (owl:onProperty s)
-;;;                                    (owl:allValuesFrom xsd:short))))
+;;;                                    (owl:allValuesFrom xsd:|short|))))
 ;;; (defConcept C5 (rdfs:subClassOf C4 C2))
 ;;; (mop:slot-definition-type (car (mop:compute-slots C5)))
-;;; -> Error: Disjoint pair #<forall s xsd:short> and #<forall s xsd:float> found in slot 
+;;; -> Error: Disjoint pair #<forall s xsd:|short|> and #<forall s xsd:|float|> found in slot 
 ;;;    inheritance computation of #<rdfs:Class C5>.
 ;;; ----------------------------------------------------------------------------------
 ;;;

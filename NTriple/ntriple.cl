@@ -708,29 +708,29 @@
 (defmethod addTriple ((subject symbol) (predicate (eql rdf:type)) (object rdfs:Resource))
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
 
-(defmethod addTriple ((subject (eql 'xsd:string)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|string|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:decimal)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|decimal|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:float)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|float|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:double)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|double|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:int)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|int|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:integer)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|integer|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:long)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|long|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:short)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|short|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:positiveInteger)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|positiveInteger|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:nonPositiveInteger)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|nonPositiveInteger|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:negativeInteger)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|negativeInteger|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
-(defmethod addTriple ((subject (eql 'xsd:nonNegativeInteger)) predicate object)
+(defmethod addTriple ((subject (eql 'xsd:|nonNegativeInteger|)) predicate object)
   (error "Invalid statement: ~S ~S ~S." subject predicate object))
 
 ;;
@@ -805,13 +805,13 @@
 
 #|
 
-(/. xsd:integer rdfs:subClassOf xsd:string)  -> ERROR
-(/. xsd:integer rdfs:subClassOf xsd:decimal) -> ERROR
+(/. xsd:|integer| rdfs:subClassOf xsd:|string|)  -> ERROR
+(/. xsd:|integer| rdfs:subClassOf xsd:|decimal|) -> ERROR
 
-(/. prop1 rdfs:range xsd:string)
+(/. prop1 rdfs:range xsd:|string|)
 (/. foo prop1 25)                     -> ERROR
 
-(/. prop2 rdfs:range xsd:integer)
+(/. prop2 rdfs:range xsd:|integer|)
 (/. foo prop2 "25")                   -> 25
 
 (/. prop3 rdf:type rdf:Property)

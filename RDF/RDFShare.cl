@@ -673,7 +673,7 @@ no <*default-namespace*> and no <*base-uri*>, the string is returned."
                (when (char= (char str pos) #\T)
                  (incf pos)
                  (parse-postT)))))
-    (make-instance 'xsd:duration
+    (make-instance 'xsd:|duration|
       :year yy
       :month mo
       :day dd
@@ -707,7 +707,7 @@ no <*default-namespace*> and no <*base-uri*>, the string is returned."
                            ((error "Illegal duration format at line ~S" (line-count stream)))))))))
         (cond ((char= (peeknext-char stream) #\T) (parse-postT))
               (t (parse-preT)))))
-    (make-instance 'xsd:duration
+    (make-instance 'xsd:|duration|
       :year yy
       :month mo
       :day dd

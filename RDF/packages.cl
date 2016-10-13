@@ -20,14 +20,14 @@
 (cl:defpackage :xsd
   (:nicknames :xs)
   (:use net.uri) ; supressing using common lisp package
-  (:export string boolean decimal float double dataTime time date
-           gYearMonth gYear gMonthDay gDay gMonth hexBinary base64Binary
-           anyURI normallizedString token language NMTOKEN Name NCName
-           integer nonPositiveInteger negativeInteger long int short byte
-           nonNegativeInteger unsignedLong unsignedInt unsignedShort unsignedByte
-           positiveInteger simpleType anySimpleType true false
-           duration duration-year duration-month duration-day duration-hour
-           duration-minute duration-second)
+  (:export "string" "boolean" "decimal" "float" "double" "dataTime" "time" "date"
+           "gYearMonth" "gYear" "gMonthDay" "gDay" "gMonth" "hexBinary" "base64Binary"
+           "anyURI" "normallizedString" "token" "language" "NMTOKEN" "Name" "NCName"
+           "integer" "nonPositiveInteger" "negativeInteger" "long" "int" "short" "byte"
+           "nonNegativeInteger" "unsignedLong" "unsignedInt" "unsignedShort" "unsignedByte"
+           "positiveInteger" "simpleType" "anySimpleType" "true" "false"
+           "duration" "duration-year" "duration-month" "duration-day" "duration-hour"
+           "duration-minute" "duration-second")
   (:documentation "http://www.w3.org/2001/XMLSchema#"))
 
 (cl:defpackage :dc

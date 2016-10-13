@@ -670,30 +670,30 @@
     (string-trim '(#\Space #\Tab #\Newline) (coerce contents 'cl:string))))
 
 (defun read-as-datatype (value datatype)
-  "<value> is a string. <datatype> is a symbol that indicates any of xsd:Datatypes. 
+  "<value> is a string. <datatype> is a symbol that indicates any of xsd:|Datatypes|. 
 This function creates an instance of <datatype> from <value>. 
 Note that white spaces of head and tail of <value> are trimed and read to a lisp object 
-from <value>. For example, if <datatype> is xsd:integer '010' as <value> is translated to 
-10, an instance of cl:integer, then 10^^xsd:integer is made, in which the value is 10."
+from <value>. For example, if <datatype> is xsd:|integer| '010' as <value> is translated to 
+10, an instance of cl:integer, then 10^^xsd:|integer| is made, in which the value is 10."
   (setq value (string-trim '(#\Space #\Tab #\Newline) value))
   (ecase datatype
-    ((xsd:float xsd:decimal xsd:integer 
-                xsd:long xsd:int xsd:short xsd:byte
-                xsd:nonPositiveInteger xsd:negativeInteger 
-                xsd:nonNegativeInteger xsd:unsignedLong xsd:unsignedInt xsd:unsignedShort xsd:unsignedByte 
-                xsd:positiveInteger)
+    ((xsd:|float| xsd:|decimal| xsd:|integer| 
+                xsd:|long| xsd:|int| xsd:|short| xsd:|byte|
+                xsd:|nonPositiveInteger| xsd:|negativeInteger| 
+                xsd:|nonNegativeInteger| xsd:|unsignedLong| xsd:|unsignedInt| xsd:|unsignedShort| xsd:|unsignedByte| 
+                xsd:|positiveInteger|)
      (^^ (read-from-string value) (symbol-value datatype)))
-    (xsd:double (^^ (read-from-string (format nil "~Ad0" value)) (symbol-value datatype)))
-    (xsd:decimal (^^ (rational (read-from-string (format nil "~Ad0" value))) (symbol-value datatype)))
-    (xsd:string (make-instance (symbol-value datatype) :value value))
-    (xsd:anyURI (iri value))
-    (xsd:boolean (cond ((string= value "1") t)
+    (xsd:|double| (^^ (read-from-string (format nil "~Ad0" value)) (symbol-value datatype)))
+    (xsd:|decimal| (^^ (rational (read-from-string (format nil "~Ad0" value))) (symbol-value datatype)))
+    (xsd:|string| (make-instance (symbol-value datatype) :value value))
+    (xsd:|anyURI| (iri value))
+    (xsd:|boolean| (cond ((string= value "1") t)
                        ((string= value "0") nil)
                        ((string-equal value "true") t)
                        ((string-equal value "false") nil)
                        ((error "Illegal value for datatype ~S:~S" datatype value))))
-    (xsd:duration (parse-as-duration value nil))
-    (xsd:anySimpleType (error "Did you define new xsd type?"))
+    (xsd:|duration| (parse-as-duration value nil))
+    (xsd:|anySimpleType| (error "Did you define new xsd type?"))
     (rdf:XMLLiteral (error "Not Yet!"))))
 
 (defun ^^ (value type)
@@ -705,9 +705,9 @@ from <value>. For example, if <datatype> is xsd:integer '010' as <value> is tran
       (cl:string (read-as-datatype value (name type)))
       (otherwise
        (case (name type)
-         (xsd:float (make-instance type :value (float value 1.0)))
-         (xsd:double (make-instance type :value (float value 1.0d0)))
-         (xsd:decimal (make-instance type :value (rational value)))
+         (xsd:|float| (make-instance type :value (float value 1.0)))
+         (xsd:|double| (make-instance type :value (float value 1.0d0)))
+         (xsd:|decimal| (make-instance type :value (rational value)))
          (otherwise
           (if (cl:typep value (name type)) (make-instance type :value value)
             (make-instance type :value (coerce value (name type))))))))))

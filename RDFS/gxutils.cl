@@ -152,7 +152,7 @@ Note that it is not cared that symbols are bound to resource objects or not."))
                           (loop for filler in fillers
                               collect (cond ;((cl:typep filler 'rdf:inLang)
                                             ; `(,(lang filler) ,(content filler)))
-                                            ((typep filler 'xsd:anySimpleType) filler)
+                                            ((typep filler 'xsd:|anySimpleType|) filler)
                                             ((typep filler rdfs:Literal) filler)
                                             ((typep filler 'uri) filler)
                                             ((eq role 'rdfs:subClassOf)

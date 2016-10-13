@@ -35,7 +35,7 @@
 ;;; The ex:A and ex:B might denote the same thing in RDF universe, and two graphs might mean same 
 ;;; meaning in the world. We need very laborious work in nonUNA principle to describe common knowledge 
 ;;; such as ex:Automobile is different from ex:Train, ex:Airplane, and ex:Ship. We must state that 
-;;; xsd:float is different from xsd:integer, xsd:URI, xsd:string, xsd:boolean, etc. for all terms in ontology.
+;;; xsd:|float| is different from xsd:|integer|, xsd:|URI|, xsd:|string|, xsd:|boolean|, etc. for all terms in ontology.
 ;;;
 ;;; Therefore, we set up the flag for non Unique Name Assumption false as default. Namely, 
 ;;; if two names or URIs are different, then the two bound objects must be different. When you 
@@ -87,13 +87,13 @@
 ;;; # Two RDF URI references are equal, if and only if they compare as equal, character by character, 
 ;;;   as Unicode strings.
 ;;; # Two plane literals as integer are equal, if and only if they are equal as mapped value in value space.
-;;; # Two typed literals (xsd:anySimpleType) are equal, if and only if datatype URIs are equal and mapped values 
+;;; # Two typed literals (xsd:|anySimpleType|) are equal, if and only if datatype URIs are equal and mapped values 
 ;;;   are equal in value space.
 ;;;
 ;;; Therefore, in this implementation
 ;;; # If <x> and <y> are equal as lisp object (integer, string, URI, symbol, CLOS object, etc.), 
 ;;;   then both are equal in RDF.
-;;; # If <x> and <y> are instances of any datatype (xsd:anySimpleType), both are equal if both data types are 
+;;; # If <x> and <y> are instances of any datatype (xsd:|anySimpleType|), both are equal if both data types are 
 ;;;   equal and both values are equal.
 ;;; # If <x> and <y> are named CLOS objects, if both have a same name, then both are equal in RDF.
 ;;;   If both have different names, the both are not equal when *nonUNA* is false, or the graph equality is 
@@ -112,9 +112,9 @@
 ;;; (rdf-equalp "string" "string"@en)                                 -> false
 ;;; (rdf-equalp "wine"@en (@ "wine" "EN"))                            -> true
 ;;; (rdf-equalp 1 1.0)                                                -> true
-;;; (rdf-equalp 1 "1"^^xsd:integer)                                   -> false
-;;; (rdf-equalp "1"^^xsd:integer (^^ 1 xsd:integer))                  -> true
-;;; (rdf-equalp "1"^^xsd:integer (^^ 1 xsd:nonNegativeInteger))       -> false
+;;; (rdf-equalp 1 "1"^^xsd:|integer|)                                   -> false
+;;; (rdf-equalp "1"^^xsd:|integer| (^^ 1 xsd:|integer|))                  -> true
+;;; (rdf-equalp "1"^^xsd:|integer| (^^ 1 xsd:|nonNegativeInteger|))       -> false
 ;;; (rdf-equalp (iri "http://somewhere") (iri "http://somewhere"))    -> true
 ;;; (rdf-equalp (iri "http://somewhere") (iri "http://some%20where")) -> false
 ;;; (rdf-equalp 'foo 'bar)                                            -> false
@@ -156,8 +156,8 @@
         ((and (cl:typep x 'rdf:inLang) (cl:typep y 'rdf:inLang))
          ;; see, http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#section-Graph-Literal
          (and (equalp (string (lang x)) (string (lang y))) (string= (content x) (content y))))
-        ((and (datatype-p (class-of x)) (datatype-p (class-of y)))   ; "1"^xsd:integer /= 1
-         (and (eq (class-of x) (class-of y))                         ; "1"^xsd:integer /= "1.0"^xsd:float
+        ((and (datatype-p (class-of x)) (datatype-p (class-of y)))   ; "1"^xsd:|integer| /= 1
+         (and (eq (class-of x) (class-of y))                         ; "1"^xsd:|integer| /= "1.0"^xsd:|float|
               (%rdf-equalp (value-of x) (value-of y))))
         ((and (rsc-object-p x) (rsc-object-p y))
          (cond ((and (name x) (name y) (equal (name x) (name y))) t) ; if names are equal, then equal. name may be a cons
@@ -432,40 +432,40 @@ cases, each value is compared with each slot name."
    If every subclass pairs between one from <c> and one from <d> is not in class-subclass relation, 
    finally t is returned."
   ;; This function is used in %rdf-subtypep.
-  ;; xsd:decimal -+- xsd:integer +- xsd:long -- xsd:int -- xsd:short -- xsd:byte
-  ;;              +- xsd:nonPositiveInteger -- xsd:negativeInteger
-  ;;              +- xsd:nonNegativeInteger -+-  xsd:positiveInteger
-  ;;                                         +-- xsd:unsignedLong - xsd:unsignedInt - xsd:unsignedShort - xsd:unsignedByte
+  ;; xsd:|decimal| -+- xsd:|integer| +- xsd:|long| -- xsd:|int| -- xsd:|short| -- xsd:|byte|
+  ;;              +- xsd:|nonPositiveInteger| -- xsd:|negativeInteger|
+  ;;              +- xsd:|nonNegativeInteger| -+-  xsd:|positiveInteger|
+  ;;                                         +-- xsd:|unsignedLong| - xsd:|unsignedInt| - xsd:|unsignedShort| - xsd:|unsignedByte|
   (cond ((eq c d) (values nil t))
         ((eq c rdfs:Resource) (values nil t))         ; in RDF universe
         ((eq d rdfs:Resource) (values nil t))
-        ((or (and (eq c (symbol-value 'xsd:nonPositiveInteger)) (eq d (symbol-value 'xsd:nonNegativeInteger)))
-             (and (eq d (symbol-value 'xsd:nonPositiveInteger)) (eq c (symbol-value 'xsd:nonNegativeInteger))))
+        ((or (and (eq c (symbol-value 'xsd:|nonPositiveInteger|)) (eq d (symbol-value 'xsd:|nonNegativeInteger|)))
+             (and (eq d (symbol-value 'xsd:|nonPositiveInteger|)) (eq c (symbol-value 'xsd:|nonNegativeInteger|))))
          ;; both shares zero
          (values nil t))
-        ((or (and (%clos-subtype-p c (symbol-value 'xsd:integer))
-                  (%clos-subtype-p d (symbol-value 'xsd:nonPositiveInteger)))
-             (and (%clos-subtype-p d (symbol-value 'xsd:integer))
-                  (%clos-subtype-p c (symbol-value 'xsd:nonPositiveInteger)))
-             (and (%clos-subtype-p c (symbol-value 'xsd:integer))
-                  (%clos-subtype-p d (symbol-value 'xsd:nonNegativeInteger)))
-             (and (%clos-subtype-p d (symbol-value 'xsd:integer))
-                  (%clos-subtype-p c (symbol-value 'xsd:nonNegativeInteger))))
+        ((or (and (%clos-subtype-p c (symbol-value 'xsd:|integer|))
+                  (%clos-subtype-p d (symbol-value 'xsd:|nonPositiveInteger|)))
+             (and (%clos-subtype-p d (symbol-value 'xsd:|integer|))
+                  (%clos-subtype-p c (symbol-value 'xsd:|nonPositiveInteger|)))
+             (and (%clos-subtype-p c (symbol-value 'xsd:|integer|))
+                  (%clos-subtype-p d (symbol-value 'xsd:|nonNegativeInteger|)))
+             (and (%clos-subtype-p d (symbol-value 'xsd:|integer|))
+                  (%clos-subtype-p c (symbol-value 'xsd:|nonNegativeInteger|))))
          (values nil t))
-        ((or (and (%clos-subtype-p c (symbol-value 'xsd:nonPositiveInteger))
-                  (%clos-subtype-p d (symbol-value 'xsd:positiveInteger)))
-             (and (%clos-subtype-p d (symbol-value 'xsd:nonPositiveInteger))
-                  (%clos-subtype-p c (symbol-value 'xsd:positiveInteger))))
+        ((or (and (%clos-subtype-p c (symbol-value 'xsd:|nonPositiveInteger|))
+                  (%clos-subtype-p d (symbol-value 'xsd:|positiveInteger|)))
+             (and (%clos-subtype-p d (symbol-value 'xsd:|nonPositiveInteger|))
+                  (%clos-subtype-p c (symbol-value 'xsd:|positiveInteger|))))
          (values nil t))
-        ((or (and (%clos-subtype-p c (symbol-value 'xsd:nonPositiveInteger))
-                  (%clos-subtype-p d (symbol-value 'xsd:unsignedLong)))
-             (and (%clos-subtype-p d (symbol-value 'xsd:nonPositiveInteger))
-                  (%clos-subtype-p c (symbol-value 'xsd:unsignedLong))))
+        ((or (and (%clos-subtype-p c (symbol-value 'xsd:|nonPositiveInteger|))
+                  (%clos-subtype-p d (symbol-value 'xsd:|unsignedLong|)))
+             (and (%clos-subtype-p d (symbol-value 'xsd:|nonPositiveInteger|))
+                  (%clos-subtype-p c (symbol-value 'xsd:|unsignedLong|))))
          (values nil t))
-        ((or (and (%clos-subtype-p c (symbol-value 'xsd:nonNegativeInteger))
-                  (%clos-subtype-p d (symbol-value 'xsd:negativeInteger)))
-             (and (%clos-subtype-p d (symbol-value 'xsd:nonNegativeInteger))
-                  (%clos-subtype-p c (symbol-value 'xsd:negativeInteger))))
+        ((or (and (%clos-subtype-p c (symbol-value 'xsd:|nonNegativeInteger|))
+                  (%clos-subtype-p d (symbol-value 'xsd:|negativeInteger|)))
+             (and (%clos-subtype-p d (symbol-value 'xsd:|nonNegativeInteger|))
+                  (%clos-subtype-p c (symbol-value 'xsd:|negativeInteger|))))
          (values nil t))
         (t (loop for csub in (cons c (collect-all-subs c)) with dsubs = (cons d (collect-all-subs d))
                do (loop for dsub in dsubs
@@ -501,36 +501,36 @@ cases, each value is compared with each slot name."
                ((check-instance-sharing c d)
                 (values nil t))
                ;; rdf disjoint part
-               ((or (and (eq c (symbol-value 'xsd:nonPositiveInteger)) (eq d (symbol-value 'xsd:nonNegativeInteger)))
-                    (and (eq d (symbol-value 'xsd:nonPositiveInteger)) (eq c (symbol-value 'xsd:nonNegativeInteger))))
+               ((or (and (eq c (symbol-value 'xsd:|nonPositiveInteger|)) (eq d (symbol-value 'xsd:|nonNegativeInteger|)))
+                    (and (eq d (symbol-value 'xsd:|nonPositiveInteger|)) (eq c (symbol-value 'xsd:|nonNegativeInteger|))))
                 (values nil t))
-               ((or (and (%clos-subtype-p c (symbol-value 'xsd:integer))
-                         (%clos-subtype-p d (symbol-value 'xsd:nonPositiveInteger)))
-                    (and (%clos-subtype-p d (symbol-value 'xsd:integer))
-                         (%clos-subtype-p c (symbol-value 'xsd:nonPositiveInteger)))
-                    (and (%clos-subtype-p c (symbol-value 'xsd:integer))
-                         (%clos-subtype-p d (symbol-value 'xsd:nonNegativeInteger)))
-                    (and (%clos-subtype-p d (symbol-value 'xsd:integer))
-                         (%clos-subtype-p c (symbol-value 'xsd:nonNegativeInteger))))
+               ((or (and (%clos-subtype-p c (symbol-value 'xsd:|integer|))
+                         (%clos-subtype-p d (symbol-value 'xsd:|nonPositiveInteger|)))
+                    (and (%clos-subtype-p d (symbol-value 'xsd:|integer|))
+                         (%clos-subtype-p c (symbol-value 'xsd:|nonPositiveInteger|)))
+                    (and (%clos-subtype-p c (symbol-value 'xsd:|integer|))
+                         (%clos-subtype-p d (symbol-value 'xsd:|nonNegativeInteger|)))
+                    (and (%clos-subtype-p d (symbol-value 'xsd:|integer|))
+                         (%clos-subtype-p c (symbol-value 'xsd:|nonNegativeInteger|))))
                 (values nil t))
-               ((or (and (%clos-subtype-p c (symbol-value 'xsd:nonPositiveInteger))
-                         (%clos-subtype-p d (symbol-value 'xsd:positiveInteger)))
-                    (and (%clos-subtype-p d (symbol-value 'xsd:nonPositiveInteger))
-                         (%clos-subtype-p c (symbol-value 'xsd:positiveInteger))))
+               ((or (and (%clos-subtype-p c (symbol-value 'xsd:|nonPositiveInteger|))
+                         (%clos-subtype-p d (symbol-value 'xsd:|positiveInteger|)))
+                    (and (%clos-subtype-p d (symbol-value 'xsd:|nonPositiveInteger|))
+                         (%clos-subtype-p c (symbol-value 'xsd:|positiveInteger|))))
                 (values t t))
-               ((or (and (%clos-subtype-p c (symbol-value 'xsd:nonPositiveInteger))
-                         (%clos-subtype-p d (symbol-value 'xsd:unsignedLong)))
-                    (and (%clos-subtype-p d (symbol-value 'xsd:nonPositiveInteger))
-                         (%clos-subtype-p c (symbol-value 'xsd:unsignedLong))))
+               ((or (and (%clos-subtype-p c (symbol-value 'xsd:|nonPositiveInteger|))
+                         (%clos-subtype-p d (symbol-value 'xsd:|unsignedLong|)))
+                    (and (%clos-subtype-p d (symbol-value 'xsd:|nonPositiveInteger|))
+                         (%clos-subtype-p c (symbol-value 'xsd:|unsignedLong|))))
                 (values t t))
-               ((or (and (%clos-subtype-p c (symbol-value 'xsd:nonNegativeInteger))
-                         (%clos-subtype-p d (symbol-value 'xsd:negativeInteger)))
-                    (and (%clos-subtype-p d (symbol-value 'xsd:nonNegativeInteger))
-                         (%clos-subtype-p c (symbol-value 'xsd:negativeInteger))))
+               ((or (and (%clos-subtype-p c (symbol-value 'xsd:|nonNegativeInteger|))
+                         (%clos-subtype-p d (symbol-value 'xsd:|negativeInteger|)))
+                    (and (%clos-subtype-p d (symbol-value 'xsd:|nonNegativeInteger|))
+                         (%clos-subtype-p c (symbol-value 'xsd:|negativeInteger|))))
                 (values t t))
                ;; implicit disjointness of datatype
-               ((and (%clos-subtype-p c xsd:anySimpleType)
-                     (%clos-subtype-p d xsd:anySimpleType))
+               ((and (%clos-subtype-p c xsd:|anySimpleType|)
+                     (%clos-subtype-p d xsd:|anySimpleType|))
                 (loop for csub in (cons c (collect-all-subs c)) with dsubs = (cons d (collect-all-subs d))
                     do (loop for dsub in dsubs
                            when (or (%clos-subtype-p csub dsub) (%clos-subtype-p dsub csub))
@@ -917,10 +917,10 @@ A subclass of this class is a metaclass.")
 ;;; Thus, if two classes are independent (not in relation of super-sub classes), then they seems to be disjoint. 
 ;;; However, if concept C and (not D) is compared in Allegro Common Lisp, ACL tends to fall into conclusion unknown. 
 ;;; It seems that CLOS does not have clear semantics on class extension. In RDF semantics, 
-;;; every entity is a member of RDF universe, then the complement of xsd:integer or (not xsd:integer) extends out 
-;;; of xsd:integer extension and xsd:decimal in RDF universe. For example, an instance of vin:Wine is not an 
-;;; instance of xsd:integer. Therefore, it is obvious that (not xsd:integer) is not a subclass of xsd:integer and 
-;;; xsd:decimal. However, cl:subtypep does not infer it (at least for ACL). 
+;;; every entity is a member of RDF universe, then the complement of xsd:|integer| or (not xsd:|integer|) extends out 
+;;; of xsd:|integer| extension and xsd:|decimal| in RDF universe. For example, an instance of vin:Wine is not an 
+;;; instance of xsd:|integer|. Therefore, it is obvious that (not xsd:|integer|) is not a subclass of xsd:|integer| and 
+;;; xsd:|decimal|. However, cl:subtypep does not infer it (at least for ACL). 
 ;;;
 ;;; Furthermore, we have notions of equivalency and disjointness on class relation in OWL. 
 ;;; Therefore, the equivalency and disjointness must be checked in addition of super-sub class relation. 
@@ -971,18 +971,18 @@ A subclass of this class is a metaclass.")
 ;;; <rdf-subtypep> has almost same logic as <subtypep> but it is only different with 
 ;;; respect to known/unknown. See following example.
 ;;; ----------------------------------------------------------------------------------
-;;; (rdf-subtypep xsd:long xsd:decimal)         -> <t t>
-;;; (subtypep xsd:long xsd:decimal)             -> <t t>
-;;; (rdf-subtypep `(not ,xsd:long) xsd:decimal) -> <nil t>
-;;; (subtypep `(not ,xsd:long) xsd:decimal)     -> <nil nil>
-;;; (rdf-subtypep xsd:decimal `(not ,xsd:long)) -> <nil t>
-;;; (subtypep xsd:decimal `(not ,xsd:long))     -> <nil nil>
+;;; (rdf-subtypep xsd:|long| xsd:|decimal|)         -> <t t>
+;;; (subtypep xsd:|long| xsd:|decimal|)             -> <t t>
+;;; (rdf-subtypep `(not ,xsd:|long|) xsd:|decimal|) -> <nil t>
+;;; (subtypep `(not ,xsd:|long|) xsd:|decimal|)     -> <nil nil>
+;;; (rdf-subtypep xsd:|decimal| `(not ,xsd:|long|)) -> <nil t>
+;;; (subtypep xsd:|decimal| `(not ,xsd:|long|))     -> <nil nil>
 ;;; ----------------------------------------------------------------------------------
-;;; In this example, xsd:long is subsumed by and not equal to xsd:decimal. Therefore, 
-;;; there is the intersection between xsd:long and xsd:decimal.
-;;; The complement of xsd:long extends over the boundary of xsd:decimal, then the extension 
-;;; of (not xsd:long) is not included by the extension of xsd:decimal, and the extension of 
-;;; the intersection between xsd:long and xsd:decimal is not included by (not xsd:long).
+;;; In this example, xsd:|long| is subsumed by and not equal to xsd:|decimal|. Therefore, 
+;;; there is the intersection between xsd:|long| and xsd:|decimal|.
+;;; The complement of xsd:|long| extends over the boundary of xsd:|decimal|, then the extension 
+;;; of (not xsd:|long|) is not included by the extension of xsd:|decimal|, and the extension of 
+;;; the intersection between xsd:|long| and xsd:|decimal| is not included by (not xsd:|long|).
 ;;;
 ;;; Function <rdf-subtypep> obeys the set-theoretic semantics of RDF(S), but <subtypep> does not follow 
 ;;; the semantics of RDF(S) exactly. Even so, there is no difference between both, if only the 
@@ -1138,14 +1138,14 @@ A subclass of this class is a metaclass.")
 ;;;; Most Specific Concepts (MSCs)
 ;;;
 ;;; Function <most-specific-concepts> is used to compute the most specific concepts among classes.
-;;; For example, xsd:integer is a superclass of xsd:int, and xsd:nonNegativeInteger is a superclass 
-;;; of xsd:positiveInteger, then those superclasses disappear in the most specific concepts among them.
+;;; For example, xsd:|integer| is a superclass of xsd:|int|, and xsd:|nonNegativeInteger| is a superclass 
+;;; of xsd:|positiveInteger|, then those superclasses disappear in the most specific concepts among them.
 ;;; ----------------------------------------------------------------------------------
 ;;; (most-specific-concepts
-;;;   (list xsd:integer xsd:int xsd:positiveInteger
-;;;            xsd:nonNegativeInteger xsd:unsignedInt))
-;;; -> (#<rdfs:Datatype xsd:unsignedInt> #<rdfs:Datatype xsd:positiveInteger>
-;;;     #<rdfs:Datatype xsd:int>)
+;;;   (list xsd:|integer| xsd:|int| xsd:|positiveInteger|
+;;;            xsd:|nonNegativeInteger| xsd:|unsignedInt|))
+;;; -> (#<rdfs:Datatype xsd:|unsignedInt|> #<rdfs:Datatype xsd:|positiveInteger|>
+;;;     #<rdfs:Datatype xsd:|int|>)
 ;;; ----------------------------------------------------------------------------------
 
 (defun most-specific-concepts (classes)
@@ -1475,11 +1475,11 @@ A subclass of this class is a metaclass.")
 ;;; --------------------------------------
 ;;;  null         rdfs:List
 ;;;  cons         rdfs:List
-;;;  uri          xsd:anyURI
+;;;  uri          xsd:|anyURI|
 ;;;  symbol       <type of symbol's value>
-;;;  string       xsd:string
-;;;  fixnum       xsd:byte, xsd:short, xsd:int
-;;;  bignum       xsd:int, xsd:long, xsd:integer
+;;;  string       xsd:|string|
+;;;  fixnum       xsd:|byte|, xsd:|short|, xsd:|int|
+;;;  bignum       xsd:|int|, xsd:|long|, xsd:|integer|
 ;;;  inLang       rdf:XMLLiteral
 ;;;  <a shadowed-class> names of multiple classes
 ;;;  <a resource> cl:type-of value
@@ -1489,14 +1489,14 @@ A subclass of this class is a metaclass.")
 ;;; ----------------------------------------------------------------------------------
 ;;; Example
 ;;; ----------------------------------------------------------------------------------
-;;;  (type-of 32767)               => xsd:short
-;;;  (type-of 2147483647)          => xsd:int
-;;;  (type-of 9223372036854775807) => xsd:long
-;;;  (type-of "string?")           => xsd:string
+;;;  (type-of 32767)               => xsd:|short|
+;;;  (type-of 2147483647)          => xsd:|int|
+;;;  (type-of 9223372036854775807) => xsd:|long|
+;;;  (type-of "string?")           => xsd:|string|
 ;;;  (type-of "Literal?"@en)       => rdf:XMLLiteral
 ;;;  (type-of ())                  => rdf:List
 ;;;  (type-of '(a b c))            => rdf:List
-;;;  (type-of xsd:true)            => rdf:boolean
+;;;  (type-of xsd:|true|)            => rdf:boolean
 ;;;  (type-of rdfs:label)          => rdf:Property
 ;;;  (type-of rdf:Property)        => rdfs:Class
 ;;;  (type-of rdfs:Class)          => rdfs:Class
@@ -1508,29 +1508,29 @@ A subclass of this class is a metaclass.")
   (case (cl:type-of x)
     (null 'rdf:List)
     (cons 'rdf:List)
-    (uri 'xsd:anyURI)
-    (iri 'xsd:anyURI)
-    (fixnum (cond ((zerop x) 'xsd:byte)
+    (uri 'xsd:|anyURI|)
+    (iri 'xsd:|anyURI|)
+    (fixnum (cond ((zerop x) 'xsd:|byte|)
                   ((plusp x)
-                   (cond ((< x 128) 'xsd:byte)
-                         ((< x 32768) 'xsd:short)
-                         (t 'xsd:int)))
+                   (cond ((< x 128) 'xsd:|byte|)
+                         ((< x 32768) 'xsd:|short|)
+                         (t 'xsd:|int|)))
                   ((minusp x)
-                   (cond ((>= x -128) 'xsd:byte)
-                         ((>= x -32768) 'xsd:short)
-                         (t 'xsd:int)))))
+                   (cond ((>= x -128) 'xsd:|byte|)
+                         ((>= x -32768) 'xsd:|short|)
+                         (t 'xsd:|int|)))))
     (bignum (cond ((plusp x)
-                   (cond ((< x 2147483648) 'xsd:int)
-                         ((< x 9223372036854775808) 'xsd:long)
-                         (t 'xsd:integer)))
+                   (cond ((< x 2147483648) 'xsd:|int|)
+                         ((< x 9223372036854775808) 'xsd:|long|)
+                         (t 'xsd:|integer|)))
                   ((minusp x)
-                   (cond ((>= x -2147483648) 'xsd:int)
-                         ((>= x -9223372036854775808) 'xsd:long)
-                         (t 'xsd:integer)))))
-    (single-float 'xsd:float)
-    (double-float 'xsd:double)
-    (rational     'xsd:decimal)
-    (symbol (cond ((eq x t) 'xsd:boolean)
+                   (cond ((>= x -2147483648) 'xsd:|int|)
+                         ((>= x -9223372036854775808) 'xsd:|long|)
+                         (t 'xsd:|integer|)))))
+    (single-float 'xsd:|float|)
+    (double-float 'xsd:|double|)
+    (rational     'xsd:|decimal|)
+    (symbol (cond ((eq x t) 'xsd:|boolean|)
                   ((object? x) (type-of (symbol-value x)))
                   (t (error "Symbol ~S is not defined as QName." x))))
     (rdf:inLang 'rdf:XMLLiteral)
@@ -1538,7 +1538,7 @@ A subclass of this class is a metaclass.")
                          (t (cl:type-of x))))
     (rdfsClass (cond ((eql x rdfs:Class) 'rdfs:Class)
                      (t (error "Another meta-metaclass than rdfs:Class:~S" x))))
-    (otherwise (cond ((stringp x) 'xsd:string)
+    (otherwise (cond ((stringp x) 'xsd:|string|)
                      ((shadowed-class-p (class-of x)) (mapcar #'name (mclasses x)))
                      (t (cl:type-of x))))))
 
@@ -1598,37 +1598,37 @@ A subclass of this class is a metaclass.")
 ;;;
 ;;; Examples of xsd data types
 ;;; ----------------------------------------------------------------------------------
-;;; (typep 1 xsd:positiveInteger)
-;;; (typep -1 xsd:negativeInteger)
-;;; (typep 0 xsd:nonNegativeInteger)
-;;; (typep 0 xsd:nonPositiveInteger)
-;;; (typep 32767 xsd:short)
-;;; (typep 32768 xsd:int)
-;;; (typep 2147483647 xsd:int)
-;;; (typep 2147483648 xsd:long)
-;;; (typep 9223372036854775807 xsd:long)
-;;; (typep 9223372036854775808 xsd:integer)
-;;; (typep 1 xsd:decimal)
-;;; (typep (cl:rational 1.0) xsd:decimal)
-;;; (typep 1.0e0 xsd:float)
-;;; (typep 1.0d0 xsd:double)
-;;; (typep "string?" xsd:string)
-;;; (typep "string?"@en xsd:string)
-;;; (typep (uri "http://somewhere") xsd:anyURI)
-;;; (typep xsd:false xsd:boolean)
-;;; (typep 1 xsd:anySimpleType)
+;;; (typep 1 xsd:|positiveInteger|)
+;;; (typep -1 xsd:|negativeInteger|)
+;;; (typep 0 xsd:|nonNegativeInteger|)
+;;; (typep 0 xsd:|nonPositiveInteger|)
+;;; (typep 32767 xsd:|short|)
+;;; (typep 32768 xsd:|int|)
+;;; (typep 2147483647 xsd:|int|)
+;;; (typep 2147483648 xsd:|long|)
+;;; (typep 9223372036854775807 xsd:|long|)
+;;; (typep 9223372036854775808 xsd:|integer|)
+;;; (typep 1 xsd:|decimal|)
+;;; (typep (cl:rational 1.0) xsd:|decimal|)
+;;; (typep 1.0e0 xsd:|float|)
+;;; (typep 1.0d0 xsd:|double|)
+;;; (typep "string?" xsd:|string|)
+;;; (typep "string?"@en xsd:|string|)
+;;; (typep (uri "http://somewhere") xsd:|anyURI|)
+;;; (typep xsd:|false| xsd:|boolean|)
+;;; (typep 1 xsd:|anySimpleType|)
 ;;; (typep 1 rdf:XMLLiteral)
-;;; (typep "1"^^xsd:positiveInteger xsd:positiveInteger)
-;;; (typep "1"^^xsd:positiveInteger xsd:anySimpleType)
-;;; (typep "1"^^xsd:positiveInteger rdf:XMLLiteral)
+;;; (typep "1"^^xsd:|positiveInteger| xsd:|positiveInteger|)
+;;; (typep "1"^^xsd:|positiveInteger| xsd:|anySimpleType|)
+;;; (typep "1"^^xsd:|positiveInteger| rdf:XMLLiteral)
 ;;; ----------------------------------------------------------------------------------
 ;;;
 ;;; Examples of Literals
 ;;; ----------------------------------------------------------------------------------
 ;;; (typep 1 rdfs:Literal)
 ;;; (typep 1 rdfs:Resource)
-;;; (typep "1"^^xsd:positiveInteger rdfs:Literal)
-;;; (typep "1"^^xsd:positiveInteger rdfs:Resource)
+;;; (typep "1"^^xsd:|positiveInteger| rdfs:Literal)
+;;; (typep "1"^^xsd:|positiveInteger| rdfs:Resource)
 ;;; (typep "subway"@en rdf:XMLLiteral)
 ;;; (typep "subway"@en rdfs:Literal)
 ;;; (typep rdfs:label rdf:Property)
@@ -1637,8 +1637,8 @@ A subclass of this class is a metaclass.")
 ;;; Examples of Others
 ;;; ----------------------------------------------------------------------------------
 ;;; (typep (list 1 2 3) rdf:List)
-;;; (typep 1 (list 'and xsd:integer rdf:XMLLiteral))
-;;; (typep 1 (list 'or xsd:integer xsd:float))
+;;; (typep 1 (list 'and xsd:|integer| rdf:XMLLiteral))
+;;; (typep 1 (list 'or xsd:|integer| xsd:|float|))
 ;;; (typep rdf:Property rdfs:Class)
 ;;; (typep rdfs:Class rdfs:Class)
 ;;; (typep rdfs:label rdfs:Resource)
@@ -1661,7 +1661,7 @@ A subclass of this class is a metaclass.")
        (rdfs:Resource (%typep object type))
        ;; resolve for object
        (uri (cond ((string= (name type) "Ontology") (values t t))
-                          ((cl:subtypep (symbol-value 'xsd:anyURI) type) (values t t))
+                          ((cl:subtypep (symbol-value 'xsd:|anyURI|) type) (values t t))
                           ((and (iri-p object) (iri-boundp object))
                            (%typep (iri-value object) type))
                           (t (values nil t))))
@@ -1726,16 +1726,16 @@ A subclass of this class is a metaclass.")
         ;; falling into here, and check it in OWL semantics
         (%%typep object type)
         )
-       (rdf:inLang (if (cl:subtypep (symbol-value 'xsd:string) type) (values t t) (values nil t)))
+       (rdf:inLang (if (cl:subtypep (symbol-value 'xsd:|string|) type) (values t t) (values nil t)))
        (cons (if (cl:subtypep rdf:List type) (values t t) (values nil t)))
        (cl:string (cond ((and (cl:typep type rdfs:Datatype) (cl:typep object (name type)))
                          (values t t))
-                        ((cl:subtypep (symbol-value 'xsd:string) type)
+                        ((cl:subtypep (symbol-value 'xsd:|string|) type)
                          (values t t))
                         (t (values nil t))))
        (cl:number (cond ((and (cl:typep type rdfs:Datatype) (cl:typep object (name type)))
                          (values t t))
-                        ((cl:subtypep (symbol-value 'xsd:decimal) type)
+                        ((cl:subtypep (symbol-value 'xsd:|decimal|) type)
                          (values t t))
                         (t (values nil t))))
        (otherwise (if (cl:typep object type) (values t t)

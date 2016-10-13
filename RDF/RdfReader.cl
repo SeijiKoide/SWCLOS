@@ -36,7 +36,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     (null nil)
     (string (list x))
     (number (list x))
-    (xsd:anySimpleType (list x))
+    (xsd:|anySimpleType| (list x))
     (rdfs:Literal (list x))
     (rdf:Description (list (Description-form x)))
     (comment nil) ; depress comment
@@ -278,12 +278,12 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
             rdfs:comment rdfs:isDefinedBy rdfs:domain rdfs:range rdfs:subClassOf 
             rdfs:subPropertyOf rdfs:seeAlso rdfs:isDefinedBy rdfs:Class rdf:type rdfs:Container 
             rdf:predicate rdf:subject rdf:object rdf:Statement rdfs:Datatype rdf:XMLLiteral 
-            rdf:List rdf:nil rdf:first rdf:rest rdf:value xsd:anySimpleType xsd:boolean 
-            xsd:anyURI xsd:string xsd:float xsd:double xsd:unsignedByte xsd:unsignedShort  
-            xsd:unsignedInt xsd:unsignedLong xsd:decimal xsd:integer xsd:long xsd:int 
-            xsd:short xsd:byte xsd:nonNegativeInteger xsd:positiveInteger 
-            xsd:nonPositiveInteger xsd:negativeInteger
-            xsd:duration
+            rdf:List rdf:nil rdf:first rdf:rest rdf:value xsd:|anySimpleType| xsd:|boolean| 
+            xsd:|anyURI| xsd:|string| xsd:|float| xsd:|double| xsd:|unsignedByte| xsd:|unsignedShort|  
+            xsd:|unsignedInt| xsd:|unsignedLong| xsd:|decimal| xsd:|integer| xsd:|long| xsd:|int| 
+            xsd:|short| xsd:|byte| xsd:|nonNegativeInteger| xsd:|positiveInteger| 
+            xsd:|nonPositiveInteger| xsd:|negativeInteger|
+            xsd:|duration|
             owl:DataRange owl:DeprecatedProperty owl:DeprecatedClass owl:incompatibleWith owl:backwardCompatibleWith
                          owl:priorVersion owl:versionInfo owl:imports owl:OntologyProperty owl:Ontology 
                          owl:AnnotationProperty owl:InverseFunctionalProperty owl:FunctionalProperty owl:SymmetricProperty 

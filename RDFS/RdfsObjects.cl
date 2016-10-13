@@ -428,7 +428,7 @@ An RDF statement is the statement made by a token of an RDF triple.")
   (symbol-value 'rdf:PlainLiteral))
 
 (defmethod print-object ((object rdf:XMLLiteral) stream)
-  "This method is not intended to use by programmer. XMLLiteral data is printed as 1^^xsd:nonNegativeInteger."
+  "This method is not intended to use by programmer. XMLLiteral data is printed as 1^^xsd:|nonNegativeInteger|."
   (format stream "~W^^~S"
     (format nil "~A" (slot-value object 'value))
     (class-name (class-of object))))
@@ -460,381 +460,381 @@ An RDF statement is the statement made by a token of an RDF triple.")
 ;;; Every RDFS datatype is defined as lisp type and RDF resource, too.
 ;;; As lisp type, data as lisp object is typed as follows.
 ;;; ----------------------------------------------------------------------------------
-;;;  (cl:typep 1 'xsd:nonNegativeInteger)
+;;;  (cl:typep 1 'xsd:|nonNegativeInteger|)
 ;;; ----------------------------------------------------------------------------------
 ;;; See XML module.
 ;;;
 ;;; As RDFS datatype, RDF resource is typed as follows.
 ;;; ----------------------------------------------------------------------------------
-;;;  (setq foo (^^ 1 xsd:nonNegativeInteger))
-;;;  (typep foo xsd:nonNegativeInteger)
+;;;  (setq foo (^^ 1 xsd:|nonNegativeInteger|))
+;;;  (typep foo xsd:|nonNegativeInteger|)
 ;;; ----------------------------------------------------------------------------------
 ;;;
 ;;; Note that excl:sub-subtypep works well on the following datatype classes
 ;;;
 
-(defparameter xsd:anySimpleType
-  (mop:ensure-class-using-class () 'xsd:anySimpleType 
+(defparameter xsd:|anySimpleType|
+  (mop:ensure-class-using-class () 'xsd:|anySimpleType| 
                                 :direct-superclasses '(rdf:XMLLiteral)
-                                :form '(cl:or xsd:boolean xsd:anyURI xsd:string xsd:float xsd:double xsd:decimal)
+                                :form '(cl:or xsd:|boolean| xsd:|anyURI| xsd:|string| xsd:|float| xsd:|double| xsd:|decimal|)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:anySimpleType class object")
-(reinitialize-instance xsd:anySimpleType
+  "xsd:|anySimpleType| class object")
+(reinitialize-instance xsd:|anySimpleType|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "anySimpleType"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#anySimpleType"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
                        'rdfs:subClassOf rdf:XMLLiteral)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:anySimpleType) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:anySimpleType) 'rdf:about))))
-  (symbol-value 'xsd:anySimpleType))
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|anySimpleType|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|anySimpleType|) 'rdf:about))))
+  (symbol-value 'xsd:|anySimpleType|))
 
-(defparameter xsd:decimal
-  (mop:ensure-class-using-class () 'xsd:decimal 
-                                :direct-superclasses '(xsd:anySimpleType)
+(defparameter xsd:|decimal|
+  (mop:ensure-class-using-class () 'xsd:|decimal| 
+                                :direct-superclasses '(xsd:|anySimpleType|)
                                 :form 'cl:rational
                                 :metaclass 'rdfs:Datatype)
-  "xsd:decimal class object")
-(reinitialize-instance xsd:decimal
+  "xsd:|decimal| class object")
+(reinitialize-instance xsd:|decimal|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "decimal"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#decimal"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:decimal) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:decimal) 'rdf:about))))
-  (symbol-value 'xsd:decimal))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|decimal|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|decimal|) 'rdf:about))))
+  (symbol-value 'xsd:|decimal|))
 
-(defparameter xsd:integer
-  (mop:ensure-class-using-class () 'xsd:integer 
-                                :direct-superclasses '(xsd:decimal)
+(defparameter xsd:|integer|
+  (mop:ensure-class-using-class () 'xsd:|integer| 
+                                :direct-superclasses '(xsd:|decimal|)
                                 :form 'cl:integer
                                 :metaclass 'rdfs:Datatype
                                 'rdf:about "http://www.w3.org/2001/XMLSchema#integer")
-  "xsd:integer class object")
-(reinitialize-instance xsd:integer
+  "xsd:|integer| class object")
+(reinitialize-instance xsd:|integer|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "integer"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#integer"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:decimal)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:integer) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:integer) 'rdf:about))))
-  (symbol-value 'xsd:integer))
+                       'rdfs:subClassOf xsd:|decimal|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|integer|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|integer|) 'rdf:about))))
+  (symbol-value 'xsd:|integer|))
 
-(defparameter xsd:nonPositiveInteger
-  (mop:ensure-class-using-class () 'xsd:nonPositiveInteger 
-                                :direct-superclasses '(xsd:integer)
+(defparameter xsd:|nonPositiveInteger|
+  (mop:ensure-class-using-class () 'xsd:|nonPositiveInteger| 
+                                :direct-superclasses '(xsd:|integer|)
                                 :form '(cl:integer cl:* 0)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:nonPositiveInteger class object")
-(reinitialize-instance xsd:nonPositiveInteger
+  "xsd:|nonPositiveInteger| class object")
+(reinitialize-instance xsd:|nonPositiveInteger|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "nonPositiveInteger"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#nonPositiveInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:integer)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:nonPositiveInteger) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:nonPositiveInteger) 'rdf:about))))
-  (symbol-value 'xsd:nonPositiveInteger))
+                       'rdfs:subClassOf xsd:|integer|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|nonPositiveInteger|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|nonPositiveInteger|) 'rdf:about))))
+  (symbol-value 'xsd:|nonPositiveInteger|))
 
-(defparameter xsd:negativeInteger
-  (mop:ensure-class-using-class () 'xsd:negativeInteger 
-                                :direct-superclasses '(xsd:nonPositiveInteger)
+(defparameter xsd:|negativeInteger|
+  (mop:ensure-class-using-class () 'xsd:|negativeInteger| 
+                                :direct-superclasses '(xsd:|nonPositiveInteger|)
                                 :form '(cl:integer cl:* -1)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:negativeInteger class object")
-(reinitialize-instance xsd:negativeInteger
+  "xsd:|negativeInteger| class object")
+(reinitialize-instance xsd:|negativeInteger|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "negativeInteger"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#negativeInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:nonPositiveInteger)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:negativeInteger) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:negativeInteger) 'rdf:about))))
-  (symbol-value 'xsd:negativeInteger))
+                       'rdfs:subClassOf xsd:|nonPositiveInteger|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|negativeInteger|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|negativeInteger|) 'rdf:about))))
+  (symbol-value 'xsd:|negativeInteger|))
 
-(defparameter xsd:long
-  (mop:ensure-class-using-class () 'xsd:long 
-                                :direct-superclasses '(xsd:integer)
+(defparameter xsd:|long|
+  (mop:ensure-class-using-class () 'xsd:|long| 
+                                :direct-superclasses '(xsd:|integer|)
                                 :form '(cl:signed-byte 64)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:long class object")
-(reinitialize-instance xsd:long
+  "xsd:|long| class object")
+(reinitialize-instance xsd:|long|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "long"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#long"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:integer)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:long) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:long) 'rdf:about))))
-  (symbol-value 'xsd:long))
+                       'rdfs:subClassOf xsd:|integer|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|long|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|long|) 'rdf:about))))
+  (symbol-value 'xsd:|long|))
 
-(defparameter xsd:int
-  (mop:ensure-class-using-class () 'xsd:int 
-                                :direct-superclasses '(xsd:long)
+(defparameter xsd:|int|
+  (mop:ensure-class-using-class () 'xsd:|int| 
+                                :direct-superclasses '(xsd:|long|)
                                 :form '(cl:signed-byte 32)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:int class object")
-(reinitialize-instance xsd:int
+  "xsd:|int| class object")
+(reinitialize-instance xsd:|int|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "int"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#int"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:long)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:int) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:int) 'rdf:about))))
-  (symbol-value 'xsd:int))
+                       'rdfs:subClassOf xsd:|long|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|int|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|int|) 'rdf:about))))
+  (symbol-value 'xsd:|int|))
 
-(defparameter xsd:short
-  (mop:ensure-class-using-class () 'xsd:short 
-                                :direct-superclasses '(xsd:int)
+(defparameter xsd:|short|
+  (mop:ensure-class-using-class () 'xsd:|short| 
+                                :direct-superclasses '(xsd:|int|)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:short class object")
-(reinitialize-instance xsd:short
+  "xsd:|short| class object")
+(reinitialize-instance xsd:|short|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "short"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#short"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:int)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:short) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:short) 'rdf:about))))
-  (symbol-value 'xsd:short))
+                       'rdfs:subClassOf xsd:|int|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|short|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|short|) 'rdf:about))))
+  (symbol-value 'xsd:|short|))
 
-(defparameter xsd:byte
-  (mop:ensure-class-using-class () 'xsd:byte 
-                                :direct-superclasses '(xsd:short)
+(defparameter xsd:|byte|
+  (mop:ensure-class-using-class () 'xsd:|byte| 
+                                :direct-superclasses '(xsd:|short|)
                                 :form '(cl:signed-byte 8)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:byte class object")
-(reinitialize-instance xsd:byte
+  "xsd:|byte| class object")
+(reinitialize-instance xsd:|byte|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "byte"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#byte"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:short)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:byte) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:byte) 'rdf:about))))
-  (symbol-value 'xsd:byte))
+                       'rdfs:subClassOf xsd:|short|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|byte|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|byte|) 'rdf:about))))
+  (symbol-value 'xsd:|byte|))
 
-(defparameter xsd:nonNegativeInteger
-  (mop:ensure-class-using-class () 'xsd:nonNegativeInteger 
-                                :direct-superclasses '(xsd:integer)
+(defparameter xsd:|nonNegativeInteger|
+  (mop:ensure-class-using-class () 'xsd:|nonNegativeInteger| 
+                                :direct-superclasses '(xsd:|integer|)
                                 :form '(cl:integer 0 cl:*)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:nonNegativeInteger class object")
-(reinitialize-instance xsd:nonNegativeInteger
+  "xsd:|nonNegativeInteger| class object")
+(reinitialize-instance xsd:|nonNegativeInteger|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "nonNegativeInteger"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:integer)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:nonNegativeInteger) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:nonNegativeInteger) 'rdf:about))))
-  (symbol-value 'xsd:nonNegativeInteger))
+                       'rdfs:subClassOf xsd:|integer|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|nonNegativeInteger|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|nonNegativeInteger|) 'rdf:about))))
+  (symbol-value 'xsd:|nonNegativeInteger|))
 
-(defparameter xsd:positiveInteger
-  (mop:ensure-class-using-class () 'xsd:positiveInteger 
-                                :direct-superclasses '(xsd:nonNegativeInteger)
+(defparameter xsd:|positiveInteger|
+  (mop:ensure-class-using-class () 'xsd:|positiveInteger| 
+                                :direct-superclasses '(xsd:|nonNegativeInteger|)
                                 :form '(cl:integer 1 cl:*)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:positiveInteger class object")
-(reinitialize-instance xsd:positiveInteger
+  "xsd:|positiveInteger| class object")
+(reinitialize-instance xsd:|positiveInteger|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "positiveInteger"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#positiveInteger"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:nonNegativeInteger)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:positiveInteger) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:positiveInteger) 'rdf:about))))
-  (symbol-value 'xsd:positiveInteger))
+                       'rdfs:subClassOf xsd:|nonNegativeInteger|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|positiveInteger|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|positiveInteger|) 'rdf:about))))
+  (symbol-value 'xsd:|positiveInteger|))
 
-(defparameter xsd:unsignedLong
-  (mop:ensure-class-using-class () 'xsd:unsignedLong 
-                                :direct-superclasses '(xsd:nonNegativeInteger)
+(defparameter xsd:|unsignedLong|
+  (mop:ensure-class-using-class () 'xsd:|unsignedLong| 
+                                :direct-superclasses '(xsd:|nonNegativeInteger|)
                                 :form '(cl:unsigned-byte 64)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:unsignedLong class object")
-(reinitialize-instance xsd:unsignedLong
+  "xsd:|unsignedLong| class object")
+(reinitialize-instance xsd:|unsignedLong|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "unsignedLong"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedLong"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:nonNegativeInteger)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:unsignedLong) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:unsignedLong) 'rdf:about))))
-  (symbol-value 'xsd:unsignedLong))
+                       'rdfs:subClassOf xsd:|nonNegativeInteger|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedLong|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedLong|) 'rdf:about))))
+  (symbol-value 'xsd:|unsignedLong|))
 
-(defparameter xsd:unsignedInt
-  (mop:ensure-class-using-class () 'xsd:unsignedInt 
-                                :direct-superclasses '(xsd:unsignedLong)
+(defparameter xsd:|unsignedInt|
+  (mop:ensure-class-using-class () 'xsd:|unsignedInt| 
+                                :direct-superclasses '(xsd:|unsignedLong|)
                                 :form '(cl:unsigned-byte 32)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:unsignedInt class object")
-(reinitialize-instance xsd:unsignedInt
+  "xsd:|unsignedInt| class object")
+(reinitialize-instance xsd:|unsignedInt|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "unsignedInt"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedInt"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:unsignedLong)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:unsignedInt) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:unsignedInt) 'rdf:about))))
-  (symbol-value 'xsd:unsignedInt))
+                       'rdfs:subClassOf xsd:|unsignedLong|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedInt|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedInt|) 'rdf:about))))
+  (symbol-value 'xsd:|unsignedInt|))
 
-(defparameter xsd:unsignedShort
-  (mop:ensure-class-using-class () 'xsd:unsignedShort 
-                                :direct-superclasses '(xsd:unsignedInt)
+(defparameter xsd:|unsignedShort|
+  (mop:ensure-class-using-class () 'xsd:|unsignedShort| 
+                                :direct-superclasses '(xsd:|unsignedInt|)
                                 :form '(cl:unsigned-byte 16)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:unsignedShort class object")
-(reinitialize-instance xsd:unsignedShort
+  "xsd:|unsignedShort| class object")
+(reinitialize-instance xsd:|unsignedShort|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "unsignedShort"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedShort"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:unsignedInt)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:unsignedShort) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:unsignedShort) 'rdf:about))))
-  (symbol-value 'xsd:unsignedShort))
+                       'rdfs:subClassOf xsd:|unsignedInt|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedShort|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedShort|) 'rdf:about))))
+  (symbol-value 'xsd:|unsignedShort|))
 
-(defparameter xsd:unsignedByte
-  (mop:ensure-class-using-class () 'xsd:unsignedByte 
-                                :direct-superclasses '(xsd:unsignedShort)
+(defparameter xsd:|unsignedByte|
+  (mop:ensure-class-using-class () 'xsd:|unsignedByte| 
+                                :direct-superclasses '(xsd:|unsignedShort|)
                                 :form '(cl:unsigned-byte 8)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:unsignedByte class object")
-(reinitialize-instance xsd:unsignedByte
+  "xsd:|unsignedByte| class object")
+(reinitialize-instance xsd:|unsignedByte|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "unsignedByte"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#unsignedByte"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:unsignedShort)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:unsignedByte) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:unsignedByte) 'rdf:about))))
-  (symbol-value 'xsd:unsignedByte))
+                       'rdfs:subClassOf xsd:|unsignedShort|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|unsignedByte|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|unsignedByte|) 'rdf:about))))
+  (symbol-value 'xsd:|unsignedByte|))
 
-(defparameter xsd:string
-  (mop:ensure-class-using-class () 'xsd:string 
-                                :direct-superclasses '(xsd:anySimpleType)
+(defparameter xsd:|string|
+  (mop:ensure-class-using-class () 'xsd:|string| 
+                                :direct-superclasses '(xsd:|anySimpleType|)
                                 :form 'cl:string
                                 :metaclass 'rdfs:Datatype)
-  "xsd:string class object")
-(reinitialize-instance (symbol-value 'xsd:string)
+  "xsd:|string| class object")
+(reinitialize-instance (symbol-value 'xsd:|string|)
                        'rdf:type rdfs:Datatype
                        'rdfs:label "string"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#string"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:string) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:string) 'rdf:about))))
-  (symbol-value 'xsd:string))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|string|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|string|) 'rdf:about))))
+  (symbol-value 'xsd:|string|))
 
-(defparameter xsd:float
-  (mop:ensure-class-using-class () 'xsd:float 
-                                :direct-superclasses '(xsd:anySimpleType)
+(defparameter xsd:|float|
+  (mop:ensure-class-using-class () 'xsd:|float| 
+                                :direct-superclasses '(xsd:|anySimpleType|)
                                 :form 'cl:single-float
                                 :metaclass 'rdfs:Datatype)
-  "xsd:float class object")
-(reinitialize-instance xsd:float
+  "xsd:|float| class object")
+(reinitialize-instance xsd:|float|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "float"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#float"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:float) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:float) 'rdf:about))))
-  (symbol-value 'xsd:float))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|float|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|float|) 'rdf:about))))
+  (symbol-value 'xsd:|float|))
 
-(defparameter xsd:double
-  (mop:ensure-class-using-class () 'xsd:double 
-                                :direct-superclasses '(xsd:anySimpleType)
+(defparameter xsd:|double|
+  (mop:ensure-class-using-class () 'xsd:|double| 
+                                :direct-superclasses '(xsd:|anySimpleType|)
                                 :form 'cl:double-float
                                 :metaclass 'rdfs:Datatype)
-  "xsd:double class object")
-(reinitialize-instance xsd:double
+  "xsd:|double| class object")
+(reinitialize-instance xsd:|double|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "double"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#double"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:double) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:double) 'rdf:about))))
-  (symbol-value 'xsd:double))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|double|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|double|) 'rdf:about))))
+  (symbol-value 'xsd:|double|))
 
-(defparameter xsd:anyURI
-  (mop:ensure-class-using-class () 'xsd:anyURI 
-                                :direct-superclasses '(xsd:anySimpleType)
+(defparameter xsd:|anyURI|
+  (mop:ensure-class-using-class () 'xsd:|anyURI| 
+                                :direct-superclasses '(xsd:|anySimpleType|)
                                 :form 'uri
                                 :metaclass 'rdfs:Datatype)
-  "xsd:anyURI class object")
-(reinitialize-instance xsd:anyURI
+  "xsd:|anyURI| class object")
+(reinitialize-instance xsd:|anyURI|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "anyURI"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#anyURI"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:anyURI) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:anyURI) 'rdf:about))))
-  (symbol-value 'xsd:anyURI))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|anyURI|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|anyURI|) 'rdf:about))))
+  (symbol-value 'xsd:|anyURI|))
 
-(defparameter xsd:boolean
-  (mop:ensure-class-using-class () 'xsd:boolean 
-                                :direct-superclasses '(xsd:anySimpleType)
-                                :form '(cl:member xsd:true xsd:false)
+(defparameter xsd:|boolean|
+  (mop:ensure-class-using-class () 'xsd:|boolean| 
+                                :direct-superclasses '(xsd:|anySimpleType|)
+                                :form '(cl:member xsd:|true| xsd:|false|)
                                 :metaclass 'rdfs:Datatype)
-  "xsd:boolean class object")
-(reinitialize-instance xsd:boolean
+  "xsd:|boolean| class object")
+(reinitialize-instance xsd:|boolean|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "boolean"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#boolean"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:boolean) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:boolean) 'rdf:about))))
-  (symbol-value 'xsd:boolean))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|boolean|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|boolean|) 'rdf:about))))
+  (symbol-value 'xsd:|boolean|))
 
-(defparameter xsd:true
-  (make-instance 'xsd:boolean :value t)
-  "xsd:boolean instance")
-(defparameter xsd:false
-  (make-instance 'xsd:boolean :value nil)
-  "xsd:boolean instance")
+(defparameter xsd:|true|
+  (make-instance 'xsd:|boolean| :value t)
+  "xsd:|boolean| instance")
+(defparameter xsd:|false|
+  (make-instance 'xsd:|boolean| :value nil)
+  "xsd:|boolean| instance")
 
-(defparameter xsd:duration
+(defparameter xsd:|duration|
   (mop:ensure-class-using-class
-   () 'xsd:duration 
-   :direct-superclasses '(xsd:anySimpleType)
+   () 'xsd:|duration| 
+   :direct-superclasses '(xsd:|anySimpleType|)
    :direct-slots `((:name year :initform () :initfunction ,(load-time-value #'excl::false)
                     :initargs (:year)
-                    :readers (xsd:duration-year) :writers ((setf xsd:duration-year)))
+                    :readers (xsd:|duration-year|) :writers ((setf xsd:|duration-year|)))
                    (:name month :initform () :initfunction ,(load-time-value #'excl::false)
                     :initargs (:month)
-                    :readers (xsd:duration-month) :writers ((setf xsd:duration-month)))
+                    :readers (xsd:|duration-month|) :writers ((setf xsd:|duration-month|)))
                    (:name day :initform () :initfunction ,(load-time-value #'excl::false)
                     :initargs (:day)
-                    :readers (xsd:duration-day) :writers ((setf xsd:duration-day)))
+                    :readers (xsd:|duration-day|) :writers ((setf xsd:|duration-day|)))
                    (:name hour :initform () :initfunction ,(load-time-value #'excl::false)
                     :initargs (:hour)
-                    :readers (xsd:duration-hour) :writers ((setf xsd:duration-hour)))
+                    :readers (xsd:|duration-hour|) :writers ((setf xsd:|duration-hour|)))
                    (:name minute :initform () :initfunction ,(load-time-value #'excl::false)
                     :initargs (:minute)
-                    :readers (xsd:duration-minute) :writers ((setf xsd:duration-minute)))
+                    :readers (xsd:|duration-minute|) :writers ((setf xsd:|duration-minute|)))
                    (:name second :initform () :initfunction ,(load-time-value #'excl::false)
                     :initargs (:second)
-                    :readers (xsd:duration-second) :writers ((setf xsd:duration-second))))
+                    :readers (xsd:|duration-second|) :writers ((setf xsd:|duration-second|))))
    :metaclass 'rdfs:Datatype)
-  "xsd:duration class object")
-(reinitialize-instance xsd:duration
+  "xsd:|duration| class object")
+(reinitialize-instance xsd:|duration|
                        'rdf:type rdfs:Datatype
                        'rdfs:label "duration"
                        'rdf:about "http://www.w3.org/2001/XMLSchema#duration"
                        'rdfs:isDefinedBy (iri "http://www.w3.org/2001/XMLSchema#")
-                       'rdfs:subClassOf xsd:anySimpleType)
-(setf (iri-value (setf (slot-value (symbol-value 'xsd:duration) 'rdf:about)
-                   (iri (slot-value (symbol-value 'xsd:duration) 'rdf:about))))
-  (symbol-value 'xsd:duration))
+                       'rdfs:subClassOf xsd:|anySimpleType|)
+(setf (iri-value (setf (slot-value (symbol-value 'xsd:|duration|) 'rdf:about)
+                   (iri (slot-value (symbol-value 'xsd:|duration|) 'rdf:about))))
+  (symbol-value 'xsd:|duration|))
 
-(defmethod print-object ((obj xsd:duration) stream)
+(defmethod print-object ((obj xsd:|duration|) stream)
   "This method is not intended to be used by users."
   (princ "P" stream)
   (with-slots ((yy year) (mo month) (dd day) (hh hour) (mi minute) (ss second))

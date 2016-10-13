@@ -293,13 +293,13 @@
                                (not (eq role 'rdfs:member))
                                (let ((range (get-range-constraint-from role)))
                                  (or (and (atom range)
-                                          (cl:subtypep 'xsd:anyURI range)) ; Seiji 2008/08/06
+                                          (cl:subtypep 'xsd:|anyURI| range)) ; Seiji 2008/08/06
                                      (and (consp range)
-                                          (every #'(lambda (cls) (cl:subtypep 'xsd:anyURI cls)) range)))))
+                                          (every #'(lambda (cls) (cl:subtypep 'xsd:|anyURI| cls)) range)))))
                           ;(format t "~%Form ~S with role ~S" form role)
                           ;(format t "~%  Constraint ~S" (get-range-constraint-from role))
                           form)
-                         ((eq (get role :datatype) 'xsd:anyURI) (error "Cant happen!") ; old edition?
+                         ((eq (get role :datatype) 'xsd:|anyURI|) (error "Cant happen!") ; old edition?
                           form)
                          (t (let ((name (uri2symbol form))     ; getting name of URI
                                   (uri (iri form)))            ; ensure interning and getting valued-uri 
@@ -331,7 +331,7 @@
       (cons (cond ((lang? (car form))
                    (setq lang-env (car form))
                    (addForm (second form) role)) ; skip lang
-                  ((and (car form) (rdf-subtypep (car form) 'xsd:anySimpleType))
+                  ((and (car form) (rdf-subtypep (car form) 'xsd:|anySimpleType|))
                    (^^ (second form) (car form)))
                   ((and (symbolp (car form)) (fboundp (car form)) (not (eq (car form) 'rdfs:subClassOf)))
                    (ecase (car form)
@@ -568,7 +568,7 @@
 ;;; (addForm
 ;;;   '(rdf:Property estimatedPopulation
 ;;;      (rdfs:domain EndangeredSpecies)
-;;;      (rdfs:range xsd:nonNegativeInteger)))
+;;;      (rdfs:range xsd:|nonNegativeInteger|)))
 ;;; (addForm
 ;;;   '(rdfs:Class Hawk
 ;;;      (estimatedPopulation 2000)))         ; MSC is computed as EndangeredSpecies
@@ -1274,24 +1274,24 @@
   "read <str> as <type> and returns an instance of <type>."
   (etypecase type
     (null (read-in-lang-env str))
-    (xsd:string (read-in-lang-env str))
+    (xsd:|string| (read-in-lang-env str))
     (rdfs:Class 
      (cond ((cl:subtypep type rdfs:Literal) (read-in-lang-env str))
            ((cl:subtypep type rdfs:Resource) (read-in-lang-env str))
            (t (error "~S is not yet prepared!" type))))
     (symbol 
      (ecase type
-       (xsd:string (read-in-lang-env str))
-       ((xsd:integer xsd:long xsd:int xsd:short xsd:byte xsd:nonNegativeInteger  
-                     xsd:negativeInteger xsd:positiveInteger xsd:nonPositiveInteger)
+       (xsd:|string| (read-in-lang-env str))
+       ((xsd:|integer| xsd:|long| xsd:|int| xsd:|short| xsd:|byte| xsd:|nonNegativeInteger|  
+                     xsd:|negativeInteger| xsd:|positiveInteger| xsd:|nonPositiveInteger|)
         (let ((value (read-from-string str)))
           (assert (cl:typep value type))
           value))
-       (xsd:anyURI (iri str))
-       (xsd:decimal (rational (read-from-string str)))
-       (xsd:float (cl:float (read-from-string str)))
-       (xsd:double (cl:float (read-from-string str) 1.0d0))
-       (xsd:boolean
+       (xsd:|anyURI| (iri str))
+       (xsd:|decimal| (rational (read-from-string str)))
+       (xsd:|float| (cl:float (read-from-string str)))
+       (xsd:|double| (cl:float (read-from-string str) 1.0d0))
+       (xsd:|boolean|
         (let ((value (read-from-string str)))
           (assert (cl:typep value type))
           value))))))
