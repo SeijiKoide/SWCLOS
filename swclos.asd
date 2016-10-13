@@ -19,12 +19,12 @@
  
 (in-package :gx-system)
 
-(eval-when (:load-toplevel :execute)
-  (defparameter *swclos-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (pathname-directory *load-truename*)))
-  (setf (logical-pathname-translations "SWCLOS")
+(defvar *swclos-directory*
+  (make-pathname :host (pathname-host *load-truename*)
+                 :device (pathname-device *load-truename*)
+                 :directory (pathname-directory *load-truename*)))
+
+(setf (logical-pathname-translations "SWCLOS")
     `(("**;*.*"
        ,(make-pathname
          :host (pathname-host *swclos-directory*)
@@ -34,17 +34,15 @@
          :name :wild
          :type :wild
          ))))
-) ; end of eval-when
 
-(eval-when (:load-toplevel :execute)
-  (unless (asdf:find-system "swclos.owl" nil)
-    (defparameter *owl-directory*
-      (merge-pathnames
-       (make-pathname
+(unless (asdf:find-system "swclos.owl" nil)
+  (defvar *owl-directory*
+    (merge-pathnames
+      (make-pathname
         :directory (append (pathname-directory *swclos-directory*)
                            (list "OWL")))
-       *swclos-directory*))
-    (setf (logical-pathname-translations "OWL")
+      *swclos-directory*))
+  (setf (logical-pathname-translations "OWL")
       `(("**;*.*"
          ,(make-pathname
            :host (pathname-host *owl-directory*)
@@ -54,8 +52,7 @@
            :name :wild
            :type :wild
            ))))
-    (load "OWL:owl.asd"))
-)
+  (load "OWL:owl.asd"))
 
 (defsystem :swclos
     :name "SWCLOS"

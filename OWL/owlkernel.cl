@@ -66,22 +66,6 @@
 (export '(owl-same-p disjoint-p  
           owl-class-p owl-thing-p owl-oneof-p))
 
-(eval-when (:load-toplevel :execute)
-  (defparameter *owl-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (pathname-directory *load-truename*)))
-  (setf (logical-pathname-translations "OWL")
-    `(("*.*"
-       ,(make-pathname
-         :host (pathname-host *owl-directory*)
-         :device (pathname-device *owl-directory*)
-         :directory (pathname-directory *owl-directory*)
-         :name :wild
-         :type :wild
-         ))))
-  )
-
 ;;;
 ;;;; OWL Property Slot Definition
 ;;;
@@ -299,7 +283,7 @@ and instance of owl:Class."))
               (name (slot-value obj 'owl:onProperty))
               (slot-exists-p obj 'owl:allValuesFrom))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "��~S.~S"
+           (format stream "  ~S.~S"
              (name (slot-value obj 'owl:onProperty))
              (or (name (slot-value obj 'owl:allValuesFrom))
                  (get-form (slot-value obj 'owl:allValuesFrom))))))
@@ -316,7 +300,7 @@ and instance of owl:Class."))
               (name (slot-value obj 'owl:onProperty))
               (slot-exists-p obj 'owl:someValuesFrom))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "��~S.~S"
+           (format stream "  ~S.~S"
              (name (slot-value obj 'owl:onProperty))
              (or (name (slot-value obj 'owl:someValuesFrom))
                  :anonymous))))
@@ -333,7 +317,7 @@ and instance of owl:Class."))
               (name (slot-value obj 'owl:onProperty))
               (slot-exists-p obj 'owl:hasValue))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "~S��{~S}"
+           (format stream "~S  {~S}"
              (name (slot-value obj 'owl:onProperty))
              (cond ((slot-boundp obj 'owl:hasValue)
                     (let ((x (slot-value obj 'owl:hasValue)))
@@ -358,11 +342,11 @@ and instance of owl:Class."))
          (print-unreadable-object (obj stream :type nil)
            (prin1 (name (slot-value obj 'owl:onProperty)) stream)
            (and (slot-boundp obj 'owl:minCardinality)
-                (format stream "�� ~S" (slot-value obj 'owl:minCardinality)))
+                (format stream "   ~S" (slot-value obj 'owl:minCardinality)))
            (and (slot-boundp obj 'owl:cardinality)
                 (format stream "= ~S" (slot-value obj 'owl:cardinality)))
            (and (slot-boundp obj 'owl:maxCardinality)
-                (format stream "�� ~S" (slot-value obj 'owl:maxCardinality)))))
+                (format stream "   ~S" (slot-value obj 'owl:maxCardinality)))))
         (t (call-next-method))))
 
 (defun owl-cardinality-p (x) (cl:typep x owl:cardinalityRestriction))
@@ -838,8 +822,8 @@ and instance of owl:Class."))
 (defProperty owl::priorVersion)     ; just for suppression of entailment warning
 
 (eval-when (:load-toplevel)
-  (let ((*default-pathname-defaults* *load-pathname*))
-    (read-rdf-file #'addRdfXml "OWL:OWL.rdf")))
+  (read-rdf-file #'addRdfXml "OWL:OWL.rdf"))
+
 ;;; ==================================================================================
 ;;;
 ;;; Note that 

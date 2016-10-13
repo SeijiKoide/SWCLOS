@@ -21,11 +21,11 @@
  
 (in-package :gx-system)  
 
-(eval-when (:load-toplevel :execute)
-  (defparameter *rdfs-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (pathname-directory *load-truename*)))
+(defvar *rdfs-directory*
+  (make-pathname :host (pathname-host *load-truename*)
+                 :device (pathname-device *load-truename*)
+                 :directory (pathname-directory *load-truename*)))
+(unless (logical-pathname-translations "RDFS")
   (setf (logical-pathname-translations "RDFS")
     `(("*.*"
        ,(make-pathname
@@ -34,19 +34,17 @@
          :directory (pathname-directory *rdfs-directory*)
          :name :wild
          :type :wild
-         ))))
-) ; end of eval-when
+         )))))
 
-(eval-when (:load-toplevel :execute)
-  (unless (asdf:find-system "swclos.rdf" nil)
-    (defparameter *rdf-directory*
-      (merge-pathnames
-       (make-pathname
+(unless (asdf:find-system "swclos.rdf" nil)
+  (defvar *rdf-directory*
+    (merge-pathnames
+      (make-pathname
         :directory (substitute "RDF" "RDFS"
                                (pathname-directory *rdfs-directory*)
                                :test #'string=))
-       *rdfs-directory*))
-    (setf (logical-pathname-translations "RDF")
+      *rdfs-directory*))
+  (setf (logical-pathname-translations "RDF")
       `(("*.*"
          ,(make-pathname
            :host (pathname-host *rdf-directory*)
@@ -55,8 +53,7 @@
            :name :wild
            :type :wild
            ))))
-    (load "RDF:rdf.asd"))
-)
+  (load "RDF:rdf.asd"))
 
 (defsystem :swclos.rdfs
     :name "SWCLOS RDFS system"

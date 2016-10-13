@@ -26,6 +26,7 @@
     (make-pathname :host (pathname-host *load-truename*)
                    :device (pathname-device *load-truename*)
                    :directory (pathname-directory *load-truename*)))
+  (format t "*owl-directory* = ~A~%" *owl-directory*)
   (setf (logical-pathname-translations "OWL")
     `(("*.*"
        ,(make-pathname
@@ -35,6 +36,7 @@
          :name :wild
          :type :wild
          ))))
+  (format t "(logical-pathname-translations \"OWL\") = ~A~%" (logical-pathname-translations "OWL"))
 ) ; end of eval-when
 
 (eval-when (:load-toplevel :execute)

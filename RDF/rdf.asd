@@ -21,11 +21,11 @@
  
 (in-package :gx-system)
 
-(eval-when (:load-toplevel :execute)
-  (defparameter *rdf-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (pathname-directory *load-truename*)))
+(defvar *rdf-directory*
+  (make-pathname :host (pathname-host *load-truename*)
+                 :device (pathname-device *load-truename*)
+                 :directory (pathname-directory *load-truename*)))
+(unless (logical-pathname-translations "RDF")
   (setf (logical-pathname-translations "RDF")
     `(("*.*"
        ,(make-pathname
@@ -34,8 +34,7 @@
          :directory (pathname-directory *rdf-directory*)
          :name :wild
          :type :wild
-         ))))
-) ; End of eval-when
+         )))))
 
 (defsystem :swclos.rdf
     :name "SWCLOS RDF subsystem"
