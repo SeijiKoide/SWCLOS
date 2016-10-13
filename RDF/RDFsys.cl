@@ -18,10 +18,10 @@
 
 (excl:defsystem :rdf (:pretty-name "RDF subsystem of SWCLOS"
                        :default-pathname #,*rdf-directory*)
-  (:module :utils        "Utils")
-  (:module :rdfio        "RdfIO")
-  (:module :iri          "IRI")
   (:module :rdfspackages "packages")
+  (:module :utils        "Utils"        (:load-before-compile :rdfspackages))
+  (:module :rdfio        "RdfIO"        (:load-before-compile :rdfspackages))
+  (:module :iri          "IRI"          (:load-before-compile :rdfspackages))
   (:module :xml          "Xml"          (:load-before-compile :rdfspackages))
   (:module :rdferror     "rdferror"     (:load-before-compile :utils :rdfspackages))
   (:module :namespace    "NameSpace"    (:load-before-compile :rdfspackages :iri))
