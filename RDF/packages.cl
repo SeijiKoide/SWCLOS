@@ -55,6 +55,7 @@
   (:documentation "http://www.w3.org/2000/01/rdf-schema#"))
 
 (defpackage :owl
+    (:nicknames |owl|)
     (:use ) ; supressing using common lisp package
     (:export "Class" "Thing" "Nothing" "Restriction" "onProperty" "allValuesFrom" "someValuesFrom" "hasValue"
              "minCardinality" "maxCardinality" "cardinality"
