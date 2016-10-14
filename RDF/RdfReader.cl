@@ -38,7 +38,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     (number (list x))
     (xsd:|anySimpleType| (list x))
     (rdfs:|Literal| (list x))
-    (rdf:|Description| (list (Description-form x)))
+    (rdf:|Description| (list (|Description|-form x)))
     (comment nil) ; depress comment
     (cons (mapcan #'make-form x))))
 
@@ -91,11 +91,11 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                           (make-form value))))
             (t (cons name (make-form value)))))))
 
-(defun Description-form (description)
+(defun |Description|-form (description)
   "generates S-exression of <description>."
-  (%Description-form (Description-tag description)
-                     (Description-att&vals description)
-                     (Description-elements description)))
+  (%Description-form (|Description|-tag description)
+                     (|Description|-att&vals description)
+                     (|Description|-elements description)))
 
 (defun %Description-form (class attrs props)
   "generates S-expression from <class>, <attrs>, and <props>.
@@ -261,7 +261,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                      nil)
                                     ((comment-p element)
                                      nil)
-                                    ((Description-p element)
+                                    ((|Description|-p element)
                                      (let ((*base-uri* *base-uri*)
                                            (*default-namespace* *default-namespace*))
                                        (funcall accepter-fun element)))

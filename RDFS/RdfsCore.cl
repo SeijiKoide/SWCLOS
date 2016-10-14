@@ -168,12 +168,12 @@
 
 (defun addRdfXml (description)
   ;;(format t "~%~S" description)
-  (cond ((Description-p description)
-         (let* ((form (Description-form description))
+  (cond ((|Description|-p description)
+         (let* ((form (|Description|-form description))
                 (about (second (assoc 'rdf:|about| (cdr form))))
                 (id (second (assoc 'rdf:|ID| (cdr form))))
                 (nodeID (second (assoc 'rdf:|nodeID| (cdr form))))
-                (name (cond ((string= (string (Description-tag description)) "Ontology")
+                (name (cond ((string= (string (|Description|-tag description)) "Ontology")
                              (name-ontology about))
                             (about (uri2symbol about)))))
            (when id
@@ -193,12 +193,12 @@
 (defun lasyAddRdfXml (description)
   "This function lazily <addForm> when it is forced.
    <delay> must be explicitly called with <force> function."
-  (cond ((Description-p description)
-         (let* ((form (Description-form description))
+  (cond ((|Description|-p description)
+         (let* ((form (|Description|-form description))
                 (about (second (assoc 'rdf:|about| (cdr form))))
                 (id (second (assoc 'rdf:|ID| (cdr form))))
                 (nodeID (second (assoc 'rdf:|nodeID| (cdr form))))
-                (name (cond ((string= (string (Description-tag description)) "Ontology")
+                (name (cond ((string= (string (|Description|-tag description)) "Ontology")
                              (name-ontology about))
                             (about (uri2symbol about)))))
            (when id

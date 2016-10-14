@@ -832,10 +832,10 @@ and instance of owl:Class."))
 ;;;
 ;;; Then, we add owl:Functional&InverseFunctionalProperty
 ;;;
-(addClass `(,rdfs:|Class|) '|owl:|FunctionalProperty||
+(addClass `(,rdfs:|Class|) '|owl:FunctionalProperty|
           `(,(symbol-value 'owl:|FunctionalProperty|) ,(symbol-value 'owl:|ObjectProperty|)))
 (addClass `(,rdfs:|Class|) 'owl::Functional&InverseFunctionalProperty
-          `(,(symbol-value '|owl:|FunctionalProperty||) ,(symbol-value 'owl:|InverseFunctionalProperty|)))
+          `(,(symbol-value '|owl:FunctionalProperty|) ,(symbol-value 'owl:|InverseFunctionalProperty|)))
 
 ;;;; We add some new axioms for OWL.
 ;;;
