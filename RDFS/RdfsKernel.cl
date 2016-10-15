@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2002-2005 Galaxy Express Corporation
+;;; Copyright (c) 2002-2005 Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007 Seiji Koide
 ;;
@@ -46,11 +46,9 @@
   ;(require :domainrange)
 ) ; end of eval-when
 
-(defpackage :gx
-  (:export subproperty 
-           ))
-
 (in-package :gx)
+
+(export 'subproperty)
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (setf (uri-namedspace-package (set-uri-namedspace "http://www.w3.org/2001/XMLSchema#"))
@@ -136,28 +134,28 @@
 ;;; The rule rdfs13 indicates the default data type in triple should be rdfs:Datatype.
 ;;; The following methods assure rdfs8 and rdfs13 rules.
 
-(defmethod excl::default-direct-superclasses ((class rdfs:Class))
+(defmethod excl::default-direct-superclasses ((class rdfs:|Class|))
   "Rdfs8 rule is implemented at this method."
-  (list (load-time-value (find-class 'rdfs:Resource))))
+  (list (load-time-value (find-class 'rdfs:|Resource|))))
 
-(defmethod excl::default-direct-superclasses ((class rdfs:Datatype))
+(defmethod excl::default-direct-superclasses ((class rdfs:|Datatype|))
   "Rdfs13 rule is implemented at this method."
-  (list (load-time-value (find-class 'rdfs:Literal))))
+  (list (load-time-value (find-class 'rdfs:|Literal|))))
 
-(defmethod make-instance :around ((class (eql rdfs:Class)) &rest initargs)
-  (cond ((notany #'(lambda (cls) (cl:subtypep cls (load-time-value rdfs:Resource)))
+(defmethod make-instance :around ((class (eql rdfs:|Class|)) &rest initargs)
+  (cond ((notany #'(lambda (cls) (cl:subtypep cls (load-time-value rdfs:|Resource|)))
                  (getf initargs :direct-superclasses))
          (setf (getf initargs :direct-superclasses)
-           (append (getf initargs :direct-superclasses) (list (load-time-value rdfs:Resource))))
+           (append (getf initargs :direct-superclasses) (list (load-time-value rdfs:|Resource|))))
          (apply #'call-next-method class initargs))
         (t (call-next-method)))
   )
 
-(defmethod make-instance :around ((class (eql rdfs:Datatype)) &rest initargs)
-  (cond ((notany #'(lambda (cls) (cl:subtypep cls (load-time-value rdfs:Literal)))
+(defmethod make-instance :around ((class (eql rdfs:|Datatype|)) &rest initargs)
+  (cond ((notany #'(lambda (cls) (cl:subtypep cls (load-time-value rdfs:|Literal|)))
                  (getf initargs :direct-superclasses))
          (setf (getf initargs :direct-superclasses)
-           (append (getf initargs :direct-superclasses) (list (load-time-value rdfs:Literal))))
+           (append (getf initargs :direct-superclasses) (list (load-time-value rdfs:|Literal|))))
          (apply #'call-next-method class initargs))
         (t (call-next-method)))
   )
@@ -211,7 +209,7 @@
 ;;;   - When rdfs:domain is supplied, the domain constraints are checked for every subject of the extension of this property.
 ;;;   - When rdfs:range is supplied, the range constraints are checked for every object of the extension of this property.
 #|
-(defmethod shared-initialize :around ((instance rdf:Property) slot-names &rest initargs)
+(defmethod shared-initialize :around ((instance rdf:|Property|) slot-names &rest initargs)
   "In order to affect new definition of rdfs:subPropertyOf to inherited domain and range constraints
 in addition to the effect of direct definitions of domain and range in <initargs>, <get-domain> and 
 <get-range> are used and before-value and after-value are compared. If there is any difference, 
@@ -271,7 +269,7 @@ of this <instance> property."
                ))))))
 |#
 
-(defmethod shared-initialize :after ((instance rdf:Property) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance rdf:|Property|) slot-names &rest initargs)
   "After regular processing, property specific procedure is processed here, i.e., book-keeping for 
    super/sub relation maintenance, the equivalent property group maintencne, adding slot definition to 
    the domain class, and finally constraint propergation of domain and range constraints."
@@ -283,10 +281,10 @@ of this <instance> property."
         (t  ; first or redefining, or when undate-instance-fore-different-class with added slot
          (apply #'book-keeping-super/sub-property instance slot-names initargs)
          (apply #'equivalentProperty-maintain instance slot-names initargs)
-         (when (getf initargs 'rdfs:domain)
-           (add-direct-slots-to-domain instance (getf initargs 'rdfs:domain)))
+         (when (getf initargs 'rdfs:|domain|)
+           (add-direct-slots-to-domain instance (getf initargs 'rdfs:|domain|)))
          (cond (initargs ; first and reinitialize
-                (let ((newrange (getf initargs 'rdfs:range))
+                (let ((newrange (getf initargs 'rdfs:|range|))
                       (prop-name (name instance)))
                   (declare (ignore newrange prop-name))
                   #|
@@ -319,7 +317,7 @@ of this <instance> property."
   "puts this property into the subproperty slot of super property."
   (declare (ignore slot-names))
   ;; inverse relation of rdfs:subPropertyOf
-  (loop for super in (mklist (getf initargs 'rdfs:subPropertyOf))
+  (loop for super in (mklist (getf initargs 'rdfs:|subPropertyOf|))
       do (when (or (eql (name super) (name property))
                    (subproperty-p super property))
            (error 'asyclic-property-termilogy-error
@@ -330,7 +328,7 @@ of this <instance> property."
           ; (cond ((property? super)
           ;        (pushnew property (slot-value (symbol-value super) 'subproperty)))
           ;       (t (error "Cant happen! The super property must be instantiated at upper level."))))
-          (rdf:Property 
+          (rdf:|Property| 
            (pushnew property (slot-value super 'subproperty)))
           )))
 
@@ -355,8 +353,8 @@ of this <instance> property."
                         `(:name ,slot-name :initargs (,slot-name)
                                 :documentation "By domain definition of this property"
                                 :subject-type ,domain))
-                       ((eq range rdf:List)
-                        ;; in case of rdf:List, it should be transparent
+                       ((eq range rdf:|List|)
+                        ;; in case of rdf:|List|, it should be transparent
                         `(:name ,slot-name :initargs (,slot-name) :type t
                                 :documentation "By domain definition of this property"
                                 :subject-type ,domain))
@@ -393,7 +391,7 @@ of this <instance> property."
    definition."
   (declare (ignore slot-names))
   (let ((deletes (remove-if #'(lambda (domain)
-                                 (member (name domain) (getf initargs 'rdfs:domain)))
+                                 (member (name domain) (getf initargs 'rdfs:|domain|)))
                             (mklist (domain-value instance)))))
     ;; Seiji Seiji Seiji Seiji
     (declare (ignore deletes))
@@ -408,8 +406,8 @@ of this <instance> property."
                   (range (get-range instance))
                   (prop-forms
                    (cond (range
-                          (cond ((eq range rdf:List)
-                                 ;; in case of rdf:List, it should be transparent
+                          (cond ((eq range rdf:|List|)
+                                 ;; in case of rdf:|List|, it should be transparent
                                  `(:name ,slot-name :initargs (,slot-name) :type t
                                          :documentation "By domain definition of this property"
                                          :subject-type ,domain))
@@ -436,7 +434,7 @@ of this <instance> property."
 ;;; When any setting value in initargs is already set in the existing slot, it is eliminated from 
 ;;; initargs. This is for supressing meaningless redefining messages.
 
-(defmethod shared-initialize :around ((instance rdfs:Resource) slot-names &rest initargs)
+(defmethod shared-initialize :around ((instance rdfs:|Resource|) slot-names &rest initargs)
   ;(format t "~%SHARED-INITIALIZE:AROUND(rdfs:Resource) ~S ~S ~S" instance slot-names initargs)
   (cond ((and (null slot-names) (not (null initargs)))
          (let ((args
@@ -464,7 +462,7 @@ of this <instance> property."
 ;;; Note that even if you want to add more abstract concept as superclass, 
 ;;; you cannot do it when system knows the MSC concept that is more specific than your indication.
 
-(defmethod shared-initialize :around ((class rdfs:Class) slot-names &rest initargs)
+(defmethod shared-initialize :around ((class rdfs:|Class|) slot-names &rest initargs)
   "When initialization rewrite direct-superclasses with MSCs of direct-superclasses in 
    <initargs>. When reinitialization rewrite direct-superclasses with MSCs of old superclasses 
    and new superclasses, then, old direct slot definitions are recovered into def-form and 
@@ -545,9 +543,9 @@ of this <instance> property."
                    ((eq name 'documentation) `(:documentation ,(slot-value slotd name)))
                    (t `(,(car (slot-value facetd 'excl::initargs)) ,(slot-value slotd name))))))
 
-(defmethod make-this-supers ((class rdfs:Class) superclasses)
+(defmethod make-this-supers ((class rdfs:|Class|) superclasses)
   "returns MSCs of <old-supers> and <new-supers>."
-  (cond ((or (eq class rdfs:Resource) (eq class |rdfs:Resource|))
+  (cond ((or (eq class rdfs:|Resource|) (eq class |rdfs:Resource|))
          (most-specific-concepts superclasses))
         ((null superclasses) |rdfs:Resource|)
         (t (most-specific-concepts superclasses))))
@@ -555,8 +553,8 @@ of this <instance> property."
 (defun collect-props-from-initargs (initargs)
   (loop for args on initargs by #'cddr
       as role = (car args)
-      when (and (not (eq role 'rdf:about))
-                (not (eq role 'rdf:ID))
+      when (and (not (eq role 'rdf:|about|))
+                (not (eq role 'rdf:|ID|))
                 (not (eq role 'xml:lang))
                 (not (keywordp role)))
       collect role))
@@ -573,12 +571,12 @@ of this <instance> property."
         for val in vals
         append (list role (cond ((keywordp role) (car val))
                                    ((and (property? role)
-                                         (eq (get-range (symbol-value role)) rdf:List))
+                                         (eq (get-range (symbol-value role)) rdf:|List|))
                                     val)
                                    ((null (cdr val)) (car val))
                                    (t val))))))
 
-(defmethod shared-initialize :before ((class rdfs:Class) slot-names
+(defmethod shared-initialize :before ((class rdfs:|Class|) slot-names
                                       &key (direct-superclasses nil direct-superclasses-p))
   "checks C subclassof D and D subclassof C, that implies equality."
   (cond ((eq slot-names t)) ; nothing done
@@ -589,7 +587,7 @@ of this <instance> property."
            :format-control "~S and ~S should be rewrite as equivalent"
            :format-arguments `(,class ,direct-superclasses)))))
 
-(defmethod shared-initialize :before ((instance rdfs:Resource) slot-names &rest initargs)
+(defmethod shared-initialize :before ((instance rdfs:|Resource|) slot-names &rest initargs)
   ;(format t "~%SHARED-INITIALIZE:BEFORE(rdfs:Resource) ~S ~S ~S" instance slot-names initargs)
   (when initargs
     (shared-initialize-before-in-RDF instance slot-names initargs)
@@ -612,7 +610,7 @@ of this <instance> property."
                  (let ((oldval (and (slot-exists-p instance role)  ; when ordinal property
                                     (slot-boundp instance role)
                                     (slot-value instance role))))
-                   (cond ((eq role 'owl:oneOf)
+                   (cond ((eq role 'owl:|oneOf|)
                           (when oldval
                             (let ((diff (set-difference filler oldval :test #'owl-same-p)))
                               (when diff
@@ -651,7 +649,7 @@ of this <instance> property."
                                     (symbol-value type))
                                   (type-option-check-with-cardinality instance filler slotd oldval))
                                  (t (error "Cant happen!"))))))
-      (rdfs:Class (cond ((consp filler)
+      (rdfs:|Class| (cond ((consp filler)
                          (loop for fil in filler
                              unless (typep fil type)
                              do (unless (eq (class-of fil) (load-time-value (symbol-value '|rdfs:Resource|)))
@@ -669,7 +667,7 @@ of this <instance> property."
                         (cond ((typep filler type) t) ; nothing done
                               ((eq (type-of filler) '|rdfs:Resource|)
                                (change-class filler type))
-                              ((eq (type-of filler) 'rdfs:Resource)
+                              ((eq (type-of filler) 'rdfs:|Resource|)
                                (change-class filler type))
                               ((subsumed-p type (class-of filler))
                                (warn "Range entail of ~S: change class of ~S to ~S." R filler type)
@@ -688,12 +686,12 @@ of this <instance> property."
          )
     (typecase type
       (null nil)
-      (rdfs:Class (cond ((atom y) (range-satisfy y))
+      (rdfs:|Class| (cond ((atom y) (range-satisfy y))
                         (t (mapc #'(lambda (fil) (range-satisfy fil)) y))))
       (t (cond ((atom y) (range-satisfy y))
                (t (mapc #'(lambda (fil) (range-satisfy fil)) y)))))))
 
-(defmethod shared-initialize :after ((class rdfs:Class) slot-names &rest initargs)
+(defmethod shared-initialize :after ((class rdfs:|Class|) slot-names &rest initargs)
   (declare (ignore slot-names))
   "checks C subclassof D and D subclassof C, that implies equality.
 Checks the residual mclasses of all instances of <class>."
@@ -712,7 +710,7 @@ Checks the residual mclasses of all instances of <class>."
                  ;(format t "~%Propagated superclass change of ~S:~%  ~S -> ~S" sub sub-supers new-sub-supers)
                  (reinitialize-instance sub :direct-superclasses new-sub-supers))))))
   
-  (let ((supers (mklist (getf initargs 'rdfs:subClassOf))))
+  (let ((supers (mklist (getf initargs 'rdfs:|subClassOf|))))
     (when supers
       ;; there might be a shadow class that is unshadowable in subclasses
       (loop for sub in (mop:class-direct-subclasses class)
@@ -750,7 +748,7 @@ Checks the residual mclasses of all instances of <class>."
 
 #|
 ;; propagate the change of superclasses of this class to subclasses
-(defmethod shared-initialize :after ((class rdfs:Class) slot-names &rest initargs)
+(defmethod shared-initialize :after ((class rdfs:|Class|) slot-names &rest initargs)
   (assert (not (eq (car (mop:class-direct-superclasses class)) class)))
   (cond ((and (null slot-names) (null initargs))  ; when metaclass changed
          )
@@ -766,7 +764,7 @@ Checks the residual mclasses of all instances of <class>."
                     (unless (set-equalp newsupers oldsupers)
                       (reinitialize-instance sub :direct-superclasses newsupers))))))))
 |#
-(defmethod shared-initialize :after ((class rdfs:Datatype) slot-names &rest initargs)
+(defmethod shared-initialize :after ((class rdfs:|Datatype|) slot-names &rest initargs)
   (cond ((and (null slot-names) (null initargs))  ; when change-class
          )
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
@@ -782,7 +780,7 @@ Checks the residual mclasses of all instances of <class>."
                       (name class))))))
         (t ;; redefinition
          (case (name class)
-           (rdf:XMLLiteral nil)
+           (rdf:|XMLLiteral| nil)
            (otherwise
             (let* ((datatype (name class))
                    (fname `(excl::deftype-expander ,datatype)))
@@ -808,7 +806,7 @@ Checks the residual mclasses of all instances of <class>."
 ;; If an instance is an usual CLOS class, single classing is ruled out.
 ;; If an instance is RDF object, multiple classing is allowed.
 
-(defmethod change-class :around ((instance rdfs:Resource) (new-class cons) &rest initargs)
+(defmethod change-class :around ((instance rdfs:|Resource|) (new-class cons) &rest initargs)
   (let ((classes (cond ((eq (car new-class) 'and) (cdr new-class))
                        (t new-class))))
     (cond ((length=1 classes)
@@ -821,18 +819,18 @@ Checks the residual mclasses of all instances of <class>."
                               (t (warn "Multiple classing with ~S for ~S" classes instance)
                                  (apply #'change-class instance shadow initargs))))))))))
 
-;(defmethod change-class :before ((instance rdfs:Class) (new-class rdfs:Class)  &rest initargs)
+;(defmethod change-class :before ((instance rdfs:|Class|) (new-class rdfs:|Class|)  &rest initargs)
 ;  (declare (ignore initargs))
 ;  (unless (mop:class-finalized-p instance) (mop:finalize-inheritance instance)))
 
-(defmethod change-class :before ((instance rdfs:Resource) (new-class standard-class)
+(defmethod change-class :before ((instance rdfs:|Resource|) (new-class standard-class)
                                  &rest initargs)
   (declare (ignore initargs))
   (unless (shadowed-class-p instance)
     (unless (rdf-class-p new-class)
       (error "You cannot role down an RDF class to a CLOS class."))))
 
-(defmethod change-class :before ((instance rdfs:Resource) (new-class rdfs:Class) &rest initargs)
+(defmethod change-class :before ((instance rdfs:|Resource|) (new-class rdfs:|Class|) &rest initargs)
   "If <instance> has a slot value and <new-class> has no slot definitions on it,
    then add the slot definitions into <new-class>."
   ;(format t "~%CHANGE-CLASS:before(~S ~S ~S)" instance new-class initargs)
@@ -850,9 +848,9 @@ Checks the residual mclasses of all instances of <class>."
       (when added
         (reinitialize-instance new-class :direct-slots added)))))
 
-(defmethod change-class ((instance rdfs:Resource) (new-class rdfs:Class) &rest initargs)
+(defmethod change-class ((instance rdfs:|Resource|) (new-class rdfs:|Class|) &rest initargs)
   (let ((old-class (class-of instance)))
-    (when (eq instance rdfs:Class) (error "Bingo, Check it!"))
+    (when (eq instance rdfs:|Class|) (error "Bingo, Check it!"))
     ;(when (eq old-class new-class) (return-from change-class instance))
     ;(format t "~%Changing class of ~S to ~S~%   with ~S" instance new-class initargs)
     (cond ((and (shadowed-class-p old-class) (not (shadowed-class-p new-class)))
@@ -887,7 +885,7 @@ Checks the residual mclasses of all instances of <class>."
            )
           ((cl:subtypep new-class old-class) (call-next-method))
           ((and (eql (class-of instance) |rdfs:Resource|)
-                (cl:subtypep new-class rdfs:Resource))
+                (cl:subtypep new-class rdfs:|Resource|))
            (call-next-method))
           ((and (rdf-metaclass-p new-class) (rdf-instance-p instance))
            (cond ((eq (class-of instance) (find-class '|rdfs:Resource|))
@@ -899,7 +897,7 @@ Checks the residual mclasses of all instances of <class>."
                (apply #'call-next-method instance shadow initargs))))
     ))
 
-(defmethod change-class :after ((instance rdfs:Resource) (new-class rdfs:Class) &rest initargs)
+(defmethod change-class :after ((instance rdfs:|Resource|) (new-class rdfs:|Class|) &rest initargs)
   (declare (ignore initargs))
   ;(format t "~%Change class :after (~S rdfs:Resource) (~S rdfs:Class)" instance new-class)
   (let ((old-class (class-of instance)))
@@ -986,13 +984,13 @@ Checks the residual mclasses of all instances of <class>."
 #|
 ;; This method is needed for method inheritance.
 (defmethod (setf mop:slot-value-using-class)
-    (value (class rdfs:Class) (object rdfs:Resource) slotd)
+    (value (class rdfs:|Class|) (object rdfs:|Resource|) slotd)
   (declare (ignore value slotd))
   ;(format t "~%Setf Slot-value-using-class4 with ~S ~S ~S" value object slotd)
   (call-next-method))
 
 (defmethod (setf mop:slot-value-using-class)
-    (value (class rdfs:Class) (object rdfs:Resource) 
+    (value (class rdfs:|Class|) (object rdfs:|Resource|) 
            (slotd gx::Property-effective-slot-definition))
   (declare (optimize (speed 3) (safety 0)))
   ;(format t "~%Setf Slot-value-using-class in IR with ~S ~S ~S" value object slotd)
@@ -1022,13 +1020,13 @@ Checks the residual mclasses of all instances of <class>."
                (cond ((not (member value filler :test #'%owl-same-p))
                       (setq value (cons value filler))
                       (slot-value-with-cardinality-check))
-                     ((eq slot-name 'rdf:type)) ; ignore but no message
+                     ((eq slot-name 'rdf:|type|)) ; ignore but no message
                      (t (ignore-slot-value))))
               ((atom filler)
                (cond ((not (member filler value :test #'%owl-same-p))
                       (setq value (cons filler value))
                       (slot-value-with-cardinality-check))
-                     ((eq slot-name 'rdf:type)) ; ignore but no message                     
+                     ((eq slot-name 'rdf:|type|)) ; ignore but no message                     
                      (t (ignore-slot-value))))
               (t (let ((union (union value filler :test #'%owl-same-p)))
                    (cond ((every #'rdf-instance-p union)
@@ -1049,7 +1047,7 @@ Checks the residual mclasses of all instances of <class>."
 (defmethod collect-all-instances-of ((class symbol)) ;smh
   (collect-all-instances-of (symbol-value class)))
 
-(defmethod collect-all-instances-of ((class rdfs:Class)) ;smh
+(defmethod collect-all-instances-of ((class rdfs:|Class|)) ;smh
   (declare (optimize (speed 3) (safety 0)))
   (remove-duplicates
    (append (class-direct-instances class)

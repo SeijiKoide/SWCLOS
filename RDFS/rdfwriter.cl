@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan,
 ;;;
-;;; Copyright © 2004 by Galaxy Express Corporation
+;;; Copyright (c) 2004 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2008 Seiji Koide
 ;;
@@ -27,11 +27,10 @@
   (require :gxforwardref)
   )
 
-(defpackage :gx
-  (:export write-resource write-xml *force-recursive-p*
-           write-rdf-all-entities-in write-xml-all-entities-in))
-
 (in-package :gx)
+
+(export '(write-resource write-xml *force-recursive-p*
+          write-rdf-all-entities-in write-xml-all-entities-in))
 
 ;;;
 ;;;; RDF Writer
@@ -41,8 +40,8 @@
 
 (defun dont-expand-p (resource)
   (and (not *force-recursive-p*)
-       (cl:typep resource rdfs:Resource)
-       (or (and (slot-boundp resource 'rdf:about) (slot-value resource 'rdf:about))
+       (cl:typep resource rdfs:|Resource|)
+       (or (and (slot-boundp resource 'rdf:|about|) (slot-value resource 'rdf:|about|))
            (and (name resource) (not (nodeID? (name resource)))))))
 
 (defun collect-used-packaged-from (x)
@@ -66,7 +65,7 @@
                        append 
                          (typecase filler
                            (symbol (list (symbol-package filler)))
-                           (rdfs:Resource
+                           (rdfs:|Resource|
                             (cond (*force-recursive-p*
                                    (collect-used-packaged-from (list filler)))
                                   (t nil))))))))
@@ -86,7 +85,7 @@
              (pprint-logical-block (stream packages)
                (when *base-uri*
                  (princ "xml:base = " stream)
-                 (write (net.uri:render-uri *base-uri* nil) :stream stream)
+                 (write (render-uri *base-uri* nil) :stream stream)
                  (pprint-newline :mandatory stream))
                (loop (let ((package (pprint-pop)))
                        (assert (not (null (documentation package t))))
@@ -116,14 +115,14 @@
 (defun write-resource (resource s)
   "prints each element as resource"
   (let ((class (type-of resource))
-        (about (or (and (slot-boundp resource 'rdf:about)
-                        (slot-value resource 'rdf:about))
+        (about (or (and (slot-boundp resource 'rdf:|about|)
+                        (slot-value resource 'rdf:|about|))
                    (and (name resource)
                         (symbol2uri (name resource)))))
         (slots (collect-instance-slots resource)))
     (when (iri-p about) (setq about (render-uri about nil)))
     (when (and about *base-uri*)
-      (let* ((basestr (net.uri:render-uri *base-uri* nil))
+      (let* ((basestr (render-uri *base-uri* nil))
              (len (length basestr)))
         (when (and (string= basestr about :end1 len :end2 len)
                    (< len (length about)))
@@ -131,17 +130,17 @@
     (setq slots (remove-if #'(lambda (slot) (null (cdr slot))) slots))
     (cond ((null slots) (write-about= resource s))
           (t (write-char #\< s)
-             (cond ((eq class 'rdfs:Resource)
-                    (write 'rdf:Description :stream s))
+             (cond ((eq class 'rdfs:|Resource|)
+                    (write 'rdf:|Description| :stream s))
                    ((eq class '|rdfs:Resource|)
-                    (write 'rdf:Description :stream s))
+                    (write 'rdf:|Description| :stream s))
                    ((owl-restriction-p resource)
                     (princ "owl:Restriction" s))
                    ((atom class)
                     (write class :stream s))
                    (t (write (car class) :stream s)
                       (setq slots
-                            (append (mapcar #'(lambda (cls) (list 'rdf:type (symbol-value cls)))
+                            (append (mapcar #'(lambda (cls) (list 'rdf:|type| (symbol-value cls)))
                                       (cdr class))
                                     slots))))
              (when about
@@ -162,10 +161,10 @@
              (pprint-newline :mandatory s)
              (write-char #\< s)
              (write-char #\/ s)
-             (cond ((eq class 'rdfs:Resource)
-                    (write 'rdf:Description :stream s))
+             (cond ((eq class 'rdfs:|Resource|)
+                    (write 'rdf:|Description| :stream s))
                    ((eq class '|rdfs:Resource|)
-                    (write 'rdf:Description :stream s))
+                    (write 'rdf:|Description| :stream s))
                    ((owl-restriction-p resource)
                     (princ "owl:Restriction" s))
                    ((atom class)
@@ -175,14 +174,14 @@
 
 (defun collection-p (resources)
   (and (consp resources) (cdr resources)
-       (not (cl:typep (car resources) 'rdf:inLang))
+       (not (cl:typep (car resources) 'rdf:|inLang|))
        ))
 
 (defun write-slot-subclassof (resource s)
   (cond ((rsc-object-p resource)
          (cond ((anonymous-p resource)
                 (write-char #\< s)
-                (write 'rdfs:subClassOf :stream s)
+                (write 'rdfs:|subClassOf| :stream s)
                 (write-char #\> s)
                 (pprint-indent :block 2 s)
                 (pprint-newline :mandatory s)
@@ -194,9 +193,9 @@
                 (pprint-newline :mandatory s)
                 (write-char #\< s)
                 (write-char #\/ s)
-                (write 'rdfs:subClassOf :stream s)
+                (write 'rdfs:|subClassOf| :stream s)
                 (write-char #\> s))
-               (t (write-resource= 'rdfs:subClassOf resource s))))
+               (t (write-resource= 'rdfs:|subClassOf| resource s))))
         ((object? resource)
          (write-slot-subclassof (symbol-value resource) s))
         ((error "Cant happen in WRITE-SLOT-SUBCLASSOF ~S" resource))))
@@ -205,12 +204,12 @@
   (let ((role (car slot))
         (resources (cdr slot)))
     (case role
-      ((rdf:type rdfs:subPropertyOf)
+      ((rdf:|type| rdfs:|subPropertyOf|)
        (pprint-logical-block (s resources)
          (loop (write-resource= role (pprint-pop) s)
                (pprint-exit-if-list-exhausted)
                (pprint-newline :mandatory s))))
-      (rdfs:subClassOf
+      (rdfs:|subClassOf|
        (pprint-logical-block (s resources)
          (loop (write-slot-subclassof (pprint-pop) s)
                (pprint-exit-if-list-exhausted)
@@ -238,7 +237,7 @@
                   (loop (let ((resource (pprint-pop)))
                           (cond ((datatype-p (class-of resource))
                                  (write-datatype= role resource s))
-                                ((cl:typep resource 'rdf:inLang)
+                                ((cl:typep resource 'rdf:|inLang|)
                                  (write-char #\< s)
                                  (write role :stream s)
                                  (princ " xml:lang=" s)
@@ -247,8 +246,8 @@
                                  (write-char #\" s)
                                  (write-char #\> s)
                                  (typecase (content resource)
-                                   (net.uri:uri (princ (content resource) s))
-                                   (rdfs:Resource (pprint-indent :block 2 s)
+                                   (uri (princ (content resource) s))
+                                   (rdfs:|Resource| (pprint-indent :block 2 s)
                                                   (pprint-newline :mandatory s)
                                                   (write-resource (content resource) s)
                                                   (pprint-indent :block 0 s)
@@ -294,23 +293,23 @@
   (typecase resource
     (string (princ resource s))
     (number (prin1 resource s))
-    (net.uri:uri (write-char #\< s)
-                 (net.uri:render-uri resource s)
+    (uri (write-char #\< s)
+                 (render-uri resource s)
                  (write-char #\> s))
-    (rdfs:Resource (cond ((dont-expand-p resource)
+    (rdfs:|Resource| (cond ((dont-expand-p resource)
                           (write-about= resource s))
                          (t (write-resource resource s))))
     (otherwise (write resource :stream s))))
 
 (defun write-about= (resource s)
   "prints <TYPE rdf:about='uri' >"
-  (let* ((about (or (and (slot-boundp resource 'rdf:about)
-                         (slot-value resource 'rdf:about))
+  (let* ((about (or (and (slot-boundp resource 'rdf:|about|)
+                         (slot-value resource 'rdf:|about|))
                     (and (name resource)
                          (symbol2uri (name resource))))))
     (when (iri-p about) (setq about (render-uri about nil)))
     (when (and about *base-uri*)
-      (let* ((basestr (net.uri:render-uri *base-uri* nil))
+      (let* ((basestr (render-uri *base-uri* nil))
              (len (length basestr)))
         (when (and (string= basestr about :end1 len :end2 len)
                    (< len (length about)))
@@ -326,12 +325,12 @@
     (write-char #\> s)))
 
 (defun write-datatype= (role resource s)
-  "prints <ROLE rdf:datatype='type' >value</ROLE>"
+  "prints <ROLE rdf:|datatype|='type' >value</ROLE>"
   (let ((type (class-name (class-of resource)))
         (value (value-of resource)))
     (write-char #\< s)
     (write role :stream s)
-    (princ " rdf:datatype=" s)
+    (princ " rdf:|datatype|=" s)
     (write-char #\" s)
     (princ (symbol2uri type) s)
     (write-char #\" s)
@@ -345,15 +344,15 @@
 (defun write-resource= (role resource s)
   "prints <ROLE rdf:resource='uri' />"
   (let* ((about (cond ((iri-p resource) resource)
-                      ((slot-boundp resource 'rdf:about)
-                       (slot-value resource 'rdf:about))
+                      ((slot-boundp resource 'rdf:|about|)
+                       (slot-value resource 'rdf:|about|))
                       ((name resource) (symbol2uri (name resource))))))
     (setq about
-          (cond ((stringp about) (slot-value about 'rdf:about))
+          (cond ((stringp about) (slot-value about 'rdf:|about|))
                 ((iri-p about) (render-uri about nil))
                 ((error "Cant happen!"))))
     (when (and about *base-uri*)
-      (let* ((basestr (net.uri:render-uri *base-uri* nil))
+      (let* ((basestr (render-uri *base-uri* nil))
              (len (length basestr)))
         (when (and (string= basestr about :end1 len :end2 len)
                    (< len (length about)))

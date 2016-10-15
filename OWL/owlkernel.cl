@@ -61,29 +61,10 @@
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:use :common-lisp)
-  (:export owl-same-p disjoint-p  
-           owl-class-p owl-thing-p owl-oneof-p
-           ))
-
 (in-package :gx)
 
-(eval-when (:load-toplevel :execute)
-  (defparameter *owl-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (pathname-directory *load-truename*)))
-  (setf (logical-pathname-translations "OWL")
-    `(("*.*"
-       ,(make-pathname
-         :host (pathname-host *owl-directory*)
-         :device (pathname-device *owl-directory*)
-         :directory (pathname-directory *owl-directory*)
-         :name :wild
-         :type :wild
-         ))))
-  )
+(export '(owl-same-p disjoint-p  
+          owl-class-p owl-thing-p owl-oneof-p))
 
 ;;;
 ;;;; OWL Property Slot Definition
@@ -124,7 +105,7 @@ OwlProperty-direct-slot-definition in OWL module.")
 ;;;
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (reinitialize-instance
-   rdfs:Resource
+   rdfs:|Resource|
    :direct-slots
    `((:name funprop-inverse :initform nil :initfunction ,(load-time-value #'excl::false)
             :initargs (:funprop-inverse))
@@ -133,19 +114,19 @@ OwlProperty-direct-slot-definition in OWL module.")
             :initargs (:inverse-funprop-inverse))))
   )
 
-(defclass owl:Class (rdfs:Class)
+(defclass owl:|Class| (rdfs:|Class|)
   ((complement-class :initarg :complement-class)
    (disjoint-classes :initarg :disjoint-classes :initform ())
    (equivalent-classes :initarg :equivalent-classes :initform ()))
-  (:metaclass rdfs:Class)
+  (:metaclass rdfs:|Class|)
   (:documentation "The meta class in OWL universe. This class is a subclass and instance of 
 rdfs:Class."))
 
-(defclass owl:Thing (rdfs:Resource)
+(defclass owl:|Thing| (rdfs:|Resource|)
   ((different-from  :initarg :different-from :initform ())
    (same-as         :initarg :same-as :initform ())
    (inverse-transitive :initarg :inverse-transitive :initform ()))
-  (:metaclass owl:Class)
+  (:metaclass owl:|Class|)
   (:documentation "The top class in OWL universe. This class is a subclass of rdfs:Resource 
 and instance of owl:Class."))
 
@@ -174,15 +155,15 @@ and instance of owl:Class."))
   "If you are sure that <class> is a metaobject of CLOS, use this instead of 
    (cl:subtypep <class> owl:Class)."
   (declare (optimize (speed 3) (safety 0)))
-  (cond ((eq class (load-time-value owl:Class)))
+  (cond ((eq class (load-time-value owl:|Class|)))
         ((mop:class-finalized-p class)
-         (and (member (load-time-value owl:Class)
+         (and (member (load-time-value owl:|Class|)
                          (mop:class-precedence-list class)
                          :test #'eq)
               t))
         ((labels ((walk-partial-cpl (c)
                     (let ((supers (mop:class-direct-superclasses c)))
-                      (when (member (load-time-value (find-class 'owl:Class))
+                      (when (member (load-time-value (find-class 'owl:|Class|))
                                        supers
                                        :test #'eq)
                         (return-from %owl-class-subtype-p t))
@@ -213,7 +194,7 @@ and instance of owl:Class."))
       (list x)))
 )
 
-(defvar owl:Nothing)
+(defvar owl:|Nothing|)
 
 (excl:without-redefinition-warnings
 (defun owl-thing-p (obj)
@@ -223,20 +204,20 @@ and instance of owl:Class."))
   (declare (inline))
   (and (excl::standard-instance-p obj)
        (%owl-thing-subclass-p (class-of obj))
-       (not (eq (name obj) 'owl:Nothing))))
+       (not (eq (name obj) 'owl:|Nothing|))))
 (defun %owl-thing-subclass-p (class)
   "If you are sure that <class> is a metaobject of CLOS, use this instead of 
   (cl:subtypep <class> owl:Thing)."
   (declare (optimize (speed 3) (safety 0)))
-  (cond ((eq class (load-time-value owl:Thing)))
+  (cond ((eq class (load-time-value owl:|Thing|)))
         ((mop:class-finalized-p class)
-         (and (member (load-time-value owl:Thing)
+         (and (member (load-time-value owl:|Thing|)
                          (mop:class-precedence-list class)
                          :test #'eq)
               t))
         ((labels ((walk-partial-cpl (c)
                     (let ((supers (mop:class-direct-superclasses c)))
-                      (when (member (load-time-value owl:Thing)
+                      (when (member (load-time-value owl:|Thing|)
                                        supers
                                        :test #'eq)
                         (return-from %owl-thing-subclass-p t))
@@ -254,10 +235,10 @@ and instance of owl:Class."))
 ;;;; Object Property for owl:inverseOf Book-keeping
 ;;;
 
-(defclass owl:ObjectProperty (rdf:Property)
+(defclass owl:|ObjectProperty| (rdf:|Property|)
   ((inverse-inverse-of :initarg :inverse-inverse-of :initform ())
    )
-  (:metaclass rdfs:Class)
+  (:metaclass rdfs:|Class|)
   (:documentation "This class defines an inverse slot of the inverse-of property."))
 
 (defun equivalent-property-of (c)
@@ -265,14 +246,14 @@ and instance of owl:Class."))
   ;; rule9, rule10
   (or (slot-value c 'equivalent-property) (list c)))
 
-(defmethod change-class :after ((instance rdf:Property) (new-class rdfs:Class) &rest initargs)
+(defmethod change-class :after ((instance rdf:|Property|) (new-class rdfs:|Class|) &rest initargs)
   "In case that <new-class> is owl:ObjectProperty, the domain of <instance> is retrieved and 
    slot definitions named its domain for <instance> is changed to an instance of 
    <OwlProperty-direct-slot-definition>."
   (case (name new-class)
-    (owl:ObjectProperty
-     (loop for domain in (mklist (and (slot-boundp instance 'rdfs:domain)
-                                      (slot-value instance 'rdfs:domain)))
+    (owl:|ObjectProperty|
+     (loop for domain in (mklist (and (slot-boundp instance 'rdfs:|domain|)
+                                      (slot-value instance 'rdfs:|domain|)))
          do (loop for slotd in (mop:class-direct-slots domain)
                 when (eq (name instance) (mop:slot-definition-name slotd))
                 do (unless (cl:typep slotd 'OwlProperty-direct-slot-definition)
@@ -282,64 +263,64 @@ and instance of owl:Class."))
 ;;;; Restriction Subclasses
 ;;;
 
-(defclass owl:Restriction (rdfs:Resource)
+(defclass owl:|Restriction| (rdfs:|Resource|)
   ()
-  (:metaclass rdfs:Class)
+  (:metaclass rdfs:|Class|)
   (:documentation "owl:Restriction is a metaclass a subclass of owl:Class in OWL."))
 
-(defmethod excl::default-direct-superclasses ((class owl:Restriction))
-  "The default direct superclass of restrictions is rdfs:Resource."
-  (list (load-time-value (find-class 'rdfs:Resource))))
+(defmethod excl::default-direct-superclasses ((class owl:|Restriction|))
+  "The default direct superclass of restrictions is rdfs:|Resource|."
+  (list (load-time-value (find-class 'rdfs:|Resource|))))
 
-(defclass owl:allValuesFromRestriction (owl:Restriction) () (:metaclass rdfs:Class)
+(defclass owl:|allValuesFromRestriction| (owl:|Restriction|) () (:metaclass rdfs:|Class|)
   (:documentation "A class for value restrictions is a subclass of owl:Restriction."))
-(defmethod print-object ((obj owl:allValuesFromRestriction) stream)
+(defmethod print-object ((obj owl:|allValuesFromRestriction|) stream)
   (cond ((and (slot-exists-p obj 'excl::name)
               (slot-boundp obj 'excl::name)
               (slot-value obj 'excl::name))
          (call-next-method))
-        ((and (slot-exists-p obj 'owl:onProperty)
-              (name (slot-value obj 'owl:onProperty))
-              (slot-exists-p obj 'owl:allValuesFrom))
+        ((and (slot-exists-p obj 'owl:|onProperty|)
+              (name (slot-value obj 'owl:|onProperty|))
+              (slot-exists-p obj 'owl:|allValuesFrom|))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "ÅÕ~S.~S"
-             (name (slot-value obj 'owl:onProperty))
-             (or (name (slot-value obj 'owl:allValuesFrom))
-                 (get-form (slot-value obj 'owl:allValuesFrom))))))
+           (format stream "  ~S.~S"
+             (name (slot-value obj 'owl:|onProperty|))
+             (or (name (slot-value obj 'owl:|allValuesFrom|))
+                 (get-form (slot-value obj 'owl:|allValuesFrom|))))))
         (t (call-next-method))))
 
-(defmethod name ((object owl:allValuesFromRestriction))
+(defmethod name ((object owl:|allValuesFromRestriction|))
   (cond ((and (slot-boundp object 'excl::name) (slot-value object 'excl::name)))
-        (t (cons 'owl:allValuesFromRestriction
-                 (mapcar #'name (mklist (slot-value object 'owl:allValuesFrom)))))))
+        (t (cons 'owl:|allValuesFromRestriction|
+                 (mapcar #'name (mklist (slot-value object 'owl:|allValuesFrom|)))))))
 
-(defclass owl:someValuesFromRestriction (owl:Restriction) () (:metaclass rdfs:Class))
-(defmethod print-object ((obj owl:someValuesFromRestriction) stream)
-  (cond ((and (slot-exists-p obj 'owl:onProperty)
-              (name (slot-value obj 'owl:onProperty))
-              (slot-exists-p obj 'owl:someValuesFrom))
+(defclass owl:|someValuesFromRestriction| (owl:|Restriction|) () (:metaclass rdfs:|Class|))
+(defmethod print-object ((obj owl:|someValuesFromRestriction|) stream)
+  (cond ((and (slot-exists-p obj 'owl:|onProperty|)
+              (name (slot-value obj 'owl:|onProperty|))
+              (slot-exists-p obj 'owl:|someValuesFrom|))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "ÅŒ~S.~S"
-             (name (slot-value obj 'owl:onProperty))
-             (or (name (slot-value obj 'owl:someValuesFrom))
+           (format stream "  ~S.~S"
+             (name (slot-value obj 'owl:|onProperty|))
+             (or (name (slot-value obj 'owl:|someValuesFrom|))
                  :anonymous))))
         (t (call-next-method))))
 
-(defmethod name ((object owl:someValuesFromRestriction))
+(defmethod name ((object owl:|someValuesFromRestriction|))
   (cond ((and (slot-boundp object 'excl::name) (slot-value object 'excl::name)))
-        (t (cons 'owl:someValuesFromRestriction
-                 (mapcar #'name (mklist (slot-value object 'owl:someValuesFrom)))))))
+        (t (cons 'owl:|someValuesFromRestriction|
+                 (mapcar #'name (mklist (slot-value object 'owl:|someValuesFrom|)))))))
 
-(defclass owl:hasValueRestriction (owl:Restriction) () (:metaclass rdfs:Class))
-(defmethod print-object ((obj owl:hasValueRestriction) stream)
-  (cond ((and (slot-exists-p obj 'owl:onProperty)
-              (name (slot-value obj 'owl:onProperty))
-              (slot-exists-p obj 'owl:hasValue))
+(defclass owl:|hasValueRestriction| (owl:|Restriction|) () (:metaclass rdfs:|Class|))
+(defmethod print-object ((obj owl:|hasValueRestriction|) stream)
+  (cond ((and (slot-exists-p obj 'owl:|onProperty|)
+              (name (slot-value obj 'owl:|onProperty|))
+              (slot-exists-p obj 'owl:|hasValue|))
          (print-unreadable-object (obj stream :type nil)
-           (format stream "~SÅﬂ{~S}"
-             (name (slot-value obj 'owl:onProperty))
-             (cond ((slot-boundp obj 'owl:hasValue)
-                    (let ((x (slot-value obj 'owl:hasValue)))
+           (format stream "~S  {~S}"
+             (name (slot-value obj 'owl:|onProperty|))
+             (cond ((slot-boundp obj 'owl:|hasValue|)
+                    (let ((x (slot-value obj 'owl:|hasValue|)))
                       (cond ((eq x t) t)
                             ((eq x nil) nil)
                             ((excl::standard-instance-p x)
@@ -350,25 +331,25 @@ and instance of owl:Class."))
                    (t :unbound)))))
         (t (call-next-method))))
 
-(defmethod name ((object owl:hasValueRestriction))
+(defmethod name ((object owl:|hasValueRestriction|))
   (cond ((and (slot-boundp object 'excl::name) (slot-value object 'excl::name)))
-        (t (cons 'owl:hasValueRestriction
-                 (mapcar #'name (mklist (slot-value object 'owl:hasValue)))))))
+        (t (cons 'owl:|hasValueRestriction|
+                 (mapcar #'name (mklist (slot-value object 'owl:|hasValue|)))))))
 
-(defclass owl:cardinalityRestriction (owl:Restriction) () (:metaclass rdfs:Class))
-(defmethod print-object ((obj owl:cardinalityRestriction) stream)
-  (cond ((slot-value obj 'owl:onProperty)
+(defclass owl:|cardinalityRestriction| (owl:|Restriction|) () (:metaclass rdfs:|Class|))
+(defmethod print-object ((obj owl:|cardinalityRestriction|) stream)
+  (cond ((slot-value obj 'owl:|onProperty|)
          (print-unreadable-object (obj stream :type nil)
-           (prin1 (name (slot-value obj 'owl:onProperty)) stream)
-           (and (slot-boundp obj 'owl:minCardinality)
-                (format stream "ÅÜ ~S" (slot-value obj 'owl:minCardinality)))
-           (and (slot-boundp obj 'owl:cardinality)
-                (format stream "= ~S" (slot-value obj 'owl:cardinality)))
-           (and (slot-boundp obj 'owl:maxCardinality)
-                (format stream "ÅÖ ~S" (slot-value obj 'owl:maxCardinality)))))
+           (prin1 (name (slot-value obj 'owl:|onProperty|)) stream)
+           (and (slot-boundp obj 'owl:|minCardinality|)
+                (format stream "   ~S" (slot-value obj 'owl:|minCardinality|)))
+           (and (slot-boundp obj 'owl:|cardinality|)
+                (format stream "= ~S" (slot-value obj 'owl:|cardinality|)))
+           (and (slot-boundp obj 'owl:|maxCardinality|)
+                (format stream "   ~S" (slot-value obj 'owl:|maxCardinality|)))))
         (t (call-next-method))))
 
-(defun owl-cardinality-p (x) (cl:typep x owl:cardinalityRestriction))
+(defun owl-cardinality-p (x) (cl:typep x owl:|cardinalityRestriction|))
 
 ;;;
 ;;;; OneOf class
@@ -377,13 +358,13 @@ and instance of owl:Class."))
 ;;; Note that the domain of owl:oneOf is rdfs:Class. Namely, 
 ;;; The owl:oneOf slot definition is attached to rdfs:Class.
 (excl:without-redefinition-warnings
-(defmethod print-object ((obj rdfs:Class) stream)
+(defmethod print-object ((obj rdfs:|Class|) stream)
   (cond ((and (slot-boundp obj 'excl::name)
               (slot-value obj 'excl::name))
          (print-unreadable-object (obj stream :type t)
            (prin1 (slot-value obj 'excl::name) stream)))
-        ((slot-boundp obj 'owl:oneOf)
-         (let ((ones (slot-value obj 'owl:oneOf)))
+        ((slot-boundp obj 'owl:|oneOf|)
+         (let ((ones (slot-value obj 'owl:|oneOf|)))
            (print-unreadable-object (obj stream :type t)
              (when (and (slot-boundp obj 'excl::name)
                         (slot-value obj 'excl::name))
@@ -409,8 +390,8 @@ and instance of owl:Class."))
 (defun owl-oneof-p (x)
   "Is this <x> an object that holds owl:oneOf data?"
   (and (rdf-class-p x)
-       (slot-exists-p x 'owl:oneOf)
-       (slot-boundp x 'owl:oneOf)
+       (slot-exists-p x 'owl:|oneOf|)
+       (slot-boundp x 'owl:|oneOf|)
        ))
 )
 
@@ -445,7 +426,7 @@ and instance of owl:Class."))
 ;;; with <subsumed-p> and <owl-equivalent-p>. 
 
 (excl:without-redefinition-warnings
-(defmethod excl::compute-effective-slot-definition-initargs ((class rdfs:Class) direct-slotds)
+(defmethod excl::compute-effective-slot-definition-initargs ((class rdfs:|Class|) direct-slotds)
   (declare (optimize (speed 3) (safety 0)))
   (let ((initargs (call-next-method)))
     (let ((type (getf initargs ':type)))
@@ -484,8 +465,8 @@ and instance of owl:Class."))
                ;; get maximum minc over slotds
                (cond ((and minc slotd-minc) (setq minc (max slotd-minc minc)))
                      (slotd-minc (setq minc slotd-minc)))
-               (when (and slotd-initfunc (property? slot-name) (find-class 'owl:TransitiveProperty nil))
-                 (cond ((cl:typep (symbol-value slot-name) (find-class 'owl:TransitiveProperty))
+               (when (and slotd-initfunc (property? slot-name) (find-class 'owl:|TransitiveProperty| nil))
+                 (cond ((cl:typep (symbol-value slot-name) (find-class 'owl:|TransitiveProperty|))
                         (cond ((and initform slotd-initform)
                                (cond ((and (consp initform) (consp slotd-initform))
                                       (error "Not Yet!"))
@@ -565,8 +546,8 @@ and instance of owl:Class."))
                slotd-initfunc = (mop:slot-definition-initfunction slotd) and
                slotd-initform = (mop:slot-definition-initform slotd)
              do
-               (when (and slotd-initfunc (property? slot-name) (find-class 'owl:TransitiveProperty nil))
-                 (cond ((cl:typep (symbol-value slot-name) (find-class 'owl:TransitiveProperty))
+               (when (and slotd-initfunc (property? slot-name) (find-class 'owl:|TransitiveProperty| nil))
+                 (cond ((cl:typep (symbol-value slot-name) (find-class 'owl:|TransitiveProperty|))
                         (cond ((and initform slotd-initform)
                                (cond ((and (consp initform) (consp slotd-initform))
                                       (error "Not Yet!"))
@@ -638,7 +619,7 @@ and instance of owl:Class."))
 ;;; If <initargs> in making an effective-slot-definition includes :maxcardinality or 
 ;;; :mincardinality keyword, the slot-definition must be OwlProperty-direct-slot-definition.
 (excl:without-redefinition-warnings
-(defmethod mop:effective-slot-definition-class ((class rdfs:Class) &rest initargs)
+(defmethod mop:effective-slot-definition-class ((class rdfs:|Class|) &rest initargs)
   "This method calls next method if there is no :maxcardinality keyword in <initargs>."
   (cond ((member :maxcardinality initargs)
          (find-class 'OwlProperty-effective-slot-definition))
@@ -688,7 +669,7 @@ and instance of owl:Class."))
                           (cond ((typep filler type) t) ; nothing done
                                 ((eq (type-of filler) '|rdfs:Resource|)
                                  (change-class filler type))
-                                ((eq (type-of filler) 'rdfs:Resource)
+                                ((eq (type-of filler) 'rdfs:|Resource|)
                                  (change-class filler type))
                                 ((subsumed-p type (class-of filler))
                                  (warn "Range entail of ~S: change class of ~S to ~S." R filler type)
@@ -708,7 +689,7 @@ and instance of owl:Class."))
                            (cond ((typep filler (forall-filler type)) t) ; nothing done
                                  ((eq (type-of filler) '|rdfs:Resource|)
                                   (change-class filler (forall-filler type)))
-                                 ((eq (type-of filler) 'rdfs:Resource)
+                                 ((eq (type-of filler) 'rdfs:|Resource|)
                                   (change-class filler (forall-filler type)))
                                  ((subsumed-p (forall-filler type) (class-of filler))
                                   (warn "allValuesFrom entailment: change class ~S to ~S."
@@ -781,7 +762,7 @@ and instance of owl:Class."))
                    (t (error "Not Yet!"))))
             (t (typecase type
                  (null nil)
-                 (rdfs:Class (cond ((atom y) (range-satisfy y))
+                 (rdfs:|Class| (cond ((atom y) (range-satisfy y))
                                    (t (mapc #'(lambda (fil) (range-satisfy fil)) y))))
                  (forall (cond ((atom y) (forall-satisfy y))
                                (t (mapc #'(lambda (fil) (forall-satisfy fil)) y))))
@@ -794,9 +775,9 @@ and instance of owl:Class."))
                           (t (mapc #'(lambda (fil) (range-satisfy fil)) y))))))))))
 ) ; end of excl:without-redefinition-warnings
 
-(defProperty owl:complementOf)
-(defConcept owl:Ontology)
-(defProperty owl:unionOf)
+(defProperty owl:|complementOf|)
+(defConcept owl:|Ontology|)
+(defProperty owl:|unionOf|)
 
 ;;;
 ;;;; Default Super Class in OWL
@@ -808,27 +789,27 @@ and instance of owl:Class."))
 ;;; this rule must be defined before reading the OWL file.
 
 ;; rule1a and rule1b by Seiji
-(defmethod excl::default-direct-superclasses ((class owl:Class))
-  (list (load-time-value (find-class 'owl:Thing))))
+(defmethod excl::default-direct-superclasses ((class owl:|Class|))
+  (list (load-time-value (find-class 'owl:|Thing|))))
 
-(defmethod make-instance :around ((class (eql owl:Class)) &rest initargs)
+(defmethod make-instance :around ((class (eql owl:|Class|)) &rest initargs)
   (cond ((notany #'(lambda (cls)
-                     (cl:subtypep cls (load-time-value owl:Thing)))
+                     (cl:subtypep cls (load-time-value owl:|Thing|)))
                  (getf initargs :direct-superclasses))
          (setf (getf initargs :direct-superclasses)
            (append (getf initargs :direct-superclasses)
-                   (list (load-time-value owl:Thing))))
+                   (list (load-time-value owl:|Thing|))))
          (apply #'call-next-method class initargs))
         (t (call-next-method)))
   )
 
-(defmethod change-class :around ((from rdfs:Class) (to owl:Thing) &rest initargs)
+(defmethod change-class :around ((from rdfs:|Class|) (to owl:|Thing|) &rest initargs)
   "This is happen when <from> is class in RDF and it is changed into OWL."
   (when (eq from to)
     (error "Changing class of ~S to itself, membership loop happend!" from)
     (return-from change-class from))
   (format t "~%Changing(rdfs:Class owl:Thing) ~S to ~S" from to)
-  (apply #'change-class from (find-class 'owl:Class) initargs)
+  (apply #'change-class from (find-class 'owl:|Class|) initargs)
   ;; then from is typed to owl:Thing through owl:Class.
   )
 
@@ -841,79 +822,79 @@ and instance of owl:Class."))
 (defProperty owl::priorVersion)     ; just for suppression of entailment warning
 
 (eval-when (:load-toplevel)
-  (let ((*default-pathname-defaults* *load-pathname*))
-    (read-rdf-file #'addRdfXml "OWL:OWL.rdf")))
+  (read-rdf-file #'addRdfXml "OWL:OWL.rdf"))
+
 ;;; ==================================================================================
 ;;;
 ;;; Note that 
-;;; (rdfs:Class owl:FunctionalProperty (rdfs:subClassOf rdf:Property))
-;;; (rdfs:Class owl:InverseFunctionalProperty  (rdfs:subClassOf owl:ObjectProperty))
+;;; (rdfs:|Class| owl:FunctionalProperty (rdfs:|subClassOf| rdf:|Property|))
+;;; (rdfs:|Class| owl:InverseFunctionalProperty  (rdfs:|subClassOf| owl:ObjectProperty))
 ;;;
 ;;; Then, we add owl:Functional&InverseFunctionalProperty
 ;;;
-(addClass `(,rdfs:Class) '|owl:FunctionalProperty|
-          `(,(symbol-value 'owl:FunctionalProperty) ,(symbol-value 'owl:ObjectProperty)))
-(addClass `(,rdfs:Class) 'owl::Functional&InverseFunctionalProperty
-          `(,(symbol-value '|owl:FunctionalProperty|) ,(symbol-value 'owl:InverseFunctionalProperty)))
+(addClass `(,rdfs:|Class|) '|owl:FunctionalProperty|
+          `(,(symbol-value 'owl:|FunctionalProperty|) ,(symbol-value 'owl:|ObjectProperty|)))
+(addClass `(,rdfs:|Class|) 'owl::Functional&InverseFunctionalProperty
+          `(,(symbol-value '|owl:FunctionalProperty|) ,(symbol-value 'owl:|InverseFunctionalProperty|)))
 
 ;;;; We add some new axioms for OWL.
 ;;;
 
-;;; For OWL Full, an owl class also inherit owl:Thing
-(addClass `(,(class-of owl:Class)) 'owl:Class `(,owl:Thing) ())
+;;; For OWL Full, an owl class also inherit owl:|Thing|
+(addClass `(,(class-of owl:|Class|)) 'owl:|Class| `(,owl:|Thing|) ())
 #|
 (apply #'mop:ensure-class-using-class (find-class 'shadowed-class) 'shadowed-class
-       :direct-superclasses `(,owl:Class)
+       :direct-superclasses `(,owl:|Class|)
        :metaclass (class-of (find-class 'shadowed-class))
        ())
 |#
 (reinitialize-instance
- (symbol-value 'owl:allValuesFrom)
- 'rdfs:domain (load-time-value (symbol-value 'owl:allValuesFromRestriction)))
+ (symbol-value 'owl:|allValuesFrom|)
+ 'rdfs:|domain| (load-time-value (symbol-value 'owl:|allValuesFromRestriction|)))
 (reinitialize-instance
- (symbol-value 'owl:someValuesFrom)
- 'rdfs:domain (load-time-value (symbol-value 'owl:someValuesFromRestriction)))
+ (symbol-value 'owl:|someValuesFrom|)
+ 'rdfs:|domain| (load-time-value (symbol-value 'owl:|someValuesFromRestriction|)))
 (reinitialize-instance 
- (symbol-value 'owl:hasValue)
- 'rdfs:domain (load-time-value (symbol-value 'owl:hasValueRestriction)))
+ (symbol-value 'owl:|hasValue|)
+ 'rdfs:|domain| (load-time-value (symbol-value 'owl:|hasValueRestriction|)))
 (reinitialize-instance 
- (symbol-value 'owl:minCardinality)
- 'rdfs:domain (load-time-value (symbol-value 'owl:cardinalityRestriction)))
+ (symbol-value 'owl:|minCardinality|)
+ 'rdfs:|domain| (load-time-value (symbol-value 'owl:|cardinalityRestriction|)))
 (reinitialize-instance 
- (symbol-value 'owl:maxCardinality)
- 'rdfs:domain (load-time-value (symbol-value 'owl:cardinalityRestriction)))
+ (symbol-value 'owl:|maxCardinality|)
+ 'rdfs:|domain| (load-time-value (symbol-value 'owl:|cardinalityRestriction|)))
 (reinitialize-instance 
- (symbol-value 'owl:cardinality)
- 'rdfs:domain (load-time-value (symbol-value 'owl:cardinalityRestriction)))
+ (symbol-value 'owl:|cardinality|)
+ 'rdfs:|domain| (load-time-value (symbol-value 'owl:|cardinalityRestriction|)))
 (eval-when (:execute :load-toplevel)
   (let ((slots
-         (remove 'owl:allValuesFrom
-                 (remove 'owl:hasValue
-                         (remove 'owl:someValuesFrom
-                                 (remove 'owl:minCardinality
-                                         (remove 'owl:maxCardinality
-                                                 (remove 'owl:cardinality
-                                                         (mop:class-direct-slots owl:Restriction)
+         (remove 'owl:|allValuesFrom|
+                 (remove 'owl:|hasValue|
+                         (remove 'owl:|someValuesFrom|
+                                 (remove 'owl:|minCardinality|
+                                         (remove 'owl:|maxCardinality|
+                                                 (remove 'owl:|cardinality|
+                                                         (mop:class-direct-slots owl:|Restriction|)
                                                          :key #'name)
                                                  :key #'name)
                                          :key #'name)
                                  :key #'name)
                          :key #'name)
                  :key #'name)))
-    (slot-makunbound owl:Restriction 'excl::direct-slots)
-    (setf (mop:class-direct-slots owl:Restriction) slots)
+    (slot-makunbound owl:|Restriction| 'excl::direct-slots)
+    (setf (mop:class-direct-slots owl:|Restriction|) slots)
     )
   )
 
-(reinitialize-instance (load-time-value (symbol-value 'owl:Thing))
-                       :complement-class (load-time-value (symbol-value 'owl:Nothing))
-                       :different-from (list (load-time-value (symbol-value 'owl:Nothing)))
-                       :disjoint-classes (list (load-time-value (symbol-value 'owl:Nothing))))
+(reinitialize-instance (load-time-value (symbol-value 'owl:|Thing|))
+                       :complement-class (load-time-value (symbol-value 'owl:|Nothing|))
+                       :different-from (list (load-time-value (symbol-value 'owl:|Nothing|)))
+                       :disjoint-classes (list (load-time-value (symbol-value 'owl:|Nothing|))))
 
-(reinitialize-instance (load-time-value (symbol-value 'owl:Nothing))
-                       :complement-class (load-time-value (symbol-value 'owl:Thing))
-                       :different-from (list (load-time-value (symbol-value 'owl:Thing)))
-                       :disjoint-classes (list (load-time-value (symbol-value 'owl:Thing))))
+(reinitialize-instance (load-time-value (symbol-value 'owl:|Nothing|))
+                       :complement-class (load-time-value (symbol-value 'owl:|Thing|))
+                       :different-from (list (load-time-value (symbol-value 'owl:|Thing|)))
+                       :disjoint-classes (list (load-time-value (symbol-value 'owl:|Thing|))))
 
 ;;;
 ;;;; %addForm for OWL
@@ -931,16 +912,16 @@ and instance of owl:Class."))
   (case role
     ((nil) nil)
     ((t) nil)
-    ((owl:intersectionOf owl:unionOf)
+    ((owl:|intersectionOf| owl:|unionOf|)
      ;; The range of these properties is rdf:List, but the range constraint should be owl:Class 
      ;; for list elements.
-     owl:Class)
-    ((owl:oneOf) rdfs:Resource)
-    ((owl:distinctMembers) owl:Thing)
+     owl:|Class|)
+    ((owl:|oneOf|) rdfs:|Resource|)
+    ((owl:|distinctMembers|) owl:|Thing|)
     (otherwise 
      (when (boundp role)
        (let ((range (get-range (symbol-value role))))
-         (if (eql range rdf:List) rdfs:Resource range))))))
+         (if (eql range rdf:|List|) rdfs:|Resource| range))))))
 )
 
 ;;
@@ -956,15 +937,15 @@ and instance of owl:Class."))
     (excl::.program-error "validate-metaclass-change forbids changing the class of ~s to ~s"
                           from to)))
 
-(defmethod change-class :after ((class rdfs:Class) (new-class (eql owl:Class))  &rest initargs)
+(defmethod change-class :after ((class rdfs:|Class|) (new-class (eql owl:|Class|))  &rest initargs)
   (declare (ignore initargs))
-  (unless (cl:subtypep class (load-time-value owl:Thing))
-    (reinitialize-instance class :direct-superclasses `(,(load-time-value owl:Thing)))))
+  (unless (cl:subtypep class (load-time-value owl:|Thing|))
+    (reinitialize-instance class :direct-superclasses `(,(load-time-value owl:|Thing|)))))
 
-(defmethod change-class :after ((class rdfs:Class) (new-class owl:Class)  &rest initargs)
+(defmethod change-class :after ((class rdfs:|Class|) (new-class owl:|Class|)  &rest initargs)
   (declare (ignore initargs))
-  (unless (cl:subtypep class (load-time-value owl:Thing))
-    (reinitialize-instance class :direct-superclasses `(,(load-time-value owl:Thing)))))
+  (unless (cl:subtypep class (load-time-value owl:|Thing|))
+    (reinitialize-instance class :direct-superclasses `(,(load-time-value owl:|Thing|)))))
 
 ;; End of module
 ;; --------------------------------------------------------------------

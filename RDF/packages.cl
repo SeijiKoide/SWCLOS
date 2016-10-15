@@ -19,7 +19,7 @@
 
 (cl:defpackage :xsd
   (:nicknames :xs)
-  (:use ) ; supressing using common lisp package
+  (:use puri) ; supressing using common lisp package
   (:export "string" "boolean" "decimal" "float" "double" "dataTime" "time" "date"
            "gYearMonth" "gYear" "gMonthDay" "gDay" "gMonth" "hexBinary" "base64Binary"
            "anyURI" "normallizedString" "token" "language" "NMTOKEN" "Name" "NCName"
@@ -32,43 +32,47 @@
 
 (cl:defpackage :dc
   (:use ) ; supressing using common lisp package
-  (:export "contributor" "coverage" "creator" "date" "description" "format" "identifier" 
+  (:export "contributor" "coverage" "creator" "date" "description" "format" "identifier"
            "language" "publisher" "relation" "rights" "source" "subject" "title" "type"))
 
 (cl:defpackage :rdf
   (:use ) ; supressing using common lisp package
-  (:export about
-           XMLDatatype 
-           inLang 
-           resource ID parseType datatype nodeID
-           Property List Statement subject predicate object 
-           Bag Seq Alt value li XMLDecl RDF Description type
-           nil first rest XMLLiteral XMLLiteral-equal
-           _1 _2 _3 _4 _5 _6 _7 _8 _9
-           type-p subclass-p
-           PlainLiteral)
+  (:export "about"
+           "XMLDatatype"
+           "inLang"
+           "resource" "ID" "parseType" "datatype" "nodeID"
+           "Property" "List" "Statement" "subject" "predicate" "object" 
+           "Bag" "Seq" "Alt" "value" "li" "XMLDecl" RDF "Description" "type"
+           "nil" "first" "rest" "XMLLiteral" "XMLLiteral-equal" "PlainLiteral"
+           _1 _2 _3 _4 _5 _6 _7 _8 _9)
   (:documentation "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
 
 (cl:defpackage :rdfs
   (:use ) ; supressing using common lisp package
-  (:export Resource Class subClassOf subPropertyOf seeAlso domain range
-           isDefinedBy range domain Literal Container label comment member
-           ContainerMembershipProperty Datatype)
+  (:export "Resource" "Class" "subClassOf" "subPropertyOf" "seeAlso" "domain" "range"
+           "isDefinedBy" "range" "domain" "Literal" "Container" "label" "comment" "member"
+           "ContainerMembershipProperty" "Datatype")
   (:documentation "http://www.w3.org/2000/01/rdf-schema#"))
 
 (defpackage :owl
+    (:nicknames |owl|)
     (:use ) ; supressing using common lisp package
-    (:export Class Thing Nothing Restriction onProperty allValuesFrom someValuesFrom hasValue
-             minCardinality maxCardinality cardinality
-             allValuesFromRestriction someValuesFromRestriction hasValueRestriction 
-             cardinalityRestriction Ontology
-             oneOf differentFrom sameAs AllDifferent distinctMembers equivalentClass
-             TransitiveProperty ObjectProperty DatatypeProperty FunctionalProperty 
-             InverseFunctionalProperty SymmetricProperty inverseOf
-             intersectionOf unionOf disjointWith complementOf equivalentProperty
-             describe-slot-constraint 
-             DataRange DeprecatedProperty DeprecatedClass incompatibleWith backwardCompatibleWith
-             priorVersion versionInfo imports OntologyProperty AnnotationProperty
+    (:export "Class" "Thing" "Nothing" "Restriction" "onProperty" "allValuesFrom" "someValuesFrom" "hasValue"
+             "minCardinality" "maxCardinality" "cardinality"
+             "allValuesFromRestriction" "someValuesFromRestriction" "hasValueRestriction"
+             "cardinalityRestriction" "Ontology"
+             "oneOf" "differentFrom" "sameAs" "AllDifferent" "distinctMembers" "equivalentClass"
+             "TransitiveProperty" "ObjectProperty" "DatatypeProperty" "FunctionalProperty"
+             "InverseFunctionalProperty" "SymmetricProperty" "inverseOf"
+             "intersectionOf" "unionOf" "disjointWith" "complementOf" "equivalentProperty"
+             "describe-slot-constraint"
+             "DataRange" "DeprecatedProperty" "DeprecatedClass" "incompatibleWith" "backwardCompatibleWith"
+             "priorVersion" "versionInfo" "imports" "OntologyProperty" "AnnotationProperty"
              )
   ;; documentation is supplied from OWL.RDF file.
   )
+
+(defpackage :gx
+  (:use :common-lisp :puri)
+  (:shadow typep subtypep type-of)
+  (:documentation "http://www.TopOntologies.com/tools/SWCLOS#"))

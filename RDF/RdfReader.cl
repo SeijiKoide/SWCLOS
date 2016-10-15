@@ -8,8 +8,8 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan,
 ;;;
-;;; Copyright © 2002,2004 by Galaxy Express Corporation, Japan.
-;;; Copyright 2008-2009 Seiji Koide.
+;;; Copyright (c) 2002,2004 by Galaxy Express Corporation, Japan.
+;;; Copyright (c) 2008-2009 Seiji Koide.
 ;;;
 ;; History
 ;; -------
@@ -17,17 +17,13 @@
 ;; 2008.08.12    Revised based on http://www.w3.org/TR/2004/REC-rdf-syntax-grammar-20040210/
 ;; 2004.05.09    File created and contents are copied from Rdf.cl
 
-(cl:provide :rdfreader)
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :rdfparser)
   )
 
-(cl:defpackage :gx
-  (:export read-rdf-file lang-tag-char-p read-lang-tag read-type-tag)
-  )
-
 (in-package :gx)
+
+(export '(read-rdf-file lang-tag-char-p read-lang-tag read-type-tag))
 
 ;;
 ;; Description structure to S-expression form
@@ -40,9 +36,9 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     (null nil)
     (string (list x))
     (number (list x))
-    (xsd:anySimpleType (list x))
-    (rdfs:Literal (list x))
-    (rdf:Description (list (Description-form x)))
+    (xsd:|anySimpleType| (list x))
+    (rdfs:|Literal| (list x))
+    (rdf:|Description| (list (|Description|-form x)))
     (comment nil) ; depress comment
     (cons (mapcan #'make-form x))))
 
@@ -50,9 +46,9 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
   (let ((name (prop-name prop))
         (atts (prop-att&vals prop))
         (value (prop-value prop)))
-    (let ((resource (getf atts 'rdf:resource))
-          (nodeID (getf atts 'rdf:nodeID))
-          (datatype (getf atts 'rdf:datatype))
+    (let ((resource (getf atts 'rdf:|resource|))
+          (nodeID (getf atts 'rdf:|nodeID|))
+          (datatype (getf atts 'rdf:|datatype|))
           (lang (getf atts 'xml:lang)))
       (cond (nodeID
              (assert (null resource) () "resource cannot be placed with nodeID.")
@@ -95,31 +91,31 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                           (make-form value))))
             (t (cons name (make-form value)))))))
 
-(defun Description-form (description)
+(defun |Description|-form (description)
   "generates S-exression of <description>."
-  (%Description-form (Description-tag description)
-                     (Description-att&vals description)
-                     (Description-elements description)))
+  (%Description-form (|Description|-tag description)
+                     (|Description|-att&vals description)
+                     (|Description|-elements description)))
 
 (defun %Description-form (class attrs props)
   "generates S-expression from <class>, <attrs>, and <props>.
    <class> is a QName symbol that indicates type tag in RDF/XML.
    <attrs> are a attribute/value list for attributes in RDF/XML.
    <props> are a property/value list for properties in RDF/XML."
-  (let ((about (getf attrs 'rdf:about))
-        (id (getf attrs 'rdf:ID))
-        (nodeID (getf attrs 'rdf:nodeID))
+  (let ((about (getf attrs 'rdf:|about|))
+        (id (getf attrs 'rdf:|ID|))
+        (nodeID (getf attrs 'rdf:|nodeID|))
         (lang (getf attrs 'xml:lang))
         (slots (loop for prop in props when (prop-p prop) collect (prop-form prop))))
     (when about
       (setq about (cond (*base-uri*
-                         (net.uri:merge-uris (net.uri:parse-uri about) 
-                                             (net.uri:parse-uri
-                                              (net.uri:render-uri *base-uri* nil))))
+                         (merge-uris (parse-uri about) 
+                                             (parse-uri
+                                              (render-uri *base-uri* nil))))
                         (*default-namespace* (unless (typep *default-namespace* 'uri-namedspace)
                                                (set-uri-namedspace
-                                                (net.uri:merge-uris (net.uri:parse-uri about)
-                                                                    (net.uri:parse-uri
+                                                (merge-uris (parse-uri about)
+                                                                    (parse-uri
                                                                      #+:mswindows
                                                                      (let ((path (pathname *default-namespace*)))
                                                                        (substitute
@@ -131,28 +127,28 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                                                      #-:mswindows
                                                                      (namestring *default-namespace*))
                                                                     ))))
-                        (t (net.uri:parse-uri about))))
-      (remf attrs 'rdf:about))
+                        (t (parse-uri about))))
+      (remf attrs 'rdf:|about|))
     ;(format t "~%about:~S" about)
     (when id
-      (setq id (net.uri:copy-uri (net.uri:parse-uri
-                                  (net.uri:render-uri
+      (setq id (copy-uri (parse-uri
+                                  (render-uri
                                    (or *base-uri* *default-namespace*) nil))
                                  :fragment id))
-      (remf attrs 'rdf:ID))
+      (remf attrs 'rdf:|ID|))
     (when nodeID
       (setq nodeID (nodeID2symbol nodeID))
-      (remf attrs 'rdf:nodeID))
+      (remf attrs 'rdf:|nodeID|))
     (when lang
       (when (stringp lang) (setq lang (intern lang "keyword")))
       (remf attrs 'xml:lang))
     (setq attrs (loop for (prop val) on attrs by #'cddr
-                    collect (cond ((and (boundp prop) (cl:typep (symbol-value prop) 'rdf:Property))
+                    collect (cond ((and (boundp prop) (cl:typep (symbol-value prop) 'rdf:|Property|))
                                    (let ((range (get-range (symbol-value prop))))
                                      (cond ((null range) (list prop val))
                                            ((and (symbolp range)
                                                  (boundp range)
-                                                 (cl:typep (symbol-value range) 'rdfs:Datatype))
+                                                 (cl:typep (symbol-value range) 'rdfs:|Datatype|))
                                             (list prop (read-as-datatype val range)))
                                            (t (list prop val)))))
                                   (t (list prop val)))))
@@ -161,8 +157,8 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
     ;(format t "~%attrs:~S" attrs)
     ;(when (and (stringp about) (zerop (length about)))
     ;  (setq about *base-uri*))
-    (cons class (cond (about (cons `(rdf:about ,about) (append attrs slots)))
-                      (id (cons `(rdf:ID ,(uri2symbol id)) (append attrs slots)))
+    (cons class (cond (about (cons `(rdf:|about| ,about) (append attrs slots)))
+                      (id (cons `(rdf:|ID| ,(uri2symbol id)) (append attrs slots)))
                       (t (append attrs slots))))))
 
 ;;;; Producer-Consumer Model
@@ -221,7 +217,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 ;;; Offically, Semantic Webs are regarded as an open world. Namely, it is regarded that you cannot know all 
 ;;; knowledge about the world. The limited capability of agent cannot exhaust almost infinite WWW world.  
 ;;; It is called Open World Assumption (OWA) in Sematic Webs. However, this assumption produces less results 
-;;; in reasoning, especially with respect to the existential value restriction of property or owl:someValuesFrom. 
+;;; in reasoning, especially with respect to the existential value restriction of property or owl:|someValuesFrom|. 
 ;;; Rigorous OWA does not infer anything on existential restrictions, even if you add a slot value that does 
 ;;; not satisfy an existenitially restriction into the slot in OWL, because a satisfiable value may be defined at 
 ;;; another place in WWW, where you do not know. 
@@ -265,7 +261,7 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
                                      nil)
                                     ((comment-p element)
                                      nil)
-                                    ((Description-p element)
+                                    ((|Description|-p element)
                                      (let ((*base-uri* *base-uri*)
                                            (*default-namespace* *default-namespace*))
                                        (funcall accepter-fun element)))
@@ -278,22 +274,22 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 (eval-when (:execute :load-toplevel)
   (setq *defined-resources*
         (mapcar #'(lambda (x) `(,x line nil))
-          '(rdfs:Resource rdfs:Literal rdf:Property rdfs:label 
-            rdfs:comment rdfs:isDefinedBy rdfs:domain rdfs:range rdfs:subClassOf 
-            rdfs:subPropertyOf rdfs:seeAlso rdfs:isDefinedBy rdfs:Class rdf:type rdfs:Container 
-            rdf:predicate rdf:subject rdf:object rdf:Statement rdfs:Datatype rdf:XMLLiteral 
-            rdf:List rdf:nil rdf:first rdf:rest rdf:value xsd:anySimpleType xsd:boolean 
-            xsd:anyURI xsd:string xsd:float xsd:double xsd:unsignedByte xsd:unsignedShort  
-            xsd:unsignedInt xsd:unsignedLong xsd:decimal xsd:integer xsd:long xsd:int 
-            xsd:short xsd:byte xsd:nonNegativeInteger xsd:positiveInteger 
-            xsd:nonPositiveInteger xsd:negativeInteger
-            xsd:duration
-            owl:DataRange owl:DeprecatedProperty owl:DeprecatedClass owl:incompatibleWith owl:backwardCompatibleWith
-                         owl:priorVersion owl:versionInfo owl:imports owl:OntologyProperty owl:Ontology 
-                         owl:AnnotationProperty owl:InverseFunctionalProperty owl:FunctionalProperty owl:SymmetricProperty 
-                         owl:TransitiveProperty owl:inverseOf owl:DatatypeProperty owl:ObjectProperty 
-                         owl:cardinality owl:maxCardinality owl:minCardinality owl:someValuesFrom owl:hasValue 
-                         owl:allValuesFrom owl:onProperty )))
+          '(rdfs:|Resource| rdfs:|Literal| rdf:|Property| rdfs:|label| 
+            rdfs:|comment| rdfs:|isDefinedBy| rdfs:|domain| rdfs:|range| rdfs:|subClassOf| 
+            rdfs:|subPropertyOf| rdfs:|seeAlso| rdfs:|isDefinedBy| rdfs:|Class| rdf:|type| rdfs:|Container| 
+            rdf:|predicate| rdf:|subject| rdf:|object| rdf:|Statement| rdfs:|Datatype| rdf:|XMLLiteral| 
+            rdf:|List| rdf:|nil| rdf:|first| rdf:|rest| rdf:|value| xsd:|anySimpleType| xsd:|boolean| 
+            xsd:|anyURI| xsd:|string| xsd:|float| xsd:|double| xsd:|unsignedByte| xsd:|unsignedShort|  
+            xsd:|unsignedInt| xsd:|unsignedLong| xsd:|decimal| xsd:|integer| xsd:|long| xsd:|int| 
+            xsd:|short| xsd:|byte| xsd:|nonNegativeInteger| xsd:|positiveInteger| 
+            xsd:|nonPositiveInteger| xsd:|negativeInteger|
+            xsd:|duration|
+            owl:|DataRange| owl:|DeprecatedProperty| owl:|DeprecatedClass| owl:|incompatibleWith| owl:|backwardCompatibleWith|
+            owl:|priorVersion| owl:|versionInfo| owl:|imports| owl:|OntologyProperty| owl:|Ontology| 
+            owl:|AnnotationProperty| owl:|InverseFunctionalProperty| owl:|FunctionalProperty| owl:|SymmetricProperty| 
+            owl:|TransitiveProperty| owl:|inverseOf| owl:|DatatypeProperty| owl:|ObjectProperty| 
+            owl:|cardinality| owl:|maxCardinality| owl:|minCardinality| owl:|someValuesFrom| owl:|hasValue| 
+            owl:|allValuesFrom| owl:|onProperty|)))
   )
 
 (defun read-rdf-file (accepter-fun &optional (file (ask-user-rdf-file)) (code :default))
@@ -479,3 +475,5 @@ This function returns a S-expression of <x>. If <x> is a comment, nil is returne
 
 ;; End of module
 ;; --------------------------------------------------------------------
+
+(cl:provide :rdfreader)

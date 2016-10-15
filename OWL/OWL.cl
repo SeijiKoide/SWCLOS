@@ -22,10 +22,6 @@
   (require :rdfscore)
   )
 
-(defpackage :gx
-  (:use :common-lisp)
-  (:export            ))
-
 (in-package :gx)
 
 ;;; <owl-equalp> checks the equality of objects in OWL, namely it returns t, if 
@@ -55,7 +51,7 @@
                ((and (owl-restriction-p x) (owl-restriction-p y))
                 (%owl-restriction-equal x y))
                ((and (owl-oneof-p x) (owl-oneof-p y))
-                (%oneof-equivalent (slot-value x 'owl:oneOf) (slot-value y 'owl:oneOf)))
+                (%oneof-equivalent (slot-value x 'owl:|oneOf|) (slot-value y 'owl:|oneOf|)))
                ;; sameAs? See rdfp6, rdfp7
                ((member x (same-as-of y) :test #'(lambda (a b) (%owl-same-p a b))) t)
                ;; differentFrom?
@@ -79,14 +75,14 @@
          (owl-equalp (symbol-value x) (symbol-value y)))
         ((and (symbolp x) (object? x)) (owl-equalp (symbol-value x) y))
         ((and (symbolp y) (object? y)) (owl-equalp x (symbol-value y)))
-        ((and (net.uri:uri-p x) (net.uri:uri-p y) (uri= x y))) ; or go through next
+        ((and (uri-p x) (uri-p y) (uri= x y))) ; or go through next
         ((and (iri-p x) (iri-p y))                             ; uri-string different but
          (cond ((and *nonUNA* (iri-boundp x) (iri-boundp y))   ; if nonUNA and has value
                 (rdf-equalp (iri-value x) (iri-value y)))      ; then check values
                (t nil)))                                    ; else different uri means different
         ((and (iri-p x) (iri-boundp x)) (owl-equalp (iri-value x) y))
         ((and (iri-p y) (iri-boundp y)) (owl-equalp x (iri-value y)))
-        ((and (cl:typep x 'rdf:inLang) (cl:typep y 'rdf:inLang))
+        ((and (cl:typep x 'rdf:|inLang|) (cl:typep y 'rdf:|inLang|))
          ;; see, http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#section-Graph-Literal
          (and (equalp (string (lang x)) (string (lang y))) (string= (content x) (content y))))
         ((and (consp x) (consp y))
@@ -178,29 +174,29 @@
 #|
 (defConcept Person)
 (defConcept Doctor
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasMedicalBranch)
-                                         (owl:someValuesFrom MedicalBranch))))
-(defConcept Doctor* (rdfs:subClassOf Person))
-(defProperty hasMedicalBranch (rdfs:domain Doctor*) (rdfs:range MedicalBranch))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasMedicalBranch)
+                                         (owl:|someValuesFrom| MedicalBranch))))
+(defConcept Doctor* (rdfs:|subClassOf| Person))
+(defProperty hasMedicalBranch (rdfs:|domain| Doctor*) (rdfs:|range| MedicalBranch))
 (defConcept Employee
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasSalary)
-                                         (owl:someValuesFrom Salary))))
-(defConcept Employee* (rdfs:subClassOf Person))
-(defProperty hasSalary (rdfs:domain Employee*) (rdfs:range Salary))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasSalary)
+                                         (owl:|someValuesFrom| Salary))))
+(defConcept Employee* (rdfs:|subClassOf| Person))
+(defProperty hasSalary (rdfs:|domain| Employee*) (rdfs:|range| Salary))
 (defConcept Employer
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasEmployee)
-                                         (owl:someValuesFrom Employee)))
-  (owl:disjointWith Employee))
-(defConcept Employer* (rdfs:subClassOf Person))
-(defProperty hasEmployee (rdfs:domain Employer*) (rdfs:range Employee))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasEmployee)
+                                         (owl:|someValuesFrom| Employee)))
+  (owl:|disjointWith| Employee))
+(defConcept Employer* (rdfs:|subClassOf| Person))
+(defProperty hasEmployee (rdfs:|domain| Employer*) (rdfs:|range| Employee))
 
 (defConcept DoctorAndEmployee
-    (owl:intersectionOf Employee Doctor))
-(defConcept DoctorAndEmployee* (rdf:type owl:Class)
-    (rdfs:subClassOf Employee* Doctor*))
+    (owl:|intersectionOf| Employee Doctor))
+(defConcept DoctorAndEmployee* (rdf:|type| owl:|Class|)
+    (rdfs:|subClassOf| Employee* Doctor*))
 
 (subsumed-p DoctorAndEmployee Doctor)
 (subsumed-p DoctorAndEmployee* Doctor*)
@@ -208,11 +204,11 @@
 (subsumed-p DoctorAndEmployee* Doctor)
 
 (defConcept DoctorAndEmployer
-    (owl:intersectionOf Employer Doctor))
+    (owl:|intersectionOf| Employer Doctor))
 (defConcept DoctorSelfEmployed
-    (owl:intersectionOf Doctor
-                        (owl:Class (owl:complementOf Employee))
-                        (owl:Class (owl:complementOf Employer))))
+    (owl:|intersectionOf| Doctor
+                        (owl:|Class| (owl:|complementOf| Employee))
+                        (owl:|Class| (owl:|complementOf| Employer))))
 
 (subsumed-p DoctorAndEmployee Doctor)
 (subsumed-p DoctorAndEmployee Employee)
@@ -226,38 +222,38 @@
 (disjoint-p DoctorSelfEmployed DoctorAndEmployer)
 (disjoint-p DoctorAndEmployee DoctorAndEmployer)
 
-(defConcept AlbeitDoctor* (rdf:type owl:Class)
-  (rdfs:subClassOf Doctor))
-(defProperty hasSalary (rdfs:domain AlbeitDoctor*) (rdfs:range Salary))
+(defConcept AlbeitDoctor* (rdf:|type| owl:|Class|)
+  (rdfs:|subClassOf| Doctor))
+(defProperty hasSalary (rdfs:|domain| AlbeitDoctor*) (rdfs:|range| Salary))
 
 (subsumed-p AlbeitDoctor* DoctorAndEmployee)
 (subsumed-p DoctorAndEmployee AlbeitDoctor*)
 
 (defConcept AlbeitDoctor 
-    (owl:intersectionOf Doctor
-                        (owl:Restriction (owl:onProperty hasSalary)
-                                         (owl:someValuesFrom Salary))))
+    (owl:|intersectionOf| Doctor
+                        (owl:|Restriction| (owl:|onProperty| hasSalary)
+                                         (owl:|someValuesFrom| Salary))))
 
 (subsumed-p AlbeitDoctor DoctorAndEmployee*)
 (subsumed-p DoctorAndEmployee* AlbeitDoctor)
 
 
 (defConcept Parent
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Person))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Person))))
 (defConcept ParentOfEmployee
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Employee))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Employee))))
 (defConcept ParentOfEmployer
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Employer))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Employer))))
 (defConcept ParentOfDoctor
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Doctor))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Doctor))))
 (subsumed-p ParentOfEmployee Parent)
 (subsumed-p ParentOfEmployer Parent)
 (subsumed-p ParentOfDoctor Parent)
@@ -265,54 +261,54 @@
 (disjoint-p ParentOfEmployee ParentOfDoctor)
 
 (defConcept ParentWhosChildAllDoctor
-    (owl:intersectionOf Parent
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:allValuesFrom Doctor))))
+    (owl:|intersectionOf| Parent
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|allValuesFrom| Doctor))))
 
 (subsumed-p ParentWhosChildAllDoctor ParentOfDoctor)
 (subsumed-p ParentWhosChildAllDoctor ParentOfEmployer)
 (subsumed-p ParentOfEmployer ParentWhosChildAllDoctor)
 
 (defConcept ParentOfDoctorAndEmployee
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom DoctorAndEmployee))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| DoctorAndEmployee))))
 (defConcept ParentOfDoctorAndEmployer
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom DoctorAndEmployer))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| DoctorAndEmployer))))
 (defConcept ParentOfDoctorSelfEmployed
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom DoctorSelfEmployed))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| DoctorSelfEmployed))))
 
 (subsumed-p ParentOfDoctorAndEmployee ParentOfDoctor)
 (subsumed-p ParentOfDoctorAndEmployee ParentOfEmployee)
 (subsumed-p ParentOfDoctorAndEmployee ParentOfEmployer)
 
 (defConcept IntersectOfParentsOfEmployeeAndParentsOfDoctor
-    (owl:intersectionOf ParentOfEmployee ParentOfDoctor))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfDoctor))
 (defConcpet IntersectOfParentOfEmployeeAndParentOfDoctor
-    (owl:intersectionOf ParentOfEmployee ParentOfEmployer))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfEmployer))
 (defConcept IntersectOfParentOfEmployeeParentOfEmployerParentOfDoctor
-    (owl:intersectionOf ParentOfEmployee ParentOfEmployer ParentOfDoctor))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfEmployer ParentOfDoctor))
 (defConcept IntersectOfParentOfEmployeeAndParentOfEmployerInheritParentOfDoctor
-    (owl:intersectionOf ParentOfEmployee ParentOfEmployer)
-  (rdfs:subClassOf ParentOfDoctor))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfEmployer)
+  (rdfs:|subClassOf| ParentOfDoctor))
 
 (subsumed-p IntersectOfParentsOfEmployeeAndParentsOfDoctor ParentOfDoctorAndEmployee) -> nil
 (subsumed-p IntersectOfParentOfEmployeeParentOfEmployerParentOfDoctor ParentOfDoctorAndEmployee)
 (defConcept ParentOfOneChildDoctorAndEmployee
-    (owl:intersectionOf ParentOfEmployee ParentOfDoctor
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:cardinality 1))))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfDoctor
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|cardinality| 1))))
 
 (subsumed-p ParentOfOneChildDoctorAndEmployee ParentOfDoctorAndEmployee)
 
 (defConcept ParentOfTwoChildDoctorAndEmployee
-    (owl:intersectionOf ParentOfEmployee ParentOfDoctor
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:cardinality 2))))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfDoctor
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|cardinality| 2))))
 
 (subsumed-p ParentOfTwoChildDoctorAndEmployee ParentOfDoctorAndEmployee)           -> nil
 (subsumed-p ParentOfOneChildDoctorAndEmployee ParentOfTwoChildDoctorAndEmployee)
@@ -323,72 +319,72 @@
 
 #|
 (defConcept ParentOfEmployeeAndEmployer
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Employee))
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Employer))))  -> clash
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Employee))
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Employer))))  -> clash
 
 (defConcept GrandParentOfDoctor
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom ParentOfDoctor))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| ParentOfDoctor))))
 (defConcept GrandParentOfDoctorAndEmployee
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom ParentOfDoctorAndEmployee))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| ParentOfDoctorAndEmployee))))
 
 (subsumed-p GrandParentOfDoctorAndEmployee GrandParentOfDoctor)
 
 (defConcept IntersectionOfOneChildParentOfEmployeeAndParentOfEmployer
-    (owl:intersectionOf ParentOfEmployee ParentOfEmployer
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:cardinality 1))))
+    (owl:|intersectionOf| ParentOfEmployee ParentOfEmployer
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|cardinality| 1))))
 
 (subsumed-p IntersectionOfOneChildParentOfEmployeeAndParentOfEmployer ParentOfEmployee)
 
-(defConcept Lawyer (rdfs:subClassOf Person))
-(defConcept PatentAttorney (rdfs:subClassOf Person))
+(defConcept Lawyer (rdfs:|subClassOf| Person))
+(defConcept PatentAttorney (rdfs:|subClassOf| Person))
 
 (defConcept ParentOfLawyer
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Lawyer))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Lawyer))))
 (defConcept ParentOfAttorney
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Attorney))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Attorney))))
 
 (defConcept ParentOfLawyerAndAttorney
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Lawyer))
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Attorney))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Lawyer))
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Attorney))))
 
 (defConcept ParentOfLawyerAndAttorneyAndDoctor
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Lawyer))
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Attorney))
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:someValuesFrom Doctor))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Lawyer))
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Attorney))
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|someValuesFrom| Doctor))))
 
 (subsumed-p ParentOfLawyer ParentOfLawyerAndAttorney)
 (subsumed-p ParentOfLawyerAndAttorneyAndDoctor ParentOfDoctor)   --> nil
 (subsumed-p ParentOfDoctor ParentOfLawyerAndAttorneyAndDoctor)
 (defConcept GrandParentOfDoctor
-    (owl:intersectionOf Person
-                        (owl:Restriction (owl:onProperty hasChild)
-                                         (owl:cardinality 1))))
+    (owl:|intersectionOf| Person
+                        (owl:|Restriction| (owl:|onProperty| hasChild)
+                                         (owl:|cardinality| 1))))
 |#
 
 (defun %oneof1-subsumed-p (c d)
   ;; recursively loop while c is an oneof.
   (cond ((not (owl-oneof-p c)) (subsumed-p c d))
         ((%clos-subtype-p c d))
-        ((every #'(lambda (ci) (typep ci d)) (slot-value c 'owl:oneOf)))
+        ((every #'(lambda (ci) (typep ci d)) (slot-value c 'owl:|oneOf|)))
         (t (some #'(lambda (csuper) (%oneof1-subsumed-p csuper d))
                  (mop:class-direct-superclasses c)))))
 
@@ -399,7 +395,7 @@
 
 (defun oneof-subsumed-p (c d)
   ;; oneOf(a b c) < oneOf (a b c d)
-  (if (subsetp (slot-value c 'owl:oneOf) (slot-value d 'owl:oneOf) :test #'%owl-same-p)
+  (if (subsetp (slot-value c 'owl:|oneOf|) (slot-value d 'owl:|oneOf|) :test #'%owl-same-p)
       (values t t)
     (values nil t)))
 
@@ -407,8 +403,8 @@
   "This function is used for shared-initialize."
   (let ((subs (mop:class-direct-subclasses class)))
     (setq subs     ; same as owl:Thing
-          (remove-if #'(lambda (sub) (eql (complement-of sub) owl:Nothing)) subs))
-    (setq subs (remove owl:Nothing subs))
+          (remove-if #'(lambda (sub) (eql (complement-of sub) owl:|Nothing|)) subs))
+    (setq subs (remove owl:|Nothing| subs))
     (setq subs (remove-if #'owl-oneof-p subs))
     (setq subs (remove-if-not #'(lambda (sub) (%typep-for-MSCs instance sub)) subs))
     (cond ((null subs) (list class))
@@ -506,7 +502,7 @@
 
 (defun %oneof-refining-p (c1 c2)
   (when (and (owl-oneof-p c1) (owl-oneof-p c2))
-    (subsetp (slot-value c1 'owl:oneOf) (slot-value c2 'owl:oneOf) :test #'%owl-same-p)))
+    (subsetp (slot-value c1 'owl:|oneOf|) (slot-value c2 'owl:|oneOf|) :test #'%owl-same-p)))
 
 (defun %complement-refining-p (c1 c2)
   (let ((complement1 ())
@@ -521,7 +517,7 @@
 
 (defun shared-initialize-after-for-complementOf (class complements)
   (loop for complement in complements with result
-      unless (eql class owl:Nothing)  ; owl:Nothing is complement to any object.
+      unless (eql class owl:|Nothing|)  ; owl:Nothing is complement to any object.
       do (cond ((setq result (check-instance-sharing class complement))
                 (error 'complementof-condition-unsatiafiable
                   :format-control "~S has super-sub relation to ~S."
@@ -550,7 +546,7 @@
   (loop for super in (remove-if #'owl-restriction-p intersections)
       unless (owl-class-p super)
       do (warn "Change class by intersectionOf:~S rdf:type owl:Class" (name super))
-        (change-class super (load-time-value owl:Class)))
+        (change-class super (load-time-value owl:|Class|)))
   (let ((siblings (get-intersect-siblings class intersections)))
     ;; class and its structural equivalents are removed from siblings
     (loop for sib in siblings
@@ -574,13 +570,13 @@
                     (reinitialize-instance class :direct-superclasses new-supers)))))))
 
 (defun intersection-p (class)
-  (and (cl:typep class owl:Class)
-       (slot-boundp class 'owl:intersectionOf)))
+  (and (cl:typep class owl:|Class|)
+       (slot-boundp class 'owl:|intersectionOf|)))
 
 (defun intersection-of (class)
-  (and (cl:typep class owl:Class)
-       (slot-boundp class 'owl:intersectionOf)
-       (slot-value class 'owl:intersectionOf)))
+  (and (cl:typep class owl:|Class|)
+       (slot-boundp class 'owl:|intersectionOf|)
+       (slot-value class 'owl:|intersectionOf|)))
 
 ;; rule14
 (defun check-intersection-refining-for-subclasses (class superclasses)
@@ -602,7 +598,7 @@
   (cond ((null (cdr classes)) classes)
         (t (mapc #'(lambda (class)
                      (mapc #'(lambda (sub)
-                               (cond ((and (cl:typep sub owl:Class)
+                               (cond ((and (cl:typep sub owl:|Class|)
                                            (intersection-of sub)
                                            (every #'(lambda (inte) (member inte classes))
                                                   (intersection-of sub)))
@@ -628,7 +624,7 @@
   (loop for sub in (remove-if #'owl-restriction-p unions)
       unless (owl-class-p sub)
       do (warn "Change class by unionOf:~S rdf:type owl:Class" (name sub))
-        (change-class sub (load-time-value (find-class 'owl:Class))))
+        (change-class sub (load-time-value (find-class 'owl:|Class|))))
   ;; reinitialize supers of unions
   (loop for sub in (remove-if #'owl-restriction-p unions)
       unless (cl:subtypep sub class)
@@ -660,7 +656,7 @@
                  (warn "~S is refined to subclass of ~S." class sib)
                  (reinitialize-instance class :direct-superclasses new-supers)))))))
 
-(defmethod change-class :before ((instance owl:Thing) (new-class (eql owl:Class)) 
+(defmethod change-class :before ((instance owl:|Thing|) (new-class (eql owl:|Class|)) 
                                  &rest initargs)
   (declare (ignore initargs))
   (when (disjoint-p (class-of instance) new-class)
@@ -668,7 +664,7 @@
       :format-control "between ~S and ~S."
       :format-arguments `(,instance ,(class-name new-class)))))
 
-(defmethod change-class :before ((instance owl:Thing) (new-class owl:Class) 
+(defmethod change-class :before ((instance owl:|Thing|) (new-class owl:|Class|) 
                                  &rest initargs)
   (declare (ignore initargs))
   (when (disjoint-p (class-of instance) new-class)
@@ -680,16 +676,16 @@
 ;;;; Shared-initialize Before for owl:Class
 ;;;
 
-(defmethod shared-initialize :before ((class owl:Class) slot-names &rest initargs
+(defmethod shared-initialize :before ((class owl:|Class|) slot-names &rest initargs
                                       &key (name nil))
   ;(format t "~%SHARED-INITIALIZE:BEFORE(owl:Class) ~S ~S ~S" class slot-names initargs)
-  (let ((supers (append (mklist (getf initargs 'rdfs:subClassOf))
-                        (getf initargs 'owl:intersectionOf))))
+  (let ((supers (append (mklist (getf initargs 'rdfs:|subClassOf|))
+                        (getf initargs 'owl:|intersectionOf|))))
     (when supers
       (check-simple-disjoint-pair-p-in-supers name supers))
     (when (and (null slot-names) (not (null initargs))) ; reinitialize
       (loop for (role newval) on initargs by #'cddr with oldval
-          when (and (or (eq role 'owl:intersectionOf) (eq role 'owl:unionOf))
+          when (and (or (eq role 'owl:|intersectionOf|) (eq role 'owl:|unionOf|))
                     (slot-exists-p class role)
                     (slot-boundp class role)
                     (setq oldval (slot-value class role))
@@ -707,48 +703,48 @@
 ;;; So, direct-superclasses is set by <reinitialize-instance> in <ensure-class>
 ;;; after <change-class>. The following routine is prepared only for direct 
 ;;; invocation of <change-class> by users.
-(defmethod update-instance-for-different-class ((previous rdfs:Class) (current owl:Class)
+(defmethod update-instance-for-different-class ((previous rdfs:|Class|) (current owl:|Class|)
                                                 &rest initargs)
   "ensures owl:Thing as superclasses in OWL universe. This routine is effective
    only if a user designates :direct-superclasses but no inheritance of owl:Thing."
-  (cond ((and (not (cl:typep previous owl:Class))     ; rdfsClass to owl:Class
+  (cond ((and (not (cl:typep previous owl:|Class|))     ; rdfsClass to owl:Class
               (getf initargs :direct-superclasses)    ; if supers but no owl:Thing
-              (some #'(lambda (obj) (cl:subtypep obj owl:Thing))
+              (some #'(lambda (obj) (cl:subtypep obj owl:|Thing|))
                     (getf initargs :direct-superclasses)))
          (setf (getf initargs :direct-superclasses)
-           (cons owl:Thing (getf initargs :direct-superclasses)))
+           (cons owl:|Thing| (getf initargs :direct-superclasses)))
          (apply #'call-next-method previous current initargs))
         (t (call-next-method))))
 
-(defmethod shared-initialize :after ((class owl:Class) slot-names &rest initargs)
+(defmethod shared-initialize :after ((class owl:|Class|) slot-names &rest initargs)
   (cond ((and (null slot-names) (null initargs))  ; when metaclass changed
          )
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
          )
         (t ;; first or redefinition
-         (with-slots (rdfs:subClassOf owl:intersectionOf owl:unionOf owl:equivalentClass 
-                                      owl:disjointWith owl:complementOf)
+         (with-slots (rdfs:|subClassOf| owl:|intersectionOf| owl:|unionOf| owl:|equivalentClass| 
+                                      owl:|disjointWith| owl:|complementOf|)
              class
            ;; see also ensure-meta-absts-using-class class for subclasses and intersections
-           (when (and (slot-boundp class 'rdfs:subClassOf) rdfs:subClassOf)
-             (check-intersection-refining-for-subclasses class (mklist rdfs:subClassOf))
+           (when (and (slot-boundp class 'rdfs:|subClassOf|) rdfs:|subClassOf|)
+             (check-intersection-refining-for-subclasses class (mklist rdfs:|subClassOf|))
              (when (mop:class-direct-subclasses class)
                (check-union-refining-for-subclasses class (mop:class-direct-subclasses class))))
-           (when (and (slot-boundp class 'owl:intersectionOf) owl:intersectionOf)
-             (shared-initialize-after-for-intersectionOf class owl:intersectionOf))
-           (when (and (slot-boundp class 'owl:unionOf) owl:unionOf)
-             (unless (eq class owl:Thing)
-               (shared-initialize-after-for-unionOf class owl:unionOf)))
-           (when (and (slot-boundp class 'owl:equivalentClass) owl:equivalentClass)
-             (shared-initialize-after-for-equivalentClass class (mklist owl:equivalentClass)))
-           (when (and (slot-boundp class 'owl:disjointWith) owl:disjointWith)
-             (shared-initialize-after-for-disjointWith class (mklist owl:disjointWith)))
-           (when (and (slot-boundp class 'owl:complementOf) owl:complementOf)
-             (shared-initialize-after-for-complementOf class (mklist owl:complementOf))))
+           (when (and (slot-boundp class 'owl:|intersectionOf|) owl:|intersectionOf|)
+             (shared-initialize-after-for-intersectionOf class owl:|intersectionOf|))
+           (when (and (slot-boundp class 'owl:|unionOf|) owl:|unionOf|)
+             (unless (eq class owl:|Thing|)
+               (shared-initialize-after-for-unionOf class owl:|unionOf|)))
+           (when (and (slot-boundp class 'owl:|equivalentClass|) owl:|equivalentClass|)
+             (shared-initialize-after-for-equivalentClass class (mklist owl:|equivalentClass|)))
+           (when (and (slot-boundp class 'owl:|disjointWith|) owl:|disjointWith|)
+             (shared-initialize-after-for-disjointWith class (mklist owl:|disjointWith|)))
+           (when (and (slot-boundp class 'owl:|complementOf|) owl:|complementOf|)
+             (shared-initialize-after-for-complementOf class (mklist owl:|complementOf|))))
          (unless (owl-thing-p class)
            (reinitialize-instance
             class
-            :direct-superclasses (list owl:Thing (mop:class-direct-superclasses class))))
+            :direct-superclasses (list owl:|Thing| (mop:class-direct-superclasses class))))
          )))
 
 ;;;
@@ -760,16 +756,16 @@
   ;;this is same as '(cl:typep <obj> owl:SymmetricProperty)'
   (and (excl::standard-instance-p obj)
        (let ((class (class-of obj)))
-         (cond ((eq class (load-time-value owl:SymmetricProperty)))
+         (cond ((eq class (load-time-value owl:|SymmetricProperty|)))
                ((mop:class-finalized-p class)
-                (and (member (load-time-value owl:SymmetricProperty)
+                (and (member (load-time-value owl:|SymmetricProperty|)
                                 (mop:class-precedence-list class)
                                 :test #'eq)
                      t))
                ((labels ((walk-partial-cpl (c)
                                            (let ((supers (mop:class-direct-superclasses c)))
                                              (when (member
-                                                    (load-time-value owl:SymmetricProperty)
+                                                    (load-time-value owl:|SymmetricProperty|)
                                                     supers :test #'eq)
                                                (return-from symmetric-property-p t))
                                              (mapc #'walk-partial-cpl supers))))
@@ -799,7 +795,7 @@
                                    do (pushnew ov (slot-value val 'same-as))
                                      (pushnew val (slot-value ov 'same-as)))))))))))
 
-(defmethod shared-initialize :after ((instance rdfs:Resource) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance rdfs:|Resource|) slot-names &rest initargs)
   "book-keeping for reification"
   (let ((args (copy-list initargs)))
     (let ((changed (remf args :direct-slots)))
@@ -810,10 +806,10 @@
              )
             (t                                        ; first or redefinition
              (typecase instance
-               (rdfs:Literal nil)
-               (rdfs:Datatype nil)
-               (rdf:Statement nil)
-               (rdf:List nil)
+               (rdfs:|Literal| nil)
+               (rdfs:|Datatype| nil)
+               (rdf:|Statement| nil)
+               (rdf:|List| nil)
                (t 
                 (apply #'book-keeping-for-reification instance slot-names args)
                 (let ((name (getf args :name)))
@@ -865,7 +861,7 @@
 ;;;; Shared-initialize After for owl:Thing
 ;;;
 
-(defmethod shared-initialize :after ((instance owl:Thing) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance owl:|Thing|) slot-names &rest initargs)
   (cond ((and (null slot-names) (null initargs))  ; when class changed
          )
         ((and (consp slot-names) (null initargs)) ; when class redefined, propagated
@@ -876,14 +872,14 @@
                 )
                (t ;(format t "~%SHARED-INITIALIZE:AFTER(owl:Thing) redefining ~S~%  slots ~S~%  with ~S)" instance slot-names initargs)
                 ))
-         (with-slots (owl:sameAs owl:differentFrom) instance
-           ;; owl:sameAs makes sameAs groups among individuals.
-           (when (slot-boundp instance 'owl:sameAs)
-             (shared-initialize-after-for-sameAs instance (mklist owl:sameAs)))
+         (with-slots (owl:|sameAs| owl:|differentFrom|) instance
+           ;; owl:|sameAs| makes sameAs groups among individuals.
+           (when (slot-boundp instance 'owl:|sameAs|)
+             (shared-initialize-after-for-sameAs instance (mklist owl:|sameAs|)))
            
-           ;; owl:differentFrom makes pairwise different groups among individuals.
-           (when (slot-boundp instance 'owl:differentFrom)
-             (shared-initialize-after-for-differentFrom instance (mklist owl:differentFrom))))
+           ;; owl:|differentFrom| makes pairwise different groups among individuals.
+           (when (slot-boundp instance 'owl:|differentFrom|)
+             (shared-initialize-after-for-differentFrom instance (mklist owl:|differentFrom|))))
          
          ;; functional property is moved to shared-initialize:after(rdfs:Resource)
          ;; inverse functional property is moved to shared-initialize:after(rdfs:Resource)
@@ -896,7 +892,7 @@
              ;(format t "~%SHARED-INITIALIZE :AFTER ~S ~S ~S" instance slot-names initargs)
              ;(format t "~%CLASS = ~S" (class-of instance))
              ;(format t "~%MCLASSES = ~S" (mclasses instance))
-             (let ((ones (slot-value oneof 'owl:oneOf)))
+             (let ((ones (slot-value oneof 'owl:|oneOf|)))
                (cond ((member instance ones :test #'%owl-same-p) nil) ; nothing done
                      (t (let ((others (remove instance ones :test #'definitely-owl-different-p)))
                           (cond ((null others) (error 'oneof-condition-unsatiafiable
@@ -927,22 +923,22 @@
                  ((null (cdr notoneofclasses))
                   (loop for oneofclass in oneofclasses with super = (car notoneofclasses)
                       when (every #'(lambda (one) (cl:typep one super))
-                                  (slot-value oneofclass 'owl:oneOf))
+                                  (slot-value oneofclass 'owl:|oneOf|))
                       do (unless (cl:subtypep oneofclass super)
                            (reinitialize-instance oneofclass :direct-superclasses `(,super)))))))
          |#
          ;; refine instance in OWL
          (typecase instance
-           (owl:Restriction nil)
-           (owl:Class
-            (when (not (eql (class-of instance) owl:Class))
+           (owl:|Restriction| nil)
+           (owl:|Class|
+            (when (not (eql (class-of instance) owl:|Class|))
               (let ((*autoepistemic-local-closed-world* nil))
                 (let ((MSCs (collect-most-specific-concepts (class-of instance) instance)))
                   (cond ((null MSCs) (error "Cant happen!"))
                         ((length=1 MSCs)
                          (cond ((eq (car MSCs) (class-of instance)))
                                ((no-twin-p (car MSCs) instance)
-                                (assert (not (eq (car MSCs) owl:Nothing)))
+                                (assert (not (eq (car MSCs) owl:|Nothing|)))
                                 (warn "Entailed in refining: ~S to ~S." instance (class-name (car MSCs)))
                                 (apply #'change-class instance (car MSCs) initargs))
                                (t (warn "Twin found for ~S at ~S" instance (name (car MSCs)))
@@ -950,8 +946,8 @@
                                   )))
                         (t (warn "~S might be refine with changing class to ~S" instance MSCs)
                            ))))))
-           (owl:Thing
-            (when (not (eql (class-of instance) owl:Thing))
+           (owl:|Thing|
+            (when (not (eql (class-of instance) owl:|Thing|))
               (let ((*autoepistemic-local-closed-world* nil))
                 (let ((MSCs (collect-most-specific-concepts (class-of instance) instance)))
                   ;(format t "~%MSCs:~S" MSCs)
@@ -959,7 +955,7 @@
                         ((length=1 MSCs)
                          (cond ((eq (car MSCs) (class-of instance)))
                                ((no-twin-p (car MSCs) instance)
-                                (assert (not (eq (car MSCs) owl:Nothing)))
+                                (assert (not (eq (car MSCs) owl:|Nothing|)))
                                 (warn "Entailed in refining: ~S to ~S." instance (class-name (car MSCs)))
                                 (apply #'change-class instance (car MSCs) initargs))
                                (t (warn "Twin found for ~S at ~S" instance (name (car MSCs)))
@@ -980,16 +976,16 @@
 ;;; or superclass-subclass relation.
 
 ;; See rdfskernel
-(defmethod make-this-supers ((class owl:Class) superclasses)
+(defmethod make-this-supers ((class owl:|Class|) superclasses)
   "returns an append list of MSCs of restrictions and MSCs of non restrictions in <old-users> and <new-supers>."
   (let ((restrictions (remove-if-not #'owl-restriction-p superclasses))
         (supers (remove-if #'owl-restriction-p superclasses)))
     (when restrictions
       (setq restrictions (most-specific-concepts-for-restrictions restrictions)))
     (when supers
-      (when (and (not (eq class owl:Thing))
-                 (not (member owl:Thing supers)))
-        (setq supers (cons owl:Thing supers)))       ; add default top
+      (when (and (not (eq class owl:|Thing|))
+                 (not (member owl:|Thing| supers)))
+        (setq supers (cons owl:|Thing| supers)))       ; add default top
       (setq supers (most-specific-concepts-for-refining supers)))
     (append supers restrictions)))
 
@@ -1004,40 +1000,40 @@
                                              ((and (equivalent-property-p
                                                     (onproperty-of abst) (onproperty-of spec))
                                                    (etypecase abst
-                                                     (owl:hasValueRestriction
+                                                     (owl:|hasValueRestriction|
                                                       (typecase spec
-                                                        (owl:hasValueRestriction 
-                                                         (subsumed-p (slot-value spec 'owl:hasValue)
-                                                                     (slot-value abst 'owl:hasValue)))
+                                                        (owl:|hasValueRestriction| 
+                                                         (subsumed-p (slot-value spec 'owl:|hasValue|)
+                                                                     (slot-value abst 'owl:|hasValue|)))
                                                         ))
-                                                     (owl:allValuesFromRestriction
+                                                     (owl:|allValuesFromRestriction|
                                                       (typecase spec
-                                                        (owl:allValuesFromRestriction 
-                                                         (subsumed-p (slot-value spec 'owl:allValuesFrom)
-                                                                     (slot-value abst 'owl:allValuesFrom)))))
-                                                     (owl:someValuesFromRestriction
+                                                        (owl:|allValuesFromRestriction| 
+                                                         (subsumed-p (slot-value spec 'owl:|allValuesFrom|)
+                                                                     (slot-value abst 'owl:|allValuesFrom|)))))
+                                                     (owl:|someValuesFromRestriction|
                                                       (typecase spec
-                                                        (owl:someValuesFromRestriction 
-                                                         (subsumed-p (slot-value spec 'owl:someValuesFrom)
-                                                                     (slot-value abst 'owl:someValuesFrom)))))
-                                                     (owl:cardinalityRestriction
+                                                        (owl:|someValuesFromRestriction| 
+                                                         (subsumed-p (slot-value spec 'owl:|someValuesFrom|)
+                                                                     (slot-value abst 'owl:|someValuesFrom|)))))
+                                                     (owl:|cardinalityRestriction|
                                                       (typecase spec
-                                                        (owl:cardinalityRestriction
+                                                        (owl:|cardinalityRestriction|
                                                          (flet ((get-card (obj prop)
                                                                           (when (slot-boundp obj prop)
                                                                             (slot-value obj prop))))
                                                            (let ((maxspec
-                                                                  (or (get-card spec 'owl:cardinality)
-                                                                      (get-card spec 'owl:maxCardinality)))
+                                                                  (or (get-card spec 'owl:|cardinality|)
+                                                                      (get-card spec 'owl:|maxCardinality|)))
                                                                  (maxabst
-                                                                  (or (get-card abst 'owl:cardinality)
-                                                                      (get-card abst 'owl:maxCardinality)))
+                                                                  (or (get-card abst 'owl:|cardinality|)
+                                                                      (get-card abst 'owl:|maxCardinality|)))
                                                                  (minspec
-                                                                  (or (get-card spec 'owl:cardinality)
-                                                                      (get-card spec 'owl:minCardinality)))
+                                                                  (or (get-card spec 'owl:|cardinality|)
+                                                                      (get-card spec 'owl:|minCardinality|)))
                                                                  (minabst
-                                                                  (or (get-card abst 'owl:cardinality)
-                                                                      (get-card abst 'owl:minCardinality))))
+                                                                  (or (get-card abst 'owl:|cardinality|)
+                                                                      (get-card abst 'owl:|minCardinality|))))
                                                              (and (or (null minabst) (null minspec)
                                                                       (> (value-of minspec) (value-of minabst)))
                                                                   (or (null maxabst) (null maxspec)
@@ -1084,25 +1080,25 @@
 ;;;
 
 ;;;
-;;;; owl:AllDifferent
+;;;; owl:|AllDifferent|
 ;;;
 
-(defmethod shared-initialize :after ((instance owl:AllDifferent) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance owl:|AllDifferent|) slot-names &rest initargs)
   (declare (ignore slot-names))
-  (let ((distincts (getf initargs 'owl:distinctMembers)))
+  (let ((distincts (getf initargs 'owl:|distinctMembers|)))
     (unless (listp distincts) (setq distincts (list distincts)))
     (loop for distinct in distincts
         do (cond ((symbolp distinct)
                   (cond ((object? distinct)
                          (setq distinct (symbol-value distinct))
                          (unless (owl-thing-p distinct)
-                           (warn "Change class by distinctMembers: ~S type owl:Thing." distinct)
-                           (change-class distinct 'owl:Thing)))
-                        (t (warn "Entail by distinctMembers: ~S type owl:Thing." distinct)
-                           (make-instance 'owl:Thing `(:name ,distinct)))))
+                           (warn "Change class by distinctMembers: ~S type owl:|Thing|." distinct)
+                           (change-class distinct 'owl:|Thing|)))
+                        (t (warn "Entail by distinctMembers: ~S type owl:|Thing|." distinct)
+                           (make-instance 'owl:|Thing| `(:name ,distinct)))))
                  ((owl-thing-p distinct))
-                 (t (warn "Change class by distinctMembers: ~S type owl:Thing." distinct)
-                    (change-class distinct 'owl:Thing)
+                 (t (warn "Change class by distinctMembers: ~S type owl:|Thing|." distinct)
+                    (change-class distinct 'owl:|Thing|)
                     )))
     (loop for distinct1 in distincts
         do (loop for distinct2 in distincts
@@ -1127,18 +1123,18 @@
     lst))
 
 ;;;
-;;;; owl:Restriction again
+;;;; owl:|Restriction| again
 ;;;
 (excl:without-redefinition-warnings 
 (defun owl-restriction-p (obj)
-  "Is this <obj> an instance of owl:Restriction?"
-  ;;this is same as '(cl:typep <obj> owl:Restriction)'
+  "Is this <obj> an instance of owl:|Restriction|?"
+  ;;this is same as '(cl:typep <obj> owl:|Restriction|)'
   (let ((class (class-of obj)))
-    (cond ((eq class (load-time-value owl:Restriction)))
+    (cond ((eq class (load-time-value owl:|Restriction|)))
           ((not (mop:class-finalized-p class))
            (labels ((walk-partial-cpl (c)
                                       (let ((supers (mop:class-direct-superclasses c)))
-                                        (when (member (load-time-value owl:Restriction)
+                                        (when (member (load-time-value owl:|Restriction|)
                                                          supers
                                                          :test #'eq)
                                           (return-from owl-restriction-p t))
@@ -1146,47 +1142,47 @@
              (declare (dynamic-extent #'walk-partial-cpl))
              (walk-partial-cpl class)
              nil))
-          (t (and (member (load-time-value owl:Restriction)
+          (t (and (member (load-time-value owl:|Restriction|)
                              (mop:class-precedence-list class)
                              :test #'eq)
                   t)))))
 )
 (defun restriction-subtypep (restriction1 restriction2)
-  (and (eq (name (slot-value restriction1 'owl:onProperty))
-           (name (slot-value restriction2 'owl:onProperty)))
+  (and (eq (name (slot-value restriction1 'owl:|onProperty|))
+           (name (slot-value restriction2 'owl:|onProperty|)))
        (etypecase restriction2
-         (owl:hasValueRestriction 
+         (owl:|hasValueRestriction| 
           (etypecase restriction1
-            (owl:hasValueRestriction
-             (eql (slot-value restriction1 'owl:hasValue)
-                  (slot-value restriction2 'owl:hasValue)))
-            (owl:allValuesFromRestriction nil)
-            (owl:someValuesFromRestriction nil)
-            (owl:cardinalityRestriction nil)))
-         (owl:allValuesFromRestriction nil)
-         (owl:someValuesFromRestriction
+            (owl:|hasValueRestriction|
+             (eql (slot-value restriction1 'owl:|hasValue|)
+                  (slot-value restriction2 'owl:|hasValue|)))
+            (owl:|allValuesFromRestriction| nil)
+            (owl:|someValuesFromRestriction| nil)
+            (owl:|cardinalityRestriction| nil)))
+         (owl:|allValuesFromRestriction| nil)
+         (owl:|someValuesFromRestriction|
           (etypecase restriction1
-            (owl:hasValueRestriction nil)
-            (owl:allValuesFromRestriction nil)
-            (owl:someValuesFromRestriction
+            (owl:|hasValueRestriction| nil)
+            (owl:|allValuesFromRestriction| nil)
+            (owl:|someValuesFromRestriction|
              (subtypep-for-refining
-              (slot-value restriction1 'owl:someValuesFrom)
-              (slot-value restriction2 'owl:someValuesFrom)))
-            (owl:cardinalityRestriction nil)))
-         (owl:cardinalityRestriction nil))))
+              (slot-value restriction1 'owl:|someValuesFrom|)
+              (slot-value restriction2 'owl:|someValuesFrom|)))
+            (owl:|cardinalityRestriction| nil)))
+         (owl:|cardinalityRestriction| nil))))
 
 ;;;
-;;;; owl:intersectionOf is translated to super/subtype relation.
+;;;; owl:|intersectionOf| is translated to super/subtype relation.
 ;;;
 
-(defmethod collect-all-subsumed-types ((class owl:Class))
+(defmethod collect-all-subsumed-types ((class owl:|Class|))
   (cond ((null (intersection-of class)) (collect-all-subtypes class))
         (t (remove-duplicates 
             (loop for super in (remove-if #'owl-restriction-p (intersection-of class))
                 append (remove-if-not #'(lambda (sub) (subsumed-p sub class))
                                       (collect-all-subtypes super)))))))
 
-(defmethod collect-all-instances-of ((class owl:Class))
+(defmethod collect-all-instances-of ((class owl:|Class|))
   (let ((*autoepistemic-local-closed-world* nil))
     (cond ((null (intersection-of class)) (call-next-method))
           (t (labels ((%all-instances-from (sub)
@@ -1201,7 +1197,7 @@
                       (loop for sib in (mop:class-direct-subclasses super)
                           append (%all-instances-from sib)))))))))
 
-(defmethod all-instances-generator ((class owl:Class))
+(defmethod all-instances-generator ((class owl:|Class|))
   (cond ((null (intersection-of class)) (call-next-method))
         (t (let ((pending-classes (intersection-of class))
                  (pending-instances nil))
@@ -1226,8 +1222,8 @@
 ;;
 
 (defun owl-complement-p (c d)
-  (cond ((eq c rdfs:Resource) (values nil nil))
-        ((eq d rdfs:Resource) (values nil nil))
+  (cond ((eq c rdfs:|Resource|) (values nil nil))
+        ((eq d rdfs:|Resource|) (values nil nil))
         ((not (slot-exists-p c 'equivalent-classes)) (values nil nil)) ; not OWL, return
         ((not (slot-exists-p d 'equivalent-classes)) (values nil nil)) ; not OWL, return
         ((values (some #'(lambda (cc)
@@ -1245,20 +1241,20 @@
 ;;
 ;;
 
-(defmethod mop:ensure-class-using-class ((class owl:Class) name &rest args)
+(defmethod mop:ensure-class-using-class ((class owl:|Class|) name &rest args)
   ;(format t "~%ENSURE-CLASS-USING-CLASS ~S ~S ~S" class name args)
-  (assert (not (eq (car (mop:class-direct-superclasses owl:Thing)) owl:Thing)))
-  (cond ((eq class owl:Thing) class)                              ; nothing done
+  (assert (not (eq (car (mop:class-direct-superclasses owl:|Thing|)) owl:|Thing|)))
+  (cond ((eq class owl:|Thing|) class)                              ; nothing done
         ((getf args :direct-superclasses) (call-next-method))     ; next
         (t (let ((initargs (copy-list args)))
-             (setf (getf initargs :direct-superclasses) '(owl:Thing))
+             (setf (getf initargs :direct-superclasses) '(owl:|Thing|))
              (apply #'call-next-method class name initargs)))))
 
 ;;;
 ;;;;  hasValue Restriction sets up an initial value of the slot.
 ;;;
-;; The following methods are called after owl:Class
-(defmethod shared-initialize :after ((class owl:hasValueRestriction) slot-names &rest initargs)
+;; The following methods are called after owl:|Class|
+(defmethod shared-initialize :after ((class owl:|hasValueRestriction|) slot-names &rest initargs)
   (when (member-if #'(lambda (x) (owl-oneof-p x)) (getf initargs :direct-superclasses))
     (error "Debug It!"))
   (cond ((and (null slot-names) (null initargs))  ; when metaclass changed
@@ -1266,11 +1262,11 @@
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
          )
         (t ;; first or redefinition
-         (let ((property (slot-value class 'owl:onProperty))
-               (hasvalues (slot-value class 'owl:hasValue)))
+         (let ((property (slot-value class 'owl:|onProperty|))
+               (hasvalues (slot-value class 'owl:|hasValue|)))
            (let ((range (get-range property)))
              (when range
-               (slot-value-range-check 'owl:hasValue hasvalues range)))
+               (slot-value-range-check 'owl:|hasValue| hasvalues range)))
            (let* ((name (name property))
                   (slotd (find name (mop:class-direct-slots class) :key #'name))
                #|   (initfun (cond ((symbolp hasvalues)
@@ -1301,7 +1297,7 @@
                                                  ;:initform hasvalues :initfunction initfun
                                                  ))
                    (t (case name
-                        ((rdfs:range)
+                        ((rdfs:|range|)
                          (push (make-instance 'gx::Property-direct-slot-definition
                                  :name name :initargs `(,name)
                                  :type (make-instance 'fills
@@ -1327,14 +1323,14 @@
                                (mop:class-direct-slots class)))))))))))
 
 (defmethod shared-initialize :after
-  ((class owl:someValuesFromRestriction) slot-names &rest initargs)
+  ((class owl:|someValuesFromRestriction|) slot-names &rest initargs)
   (cond ((and (null slot-names) (null initargs))  ; when metaclass changed
          )
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
          )
         (t ;; first or redefinition
-         (let ((property (slot-value class 'owl:onProperty))
-               (somevalues (slot-value class 'owl:someValuesFrom)))
+         (let ((property (slot-value class 'owl:|onProperty|))
+               (somevalues (slot-value class 'owl:|someValuesFrom|)))
            (let* ((name (name property))
                   (slotd (find name (mop:class-direct-slots class) :key #'name)))
              (cond (slotd (reinitialize-instance slotd :name name
@@ -1343,7 +1339,7 @@
                                                          :filler somevalues
                                                          :subject-type class)))
                    (t (case name
-                        ((rdfs:range)
+                        ((rdfs:|range|)
                          (push (make-instance 'gx::Property-direct-slot-definition
                                  :name name :initargs `(,name)
                                  :type (make-instance 'exists
@@ -1365,14 +1361,14 @@
                                (mop:class-direct-slots class)))))))))))
 
 (defmethod shared-initialize :after
-  ((class owl:allValuesFromRestriction) slot-names &rest initargs)
+  ((class owl:|allValuesFromRestriction|) slot-names &rest initargs)
   (cond ((and (null slot-names) (null initargs))  ; when metaclass changed
          )
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
          )
         (t ;; first or redefinition
-         (let ((property (slot-value class 'owl:onProperty))
-               (allvalues (slot-value class 'owl:allValuesFrom)))
+         (let ((property (slot-value class 'owl:|onProperty|))
+               (allvalues (slot-value class 'owl:|allValuesFrom|)))
            (let ((name (name property))
                  ;(range (get-range property))
                  )
@@ -1384,7 +1380,7 @@
                           do (warn "oneOf + onProperty range entailment by ~S: ~S rdf:type ~S"
                                name one range)
                             (change-class one range)))
-                     ((and (not (cl:typep allvalues owl:Restriction))
+                     ((and (not (cl:typep allvalues owl:|Restriction|))
                            (not (subsumed-p allvalues range)))
                       (warn "onProperty range entailment by ~S: ~S rdfs:subClassOf ~S"
                         name allvalues range)
@@ -1402,7 +1398,7 @@
                                                            :filler allvalues
                                                            :subject-type class)))
                      (t (case name
-                          ((rdfs:range)
+                          ((rdfs:|range|)
                            (push (make-instance 'gx::Property-direct-slot-definition
                                    :name name :initargs `(,name)
                                    :type (make-instance 'forall
@@ -1424,20 +1420,20 @@
                                  (mop:class-direct-slots class))))))))))))
 
 (defmethod shared-initialize :after
-  ((class owl:cardinalityRestriction) slot-names &rest initargs)
+  ((class owl:|cardinalityRestriction|) slot-names &rest initargs)
   (cond ((and (null slot-names) (null initargs))  ; when metaclass changed
          )
         ((and (consp slot-names) (null initargs)) ; when metaclass redefined, propagated
          )
         (t ;; first or redefinition
-         (let ((property (slot-value class 'owl:onProperty)))
+         (let ((property (slot-value class 'owl:|onProperty|)))
            (let* ((name (name property))
-                  (maxcardinality (and (slot-boundp class 'owl:maxCardinality) 
-                                       (slot-value class 'owl:maxCardinality)))
-                  (mincardinality (and (slot-boundp class 'owl:minCardinality) 
-                                       (slot-value class 'owl:minCardinality)))
-                  (cardinality (and (slot-boundp class 'owl:cardinality) 
-                                    (slot-value class 'owl:cardinality)))
+                  (maxcardinality (and (slot-boundp class 'owl:|maxCardinality|) 
+                                       (slot-value class 'owl:|maxCardinality|)))
+                  (mincardinality (and (slot-boundp class 'owl:|minCardinality|) 
+                                       (slot-value class 'owl:|minCardinality|)))
+                  (cardinality (and (slot-boundp class 'owl:|cardinality|) 
+                                    (slot-value class 'owl:|cardinality|)))
                   (slotd (find name (mop:class-direct-slots class) :key #'name)))
              (when (datatype-p (class-of cardinality))
                (setq cardinality (value-of cardinality)))
@@ -1461,13 +1457,13 @@
                           (mop:class-direct-slots class)))))))))
 
 ;;;
-;;;; For owl:equivalentProperty
+;;;; For owl:|equivalentProperty|
 ;;;
 (excl:without-redefinition-warnings
 (defun equivalentProperty-maintain (instance slot-names &rest initargs)
   (declare (ignore slot-names))
-  (when (getf initargs 'owl:equivalentProperty)
-    (let ((equivs (mklist (slot-value instance 'owl:equivalentProperty))))
+  (when (getf initargs 'owl:|equivalentProperty|)
+    (let ((equivs (mklist (slot-value instance 'owl:|equivalentProperty|))))
       (let ((equivalent-props (equivalent-property-of instance)))
         (cond ((null equivalent-props) (setq equivalent-props (list instance)))
               (t (setq equivalent-props (most-specific-properties (append equivalent-props equivs)))
@@ -1503,44 +1499,44 @@
   properties)
 
 ;;;
-;;;; owl:inverseOf
+;;;; owl:|inverseOf|
 ;;;
 (excl:without-redefinition-warnings
 (defun %get-inverse-prop (prop)              ; See rdfp8ax, rdfp8bx
-  (when (cl:typep prop owl:ObjectProperty)
-    (or (and (slot-boundp prop 'owl:inverseOf) (slot-value prop 'owl:inverseOf))
+  (when (cl:typep prop owl:|ObjectProperty|)
+    (or (and (slot-boundp prop 'owl:|inverseOf|) (slot-value prop 'owl:|inverseOf|))
         (slot-value prop 'inverse-inverse-of))))
 )
 ;;;
 ;;;; Property in OWL
 ;;;
 
-(defmethod shared-initialize :after ((instance owl:ObjectProperty) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance owl:|ObjectProperty|) slot-names &rest initargs)
   ; instance = ub:memberOf
   (declare (ignore slot-names))
-  (cond ((getf initargs 'owl:inverseOf)
-         (let ((inv (slot-value instance 'owl:inverseOf)))
+  (cond ((getf initargs 'owl:|inverseOf|)
+         (let ((inv (slot-value instance 'owl:|inverseOf|)))
            ; inv = ub:member
-           (assert (cl:typep inv owl:ObjectProperty))
+           (assert (cl:typep inv owl:|ObjectProperty|))
            (assert (or (null (slot-value inv 'inverse-inverse-of))
                        (eql instance (slot-value inv 'inverse-inverse-of))))
            ;(format t "~%REINITIALIZE ~S :inverse-inverse-of ~S" inv instance)
            (reinitialize-instance inv :inverse-inverse-of instance)
-           (let ((inv-domain (and (slot-boundp inv 'rdfs:domain) (slot-value inv 'rdfs:domain)))
+           (let ((inv-domain (and (slot-boundp inv 'rdfs:|domain|) (slot-value inv 'rdfs:|domain|)))
                  ; inv-domain = ub:Organization
-                 (inv-range (and (slot-boundp inv 'rdfs:range) (slot-value inv 'rdfs:range))))
+                 (inv-range (and (slot-boundp inv 'rdfs:|range|) (slot-value inv 'rdfs:|range|))))
              ; inv-range = ub:Person
              (when (or inv-range inv-domain)
                ;(format t "~%REINITIALIZE ~S rdfs:domain ~S rdfs:range ~S" instance inv-range (or inv-domain t))
-               (reinitialize-instance instance 'rdfs:domain inv-range 'rdfs:range (or inv-domain t))
+               (reinitialize-instance instance 'rdfs:|domain| inv-range 'rdfs:|range| (or inv-domain t))
                ; slot ub:memberOf for ub:Person
                (mop:finalize-inheritance inv-range)
                ))))))
 
 ;; rule8 by seiji
-(defmethod shared-initialize :after ((instance owl:SymmetricProperty) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance owl:|SymmetricProperty|) slot-names &rest initargs)
   (declare (ignore slot-names))
-  (when (or (getf initargs 'rdfs:domain) (getf initargs 'rdfs:range))
+  (when (or (getf initargs 'rdfs:|domain|) (getf initargs 'rdfs:|range|))
     (let ((domain (domain-value instance))
           (range (range-value instance)))
       (when (and domain range)
@@ -1548,25 +1544,25 @@
           (loop for cls in equivs
               do (unless (owl-class-p cls)
                    (warn "~S rdfs:type owl:Class by owl:SymmetricProperty entailment." cls)
-                   (change-class cls owl:Class))
+                   (change-class cls owl:|Class|))
                 (setf (slot-value cls 'equivalent-classes) equivs)
                 ))))))
 
 (excl:without-redefinition-warnings
-(defmethod domain-value ((property rdf:Property))
-  (flet ((get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain))))
+(defmethod domain-value ((property rdf:|Property|))
+  (flet ((get-dom (p) (and (slot-boundp p 'rdfs:|domain|) (slot-value p 'rdfs:|domain|))))
     (mkatom (mappend #'(lambda (p) (mklist (get-dom p))) (equivalent-property-of property)))))
 )
 
-(defmethod domain-value ((property owl:ObjectProperty))
+(defmethod domain-value ((property owl:|ObjectProperty|))
   ;; in change-class from (rdf:Property vin:locatedIn) to owl:TransitiveProperty
   ;; this function is called from update-instance-for-different-class/shared-initialize:around(rdf:Property)
   ;; but owl:inverseOf and inverse-inverse-of slot value is unbound before shared-initialization.
   ;; rule12 by seiji
-  (flet ((%get-inv (p) (and (slot-boundp p 'owl:inverseOf) (slot-value p 'owl:inverseOf)))
+  (flet ((%get-inv (p) (and (slot-boundp p 'owl:|inverseOf|) (slot-value p 'owl:|inverseOf|)))
          (%get-inv-inv (p) (and (slot-boundp p 'inverse-inverse-of) (slot-value property 'inverse-inverse-of)))
-         (get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain)))
-         (get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
+         (get-dom (p) (and (slot-boundp p 'rdfs:|domain|) (slot-value p 'rdfs:|domain|)))
+         (get-ran (p) (and (slot-boundp p 'rdfs:|range|) (slot-value p 'rdfs:|range|))))
     (let* ((inv (or (%get-inv property) (%get-inv-inv property)))
            (inv-range (and inv
                            (mappend #'(lambda (p) (mklist (get-ran p)))
@@ -1576,16 +1572,16 @@
       (mkatom (append domain inv-range)))))
 
 (excl:without-redefinition-warnings
-(defmethod range-value ((property rdf:Property))
-  (flet ((get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
+(defmethod range-value ((property rdf:|Property|))
+  (flet ((get-ran (p) (and (slot-boundp p 'rdfs:|range|) (slot-value p 'rdfs:|range|))))
     (mkatom (mappend #'(lambda (p) (mklist (get-ran p))) (equivalent-property-of property)))))
 )
 
-(defmethod range-value ((property owl:ObjectProperty))
-  (flet ((%get-inv (p) (and (slot-boundp p 'owl:inverseOf) (slot-value p 'owl:inverseOf)))
+(defmethod range-value ((property owl:|ObjectProperty|))
+  (flet ((%get-inv (p) (and (slot-boundp p 'owl:|inverseOf|) (slot-value p 'owl:|inverseOf|)))
          (%get-inv-inv (p) (and (slot-boundp p 'inverse-inverse-of) (slot-value property 'inverse-inverse-of)))
-         (get-dom (p) (and (slot-boundp p 'rdfs:domain) (slot-value p 'rdfs:domain)))
-         (get-ran (p) (and (slot-boundp p 'rdfs:range) (slot-value p 'rdfs:range))))
+         (get-dom (p) (and (slot-boundp p 'rdfs:|domain|) (slot-value p 'rdfs:|domain|)))
+         (get-ran (p) (and (slot-boundp p 'rdfs:|range|) (slot-value p 'rdfs:|range|))))
     (let* ((inv (or (%get-inv property) (%get-inv-inv property)))
            (inv-domain (and inv
                             (mappend #'(lambda (p) (mklist (get-dom p)))
@@ -1599,32 +1595,32 @@
 ;;
 #|
 (defmethod (setf mop:slot-value-using-class) :before
-  (value (class owl:Class) (object owl:Thing) (slotd gx::OwlProperty-effective-slot-definition))
+  (value (class owl:|Class|) (object owl:|Thing|) (slotd gx::OwlProperty-effective-slot-definition))
   ;(format t "~%Setf Slot-value-using-class:before with ~S to ~S ~S" value object slotd)
   (when (slot-value slotd 'excl::initform)
     (when (not (owl-equalp value (slot-value slotd 'excl::initform)))
       (when (and (slot-value slotd 'maxcardinality) (<= (slot-value slotd 'maxcardinality) 1)
                  (not (functional-property? (name slotd))))
-        (error "owl:hasValue cardinality violation: ~S.~S <- ~S" object (name slotd) value)))))
+        (error "owl:|hasValue| cardinality violation: ~S.~S <- ~S" object (name slotd) value)))))
 |#
 ;;;
 ;;; We construct every inference upon subsumption-basis.
 ;;; Subsumption is infered by structural subsumption algorithms, here.
 
 (defun union-of (class)
-  (and (slot-exists-p class 'owl:unionOf)
-       (slot-boundp class 'owl:unionOf)
-       (slot-value class 'owl:unionOf)))
+  (and (slot-exists-p class 'owl:|unionOf|)
+       (slot-boundp class 'owl:|unionOf|)
+       (slot-value class 'owl:|unionOf|)))
 
 (defun complement-of (class)
-  (and (slot-exists-p class 'owl:complementOf)
-       (slot-boundp class 'owl:complementOf)
-       (slot-value class 'owl:complementOf)))
+  (and (slot-exists-p class 'owl:|complementOf|)
+       (slot-boundp class 'owl:|complementOf|)
+       (slot-value class 'owl:|complementOf|)))
 
 (defun onproperty-of (restriction)
-  (and (slot-exists-p restriction 'owl:onProperty)
-       (slot-boundp restriction 'owl:onProperty)
-       (slot-value restriction 'owl:onProperty)))
+  (and (slot-exists-p restriction 'owl:|onProperty|)
+       (slot-boundp restriction 'owl:|onProperty|)
+       (slot-value restriction 'owl:|onProperty|)))
 
 ;;;
 ;;;; Membership in OWL
@@ -1666,7 +1662,7 @@
   "This is sub-subfunction for <typep>. This is only invoked in <%%typep>.
    This function tests type relation for each member of owl:sameAs group."
   (if (owl-oneof-p type)
-      (cond ((member object (slot-value type 'owl:oneOf) :test #'%owl-same-p)
+      (cond ((member object (slot-value type 'owl:|oneOf|) :test #'%owl-same-p)
              (values t t))
             (t (values nil t)))
     (let ((sames (and (slot-exists-p object 'same-as)
@@ -1716,24 +1712,24 @@
         as slotvalues = (mklist (get-value object (onproperty-of r)))
         do ;(format t "~%prop:~S~%slotvalues:~S" prop slotvalues)
           (etypecase r
-            (owl:allValuesFromRestriction          ; rdfp16 by ter Horst
+            (owl:|allValuesFromRestriction|          ; rdfp16 by ter Horst
              (cond ((null slotvalues)              ; by Seiji, allValues restriction in intersection must exist definitely.
                     (return-from owl-intersection-type-p (values nil t)))
-                   (t (let ((rst (slot-value r 'owl:allValuesFrom)))
+                   (t (let ((rst (slot-value r 'owl:|allValuesFrom|)))
                         (loop for v in slotvalues
                             do (multiple-value-bind (v1 v2) (%typep v rst)
                                  (when (not v1)
                                    (cond (v2 (return-from owl-intersection-type-p (values nil t)))
                                          (t (setq known nil))))))))))
-            (owl:someValuesFromRestriction          ; rdfp15 by ter Horst
+            (owl:|someValuesFromRestriction|          ; rdfp15 by ter Horst
              (cond ((null slotvalues)
                     (if *autoepistemic-local-closed-world*
                         (if (y-or-n-p "No value for ~S in ~S.~%Create it?" prop object)
                             (setf (slot-value object prop) 
-                              (addInstance (slot-value r 'owl:someValuesFrom) nil))
+                              (addInstance (slot-value r 'owl:|someValuesFrom|) nil))
                           (return-from owl-intersection-type-p (values nil t)))
                       (return-from owl-intersection-type-p (values nil nil))))
-                   (t (let ((rst (slot-value r 'owl:someValuesFrom)))
+                   (t (let ((rst (slot-value r 'owl:|someValuesFrom|)))
                         (cond ((some #'(lambda (v)
                                          (multiple-value-bind (v1 v2) (%typep v rst)
                                            (when (not v1)
@@ -1744,18 +1740,18 @@
                               (*autoepistemic-local-closed-world*    ; local world
                                (if (y-or-n-p "No value for ~S in ~S.~%Create it?" prop object)
                                    (setf (slot-value object prop) 
-                                     (addInstance (slot-value r 'owl:someValuesFrom) nil))
+                                     (addInstance (slot-value r 'owl:|someValuesFrom|) nil))
                                  (return-from owl-intersection-type-p (values nil t))))
                               (t (return-from owl-intersection-type-p (values nil nil))))))))
-            (owl:hasValueRestriction              ; rdfp14a by ter Horst
+            (owl:|hasValueRestriction|              ; rdfp14a by ter Horst
              (cond ((null slotvalues)
                     (if *autoepistemic-local-closed-world*
                         (if (error "check it")
                             ;(y-or-n-p "No value for ~S in ~S.~%Add it?" prop object)
-                            (setf (slot-value object prop) (slot-value r 'owl:hasValue))
+                            (setf (slot-value object prop) (slot-value r 'owl:|hasValue|))
                           (return-from owl-intersection-type-p (values nil t)))
                       (return-from owl-intersection-type-p (values nil nil))))
-                   (t (let ((rst (slot-value r 'owl:hasValue)))
+                   (t (let ((rst (slot-value r 'owl:|hasValue|)))
                         ;(format t "~%rst:~S" rst)
                         (cond ((some #'(lambda (v)
                                          (or (owl-same-p v rst)             ; seiji 2010 Sep.
@@ -1771,21 +1767,21 @@
                               (*autoepistemic-local-closed-world*    ; local world
                                (if (error "check it")
                                    ;(y-or-n-p "No value for ~S in ~S.~%Add it?" prop object)
-                                   (setf (slot-value object prop) (slot-value r 'owl:hasValue))
+                                   (setf (slot-value object prop) (slot-value r 'owl:|hasValue|))
                                  (return-from owl-intersection-type-p (values nil t))))
                               (t (return-from owl-intersection-type-p (values nil nil))))))))
-            (owl:cardinalityRestriction
-             (let ((maxr (cond ((slot-boundp r 'owl:cardinality)
-                                (slot-value r 'owl:cardinality))
-                               ((slot-boundp r 'owl:maxCardinality)
-                                (slot-value r 'owl:maxCardinality))))
-                   (minr (cond ((slot-boundp r 'owl:cardinality)
-                                (slot-value r 'owl:cardinality))
-                               ((slot-boundp r 'owl:minCardinality)
-                                (slot-value r 'owl:minCardinality)))))
-               (when (and maxr (cl:typep maxr rdf:XMLLiteral))
+            (owl:|cardinalityRestriction|
+             (let ((maxr (cond ((slot-boundp r 'owl:|cardinality|)
+                                (slot-value r 'owl:|cardinality|))
+                               ((slot-boundp r 'owl:|maxCardinality|)
+                                (slot-value r 'owl:|maxCardinality|))))
+                   (minr (cond ((slot-boundp r 'owl:|cardinality|)
+                                (slot-value r 'owl:|cardinality|))
+                               ((slot-boundp r 'owl:|minCardinality|)
+                                (slot-value r 'owl:|minCardinality|)))))
+               (when (and maxr (cl:typep maxr rdf:|XMLLiteral|))
                  (setq maxr (value-of maxr)))
-               (when (and minr (cl:typep minr rdf:XMLLiteral))
+               (when (and minr (cl:typep minr rdf:|XMLLiteral|))
                  (setq minr (value-of minr)))
                (unless (and (or (null minr) (>= (length slotvalues) minr))
                             (or (null maxr) (<= (length slotvalues) maxr)))
@@ -1842,7 +1838,7 @@
 ;;
 
 (defmethod (setf mop:slot-value-using-class)
-    ((value Property-direct-slot-definition) (class rdfs:Class) (object owl:Restriction) slotd)
+    ((value Property-direct-slot-definition) (class rdfs:|Class|) (object owl:|Restriction|) slotd)
   ;(format t "~%Setf Slot-value-using-class with ~S to ~S ~S" value object slotd)
   (error "Bingo")
   (let ((slot-name (mop:slot-definition-name slotd))
@@ -1870,10 +1866,10 @@
   (setq *referenced-resources* nil)
 )
 
-(defmethod superclasses-of ((object owl:Class))
+(defmethod superclasses-of ((object owl:|Class|))
   (mappend #'equivalent-classes-of
            (mappend #'mop:class-direct-superclasses (equivalent-classes-of object))))
-(defmethod subclasses-of ((object owl:Class))
+(defmethod subclasses-of ((object owl:|Class|))
   (mappend #'equivalent-classes-of
            (mappend #'mop:class-direct-subclasses (equivalent-classes-of object))))
 
@@ -1881,12 +1877,12 @@
 ;; Additional Useful Axioms
 ;;
 #+:slot-value-for-metaclass
-(defConcept owl:DatatypeProperty (rdf:type rdfs:Class)
-  (rdfs:subClassOf (owl:Restriction (owl:onProperty rdfs:range)
-                                    (owl:allValuesFrom rdfs:Datatype))))
+(defConcept owl:|DatatypeProperty| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| (owl:|Restriction| (owl:|onProperty| rdfs:|range|)
+                                    (owl:|allValuesFrom| rdfs:|Datatype|))))
 #+:slot-value-for-metaclass
-(defConcept owl:ObjectProperty (rdf:type rdfs:Class)
-  (rdfs:subClassOf (owl:Restriction (owl:onProperty rdfs:range)
-                                    (owl:allValuesFrom owl:Class))))
+(defConcept owl:|ObjectProperty| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| (owl:|Restriction| (owl:|onProperty| rdfs:|range|)
+                                    (owl:|allValuesFrom| owl:|Class|))))
 |#
 

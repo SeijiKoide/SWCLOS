@@ -18,10 +18,6 @@
   (require :rdfskernel)
   ) ; end of eval-when
 
-(defpackage :gx
-  (:shadow subtypep )
-  (:export ))
-
 (in-package :gx)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -35,7 +31,7 @@
 
 (excl:without-package-locks
     #|
-(defmethod change-class :after ((instance standard-object) (new-class rdfs:Resource) &rest initargs)
+(defmethod change-class :after ((instance standard-object) (new-class rdfs:|Resource|) &rest initargs)
   (declare (ignore initargs))
   ;(format t "~%CHANGE-CLASS:AFTER standard-object ~S to rdfs:Resource ~S" instance new-class)
   (let ((name (slot-value instance 'excl::name)))
@@ -48,22 +44,22 @@
   ;; the class has become an instance of designated metaclass but this code is invoked 
   ;; if the original class was mop:forward-referenced-class.
   (declare (ignore args))
-  (when (and (%clos-subtype-p class rdfs:Class) name 
+  (when (and (%clos-subtype-p class rdfs:|Class|) name 
              (or (not (boundp name)) (null (symbol-value name))))
     (export-as-QName name)
     (setf (symbol-value name) class)))
 )
 #|
 (excl:without-package-locks
-(defmethod mop:finalize-inheritance :before ((class rdfs:Class))
+(defmethod mop:finalize-inheritance :before ((class rdfs:|Class|))
   (let* ((classes (collect-superclasses* class))
          (forward-referenced-classes
           (remove-if-not #'excl::forward-referenced-class-p classes)))
     (loop for fclass in forward-referenced-classes
-        do (change-class fclass rdfs:Class))
+        do (change-class fclass rdfs:|Class|))
     ))
 (defmethod mop:finalize-inheritance :before ((class mop:forward-referenced-class))
-  (change-class class rdfs:Class))
+  (change-class class rdfs:|Class|))
 )
 |#
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -71,7 +67,7 @@
 ;; Finalize Inheritance for Partial Order Inconsistency in CPL
 ;;
 
-(defmethod mop:finalize-inheritance ((class rdfs:Class))
+(defmethod mop:finalize-inheritance ((class rdfs:|Class|))
   (let* ((oldsupers (mop:class-direct-superclasses class))
          (newsupers (if (> (length oldsupers) 1)
                         (most-specific-concepts-by-superclasses oldsupers)
@@ -110,7 +106,7 @@
   (flet ((swap (x y lst) 
                (substitute y :seiji (substitute x y (substitute :seiji x lst)))))
     (labels ((walk-supers-to-repair (inconsistent super)
-               (cond ((eql self rdfs:Resource) nil)
+               (cond ((eql self rdfs:|Resource|) nil)
                      ((eql self |rdfs:Resource|) nil)
                      ((member (cadr inconsistent)
                                  (member (car inconsistent)
@@ -164,7 +160,7 @@
 ;;......................................................................................
 ;; from Kiczales "The Art of the Metaobject Protocol"
 #+never
-(defmethod mop:class-precedence-list ((root rdfs:Class))
+(defmethod mop:class-precedence-list ((root rdfs:|Class|))
   (std-compute-class-precedence-list root))
 
 (defun std-compute-class-precedence-list (class)
@@ -243,15 +239,15 @@
           ((error "Cant happen!")))))
 
 (defun reify (subject predicate object)
-  (when (not (cl:typep subject rdf:Statement))
-    (unless (loop for stat in (class-direct-instances rdf:Statement)
-                thereis (and (rdf-equalp subject (slot-value stat 'rdf:subject))
-                             (rdf-equalp predicate (slot-value stat 'rdf:predicate))
-                             (rdf-equalp object (slot-value stat 'rdf:object))))
+  (when (not (cl:typep subject rdf:|Statement|))
+    (unless (loop for stat in (class-direct-instances rdf:|Statement|)
+                thereis (and (rdf-equalp subject (slot-value stat 'rdf:|subject|))
+                             (rdf-equalp predicate (slot-value stat 'rdf:|predicate|))
+                             (rdf-equalp object (slot-value stat 'rdf:|object|))))
       ;(format t "~%Making statement:~S ~S ~S" subject predicate object)
-      (make-instance 'rdf:Statement :subject subject :predicate predicate :object object))))
+      (make-instance 'rdf:|Statement| :subject subject :predicate predicate :object object))))
 
-(defmethod shared-initialize :after ((instance rdfs:Resource) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance rdfs:|Resource|) slot-names &rest initargs)
   "book-keeping for reification seiji"
   ;(format t "SHARED-INTIALIZE:AFTER((~S rdfs:Resource) ~S &rest ~S)~%" instance slot-names initargs)
   (cond ((and (null slot-names) (null initargs))  ; when change-class
@@ -260,10 +256,10 @@
          )
         (t                                        ; first or redefinition
          (typecase instance
-           (rdfs:Literal nil)
-           (rdfs:Datatype nil)
-           (rdf:Statement nil)
-           (rdf:List nil)
+           (rdfs:|Literal| nil)
+           (rdfs:|Datatype| nil)
+           (rdf:|Statement| nil)
+           (rdf:|List| nil)
            (otherwise 
             (apply #'book-keeping-for-reification instance slot-names initargs)
             )))))

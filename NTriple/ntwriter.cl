@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan,
 ;;;
-;;; Copyright © 2004 by Galaxy Express Corporation
+;;; Copyright (c) 2004 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2008 Seiji Koide
 ;;
@@ -40,21 +40,21 @@
         ; (name resource))
         ((and (symbolp resource) (object? resource))
          (symbol2uri resource))
-        ((and (rsc-object-p resource) (slot-boundp resource 'rdf:about))
-         (iri (slot-value resource 'rdf:about)))
+        ((and (rsc-object-p resource) (slot-boundp resource 'rdf:|about|))
+         (iri (slot-value resource 'rdf:|about|)))
         ((not (anonymous-p resource))
          (symbol2uri (name resource)))))
 
 (defun print-uri-form (uri stream)
   (write-char #\< stream)
-  (net.uri:render-uri uri stream)
+  (render-uri uri stream)
   (write-char #\> stream))
 
 (defun write-triple (triple &optional (stream *standard-output*))
   (flet ((write-it (obj)
-                   (when (eq obj '|rdfs:Resource|) (setq obj 'rdfs:Resource))
-                   (when (eq obj |rdfs:Resource|) (setq obj rdfs:Resource))
-                   (if (net.uri:uri-p obj) (print-uri-form obj stream)
+                   (when (eq obj '|rdfs:Resource|) (setq obj 'rdfs:|Resource|))
+                   (when (eq obj |rdfs:Resource|) (setq obj rdfs:|Resource|))
+                   (if (uri-p obj) (print-uri-form obj stream)
                      (let ((uri (get-triple-uri obj)))
                        (cond ((symbolp uri) (prin1 uri stream))
                              (uri (print-uri-form uri stream))
@@ -71,11 +71,11 @@
       (write-it predicate)
       (write-char #\space stream)
       (typecase object
-        (rdf:XMLLiteral (format stream "~W^^<~A>"
+        (rdf:|XMLLiteral| (format stream "~W^^<~A>"
                           (format nil "~A" (slot-value object 'value))
                           (symbol2uri (class-name (class-of object)))))
-        (rdfs:Literal (write object :stream stream))
-        (rdfs:Resource (write-it object))
+        (rdfs:|Literal| (write object :stream stream))
+        (rdfs:|Resource| (write-it object))
         (symbol (cond ((nodeID? object) (write object :stream stream))
                       ((object? object) (write-it (symbol-value object)))
                       (t (write object :stream stream))))

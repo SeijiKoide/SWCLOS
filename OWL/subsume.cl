@@ -10,16 +10,9 @@
 ;; -------
 ;; 2009.11.03    File created and subsumed-p part is moved here from leanOWL.
 
-(cl:provide :subsume)
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  )
-
-(defpackage :gx
-  (:use :common-lisp)
-  (:export subsumed-p ))
-
 (in-package :gx)
+
+(export 'subsumed-p)
 
 ;;;
 ;;;; Subsumption 
@@ -50,12 +43,12 @@
          ;; {vin:Dry vin:OffDry} < {vin:Dry vin:OffDry vin:Sweet}
          (oneof-subsumed-p c d))
         ;; as classes
-        ((and (or (eq c (symbol-value 'owl:Class)) (owl-class-p c))
-              (or (eq d (symbol-value 'owl:Class)) (owl-class-p d))
-              ;; note that owl:Class is not in owl:Class extensions.
-              (or (eq c (symbol-value 'owl:Nothing))
-                  (eq d (symbol-value 'owl:Thing))
-                  (when (or (eq d (symbol-value 'owl:Nothing)) (eq c (symbol-value 'owl:Thing)))
+        ((and (or (eq c (symbol-value 'owl:|Class|)) (owl-class-p c))
+              (or (eq d (symbol-value 'owl:|Class|)) (owl-class-p d))
+              ;; note that owl:|Class| is not in owl:|Class| extensions.
+              (or (eq c (symbol-value 'owl:|Nothing|))
+                  (eq d (symbol-value 'owl:|Thing|))
+                  (when (or (eq d (symbol-value 'owl:|Nothing|)) (eq c (symbol-value 'owl:|Thing|)))
                     (return-from subsumed-p (values nil t)))
                   (some #'(lambda (cc)
                             (some #'(lambda (dd)
@@ -79,7 +72,7 @@
                ((and (object? c) (object? d))
                 (subsumed-p (symbol-value c) (symbol-value d)))
                ((and (datatype? c) (object? d))
-                (values (subtypep (find-class 'rdf:XMLLiteral) d) t))
+                (values (subtypep (find-class 'rdf:|XMLLiteral|) d) t))
                ((and (object? c) (datatype? d))
                 (values nil t))
                (t (values nil nil))))
@@ -109,10 +102,10 @@
         ((eq cc nil) (values t t))
         ((eq cc t) (values nil t))
         ((eq dd nil) (values nil t))
-        ((eq dd owl:Thing) (values t t))
-        ((eq cc owl:Nothing) (values t t))
-        ((eq dd owl:Nothing) (values nil t))
-        ((eq cc owl:Thing) (values nil t))
+        ((eq dd owl:|Thing|) (values t t))
+        ((eq cc owl:|Nothing|) (values t t))
+        ((eq dd owl:|Nothing|) (values nil t))
+        ((eq cc owl:|Thing|) (values nil t))
         ((%clos-subtype-p cc dd) (values t t)) ; CLOS or RDFS default reasoning
         ((%clos-subtype-p dd cc) (values nil t))
         ((and (union-of cc) ; vin:Fruit has no supers but has two subs.
@@ -158,7 +151,7 @@
   "returns unfolded concepts of <conj>, if <conj> is an intersection in OWL, 
    otherwise returns <conj> itself."
   (cond ((intersection-p conj)
-         (mapcar #'unfold-intersection (slot-value conj 'owl:intersectionOf)))
+         (mapcar #'unfold-intersection (slot-value conj 'owl:|intersectionOf|)))
         (t conj)))
 
 (defun intersection-subsumed-p (c dintersections)
@@ -180,8 +173,8 @@
                              (mop:class-slots c))
               (remove-duplicates
                (mapcar #'(lambda (dr) (name (onproperty-of dr))) drestrs))
-              (remove-if-not #'(lambda (x) (cl:typep x (symbol-value 'owl:cardinalityRestriction))) drestrs)
-              (remove-if #'(lambda (x) (cl:typep x (symbol-value 'owl:cardinalityRestriction))) drestrs))))))
+              (remove-if-not #'(lambda (x) (cl:typep x (symbol-value 'owl:|cardinalityRestriction|))) drestrs)
+              (remove-if #'(lambda (x) (cl:typep x (symbol-value 'owl:|cardinalityRestriction|))) drestrs))))))
 (defun %intersection-restriction-subsumed-p (cslots dprops dcards dcnsts)
   "cslots are effective slots for c's instances, dprops are property names for restrictions as intersection at d.
    dcars are cardinality restrictions on d's properties. dcnsts are non-cardinality restrictions on d's properties."
@@ -193,13 +186,13 @@
                   (get-maxcard
                    (x)
                    (and x
-                        (or (and (slot-boundp x 'owl:cardinality) (slot-value x 'owl:cardinality))
-                            (and (slot-boundp x 'owl:maxCardinality) (slot-value x 'owl:maxCardinality)))))
+                        (or (and (slot-boundp x 'owl:|cardinality|) (slot-value x 'owl:|cardinality|))
+                            (and (slot-boundp x 'owl:|maxCardinality|) (slot-value x 'owl:|maxCardinality|)))))
                   (get-mincard
                    (x)
                    (and x
-                        (or (and (slot-boundp x 'owl:cardinality) (slot-value x 'owl:cardinality))
-                            (and (slot-boundp x 'owl:minCardinality) (slot-value x 'owl:minCardinality))))))
+                        (or (and (slot-boundp x 'owl:|cardinality|) (slot-value x 'owl:|cardinality|))
+                            (and (slot-boundp x 'owl:|minCardinality|) (slot-value x 'owl:|minCardinality|))))))
              (let ((dcnst (remove-if-not #'onproperty-p dcnsts))
                    (dcard (remove-if-not #'onproperty-p dcards))
                    (cslot (find prop cslots :key #'mop:slot-definition-name :test #'(lambda (p1 p2) (or (equal p1 p2))))) ; or subproperty? but not yet
@@ -211,16 +204,16 @@
                              (assert (length=1 dcnst))
                              (setq dcnst (car dcnst))
                              (etypecase dcnst
-                               (owl:someValuesFromRestriction
+                               (owl:|someValuesFromRestriction|
                                 (format t "~%someValuesFromRestriction ~S in autoepistemic local closed world ~S" dcnst *autoepistemic-local-closed-world*)
                                 (if *autoepistemic-local-closed-world*
                                     (return-from %intersection-restriction-subsumed-p (values nil t))
                                   (setq val2 (or val2 t))))
-                               (owl:hasValueRestriction
+                               (owl:|hasValueRestriction|
                                 (if *autoepistemic-local-closed-world*
                                     (return-from %intersection-restriction-subsumed-p (values nil t))
                                   (setq val2 (or val2 t))))
-                               (owl:allValuesFromRestriction (setq val2 (or val2 t)))))
+                               (owl:|allValuesFromRestriction| (setq val2 (or val2 t)))))
                             ((length=1 dcard)
                              (error "Not Yet!")
                              (setq dcard (car dcard))
@@ -250,9 +243,9 @@
                               (dmax (get-maxcard dcard))
                               (dmin (get-mincard dcard)))
                           ;(format t "~%dmax:~S~%dmin:~S" dmax dmin)
-                          (when (and dmax (cl:typep dmax rdf:XMLLiteral))
+                          (when (and dmax (cl:typep dmax rdf:|XMLLiteral|))
                             (setq dmax (value-of dmax)))
-                          (when (and dmin (cl:typep dmin rdf:XMLLiteral))
+                          (when (and dmin (cl:typep dmin rdf:|XMLLiteral|))
                             (setq dmin (value-of dmin)))
                           (when (and cmax dmax (> cmax dmax))
                             (return-from %intersection-restriction-subsumed-p (values nil t)))
@@ -342,14 +335,14 @@
 (defun create-models-for-subsumer-from-restrictions (var role max min conjuncts models)
   "creates a model from universal <var> and restriction <conjuncts>.
    Note that all properties in <conjuncts> are is <role>."
-  (let ((fills      (remove-if-not #'(lambda (r) (cl:typep r 'owl:hasValueRestriction)) conjuncts))
-        (exists     (remove-if-not #'(lambda (r) (cl:typep r 'owl:someValuesFromRestriction)) conjuncts))
-        (universals (remove-if-not #'(lambda (r) (cl:typep r 'owl:allValuesFromRestriction)) conjuncts))
-        (types      (remove-if     #'(lambda (r) (cl:typep r 'owl:Restriction)) conjuncts)))
+  (let ((fills      (remove-if-not #'(lambda (r) (cl:typep r 'owl:|hasValueRestriction|)) conjuncts))
+        (exists     (remove-if-not #'(lambda (r) (cl:typep r 'owl:|someValuesFromRestriction|)) conjuncts))
+        (universals (remove-if-not #'(lambda (r) (cl:typep r 'owl:|allValuesFromRestriction|)) conjuncts))
+        (types      (remove-if     #'(lambda (r) (cl:typep r 'owl:|Restriction|)) conjuncts)))
     ;(format t "~%fills:~S exists:~S universals:~S types:~S" fills exists universals types)
-    (let ((fillers (mapcar #'(lambda (fill) (slot-value fill 'owl:hasValue)) fills))
-          (exists  (mapcar #'(lambda (exst) (slot-value exst 'owl:someValuesFrom)) exists))
-          (alls    (mapcar #'(lambda (all)  (slot-value all  'owl:allValuesFrom)) universals)))
+    (let ((fillers (mapcar #'(lambda (fill) (slot-value fill 'owl:|hasValue|)) fills))
+          (exists  (mapcar #'(lambda (exst) (slot-value exst 'owl:|someValuesFrom|)) exists))
+          (alls    (mapcar #'(lambda (all)  (slot-value all  'owl:|allValuesFrom|)) universals)))
       (generate-subsumer-models var role max types alls exists fillers models))))
 
 (defun clash-p (bindings cbindings conjuncts)
@@ -679,20 +672,20 @@
 ;;;
 
 (defun transitive-property-p (obj)
-  "Is this <obj> an instance of owl:TransitiveProperty?"
-  ;;this is same as '(cl:typep <obj> owl:TransitiveProperty)'
+  "Is this <obj> an instance of owl:|TransitiveProperty|?"
+  ;;this is same as '(cl:typep <obj> owl:|TransitiveProperty|)'
   (and (excl::standard-instance-p obj)
        (let ((class (class-of obj)))
-         (cond ((eq class (find-class 'owl:TransitiveProperty)))
+         (cond ((eq class (find-class 'owl:|TransitiveProperty|)))
                ((mop:class-finalized-p class)
-                (and (member (find-class 'owl:TransitiveProperty)
+                (and (member (find-class 'owl:|TransitiveProperty|)
                                 (mop:class-precedence-list class)
                                 :test #'eq)
                      t))
                ((labels ((walk-partial-cpl (c)
                                            (let ((supers (mop:class-direct-superclasses c)))
                                              (when (member
-                                                    (find-class 'owl:TransitiveProperty)
+                                                    (find-class 'owl:|TransitiveProperty|)
                                                     supers :test #'eq)
                                                (return-from transitive-property-p t))
                                              (mapc #'walk-partial-cpl supers))))
@@ -758,7 +751,7 @@
                         (return (values nil known))))
               (not (let ((ty2 (arg1 type2)))
                      (cond ((owl-equivalent-p type1 ty2) (values nil t)) ; x and (not x), disjoint
-                           ((owl-equivalent-p type1 rdfs:Resource) (values t t))
+                           ((owl-equivalent-p type1 rdfs:|Resource|) (values t t))
                            ;;    type1 is included in t2, disjoint
                            ((subsumed-p type1 ty2) (values nil t)) 
                            ;;    (not ty2) = (not type1) U (type1 - ty2)
@@ -780,7 +773,7 @@
                      (t (values nil nil))))
               (not (let ((ty1 (arg1 type1)))
                      (cond ((owl-equivalent-p ty1 type2) (values nil t)) ; (not x) and x, disjoint
-                           ((owl-equivalent-p type2 rdfs:Resource) (values t t))
+                           ((owl-equivalent-p type2 rdfs:|Resource|) (values t t))
                            ;;       (not ty1) = (not type2) U (type2 - ty1)
                            ((subsumed-p ty1 type2) (values nil t))
                            ((subsumed-p type2 ty1) (values nil t))  ; disjoint

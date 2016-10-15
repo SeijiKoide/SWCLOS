@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2002-2005 Galaxy Express Corporation
+;;; Copyright (c) 2002-2005 Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007 Seiji Koide
 ;;
@@ -25,11 +25,10 @@
   (require :rdfboot)
 ) ; end of eval-when
 
-(defpackage :gx
-  (:export domain-value get-domain collect-domains domainp rangep range-value get-range collect-ranges
-           *autoepistemic-local-closed-world*))
-
 (in-package :gx)
+
+(export '(domain-value get-domain collect-domains domainp rangep range-value get-range collect-ranges
+           *autoepistemic-local-closed-world*))
 
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (setf (uri-namedspace-package (set-uri-namedspace "http://www.w3.org/2001/XMLSchema#"))
@@ -92,10 +91,10 @@
 ;;; the RDF universe. The top concept is rdfs:Resource and the top meta concept is rdfs:Class in 
 ;;; the OWL universe, too. 
 
-(defparameter *top* rdfs:Resource
+(defparameter *top* rdfs:|Resource|
   "The top concept, i.e. rdfs:Resource in RDFS, and in OWL, too.")
 
-(defparameter *meta* rdfs:Class
+(defparameter *meta* rdfs:|Class|
   "The top meta-object, i.e. rdfs:Class in RDFS, and in OWL, too.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,10 +102,10 @@
 ;;;; Domain Value
 ;;;
 
-(defmethod domain-value ((property rdf:Property))
+(defmethod domain-value ((property rdf:|Property|))
   "retrieve the domain value of <property>, or returns nil if not exists.
    Note that this method is refined for owl:ObjectProperty."
-  (and (slot-boundp property 'rdfs:domain) (slot-value property 'rdfs:domain)))
+  (and (slot-boundp property 'rdfs:|domain|) (slot-value property 'rdfs:|domain|)))
 
 (defun %domain-value (property)
   "returns a list of domains for property or null list."
@@ -131,8 +130,8 @@
 
 (defun most-specific-inherited-domain (property)
   (let ((domain nil)
-        (supers (and (slot-boundp property 'rdfs:subPropertyOf)
-                     (slot-value property 'rdfs:subPropertyOf))))
+        (supers (and (slot-boundp property 'rdfs:|subPropertyOf|)
+                     (slot-value property 'rdfs:|subPropertyOf|))))
     (loop for super in (if (listp supers) supers (list supers))
         do (setq domain (more-specific-domain property domain super)))
     domain))
@@ -161,34 +160,34 @@
   "collects domain information from <properties>. A property must be a symbol.
    If anyone in properties is not defined, this function executes rdf1 entaiment rule."
   (loop for role in properties with domains
-      when (and (not (eq role 'rdf:about))
-                (not (eq role 'rdf:ID))
+      when (and (not (eq role 'rdf:|about|))
+                (not (eq role 'rdf:|ID|))
                 (not (eq role 'xml:lang))
                 (not (keywordp role)))
       do (when (not (property? role))
            (warn "Entail by rdf1: ~S rdf:type rdf:Property." role)
-           (set role (make-instance rdf:Property :name role)))
+           (set role (make-instance rdf:|Property| :name role)))
         (setq domains (union (%get-domain (symbol-value role)) domains))
       finally (return domains)))
 
 (defun domainp (property domain)
   "returns true if <property>'s domain is a subclass of <domain>, or if 
    some of <property>'s super-properties has a subclass domain of <domain>."
-  (or (and (slot-boundp property 'rdfs:domain)
-           (let ((cls (slot-value property 'rdfs:domain)))
+  (or (and (slot-boundp property 'rdfs:|domain|)
+           (let ((cls (slot-value property 'rdfs:|domain|)))
              (cond ((listp cls) (some #'(lambda (d) (subtypep d domain)) cls))
                    ((subtypep cls domain)))))
       (some #'(lambda (superp) (domainp superp domain))
-            (slot-value property 'rdfs:subPropertyOf))))
+            (slot-value property 'rdfs:|subPropertyOf|))))
 
 ;;;
 ;;;;  Range Value
 ;;;
 
-(defmethod range-value ((property rdf:Property))
+(defmethod range-value ((property rdf:|Property|))
   "retrieve the range value of <property>, or returns nil if not exists.
    This method is refined for owl:ObjectProperty."
-  (and (slot-boundp property 'rdfs:range) (slot-value property 'rdfs:range)))
+  (and (slot-boundp property 'rdfs:|range|) (slot-value property 'rdfs:|range|)))
 
 (defun %range-value (property)
   "returns a list of ranges for property or null list."
@@ -200,8 +199,8 @@
 
 (defun most-specific-inherited-range (property)
   (let ((range nil)
-        (supers (and (slot-boundp property 'rdfs:subPropertyOf)
-                     (slot-value property 'rdfs:subPropertyOf))))
+        (supers (and (slot-boundp property 'rdfs:|subPropertyOf|)
+                     (slot-value property 'rdfs:|subPropertyOf|))))
     (unless (listp supers) (setq supers (list supers)))
     (loop for super in supers
         do (setq range (more-specific-range property range super)))
@@ -242,24 +241,24 @@
 (defun collect-ranges (properties)
   "collects range information from <properties>. A property must be a symbol."
   (loop for role in properties with ranges
-      when (and (not (eq role 'rdf:about))
-                (not (eq role 'rdf:ID))
+      when (and (not (eq role 'rdf:|about|))
+                (not (eq role 'rdf:|ID|))
                 (not (eq role 'xml:lang))
                 (not (keywordp role)))
       do (when (not (property? role))
            (warn "Entail by rdf1: ~S rdf:type rdf:Property." role)
-           (set role (make-instance rdf:Property :name role)))
+           (set role (make-instance rdf:|Property| :name role)))
         (setq ranges (union (%get-range (symbol-value role)) ranges))
       finally (return ranges)))
 
 (defun rangep (property range)
   "returns true if <property>'s range is a subclass of <range>, or if 
    some of <property>'s super-properties has a subclass range of <range>."
-  (or (and (slot-boundp property 'rdfs:range)
-           (let ((cls (slot-value property 'rdfs:range)))
+  (or (and (slot-boundp property 'rdfs:|range|)
+           (let ((cls (slot-value property 'rdfs:|range|)))
              (cond ((consp cls) (some #'(lambda (r) (subtypep r range)) cls))
                    ((subtypep cls range)))))
-      (let ((supers (slot-value property 'rdfs:subPropertyOf)))
+      (let ((supers (slot-value property 'rdfs:|subPropertyOf|)))
         (unless (listp supers) (setq supers (list supers)))
         (some #'(lambda (super) (rangep super range)) supers))))
 
@@ -271,7 +270,7 @@
   "Is every domain satisfied?"
   (every #'(lambda (d)
              (or (cl:typep instance d)
-                 (and (eql d rdfs:Class) (cl:subtypep instance rdfs:Resource))))
+                 (and (eql d rdfs:|Class|) (cl:subtypep instance rdfs:|Resource|))))
          domains))
 
 (defun domain-check-for-class (class domain)
@@ -285,7 +284,7 @@
       (otherwise (setq domain (cons 'and domain)))))
   (cond ((null domain) class)
         ((cl:subtypep class domain) class)
-        ((and (eql domain rdfs:Class) (cl:subtypep class rdfs:Class)) class)
+        ((and (eql domain rdfs:|Class|) (cl:subtypep class rdfs:|Class|)) class)
         (t (warn "Domain entail:class ~S to ~S." (class-name class) domain)
            domain)))
 
@@ -294,7 +293,7 @@
    entailment is invoked as much as possible."
   (cond ((null domain) instance)
         ((cl:typep instance domain) instance)
-        ((and (eql domain rdfs:Class) (cl:subtypep instance rdfs:Resource)) instance)
+        ((and (eql domain rdfs:|Class|) (cl:subtypep instance rdfs:|Resource|)) instance)
         ((rsc-object-p instance)
          (cond ((rdf-class-p domain)
                 (warn "Domain entail4:change class of ~S to ~S." instance domain)
@@ -326,7 +325,7 @@
     (null (cond ((and (symbolp value) (object? value)) (symbol-value value))
                 ((consp value)
                  (cond ((lang? (car value))
-                        (make-instance 'rdf:inLang
+                        (make-instance 'rdf:|inLang|
                           :lang (intern (car value) "keyword")
                           :content (cadr value)))
                        (t (loop for fil in value collect (slot-value-range-check role fil range)))))
@@ -349,7 +348,7 @@
             (not (if (slot-value-range-check role value (args range)) nil value))
             (otherwise (slot-value-range-check role value (cons 'and range)))))
     (forall (cond ((consp value)
-                   (cond ((subtypep rdf:List range) value)
+                   (cond ((subtypep rdf:|List| range) value)
                          (t (remove nil
                                     (loop for val in value collect (slot-value-range-check role val range))))))
                   ((and (equivalent-property-p role (forall-role range))
@@ -385,7 +384,7 @@
                   :format-arguments (list value range)))
                (t value)))
     (otherwise (cond ((consp value)
-                      (cond ((subtypep rdf:List range) value)
+                      (cond ((subtypep rdf:|List| range) value)
                             (t (remove nil
                                        (loop for val in value collect (slot-value-range-check role val range))))))
                      (t (%slot-value-range-check role value range))))))
@@ -393,22 +392,22 @@
   "range is an atom."
   (when (eq value t)
     (return-from %slot-value-range-check
-      (cond ((cl:subtypep range 'xsd:boolean) value)
-            ((and (symbolp range) (eq range 'xsd:boolean)) value)
+      (cond ((cl:subtypep range 'xsd:|boolean|) value)
+            ((and (symbolp range) (eq range 'xsd:|boolean|)) value)
             ((error "Cant happen:t for range ~S" range)))))
   (etypecase value
-    (null (cond ((cl:subtypep range 'xsd:boolean) value)
-                ((and (symbolp range) (eq range 'xsd:boolean)) value)
+    (null (cond ((cl:subtypep range 'xsd:|boolean|) value)
+                ((and (symbolp range) (eq range 'xsd:|boolean|)) value)
                 (t value))) ; pass null
-    (cons (cond ((subtypep rdf:List range) value)
+    (cons (cond ((subtypep rdf:|List| range) value)
                 ((lang? (car value))
                  (setq value
-                       (make-instance 'rdf:inLang
+                       (make-instance 'rdf:|inLang|
                          :lang (intern (car value) "keyword")
                          :content (cadr value)))
                  (assert (and range
-                              (or (eql range 'xsd:string)
-                                  (cl:subtypep rdfs:Literal range))))
+                              (or (eql range 'xsd:|string|)
+                                  (cl:subtypep rdfs:|Literal| range))))
                  value)
                 (t (remove nil (loop for val in value collect (%slot-value-range-check role val range))))))
     (symbol ; maybe keyword
@@ -431,20 +430,20 @@
                   ((error "Cant happen!" 1 value range))))  ; by smh
            (t value)))
     (number (cond ((typep value range) value)
-                  ((cl:subtypep range 'xsd:decimal) value)
+                  ((cl:subtypep range 'xsd:|decimal|) value)
                   (t (error "Not Yet!"))))
     (string (cond ((typep value range) value)
-                  ((cl:subtypep range 'xsd:decimal)
+                  ((cl:subtypep range 'xsd:|decimal|)
                    (read-from-string value))
                   (t (error "Not Yet!"))))
-    (rdf:inLang (cond ((typep value range) value) 
+    (rdf:|inLang| (cond ((typep value range) value) 
                       (t (error "Not Yet!"))))
-    (net.uri:uri (cond ((typep value range) value)               ; OK
-                       ((cl:subtypep range rdfs:Resource) value) ; range is owl:Ontology
+    (uri (cond ((typep value range) value)               ; OK
+                       ((cl:subtypep range rdfs:|Resource|) value) ; range is owl:Ontology
                        ((typep (iri-value value) range) value)  ; check 
                        ((warn "*** INVALID SLOT VALUE1 ~S FOR ~S ***" value range)
                         value)))
-    (rdfs:Resource
+    (rdfs:|Resource|
      (cond ((rdf-metaclass-p range)
             (cond ((typep value range) value)
                   ((error "Bingo!!!"))
@@ -476,13 +475,13 @@
                    ;; Still don't handle an or type with more than a single subform. -smh
                    (slot-value-range-check role value (cadr range))) ; by smh
                   ))))
-    (xsd:anySimpleType
+    (xsd:|anySimpleType|
      (format t "~%YYYYES!")
      (cond ((typep value range) value)              ; OK
-           ((eq range 'rdfs:Literal) value)
-           ((or (cl:subtypep range 'xsd:decimal)
-                (cl:subtypep range 'xsd:float)
-                (cl:subtypep range 'xsd:double))
+           ((eq range 'rdfs:|Literal|) value)
+           ((or (cl:subtypep range 'xsd:|decimal|)
+                (cl:subtypep range 'xsd:|float|)
+                (cl:subtypep range 'xsd:|double|))
             (cond ((and (numberp value) (cl:typep value range))
                    value)
                   ((stringp value)
@@ -491,7 +490,7 @@
                          ((error 'invalid-slot-value-for-range
                             :format-control "~S for range ~S"
                             :format-arguments (list value range)))))))
-           ((cl:subtypep range 'xsd:string) value)
+           ((cl:subtypep range 'xsd:|string|) value)
            (t (warn "*** INVALID SLOT VALUE2 ~S FOR ~S ***" value range) value)))
     ))
 

@@ -17,13 +17,6 @@
 ;;
 ;;; ==================================================================================
 
-(cl:provide :rdfscore)
-
-(cl:defpackage :gx
-  (:export addObject addForm addInstance addClass defResource defProperty defConcept 
-           defIndividual subproperty-p addRdfXml)
-  )
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :swclosutils)
   (require :swclospackages)
@@ -35,6 +28,9 @@
 ) ; end of eval-when
 
 (in-package :gx)
+
+(export '(add-Object add-Form add-Instance add-Class def-Resource def-Property def-Concept 
+           def-Individual subproperty-p add-Rdf-Xml))
 
 (declaim (inline create-slot slot-role slot-forms slot-filler get-filler))
 
@@ -86,22 +82,22 @@
 ;;;
 ;;; To direct a class in defining an entity, rdf:type is used in <slot-form> as same as other slot-forms. For example,
 ;;; ----------------------------------------------------------------------------------
-;;;    (defIndividual vin::ElyseZinfandel (rdf:type vin::Zinfandel)).
+;;;    (defIndividual vin::ElyseZinfandel (rdf:|type| vin::Zinfandel)).
 ;;; ----------------------------------------------------------------------------------
 ;;; As default, rdf:Property is used for property class in <defProperty>. 
 ;;; To direct an object property in OWL, rdf:type is used in <defProperty> as follows.
 ;;; ----------------------------------------------------------------------------------
-;;;    (defProperty vin::hasColor (rdf:type owl::ObjectProperty))
+;;;    (defProperty vin::hasColor (rdf:|type| owl::ObjectProperty))
 ;;; ----------------------------------------------------------------------------------
 ;;; Note that owl:FunctionalProperty is not a subclass of owl:ObjectProperty, while 
 ;;; owl:InverseFunctionalProperty is a subclass of owl:ObjectProperty. Therefore, it may 
 ;;; be needed to add owl:ObjectProperty with owl:FunctionalProperty as follows.
 ;;; ----------------------------------------------------------------------------------
 ;;;  (defProperty vin::hasMaker 
-;;;    (rdf:type owl:FunctionalProperty owl:ObjectProperty))
+;;;    (rdf:|type| owl:FunctionalProperty owl:ObjectProperty))
 ;;;
 ;;;  (defProperty vin::producesWine
-;;;    (rdf:type owl:InverseFunctionalProperty)
+;;;    (rdf:|type| owl:InverseFunctionalProperty)
 ;;;    (owl:inverseOf vin::hasMaker))
 ;;; ----------------------------------------------------------------------------------
 
@@ -109,16 +105,16 @@
   (defun expand-def (type name args)
     "<type> may be symbol rdfs:Class, rdf:Property, rdfs:Resource, or '|rdfs:Resource|."
     (cond ((null name)
-           (cond ((and (null type) (assoc 'rdf:type args))
-                  `(addForm ',(cons (mkatom (cdr (assoc 'rdf:type args))) args)
+           (cond ((and (null type) (assoc 'rdf:|type| args))
+                  `(addForm ',(cons (mkatom (cdr (assoc 'rdf:|type| args))) args)
                             t))
                  (t `(addForm ',(cons type args)
                               t))))
           ((symbolp name)
-           (cond ((and (null type) (assoc 'rdf:type args))
+           (cond ((and (null type) (assoc 'rdf:|type| args))
                   `(progn
                      (defparameter ,name
-                       (addForm ',(cons (mkatom (cdr (assoc 'rdf:type args))) (cons `(:name ,name) args))
+                       (addForm ',(cons (mkatom (cdr (assoc 'rdf:|type| args))) (cons `(:name ,name) args))
                                 t))
                      ,name))
                  (t `(progn
@@ -135,55 +131,55 @@
    and returns the class object."
   (assert (symbolp name))
   `(progn (excl:record-source-file ',name :type :type)
-     ,(expand-def 'rdfs:Class name args)))
+     ,(expand-def 'rdfs:|Class| name args)))
 
 (defmacro defConcept (name &rest args)
   "defines a class in OWL or a resource class in RDF(S). 
    This macro sets the class object to the symbol <name> 
    and returns the class object."
   (assert (symbolp name))
-  (cond ((and (assoc 'rdf:type args)
-              (length=1 (cdr (assoc 'rdf:type args))))
-         (cond ((eql 'owl:Class (cadr (assoc 'rdf:type args)))
+  (cond ((and (assoc 'rdf:|type| args)
+              (length=1 (cdr (assoc 'rdf:|type| args))))
+         (cond ((eql 'owl:|Class| (cadr (assoc 'rdf:|type| args)))
                 `(progn (excl:record-source-file ',name :type :type)
-                   ,(expand-def 'owl:Class name (remove 'rdf:type args :key #'car))))
-               ((eql 'rdfs:Class (cadr (assoc 'rdf:type args)))
+                   ,(expand-def 'owl:|Class| name (remove 'rdf:|type| args :key #'car))))
+               ((eql 'rdfs:|Class| (cadr (assoc 'rdf:|type| args)))
                 `(progn (excl:record-source-file ',name :type :type)
-                   ,(expand-def 'rdfs:Class name (remove 'rdf:type args :key #'car))))
+                   ,(expand-def 'rdfs:|Class| name (remove 'rdf:|type| args :key #'car))))
                (t `(progn (excl:record-source-file ',name :type :type)
-                     ,(expand-def 'rdfs:Class name args)))))
+                     ,(expand-def 'rdfs:|Class| name args)))))
         (t `(progn (excl:record-source-file ',name :type :type)
-              ,(expand-def 'rdfs:Class name args)))))
+              ,(expand-def 'rdfs:|Class| name args)))))
 
 (defmacro defProperty (name &rest args)
   "defines an instance of rdf:Property. 
    This macro sets a property object to the symbol <name> and 
    returns the property object."
   (assert (symbolp name))
-  (expand-def 'rdf:Property name args))
+  (expand-def 'rdf:|Property| name args))
 
 (defmacro defIndividual (name &rest args)
   "defines an individual of owl:Resource 
    with <name> and slots.  This macro sets the individual object to 
    the symbol <name> and the object."
   (assert (symbolp name))
-  (cond ((assoc 'rdf:type args) (expand-def 'rdfs:Resource name args))
+  (cond ((assoc 'rdf:|type| args) (expand-def 'rdfs:|Resource| name args))
         (t (expand-def '|rdfs:Resource| name args))))
 
 (defun addRdfXml (description)
   ;;(format t "~%~S" description)
-  (cond ((Description-p description)
-         (let* ((form (Description-form description))
-                (about (second (assoc 'rdf:about (cdr form))))
-                (id (second (assoc 'rdf:ID (cdr form))))
-                (nodeID (second (assoc 'rdf:nodeID (cdr form))))
-                (name (cond ((string= (string (Description-tag description)) "Ontology")
+  (cond ((|Description|-p description)
+         (let* ((form (|Description|-form description))
+                (about (second (assoc 'rdf:|about| (cdr form))))
+                (id (second (assoc 'rdf:|ID| (cdr form))))
+                (nodeID (second (assoc 'rdf:|nodeID| (cdr form))))
+                (name (cond ((string= (string (|Description|-tag description)) "Ontology")
                              (name-ontology about))
                             (about (uri2symbol about)))))
            (when id
              (assert (null nodeID))
              (setq form (cons (car form)
-                              (remove (assoc 'rdf:ID (cdr form)) (cdr form)))))
+                              (remove (assoc 'rdf:|ID| (cdr form)) (cdr form)))))
            (when nodeID
              (setq form (cons (car form)
                               (remove (assoc 'nodeID (cdr form)) (cdr form)))))
@@ -197,18 +193,18 @@
 (defun lasyAddRdfXml (description)
   "This function lazily <addForm> when it is forced.
    <delay> must be explicitly called with <force> function."
-  (cond ((Description-p description)
-         (let* ((form (Description-form description))
-                (about (second (assoc 'rdf:about (cdr form))))
-                (id (second (assoc 'rdf:ID (cdr form))))
-                (nodeID (second (assoc 'rdf:nodeID (cdr form))))
-                (name (cond ((string= (string (Description-tag description)) "Ontology")
+  (cond ((|Description|-p description)
+         (let* ((form (|Description|-form description))
+                (about (second (assoc 'rdf:|about| (cdr form))))
+                (id (second (assoc 'rdf:|ID| (cdr form))))
+                (nodeID (second (assoc 'rdf:|nodeID| (cdr form))))
+                (name (cond ((string= (string (|Description|-tag description)) "Ontology")
                              (name-ontology about))
                             (about (uri2symbol about)))))
            (when id
              (assert (null nodeID))
              (setq form (cons (car form)
-                              (remove (assoc 'rdf:ID (cdr form)) (cdr form)))))
+                              (remove (assoc 'rdf:|ID| (cdr form)) (cdr form)))))
            (when nodeID
              (setq form (cons (car form)
                               (remove (assoc 'nodeID (cdr form)) (cdr form)))))
@@ -276,17 +272,17 @@
    but a role for <form> as filler in recursive call."
   (when (eq form t) (return-from addForm t))
   (when (eq form nil) (return-from addForm nil))
-  (assert (not (boundp 'rdf:about)))
+  (assert (not (boundp 'rdf:|about|)))
   (let ((lang-env lang-env))  ; this is effective in read-in-lang-env
     (etypecase form
       (cl:number form)                          ; a number denotes itself
       (cl:string (cond ((property? role)        ; a string denotes itself or typed data if role indicates so.
                         (read-data (get-range-constraint-from role) form))
                        (t (read-in-lang-env form))))
-      (net.uri:uri (assert (and (not (eq role t)) (not (eq role nil))))
-                   (cond ((eq role 'rdf:about) (error "Cant happen!")) ; form2slot processes it before falling here
-                         ((eq role 'rdf:ID) (error "Cant happen!"))
-                         ((eq role 'rdfs:isDefinedBy) form)
+      (uri (assert (and (not (eq role t)) (not (eq role nil))))
+                   (cond ((eq role 'rdf:|about|) (error "Cant happen!")) ; form2slot processes it before falling here
+                         ((eq role 'rdf:|ID|) (error "Cant happen!"))
+                         ((eq role 'rdfs:|isDefinedBy|) form)
                          ((string= (string role) "priorVersion") form)  ; avoiding owl package in RDF subsystem
                          ((string= (string role) "imports") form)
                          ((and (object? role)
@@ -294,23 +290,23 @@
                                         "OntologyProperty"))
                           form)
                          ((and (object? role)
-                               (not (eq role 'rdfs:member))
+                               (not (eq role 'rdfs:|member|))
                                (let ((range (get-range-constraint-from role)))
                                  (or (and (atom range)
-                                          (cl:subtypep 'xsd:anyURI range)) ; Seiji 2008/08/06
+                                          (cl:subtypep 'xsd:|anyURI| range)) ; Seiji 2008/08/06
                                      (and (consp range)
-                                          (every #'(lambda (cls) (cl:subtypep 'xsd:anyURI cls)) range)))))
+                                          (every #'(lambda (cls) (cl:subtypep 'xsd:|anyURI| cls)) range)))))
                           ;(format t "~%Form ~S with role ~S" form role)
                           ;(format t "~%  Constraint ~S" (get-range-constraint-from role))
                           form)
-                         ((eq (get role :datatype) 'xsd:anyURI) (error "Cant happen!") ; old edition?
+                         ((eq (get role :datatype) 'xsd:|anyURI|) (error "Cant happen!") ; old edition?
                           form)
                          (t (let ((name (uri2symbol form))     ; getting name of URI
                                   (uri (iri form)))            ; ensure interning and getting valued-uri 
                               (cond (name (setf (iri-value uri) (addForm name role)))
                                     ; un-named URI denotes anonymous object
                                     (t (if (iri-boundp uri) (iri-value uri)
-                                         (setf (iri-value uri) (addForm `(rdfs:Resource ) role)))
+                                         (setf (iri-value uri) (addForm `(rdfs:|Resource| ) role)))
                                        ))))))
       ;; typed literal???
       (symbol (assert (and (not (eq role t)) (not (eq role nil))))
@@ -325,9 +321,9 @@
                            (obj (make-object-with-minimal-constraint form role)))
                        (when uri (setf (iri-value uri) obj))
                        obj))))
-      (rdf:inLang form)
-      (rdfs:Literal form)                                   ; RDF literal denotes itself
-      (rdfs:Resource (assert (and (not (eq role t)) (not (eq role nil))))
+      (rdf:|inLang| form)
+      (rdfs:|Literal| form)                                   ; RDF literal denotes itself
+      (rdfs:|Resource| (assert (and (not (eq role t)) (not (eq role nil))))
                      (error "Cant happen!")
                      (when (name form)
                        (push `(,(name form) line ,*line-number*) *referenced-resources*))
@@ -335,9 +331,9 @@
       (cons (cond ((lang? (car form))
                    (setq lang-env (car form))
                    (addForm (second form) role)) ; skip lang
-                  ((and (car form) (rdf-subtypep (car form) 'xsd:anySimpleType))
+                  ((and (car form) (rdf-subtypep (car form) 'xsd:|anySimpleType|))
                    (^^ (second form) (car form)))
-                  ((and (symbolp (car form)) (fboundp (car form)) (not (eq (car form) 'rdfs:subClassOf)))
+                  ((and (symbolp (car form)) (fboundp (car form)) (not (eq (car form) 'rdfs:|subClassOf|)))
                    (ecase (car form)
                      (iri (iri (second form)))
                      (^^ (^^ (second form) (third form)))
@@ -347,34 +343,34 @@
                      ;(format t "~%Form:~S" form)
                      (let ((domains (most-specific-concepts (collect-domains (mapcar #'car (cdr form))))))
                        ;(format t "~%Domains:~S" domains)
-                       (loop for cls in (cdr (assoc 'rdf:type (cdr form)))
+                       (loop for cls in (cdr (assoc 'rdf:|type| (cdr form)))
                            do (cond ((symbolp cls))
-                                    ((net.uri:uri-p cls) (setq cls (uri2symbol cls)))
-                                    ((consp cls) (setq cls (addForm cls 'rdf:type)))
+                                    ((uri-p cls) (setq cls (uri2symbol cls)))
+                                    ((consp cls) (setq cls (addForm cls 'rdf:|type|)))
                                     (t (error "Not Yet!")))
                              (unless (or (rdf-class-p cls) (class? cls))
-                               (warn "Range entail by rdf:type: ~S rdf:type ~S." cls (name (rdfs:range rdf:type)))
+                               (warn "Range entail by rdf:type: ~S rdf:type ~S." cls (name (rdfs:|range| rdf:|type|)))
                                (cond ((length=1 domains)
-                                      (cond ((eq (car domains) rdfs:Resource)
-                                             (addClass rdfs:Class cls (list rdfs:Resource)))
+                                      (cond ((eq (car domains) rdfs:|Resource|)
+                                             (addClass rdfs:|Class| cls (list rdfs:|Resource|)))
                                             ((y-or-n-p "Define ~S as subclass of ~S?" cls (car domains))
                                              (warn "Superclass of ~S is entailed to ~S by domain constraint of other properties."
                                                cls (name (car domains)))
                                              (addForm `(,(type-of (car domains))
                                                           (:name ,cls)
-                                                          (rdfs:subClassOf ,(name (car domains))))))
+                                                          (rdfs:|subClassOf| ,(name (car domains))))))
                                             ((warn "Nothing done!"))))
                                      (t (let ((uri (symbol2uri cls))
-                                              (obj (addClass (rdfs:range rdf:type) cls ())))
+                                              (obj (addClass (rdfs:|range| rdf:|type|) cls ())))
                                           (when uri (setf (iri-value uri) obj))
                                           obj)))))
                        (let ((class
-                              (cond ((or (null (car form)) (eq (car form) 'rdf:Description))
-                                     (if (assoc 'rdf:type (cdr form))
-                                         (let ((cls (cadr (assoc 'rdf:type (cdr form)))))
+                              (cond ((or (null (car form)) (eq (car form) 'rdf:|Description|))
+                                     (if (assoc 'rdf:|type| (cdr form))
+                                         (let ((cls (cadr (assoc 'rdf:|type| (cdr form)))))
                                            (etypecase cls
                                              (symbol (symbol-value cls))
-                                             (net.uri:uri (symbol-value (uri2symbol cls)))
+                                             (uri (symbol-value (uri2symbol cls)))
                                              (cons (addForm cls))))
                                        (if domains (car domains) (symbol-value '|rdfs:Resource|))))
                                     ((consp (car form))
@@ -385,22 +381,22 @@
                                      (car (most-specific-concepts (append domains (list (symbol-value (car form)))))))
                                     (t (warn "Implicit range entailment: ~S rdf:type rdfs:Class." (car form))
                                        (let ((uri (symbol2uri (car form)))
-                                             (obj (addClass rdfs:Class (car form) ())))
+                                             (obj (addClass rdfs:|Class| (car form) ())))
                                          (when uri (setf (iri-value uri) obj))
                                          obj))))
                              (slots (aggregate-slots (cdr form)))
                              (obj nil))
                          ;(format t "~%Class:~S" class)
-                         (cond ((and (assoc 'owl:oneOf slots) (assoc :name slots))
+                         (cond ((and (assoc 'owl:|oneOf| slots) (assoc :name slots))
                                 (setq obj
-                                      (%addForm class (mapcar #'form2slot (remove (assoc 'owl:oneOf slots) slots)) role))
+                                      (%addForm class (mapcar #'form2slot (remove (assoc 'owl:|oneOf| slots) slots)) role))
                                 ;; obj = class of oneOfs, rule7
-                                (loop for one in (cdr (assoc 'owl:oneOf slots))
+                                (loop for one in (cdr (assoc 'owl:|oneOf| slots))
                                     do (addForm
                                         (cond ((consp one)                                    ; maybe a form
-                                               (cond ((eq (car one) 'owl:Thing)
+                                               (cond ((eq (car one) 'owl:|Thing|)
                                                       (cons (name obj) (cdr one)))
-                                                     (t (append one `((rdf:type ,(name obj)))))))
+                                                     (t (append one `((rdf:|type| ,(name obj)))))))
                                               ((symbolp one) `(,(name obj) (:name ,one)))     ; maybe a name
                                               (t `(,(name obj) ,one))                         ; object ?
                                               )))
@@ -426,15 +422,15 @@
       (:name
        (push `(,(car forms) line ,*line-number*) *referenced-resources*)
        slot-form)
-      (rdf:about
+      (rdf:|about|
        (let ((*uri2symbol-package-mapping-fun* #'excl::false)
              (*uri2symbol-name-mapping-fun* #'excl::false)
              (about (iri (car forms))))
          (let ((symbol (uri2symbol about)))
            (when symbol
              (push `(,symbol line ,*line-number*) *referenced-resources*)))
-         `(rdf:about ,about)))
-      (rdf:ID
+         `(rdf:|about| ,about)))
+      (rdf:|ID|
        (let ((*uri2symbol-package-mapping-fun* #'excl::false)
              (*uri2symbol-name-mapping-fun* #'excl::false))
          (let ((symbol (car forms)))
@@ -455,7 +451,7 @@
   (if (property? role)
       (let ((range (get-range-constraint-from role)))
         (cond (range
-               (cond ((subproperty-p (symbol-value role) rdfs:subClassOf)
+               (cond ((subproperty-p (symbol-value role) rdfs:|subClassOf|)
                       (cond ((not (object? name))
                              (warn "Range entailX1 by ~S: ~S rdf:type ~S." role name (name range))
                              (addObject range `((:name ,name))))
@@ -463,7 +459,7 @@
                              (warn "Range entailX1 by ~S: ~S rdf:type ~S." role name (name range))
                              (change-class (symbol-value name) range))
                             (t (symbol-value name))))
-                     ((subproperty-p (symbol-value role) rdf:type)
+                     ((subproperty-p (symbol-value role) rdf:|type|)
                       (cond ((not (object? name))
                              (warn "Range entailX2 by ~S: ~S rdf:type ~S." role name (name range))
                              (addObject range `((:name ,name))))
@@ -491,7 +487,7 @@
       (let ((range (get-range-constraint-from role)))
         (cond ((null range) obj)
               ((atom range)
-               (cond ((eq obj rdfs:Class) obj)
+               (cond ((eq obj rdfs:|Class|) obj)
                      ((cl:typep obj range) obj)
                      (t (warn "Range entailX4 by ~S: ~S rdf:type ~S." role obj (name range))
                         (change-class obj range))))
@@ -523,7 +519,7 @@
     (otherwise 
      (when (boundp role)
        (let ((range (get-range (symbol-value role))))
-         (if (eql range rdf:List) rdfs:Resource range))))))
+         (if (eql range rdf:|List|) rdfs:|Resource| range))))))
 
 ;;;
 ;;;; %addForm for RDF
@@ -539,7 +535,7 @@
 ;;; In most of cases, the most specific concept (MSC) among domain constraints from roles that are included in <slots>,
 ;;; a range constraint of pair <role> in slot of upper nests, and rdf:type filler in <slots> is computed and used.
 ;;; If any roles in <slots> are not defined, they are tentatively defined as instance of rdf:Property. In case that,
-;;; * %addForm((eql 'rdf:Description)) - If MSC from constraints exists it is used, otherwise the value of 
+;;; * %addForm((eql 'rdf:|Description|)) - If MSC from constraints exists it is used, otherwise the value of 
 ;;;   *top*(=rdfs:Resource) is <type>.
 ;;; * %addForm((eql rdfs:Class)) - If MSC is more special than rdfs:Class, 
 ;;;   it is used otherwise rdfs:Class is used for <type>.
@@ -563,18 +559,18 @@
 ;;; See the following example. Here Species and EndangeredSpecies are defined as metaclass. 
 ;;; ----------------------------------------------------------------------------------
 ;;; (addForm
-;;;   '(rdfs:Class Species
-;;;      (rdfs:subClassOf rdfs:Class)        ; this makes Species a metaclass
-;;;      (rdfs:comment "This example is for the demonstration of addForm.")))
+;;;   '(rdfs:|Class| Species
+;;;      (rdfs:|subClassOf| rdfs:|Class|)        ; this makes Species a metaclass
+;;;      (rdfs:|comment| "This example is for the demonstration of addForm.")))
 ;;; (addForm
-;;;   '(rdfs:Class EndangeredSpecies
-;;;      (rdfs:subClassOf Species)))         ; a subclass of metaclass is a metaclass
+;;;   '(rdfs:|Class| EndangeredSpecies
+;;;      (rdfs:|subClassOf| Species)))         ; a subclass of metaclass is a metaclass
 ;;; (addForm
-;;;   '(rdf:Property estimatedPopulation
-;;;      (rdfs:domain EndangeredSpecies)
-;;;      (rdfs:range xsd:nonNegativeInteger)))
+;;;   '(rdf:|Property| estimatedPopulation
+;;;      (rdfs:|domain| EndangeredSpecies)
+;;;      (rdfs:|range| xsd:|nonNegativeInteger|)))
 ;;; (addForm
-;;;   '(rdfs:Class Hawk
+;;;   '(rdfs:|Class| Hawk
 ;;;      (estimatedPopulation 2000)))         ; MSC is computed as EndangeredSpecies
 ;;; (addForm '(Hawk Harry))
 ;;; ----------------------------------------------------------------------------------
@@ -586,9 +582,9 @@
                 (reverse
                  (cons type
                        (append (mklist (get-range-constraint-from role))
-                               (remove rdf:List (collect-domains (mapcar #'slot-role slots)))
+                               (remove rdf:|List| (collect-domains (mapcar #'slot-role slots)))
                                (cdr (find-if #'(lambda (role) 
-                                                 (and (property? role) (subproperty-p (symbol-value role) rdf:type)))
+                                                 (and (property? role) (subproperty-p (symbol-value role) rdf:|type|)))
                                              slots :key #'slot-role))))))))
     (cond ((null types) (setq type (symbol-value '|rdfs:Resource|)))
           ((length=1 types) (setq type (car types)))
@@ -606,17 +602,17 @@
            (accumulate-defined-name (assoc :name slots)))
          (addObject type slots))
         ((and (symbolp type) (string= (string type) "Ontology"))
-         (let ((name (name-ontology (slot-filler (assoc 'rdf:about slots)))))
+         (let ((name (name-ontology (slot-filler (assoc 'rdf:|about| slots)))))
            (addObject type (acons :name (list name) slots))))
-        ((assoc 'rdf:about slots)
-         ;; if rdf:about attribute exists and no name, then name is set from rdf:about attribute.
-         (let ((uri (slot-filler (assoc 'rdf:about slots))))
+        ((assoc 'rdf:|about| slots)
+         ;; if rdf:about attribute exists and no name, then name is set from rdf:|about| attribute.
+         (let ((uri (slot-filler (assoc 'rdf:|about| slots))))
            (let ((name (unless (assoc :name slots) (uri2symbol uri))))
              (when (or (eq role t) (eq role nil)) ;; top level input
                (accumulate-defined-name name))
              (addObject type (acons :name (list name) slots)))))
-        ((assoc 'rdf:ID slots)
-         (let ((name (slot-filler (assoc 'rdf:ID slots))))
+        ((assoc 'rdf:|ID| slots)
+         (let ((name (slot-filler (assoc 'rdf:|ID| slots))))
            (when (or (eq role t) (eq role nil)) ;; top level input
              (accumulate-defined-name name))
            (addObject type (acons :name (list name) slots))))
@@ -629,7 +625,7 @@
           (most-specific-concepts
            (loop for type in types when (rdf-metaclass-p (class-of type)) append (mclasses type))))
          (meta
-          (cond ((null metas) rdfs:Class)
+          (cond ((null metas) rdfs:|Class|)
                 ((length=1 metas) (car metas))
                 (t (error "Not Yet!")))))
     (addClass meta (make-coined-name types) types)))
@@ -683,7 +679,7 @@
    to fix the meta class and abst classes for this object. Finally, calls <addClass> if the meta class or abst exists, else 
    calls <addInstance>. If optional <domains> is not supplied, the domain constrant is computed and it is used for ensuring 
    the metaclass and abst classes. To suppress domain computing, supply nil."
-  (when (cl:subtypep type 'rdfs:Container) ;type = rdf:Alt,rdf:Seq,rdf:Bag, etc.
+  (when (cl:subtypep type 'rdfs:|Container|) ;type = rdf:Alt,rdf:Seq,rdf:Bag, etc.
     (check-ordinal-properties slot-forms))
   (let ((name (second (assoc ':name slot-forms))))
     (setq slot-forms (remove (assoc ':name slot-forms) slot-forms :test #'eq))
@@ -710,7 +706,7 @@
 
 (defmethod ensure-meta-absts-using-class (meta class slot-forms domains)
   (error "Can't happen!"))
-(defmethod ensure-meta-absts-using-class ((meta rdfs:Class) (class rdfs:Resource) slot-forms domains)
+(defmethod ensure-meta-absts-using-class ((meta rdfs:|Class|) (class rdfs:|Resource|) slot-forms domains)
   "<class> must be an instance."
   (error "Cant happen!"))
 
@@ -719,20 +715,20 @@
   (let ((types (mappend #'cdr
                         (remove-if-not #'(lambda (slot)
                                            (let ((role (slot-role slot)))
-                                             (or (eq role 'rdf:type)
+                                             (or (eq role 'rdf:|type|)
                                                  (and (boundp role) (symbol-value role)
-                                                      (subproperty-p (symbol-value role) rdf:type)))))
+                                                      (subproperty-p (symbol-value role) rdf:|type|)))))
                                        slot-forms)))
         (absts (mappend #'cdr
                         (remove-if-not #'(lambda (slot)
                                            (let ((role (slot-role slot)))
-                                             (or (eq role 'rdfs:subClassOf)
-                                                 (eq role 'owl:intersectionOf)
+                                             (or (eq role 'rdfs:|subClassOf|)
+                                                 (eq role 'owl:|intersectionOf|)
                                                  (and (boundp role) (symbol-value role)
-                                                      (or (and (not (eq role 'owl:equivalentClass))
-                                                               (subproperty-p (symbol-value role) rdfs:subClassOf))
-                                                          (and (boundp 'owl:intersectionOf)
-                                                               (subproperty-p (symbol-value role) (symbol-value 'owl:intersectionOf))))))))
+                                                      (or (and (not (eq role 'owl:|equivalentClass|))
+                                                               (subproperty-p (symbol-value role) rdfs:|subClassOf|))
+                                                          (and (boundp 'owl:|intersectionOf|)
+                                                               (subproperty-p (symbol-value role) (symbol-value 'owl:|intersectionOf|))))))))
                                        slot-forms))))
     ;; ensure absts
     (mapc #'(lambda (abst)
@@ -766,25 +762,25 @@
     (values (refine-concept-by-intersection types)
             absts)))
 
-(defmethod ensure-meta-absts-using-class ((meta rdfs:Class) (class rdfs:Class) slot-forms domains)
+(defmethod ensure-meta-absts-using-class ((meta rdfs:|Class|) (class rdfs:|Class|) slot-forms domains)
   "<class> must be a class or metaclass."
   (let ((types (mappend #'cdr
                         (remove-if-not #'(lambda (slot)
                                            (let ((role (slot-role slot)))
-                                             (or (eq role 'rdf:type)
+                                             (or (eq role 'rdf:|type|)
                                                  (and (boundp role) (symbol-value role)
-                                                      (subproperty-p (symbol-value role) rdf:type)))))
+                                                      (subproperty-p (symbol-value role) rdf:|type|)))))
                                        slot-forms)))
         (absts (mappend #'cdr
                         (remove-if-not #'(lambda (slot)
                                            (let ((role (slot-role slot)))
-                                             (or (eq role 'rdfs:subClassOf)
-                                                 (eq role 'owl:intersectionOf)
+                                             (or (eq role 'rdfs:|subClassOf|)
+                                                 (eq role 'owl:|intersectionOf|)
                                                  (and (boundp role) (symbol-value role)
-                                                      (or (and (not (eq role 'owl:equivalentClass))
-                                                               (subproperty-p (symbol-value role) rdfs:subClassOf))
-                                                          (and (boundp 'owl:intersectionOf)
-                                                               (subproperty-p (symbol-value role) (symbol-value 'owl:intersectionOf))))))))
+                                                      (or (and (not (eq role 'owl:|equivalentClass|))
+                                                               (subproperty-p (symbol-value role) rdfs:|subClassOf|))
+                                                          (and (boundp 'owl:|intersectionOf|)
+                                                               (subproperty-p (symbol-value role) (symbol-value 'owl:|intersectionOf|))))))))
                                        slot-forms))))
     ;; ensure absts
     (mapc #'(lambda (abst)
@@ -828,7 +824,7 @@
   classes)
 
 #|
-(defmethod ensure-meta-absts-using-class ((meta rdfs:Class) (class rdfs:Class) slot-forms domains)
+(defmethod ensure-meta-absts-using-class ((meta rdfs:|Class|) (class rdfs:|Class|) slot-forms domains)
   (flet ((ensure-meta (fil) (cond ((rdf-metaclass-p fil) fil)
                                   ((rdf-class-p fil)
                                    (reinitialize-instance
@@ -848,18 +844,18 @@
     (let ((absts nil)
           (metas nil))
       (loop for (role . fillers) in slot-forms
-          when (or (eq role 'rdfs:subClassOf)
-                   (eq role 'owl:intersectionOf)
+          when (or (eq role 'rdfs:|subClassOf|)
+                   (eq role 'owl:|intersectionOf|)
                    (and (boundp role) (symbol-value role)
-                        (or (and (not (eq role 'owl:equivalentClass))
-                                 (subproperty-p (symbol-value role) rdfs:subClassOf))
-                            (and (boundp 'owl:intersectionOf)
-                                 (subproperty-p (symbol-value role) (symbol-value 'owl:intersectionOf))))))
+                        (or (and (not (eq role 'owl:|equivalentClass|))
+                                 (subproperty-p (symbol-value role) rdfs:|subClassOf|))
+                            (and (boundp 'owl:|intersectionOf|)
+                                 (subproperty-p (symbol-value role) (symbol-value 'owl:|intersectionOf|))))))
           do (setq absts (union absts (mapcar #'ensure-abst fillers))))
       (loop for (role . fillers) in slot-forms
-          when (or (eq role 'rdf:type)
+          when (or (eq role 'rdf:|type|)
                    (and (boundp role) (symbol-value role)
-                        (subproperty-p (symbol-value role) rdf:type)))
+                        (subproperty-p (symbol-value role) rdf:|type|)))
           do (setq metas (union metas fillers)))
       (when (and absts (notany #'rdf-metaclass-p metas))
         (loop for meta in metas do (ensure-meta meta)))
@@ -893,31 +889,31 @@
   (setq classes (mklist classes))
   (let ((name (etypecase class
                 (symbol class)
-                (net.uri:uri (uri2symbol class))
-                (rdfs:Resource (name class))))
+                (uri (uri2symbol class))
+                (rdfs:|Resource| (name class))))
         (uri (etypecase class
                (symbol (symbol2uri class))
-               (net.uri:uri class)
-               (rdfs:Resource (iri class))))
+               (uri class)
+               (rdfs:|Resource| (iri class))))
         (obj (etypecase class
                (symbol (and (boundp class) (symbol-value class)))
-               (net.uri:uri (iri-value class))
-               (rdfs:Resource class)))
+               (uri (iri-value class))
+               (rdfs:|Resource| class)))
         (initargs
          (loop for slot in islots
              append (let ((role (slot-role slot))
                           (fillers (slot-forms slot)))
                       (cond ((null fillers) (list role :unbound))
-                            ((eq role 'rdf:about) slot)
-                            ((eq role 'rdf:ID) slot)
+                            ((eq role 'rdf:|about|) slot)
+                            ((eq role 'rdf:|ID|) slot)
                             ((property? role)
-                             (cond ((eq (get-range (symbol-value role)) rdf:List)
+                             (cond ((eq (get-range (symbol-value role)) rdf:|List|)
                                     (list role (mklist fillers)))
                                    ((cdr fillers)
                                     (list role fillers))
                                    (t slot)))
-                            (t (warn "Entail by rdfs1: ~S rdf:type rdf:Property." role)
-                               (make-instance 'rdf:Property :name role)
+                            (t (warn "Entail by rdfs1: ~S rdf:|type| rdf:|Property|." role)
+                               (make-instance 'rdf:|Property| :name role)
                                (cond ((cdr fillers) (list role fillers))
                                      (t slot))))))))
     ;(format t "~%Name:~S~%URL:~S~%CLS:~S~%Initargs:~S" name uri obj initargs)
@@ -930,9 +926,9 @@
            (set-iri-value (obj)
                           "binds <obj> to obj's uri of rdf:ID or rdf:about attribute value, 
               and push <obj> into *subjects-defined*"
-                          (with-slots (rdf:about rdf:ID) obj
-                            (cond ((slot-boundp obj 'rdf:about) (setf (iri-value (iri rdf:about)) obj))
-                                  ((slot-boundp obj 'rdf:ID) (setf (iri-value (symbol2uri rdf:ID)) obj))))
+                          (with-slots (rdf:|about| rdf:|ID|) obj
+                            (cond ((slot-boundp obj 'rdf:|about|) (setf (iri-value (iri rdf:|about|)) obj))
+                                  ((slot-boundp obj 'rdf:|ID|) (setf (iri-value (symbol2uri rdf:|ID|)) obj))))
                           (pushnew obj *subjects-defined*)
                           obj))
       (when (and name (not uri) (documentation (symbol-package name) t))
@@ -942,7 +938,7 @@
       (cond (obj                                                  ; redefining
              ;; redefinition in either same or different class is processed in ensure-class
              ;; :direct-superclasses and :direct-slots is added into old ones 
-             ;; by shared-initialize :around (rdfs:Class)
+             ;; by shared-initialize :around (rdfs:|Class|)
              ;(format t "~%Adding Class by redefinition classes:~S~%   name:~S~%   absts:~S~%   slots:~S" classes name absts islots)
              (cond ((every #'(lambda (cls) (cl:typep obj cls)) classes)
                     ;(format t "~%~S is already an instance of ~S." obj classes)
@@ -1056,31 +1052,31 @@
   (setq classes (mklist classes))
   (let ((name (etypecase instance
                 (symbol instance)
-                (net.uri:uri (uri2symbol instance))
-                (rdfs:Resource (name instance))))
+                (uri (uri2symbol instance))
+                (rdfs:|Resource| (name instance))))
         (uri (etypecase instance
                 (symbol (symbol2uri instance))
-                (net.uri:uri instance)
-                (rdfs:Resource (iri instance))))
+                (uri instance)
+                (rdfs:|Resource| (iri instance))))
         (obj (etypecase instance
                (symbol (and (boundp instance) (symbol-value instance)))
-               (net.uri:uri (iri-value instance))
-               (rdfs:Resource instance)))
+               (uri (iri-value instance))
+               (rdfs:|Resource| instance)))
         (initargs
          (loop for slot in slots
              append (let ((role (slot-role slot))
                           (fillers (slot-forms slot)))
                       (cond ((null fillers) (list role :unbound))
-                            ((eq role 'rdf:about) slot)
-                            ((eq role 'rdf:ID) slot)
+                            ((eq role 'rdf:|about|) slot)
+                            ((eq role 'rdf:|ID|) slot)
                             ((property? role)
-                             (cond ((eq (get-range (symbol-value role)) rdf:List)
+                             (cond ((eq (get-range (symbol-value role)) rdf:|List|)
                                     (list role (mklist fillers)))
                                    ((cdr fillers)
                                     (list role fillers))
                                    (t slot)))
                             (t (warn "Entail by rdfs1: ~S rdf:type rdf:Property." role)
-                               (make-instance 'rdf:Property :name role)
+                               (make-instance 'rdf:|Property| :name role)
                                (cond ((cdr fillers) (list role fillers))
                                      (t slot))))))))
     ;(format t "~%Initargs: ~S" initargs)
@@ -1101,9 +1097,9 @@
                                                    (t (warn "Multiple classing with ~S for ~S" classes obj)
                                                       (change-class obj shadow)))))))
            (set-iri-value (obj)
-                          (with-slots (rdf:about rdf:ID) obj
-                            (cond ((slot-boundp obj 'rdf:about) (setf (iri-value (iri rdf:about)) obj))
-                                  ((slot-boundp obj 'rdf:ID) (setf (iri-value (symbol2uri rdf:ID)) obj))))
+                          (with-slots (rdf:|about| rdf:|ID|) obj
+                            (cond ((slot-boundp obj 'rdf:|about|) (setf (iri-value (iri rdf:|about|)) obj))
+                                  ((slot-boundp obj 'rdf:|ID|) (setf (iri-value (symbol2uri rdf:|ID|)) obj))))
                           (pushnew obj *subjects-defined*)
                           obj))
       (cond ((and (null slots) (eq (car classes) (class-of obj)))
@@ -1112,7 +1108,7 @@
              (format t "~%Redefining ~S with classes:~S~%    slots:~S in addInstance" name classes slots)
              ;; If name is a blank node ID, definitely it is bound to an default object.
              ;; Therefore the control always falls here, and the object is anonymous.
-             (let ((mclasses (substitute rdfs:Resource |rdfs:Resource| (mclasses obj))))
+             (let ((mclasses (substitute rdfs:|Resource| |rdfs:Resource| (mclasses obj))))
                (cond ((every #'(lambda (cls) (cl:typep obj cls)) classes)
                       (when initargs
                         (format t "~%Reinitializing ~S with ~S" obj initargs)
@@ -1193,7 +1189,7 @@
                 (setq operated t))
           (when operated (mop:finalize-inheritance class)))))))
 
-(defmethod make-instance :before ((class rdfs:Class) &rest initargs)
+(defmethod make-instance :before ((class rdfs:|Class|) &rest initargs)
   (when initargs
     (ensure-class-slotds class initargs)))
 
@@ -1207,12 +1203,12 @@
             do (when (setq domain (get-domain (symbol-value prop)))
                  (cond ((consp domain)
                         (setq domains
-                              (union (reverse (remove rdf:List domain)) domains)))
-                       ((not (eql domain rdf:List))
+                              (union (reverse (remove rdf:|List| domain)) domains)))
+                       ((not (eql domain rdf:|List|))
                         (pushnew domain domains)))))
         domains))))
     
-(defmethod make-instance ((class rdfs:Class) &rest initargs)
+(defmethod make-instance ((class rdfs:|Class|) &rest initargs)
   "This method accepts any class and metaclass including rdfs:Class.
    Before calling the primary method, ensure slot definitions for this <class> for initargs.
    Domain constraints are also taken care, and make a shadow class if multiple classes indicated."
@@ -1249,7 +1245,7 @@
 ;;;; Reinitialize Instance
 ;;;
 
-(defmethod reinitialize-instance :before ((instance rdfs:Resource) &rest initargs)
+(defmethod reinitialize-instance :before ((instance rdfs:|Resource|) &rest initargs)
   "After ensuring that every slot is effectively defined at the class of <instance>,
    if new type option derived from domain constraints are special than the old class, 
    change-class is invoked before primary method of <reinitialize-instance>."
@@ -1278,24 +1274,24 @@
   "read <str> as <type> and returns an instance of <type>."
   (etypecase type
     (null (read-in-lang-env str))
-    (xsd:string (read-in-lang-env str))
-    (rdfs:Class 
-     (cond ((cl:subtypep type rdfs:Literal) (read-in-lang-env str))
-           ((cl:subtypep type rdfs:Resource) (read-in-lang-env str))
+    (xsd:|string| (read-in-lang-env str))
+    (rdfs:|Class| 
+     (cond ((cl:subtypep type rdfs:|Literal|) (read-in-lang-env str))
+           ((cl:subtypep type rdfs:|Resource|) (read-in-lang-env str))
            (t (error "~S is not yet prepared!" type))))
     (symbol 
      (ecase type
-       (xsd:string (read-in-lang-env str))
-       ((xsd:integer xsd:long xsd:int xsd:short xsd:byte xsd:nonNegativeInteger  
-                     xsd:negativeInteger xsd:positiveInteger xsd:nonPositiveInteger)
+       (xsd:|string| (read-in-lang-env str))
+       ((xsd:|integer| xsd:|long| xsd:|int| xsd:|short| xsd:|byte| xsd:|nonNegativeInteger|  
+                     xsd:|negativeInteger| xsd:|positiveInteger| xsd:|nonPositiveInteger|)
         (let ((value (read-from-string str)))
           (assert (cl:typep value type))
           value))
-       (xsd:anyURI (iri str))
-       (xsd:decimal (rational (read-from-string str)))
-       (xsd:float (cl:float (read-from-string str)))
-       (xsd:double (cl:float (read-from-string str) 1.0d0))
-       (xsd:boolean
+       (xsd:|anyURI| (iri str))
+       (xsd:|decimal| (rational (read-from-string str)))
+       (xsd:|float| (cl:float (read-from-string str)))
+       (xsd:|double| (cl:float (read-from-string str) 1.0d0))
+       (xsd:|boolean|
         (let ((value (read-from-string str)))
           (assert (cl:typep value type))
           value))))))
@@ -1303,7 +1299,7 @@
 (defun read-in-lang-env (str)
   "reads <str> with language option in RDF, and returns an instance of rdf:inLang. See also, <lang-env>."
   (cond ((null lang-env) str)
-        (t (make-instance 'rdf:inLang :lang lang-env :content str))))
+        (t (make-instance 'rdf:|inLang| :lang lang-env :content str))))
 
 ;;;
 ;;;; Slots := (role . forms) | (role filler)
@@ -1321,27 +1317,27 @@
 ;;; See, RDFboot module.
 ;;;
 #|
-(defConcept rdfs:Container (rdf:type rdfs:Class)
-  (rdfs:subClassOf rdfs:Resource)
-  (rdfs:label "Container")
-  (rdf:about "http://www.w3.org/2000/01/rdf-schema#Container")
-  (rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#"))
-  (rdfs:comment "The class of RDF containers."))
+(defConcept rdfs:|Container| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| rdfs:|Resource|)
+  (rdfs:|label| "Container")
+  (rdf:|about| "http://www.w3.org/2000/01/rdf-schema#Container")
+  (rdfs:|isDefinedBy| (iri "http://www.w3.org/2000/01/rdf-schema#"))
+  (rdfs:|comment| "The class of RDF containers."))
 
-(defProperty rdfs:member
-  (rdf:about "http://www.w3.org/2000/01/rdf-schema#member")
-  (rdfs:label "member")
-  (rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#"))
-  (rdfs:comment "A member of the subject container.")
-  (rdfs:domain rdfs:Container)                              ; reaxiomatized by Seiji 2008/6/27
-  (rdfs:range rdfs:Resource))
+(defProperty rdfs:|member|
+  (rdf:|about| "http://www.w3.org/2000/01/rdf-schema#member")
+  (rdfs:|label| "member")
+  (rdfs:|isDefinedBy| (iri "http://www.w3.org/2000/01/rdf-schema#"))
+  (rdfs:|comment| "A member of the subject container.")
+  (rdfs:|domain| rdfs:|Container|)                              ; reaxiomatized by Seiji 2008/6/27
+  (rdfs:|range| rdfs:|Resource|))
 
-(defConcept rdfs:ContainerMembershipProperty (rdf:type rdfs:Class)
-  (rdfs:subClassOf rdf:Property)
-  (rdfs:label "ContainerMembershipProperty")
-  (rdf:about "http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty")
-  (rdfs:isDefinedBy (iri "http://www.w3.org/2000/01/rdf-schema#"))
-  (rdfs:comment "The class of container membership properties, rdf:_1, rdf:_2, ...,
+(defConcept rdfs:|ContainerMembershipProperty| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| rdf:|Property|)
+  (rdfs:|label| "ContainerMembershipProperty")
+  (rdf:|about| "http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty")
+  (rdfs:|isDefinedBy| (iri "http://www.w3.org/2000/01/rdf-schema#"))
+  (rdfs:|comment| "The class of container membership properties, rdf:_1, rdf:_2, ...,
   all of which are sub-properties of 'member'."))
 |#
 ;;;; Rdfs12
@@ -1349,49 +1345,49 @@
 ;;; then, <uuu> rdfs:subPropertyOf rdfs:member.
 
 (defmethod shared-initialize :after
-  ((instance rdfs:ContainerMembershipProperty) slot-names &rest initargs)
+  ((instance rdfs:|ContainerMembershipProperty|) slot-names &rest initargs)
   "adds rdfs:member info into <instance> according to rdfs12 rule."
   (declare (ignore slot-names))
-  (let ((superprops (and (slot-boundp instance 'rdfs:subPropertyOf)
-                         (slot-value instance 'rdfs:subPropertyOf))))
+  (let ((superprops (and (slot-boundp instance 'rdfs:|subPropertyOf|)
+                         (slot-value instance 'rdfs:|subPropertyOf|))))
     (cond ((null superprops)
-           (setf (slot-value instance 'rdfs:subPropertyOf) rdfs:member))
+           (setf (slot-value instance 'rdfs:|subPropertyOf|) rdfs:|member|))
           ((not (consp superprops))
-           (unless (subproperty-p superprops rdfs:member)
-             (setf (slot-value instance 'rdfs:subPropertyOf) (list superprops rdfs:member))))
-          (t (pushnew rdfs:member (slot-value instance 'rdfs:subPropertyOf)
+           (unless (subproperty-p superprops rdfs:|member|)
+             (setf (slot-value instance 'rdfs:|subPropertyOf|) (list superprops rdfs:|member|))))
+          (t (pushnew rdfs:|member| (slot-value instance 'rdfs:|subPropertyOf|)
                       :test-not #'(lambda (m superp) (subproperty-p superp m))))))
-  (pushnew instance (slot-value rdfs:member 'subproperty)
+  (pushnew instance (slot-value rdfs:|member| 'subproperty)
                       :test-not #'(lambda (ins subp) (subproperty-p ins subp))))
 
-(defConcept rdf:Bag (rdf:type rdfs:Class)
-  (rdfs:subClassOf rdfs:Container)
-  (rdfs:label "Bag")
-  (rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag")
-  (rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
-  (rdfs:comment "The class of unordered containers."))
-(defConcept rdf:Seq (rdf:type rdfs:Class)
-  (rdfs:subClassOf rdfs:Container)
-  (rdfs:label "Seq")
-  (rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq")
-  (rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
-  (rdfs:comment "The class of ordered containers."))
-(defConcept rdf:Alt (rdf:type rdfs:Class)
-  (rdfs:subClassOf rdfs:Container)
-  (rdfs:label "Alt")
-  (rdf:about "http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt")
-  (rdfs:isDefinedBy (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
-  (rdfs:comment "The class of containers of alternatives."))
+(defConcept rdf:|Bag| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| rdfs:|Container|)
+  (rdfs:|label| "Bag")
+  (rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag")
+  (rdfs:|isDefinedBy| (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
+  (rdfs:|comment| "The class of unordered containers."))
+(defConcept rdf:|Seq| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| rdfs:|Container|)
+  (rdfs:|label| "Seq")
+  (rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq")
+  (rdfs:|isDefinedBy| (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
+  (rdfs:|comment| "The class of ordered containers."))
+(defConcept rdf:|Alt| (rdf:|type| rdfs:|Class|)
+  (rdfs:|subClassOf| rdfs:|Container|)
+  (rdfs:|label| "Alt")
+  (rdf:|about| "http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt")
+  (rdfs:|isDefinedBy| (iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#"))
+  (rdfs:|comment| "The class of containers of alternatives."))
 
-(defun rdfs:subClassOf (class)
-  (slot-value class 'rdfs:subClassOf))
-(defsetf rdfs:subClassOf (class) (value)
-  `(setf (slot-value ,class 'rdfs:subClassOf) ,value))
+(defun rdfs:|subClassOf| (class)
+  (slot-value class 'rdfs:|subClassOf|))
+(defsetf rdfs:|subClassOf| (class) (value)
+  `(setf (slot-value ,class 'rdfs:|subClassOf|) ,value))
 
-(defun rdfs:subPropertyOf (class)
-  (slot-value class 'rdfs:subPropertyOf))
-(defsetf rdfs:subPropertyOf (class) (value)
-  `(setf (slot-value ,class 'rdfs:subPropertyOf) ,value))
+(defun rdfs:|subPropertyOf| (class)
+  (slot-value class 'rdfs:|subPropertyOf|))
+(defsetf rdfs:|subPropertyOf| (class) (value)
+  `(setf (slot-value ,class 'rdfs:|subPropertyOf|) ,value))
 
 ;;;
 ;;;; Automatated ContainerMembershipProperty Creation
@@ -1403,13 +1399,13 @@
   (loop for slot in slot-forms
       unless (or (atom slot)
                  (eq :name (slot-role slot))
-                 (eq 'rdf:about (slot-role slot))
-                 (eq 'rdf:ID (slot-role slot))
+                 (eq 'rdf:|about| (slot-role slot))
+                 (eq 'rdf:|ID| (slot-role slot))
                  )
       do (make-ordinal-property (slot-role slot))))
 
 (defun make-ordinal-property (role)
-  (addInstance rdfs:ContainerMembershipProperty role ())
+  (addInstance rdfs:|ContainerMembershipProperty| role ())
   role)
 
 ;;;
@@ -1419,8 +1415,8 @@
   "returns an instance of rdf:Seq with members from <l>. The first element of 
    <l> fills the first role rdf:_1, the second fills the second role rdf:_2, and so on. 
    If <l> is empty, rdf:nil is returned."
-  (if (null l) rdf:nil
-    (addInstance rdf:Seq nil
+  (if (null l) rdf:|nil|
+    (addInstance rdf:|Seq| nil
                  (loop for x in l
                      for i from 1 to (length l)
                      collect (create-slot (make-ordinal-property-from-number i) x)))))
@@ -1429,8 +1425,8 @@
   "returns an instance of rdf:Seq with members from <l>. The first element of 
    <l> fills the first role rdf:_1, the second fills the second role rdf:_2, and so on. 
    If <l> is empty, rdf:nil is returned."
-  (if (null l) rdf:nil
-    (addInstance rdf:Bag nil
+  (if (null l) rdf:|nil|
+    (addInstance rdf:|Bag| nil
                  (loop for x in l
                      for i from 1 to (length l)
                      collect (create-slot (make-ordinal-property-from-number i) x)))))
@@ -1439,13 +1435,13 @@
   "returns an instance of rdf:Seq with members from <l>. The first element of 
    <l> fills the first role rdf:_1, the second fills the second role rdf:_2, and so on. 
    If <l> is empty, rdf:nil is returned."
-  (if (null l) rdf:nil
-    (addInstance rdf:Alt nil
+  (if (null l) rdf:|nil|
+    (addInstance rdf:|Alt| nil
                  (loop for x in l
                      for i from 1 to (length l)
                      collect (create-slot (make-ordinal-property-from-number i) x)))))
 
-(defmethod shared-initialize :after ((instance rdfs:Resource) slot-names &rest initargs)
+(defmethod shared-initialize :after ((instance rdfs:|Resource|) slot-names &rest initargs)
   "book-keeping for reification seiji"
   (let ((args (copy-list initargs)))
     (let ((changed (remf args :direct-slots)))
@@ -1456,10 +1452,10 @@
              )
             (t                                        ; first or redefinition
              (typecase instance
-               (rdfs:Literal nil)
-               (rdfs:Datatype nil)
-               (rdf:Statement nil)
-               (rdf:List nil)
+               (rdfs:|Literal| nil)
+               (rdfs:|Datatype| nil)
+               (rdf:|Statement| nil)
+               (rdf:|List| nil)
                (otherwise 
                 (apply #'book-keeping-for-reification instance slot-names args)
                 (let ((name (getf args :name)))
@@ -1493,3 +1489,5 @@
 ;;;
 ;;; Seiji Koide Aug-04-2009
 ;;;
+
+(cl:provide :rdfscore)

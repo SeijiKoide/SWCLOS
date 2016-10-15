@@ -4,14 +4,9 @@
 ;;; Utilities in this file are taken from AIMA and redefined in package gx.
 ;;; ==================================================================================
 
-(cl:provide :swclosutils)
-
-(cl:defpackage :gx
-  (:use :common-lisp)
-  (:export mappend squash length=1 splice-seq-on null-string-p
-           match))
-
 (in-package :gx)
+
+(export '(mappend squash length=1 splice-seq-on null-string-p match))
 
 ;;.............................................................................................
 ;;
@@ -265,8 +260,15 @@ but optimized for vectors."
 (defun null-string-p (str)
   (or (null str) (string= str "")))
 
+(declaim (inline false))
+(defun false (&rest ignore)
+  (declare (ignore ignore))
+  nil)
+
 ;; End of module
 ;; --------------------------------------------------------------------
 ;;;
 ;;; Seiji Koide Nov-15-2010
 ;;;
+
+(cl:provide :swclosutils)

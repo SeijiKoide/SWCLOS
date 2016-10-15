@@ -13,14 +13,9 @@
 ;; -------
 ;; 2008.02.04    File created.
 
-(cl:defpackage :gx
-  (:export "+no-bindings+" "subst-bindings" "unify")
-  )
-
-(eval-when (:execute :load-toplevel :compile-toplevel)
-  ) ; end of eval-when
-
 (in-package :gx)
+
+(export '(+no-bindings+ subst-bindings unify))
 
 (defconstant +fail+ nil
   "Indicates unification failure")
@@ -116,13 +111,13 @@
            (cond ((and (symbolp x) (resource? x)) (class-of (symbol-value x)))
                  ((%instance-p x) (class-of x))
                  ((rdf-class-p x) (class-of x))
-                 (t (symbol-value 'owl:Thing))))
+                 (t (symbol-value 'owl:|Thing|))))
           ((%instance-p val) (class-of val))
           ((rdf-class-p val) (class-of val))
           ((and (symbolp val) (resource? val)) (class-of (symbol-value val)))
           ((skolem-p val) (error "Not Yet!"))
           ((consp val) (conjunction val))  ; if a list then it should be a conjunction.
-          (t (symbol-value 'owl:Thing)))))
+          (t (symbol-value 'owl:|Thing|)))))
 
 ;;;
 ;;; A variable is a symbol whose name starts with character #\?.
@@ -645,20 +640,20 @@
 
 
 #|
-(defProperty Knows (rdf:type owl:ObjectProperty)
-  (rdfs:domain Human))
-(defResource Human (rdf:type owl:Class))
-(defResource Mother (rdf:type owl:Class)
-  (rdfs:subClassOf Human))
-(defResource Pet (rdf:type owl:Class)
-  (owl:disjointWith Human))
-(defResource Cat (rdf:type owl:Class)
-  (rdfs:subClassOf Pet))
-(defIndividual John (rdf:type Human)
+(defProperty Knows (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Human))
+(defResource Human (rdf:|type| owl:|Class|))
+(defResource Mother (rdf:|type| owl:|Class|)
+  (rdfs:|subClassOf| Human))
+(defResource Pet (rdf:|type| owl:|Class|)
+  (owl:|disjointWith| Human))
+(defResource Cat (rdf:|type| owl:|Class|)
+  (rdfs:|subClassOf| Pet))
+(defIndividual John (rdf:|type| Human)
   (Knows Jane))
-(defIndividual Jane (rdf:type Human))
-(defIndividual Leonid (rdf:type Human))
-(defIndividual Elizabeth (rdf:type Cat))
+(defIndividual Jane (rdf:|type| Human))
+(defIndividual Leonid (rdf:|type| Human))
+(defIndividual Elizabeth (rdf:|type| Cat))
 (unify '(Knows John ?x) '(Knows John Jane))
 (unify '(Knows John ?x) '(Knows ?y Leonid))
 (unify '(Knows John ?x) '(Knows ?y ?z) +no-bindings+ `((?z . ,Mother)))
@@ -692,25 +687,25 @@
 ;; (Intersect {a a1 a2} {a aa1 aa2})     -> (or (and (a1 = aa1) (a2 = aa2)) (and (a1 = aa2) (a2 = aa1)))
 
 #|
-(defProperty workAt (rdf:type owl:ObjectProperty)
-  (rdfs:domain Person)
-  (rdfs:range Office))
-(defProperty liveAt (rdf:type owl:ObjectProperty)
-  (rdfs:domain Person)
-  (rdfs:range Residence))
-(defProperty location (rdf:type owl:ObjectProperty)
-  (rdfs:domain Building)
-  (rdfs:range Address))
+(defProperty workAt (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Person)
+  (rdfs:|range| Office))
+(defProperty liveAt (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Person)
+  (rdfs:|range| Residence))
+(defProperty location (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Building)
+  (rdfs:|range| Address))
 
-(defResource Office (rdfs:subClassOf Building))
-(defResource Residence (rdfs:subClassOf Building))
+(defResource Office (rdfs:|subClassOf| Building))
+(defResource Residence (rdfs:|subClassOf| Building))
 
-(defIndividual John (rdf:type Person)
+(defIndividual John (rdf:|type| Person)
   (workAt JohnsOffice)
   (liveAt JohnsHome))
-(defIndividual JohnsOffice (rdf:type Office)
+(defIndividual JohnsOffice (rdf:|type| Office)
   (location JohnsAddress))
-(defIndividual JohnsHome (rdf:type Residence)
+(defIndividual JohnsHome (rdf:|type| Residence)
   (location JohnsAddress))
 
 (=> (and (workAt ?person ?office) (liveAt ?person ?home) (location ?office ?loc) (location ?home ?loc))
@@ -821,64 +816,64 @@
 |#
 
 #|
-(defProperty locatedIn (rdf:type owl:TransitiveProperty)
-  (rdfs:range Region))
-(defIndividual EU (rdf:type Region))
-(defIndividual German (rdf:type Region)
+(defProperty locatedIn (rdf:|type| owl:|TransitiveProperty|)
+  (rdfs:|range| Region))
+(defIndividual EU (rdf:|type| Region))
+(defIndividual German (rdf:|type| Region)
   (locatedIn EU))
-(defIndividual French (rdf:type Region)
+(defIndividual French (rdf:|type| Region)
   (locatedIn EU))
-(defIndividual UK (rdf:type Region)
+(defIndividual UK (rdf:|type| Region)
   (locatedIn EU))
 
-(defResource EUCity (rdf:type owl:Class)
-  (owl:intersectionOf City
-                      (owl:Restriction (owl:onProperty locatedIn)
-                                       (owl:hasValue EU))))
+(defResource EUCity (rdf:|type| owl:|Class|)
+  (owl:|intersectionOf| City
+                      (owl:|Restriction| (owl:|onProperty| locatedIn)
+                                       (owl:|hasValue| EU))))
 
-(defResource GermanCity (rdf:type owl:Class)
-  (owl:intersectionOf City
-                      (owl:Restriction (owl:onProperty locatedIn)
-                                       (owl:hasValue German))))
-(defResource FrenchCity (rdf:type owl:Class)
-  (owl:intersectionOf City
-                      (owl:Restriction (owl:onProperty locatedIn)
-                                       (owl:hasValue French))))
-(defResource UKCity (rdf:type owl:Class)
-  (owl:intersectionOf City
-                      (owl:Restriction (owl:onProperty locatedIn)
-                                       (owl:hasValue UK))))
+(defResource GermanCity (rdf:|type| owl:|Class|)
+  (owl:|intersectionOf| City
+                      (owl:|Restriction| (owl:|onProperty| locatedIn)
+                                       (owl:|hasValue| German))))
+(defResource FrenchCity (rdf:|type| owl:|Class|)
+  (owl:|intersectionOf| City
+                      (owl:|Restriction| (owl:|onProperty| locatedIn)
+                                       (owl:|hasValue| French))))
+(defResource UKCity (rdf:|type| owl:|Class|)
+  (owl:|intersectionOf| City
+                      (owl:|Restriction| (owl:|onProperty| locatedIn)
+                                       (owl:|hasValue| UK))))
 
-(defResource City (rdfs:subClassOf Region))
+(defResource City (rdfs:|subClassOf| Region))
 
-(defIndividual Frankfurt (rdf:type City)
+(defIndividual Frankfurt (rdf:|type| City)
   (hasTrainTo Paris)
   (hasFrightTo Paris)
   (locatedIn German))
-(defIndividual Paris (rdf:type City)
+(defIndividual Paris (rdf:|type| City)
   (hasTrainTo Frankfurt)
   (hasTrainTo London)
   (hasFrightTo Frankfurt)
   (locatedIn French))
-(defIndividual London (rdf:type City)
+(defIndividual London (rdf:|type| City)
   (hasTrainTo Paris)
   (hasFrightTo Paris)
   (hasFrightTo Frankfurt)
   (locatedIn UK))
 
-(defProperty withVehicle (rdf:type owl:ObjectProperty)
-  (rdfs:domain Travel)
-  (rdfs:range Vehcle))
-(defProperty departFrom (rdf:type owl:ObjectProperty)
-  (rdfs:domain Travel)
-  (rdfs:range Region))
-(defProperty departTo (rdf:type owl:ObjectProperty)
-  (rdfs:domain Travel)
-  (rdfs:range Region))
+(defProperty withVehicle (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Travel)
+  (rdfs:|range| Vehcle))
+(defProperty departFrom (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Travel)
+  (rdfs:|range| Region))
+(defProperty departTo (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|domain| Travel)
+  (rdfs:|range| Region))
 
-(defProperty withTrain (rdf:type owl:ObjectProperty)
-  (rdfs:subPropertyOf withVehicle))
-(defResource withAirPlane (rdf:type owl:ObjectProperty)
-  (rdfs:subPropertyOf withVehicle))
+(defProperty withTrain (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|subPropertyOf| withVehicle))
+(defResource withAirPlane (rdf:|type| owl:|ObjectProperty|)
+  (rdfs:|subPropertyOf| withVehicle))
 
 |#

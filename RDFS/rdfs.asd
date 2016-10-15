@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2003, 2004, 2006 by Galaxy Express Corporation
+;;; Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007, 2008, 2009 Seiji Koide
 
@@ -21,11 +21,11 @@
  
 (in-package :gx-system)  
 
-(eval-when (:load-toplevel :execute)
-  (defparameter *rdfs-directory*
-    (make-pathname :host (pathname-host *load-truename*)
-                   :device (pathname-device *load-truename*)
-                   :directory (pathname-directory *load-truename*)))
+(defvar *rdfs-directory*
+  (make-pathname :host (pathname-host *load-truename*)
+                 :device (pathname-device *load-truename*)
+                 :directory (pathname-directory *load-truename*)))
+(unless (logical-pathname-translations "RDFS")
   (setf (logical-pathname-translations "RDFS")
     `(("*.*"
        ,(make-pathname
@@ -34,19 +34,17 @@
          :directory (pathname-directory *rdfs-directory*)
          :name :wild
          :type :wild
-         ))))
-) ; end of eval-when
+         )))))
 
-(eval-when (:load-toplevel :execute)
-  (unless (asdf:find-system "rdf" nil)
-    (defparameter *rdf-directory*
-      (merge-pathnames
-       (make-pathname
+(unless (asdf:find-system "swclos.rdf" nil)
+  (defvar *rdf-directory*
+    (merge-pathnames
+      (make-pathname
         :directory (substitute "RDF" "RDFS"
                                (pathname-directory *rdfs-directory*)
                                :test #'string=))
-       *rdfs-directory*))
-    (setf (logical-pathname-translations "RDF")
+      *rdfs-directory*))
+  (setf (logical-pathname-translations "RDF")
       `(("*.*"
          ,(make-pathname
            :host (pathname-host *rdf-directory*)
@@ -55,12 +53,9 @@
            :name :wild
            :type :wild
            ))))
-    (load "RDF:RDF.asdf"))
-)
+  (load "RDF:rdf.asd"))
 
-;(defmethod source-file-type ((c cl-source-file) (s module)) "cl")
-
-(defsystem :rdfs
+(defsystem :swclos.rdfs
     :name "SWCLOS RDFS system"
   :author "Seiji Koide <SeijiKoide@aol.com>"
   :maintainer "Seiji Koide <SeijiKoide@aol.com>"
@@ -68,17 +63,21 @@
   :licence "SWCLOS"
   :description "RDFS subsystem of SWCLOS (an OWL Full processor on top of CLOS)."
   :long-description "This code is written at Galaxy Express Corporation, Japan, for the realization of the MEXT IT Program in Japan."
-  :depends-on ("rdf")
-  :in-order-to ((compile-op (load-op "rdf"))  
-                (load-op (load-op "rdf")))
+  :depends-on ("swclos.rdf")
+  :in-order-to ((compile-op (load-op "swclos.rdf"))  
+                (load-op (load-op "swclos.rdf")))
   :pathname #+(and :asdf (not :asdf2)) (translate-logical-pathname "RDFS:")
             #+(and :asdf :asdf2)       nil
+  :default-component-class cl-source-file.cl
   :components
   ((:file "SlotDef"      :depends-on ())
-   (:file "RDFboot"      :depends-on ("SlotDef"))
+   (:file "RDFboot0"     :depends-on ("SlotDef"))
+   (:file "RDFboot1"     :depends-on ("RDFboot0"))
+   (:file "RDFboot"      :depends-on ("RDFboot1"))
    (:file "DomainRange"  :depends-on ("RDFboot"))
    (:file "RdfsKernel"   :depends-on ("SlotDef" "RDFboot"))
-   (:file "GxType"       :depends-on ("SlotDef" "RDFboot"))
+   (:file "GxType0"      :depends-on ("SlotDef" "RDFboot"))
+   (:file "GxType"       :depends-on ("GxType0"))
    (:file "RdfsObjects"  :depends-on ("RDFboot" "GxType"))
    (:file "GxForwardRef" :depends-on ("GxType" "RdfsObjects" "DomainRange" "RdfsKernel"))
    (:file "RdfsCore"     :depends-on ("DomainRange" "RdfsObjects" "RdfsKernel"))
@@ -90,7 +89,7 @@
 (in-package #:cl-user)
 
 (format t "~%;;To compile, execute these forms:~%~s~%"
-  '(asdf:operate 'asdf:compile-op :rdfs))
+  '(asdf:operate 'asdf:compile-op :swclos.rdfs))
 
 (format t "~%;;To load, execute these forms:~%~s~%"
-  '(asdf:operate 'asdf:load-op :rdfs))
+  '(asdf:operate 'asdf:load-op :swclos.rdfs))

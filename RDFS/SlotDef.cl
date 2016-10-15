@@ -210,7 +210,7 @@ which work as the constraint for settable number of values."))
   (declare (optimize (speed 3) (safety 0)))
   (cond ((eq slot-names t) ; when first
          ;(assert (eq name (mop:slot-definition-name slotd))) ; name is always name
-         (cond ((and (boundp name) (cl:typep (symbol-value name) 'rdf:Property)) ; instead of (property? name)
+         (cond ((and (boundp name) (cl:typep (symbol-value name) 'rdf:|Property|)) ; instead of (property? name)
                 (let ((prop (symbol-value name)))
                   (let ((slotds (slot-value prop 'slotds))
                         (subject-type (slot-definition-subject-type slotd)))
@@ -227,16 +227,16 @@ which work as the constraint for settable number of values."))
 (defun property-p (x)
   "returns true if <x> is an instance of rdf property."
   (declare (inline))
-  (cl:typep x 'rdf:Property))
+  (cl:typep x 'rdf:|Property|))
 
 (defun property? (name)
   "returns true if <name> is an rdf property name"
   (declare (inline))
   (case name
-    ((rdfs:subClassOf rdfs:label rdfs:comment rdfs:isDefinedBy rdfs:domain rdfs:range rdfs:subPropertyOf)
+    ((rdfs:|subClassOf| rdfs:|label| rdfs:|comment| rdfs:|isDefinedBy| rdfs:|domain| rdfs:|range| rdfs:|subPropertyOf|)
      t)
     (otherwise 
-     (and (boundp name) (cl:typep (symbol-value name) 'rdf:Property)))))
+     (and (boundp name) (cl:typep (symbol-value name) 'rdf:|Property|)))))
 
 (defmethod name ((object mop:standard-direct-slot-definition))
   "returns a name of <object>, if it is named, otherwise nil."

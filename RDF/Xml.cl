@@ -28,8 +28,6 @@
 ;; 2002.09.04    File created
 ;;; ==================================================================================
 
-(cl:provide :xsd)
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :swclospackages)
   ) ; end of eval-when
@@ -137,37 +135,37 @@
 ;;; See also GxType module with respect to the lexical space representation.
 ;;; See also <disjoint-p> on the discussion on disjointness of xsd datatypes.
 
-(cl:deftype unsignedByte () "0 &lt;= x &lt;= 255" '(cl:unsigned-byte 8))
-(cl:deftype unsignedShort () "0 &lt;= x &lt;= 65535" '(cl:unsigned-byte 16))
-(cl:deftype unsignedInt () "0 &lt;= x &lt;= 4294967295" '(cl:unsigned-byte 32))
-(cl:deftype unsignedLong () "0 &lt;= x &lt;= 18446744073709551615" '(cl:unsigned-byte 64))
+(cl:deftype |unsignedByte| () "0 &lt;= x &lt;= 255" '(cl:unsigned-byte 8))
+(cl:deftype |unsignedShort| () "0 &lt;= x &lt;= 65535" '(cl:unsigned-byte 16))
+(cl:deftype |unsignedInt| () "0 &lt;= x &lt;= 4294967295" '(cl:unsigned-byte 32))
+(cl:deftype |unsignedLong| () "0 &lt;= x &lt;= 18446744073709551615" '(cl:unsigned-byte 64))
 ;;cf. http://www.franz.com/support/documentation/8.0/ansicl/dictentr/unsigned.htm
 
-(cl:deftype byte () "-128 &lt;= x &lt;= 127" '(cl:signed-byte 8))
-(cl:deftype short () "-32768 &lt;= x &lt;= 32767" '(cl:signed-byte 16))
-(cl:deftype int () "-2147483648 &lt;= x &lt;= 2147483647" '(cl:signed-byte 32))
-(cl:deftype long () "-9223372036854775808 &lt;= x &lt;= 9223372036854775807" '(cl:signed-byte 64))
+(cl:deftype |byte| () "-128 &lt;= x &lt;= 127" '(cl:signed-byte 8))
+(cl:deftype |short| () "-32768 &lt;= x &lt;= 32767" '(cl:signed-byte 16))
+(cl:deftype |int| () "-2147483648 &lt;= x &lt;= 2147483647" '(cl:signed-byte 32))
+(cl:deftype |long| () "-9223372036854775808 &lt;= x &lt;= 9223372036854775807" '(cl:signed-byte 64))
 ;;cf. http://www.franz.com/support/documentation/8.0/ansicl/dictentr/signed-b.htm
-(cl:deftype integer () "any number of digits without point but with or without + or -" 'cl:integer)
+(cl:deftype |integer| () "any number of digits without point but with or without + or -" 'cl:integer)
 
-(cl:deftype positiveInteger () "integer greater than 0" '(cl:integer 1 cl:*))
-(cl:deftype nonPositiveInteger () "integer smaller than 1" '(cl:integer cl:* 0))
-(cl:deftype negativeInteger () "integer smaller than 0" '(cl:integer cl:* -1))
-(cl:deftype nonNegativeInteger () "integer greater than -1" '(cl:integer 0 cl:*))
+(cl:deftype |positiveInteger| () "integer greater than 0" '(cl:integer 1 cl:*))
+(cl:deftype |nonPositiveInteger| () "integer smaller than 1" '(cl:integer cl:* 0))
+(cl:deftype |negativeInteger| () "integer smaller than 0" '(cl:integer cl:* -1))
+(cl:deftype |nonNegativeInteger| () "integer greater than -1" '(cl:integer 0 cl:*))
 
-(cl:deftype float () "floating point number in lisp" 'cl:single-float)
-(cl:deftype double () "double floating point number in lisp" 'cl:double-float)
+(cl:deftype |float| () "floating point number in lisp" 'cl:single-float)
+(cl:deftype |double| () "double floating point number in lisp" 'cl:double-float)
 
-(cl:deftype decimal () "rational number in lisp, which should be revised in future." 'cl:rational)
+(cl:deftype |decimal| () "rational number in lisp, which should be revised in future." 'cl:rational)
 
-(cl:deftype string () "string in lisp" 'cl:string)
+(cl:deftype |string| () "string in lisp" 'cl:string)
 
-(cl:deftype boolean () "xsd:true or xsd:false" '(cl:member xsd:true xsd:false))
+(cl:deftype |boolean| () "xsd:true or xsd:false" '(cl:member |xsd:true| |xsd:false|))
 
-(cl:deftype anyURI () "net.uri:rui in ACL" 'net.uri:uri)
+(cl:deftype |anyURI| () "URI in Common Lisp" 'uri)
 
-(cl:deftype anySimpleType () "xsd:boolean, xsd:anyURI, xsd:string, xsd:float, xsd:double, or xsd:decimal"
-  '(cl:or boolean anyURI string float double decimal))
+(cl:deftype |anySimpleType| () "xsd:boolean, xsd:anyURI, xsd:string, xsd:float, xsd:double, or xsd:decimal"
+  '(cl:or |boolean| |anyURI| |string| |float| |double| |decimal|))
 
 ;(cl:declaim (cl:special nonPositiveInteger nonNegativeInteger anySimpleType))
 
@@ -256,3 +254,5 @@
 ;;;
 ;;; Seiji Koide Sep-11-2008
 ;;;
+
+(cl:provide :xsd)

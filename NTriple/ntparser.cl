@@ -8,21 +8,20 @@
 ;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;; for the realization of the MEXT IT Program in Japan,
 ;;
-;; Copyright © 2003, by Galaxy Express Corporation
+;; Copyright   2003, by Galaxy Express Corporation
 ;;
 ;; History
 ;; -------
 ;; 2004.12.10    N-Triple parsing modified adapting <http://www.w3.org/TR/2004/REC-rdf-testcases-20040210/>
 ;; 2003.05.10    File created
 
-(defpackage :gx
-    (:export read-NTriple-file addTriple-from-file))
-
 (eval-when (:execute :load-toplevel :compile-toplevel)
   (require :uri)
   ) ; end of eval-when
 
 (in-package :gx)
+
+(export '(read-NTriple-file addTriple-from-file))
 
 ;;
 ;; Name space is mapped to a lisp package.
@@ -32,18 +31,18 @@
   (find resource (list-all-packages) :key #'documentation :test #'equalp))
 
 (defun find-package-from-uri (resource)
-  (when (stringp resource) (setq resource (net.uri:parse-uri resource)))
+  (when (stringp resource) (setq resource (parse-uri resource)))
   (find resource (list-all-packages)
-        :key #'(lambda (pkg) (net.uri:parse-uri (documentation pkg t)))
-        :test #'(lambda (u1 u2) (and (string= (net.uri:uri-host u1) (net.uri:uri-host u2))
-                                     (string= (net.uri:uri-path u1) (net.uri:uri-path u2))))))
+        :key #'(lambda (pkg) (parse-uri (documentation pkg t)))
+        :test #'(lambda (u1 u2) (and (string= (uri-host u1) (uri-host u2))
+                                     (string= (uri-path u1) (uri-path u2))))))
 
 ;(defun find-package-from-uri-host (resource)
 ;  (when (stringp resource)
-;    (setq resource (net.uri:parse-uri resource)))
-;  (let ((host (net.uri:uri-host resource)))
+;    (setq resource (parse-uri resource)))
+;  (let ((host (uri-host resource)))
 ;    (find resource (list-all-packages)
-;          :key #'(lambda (pkg) (net.uri:uri-host (net.uri:parse-uri (documentation pkg t))))
+;          :key #'(lambda (pkg) (uri-host (parse-uri (documentation pkg t))))
 ;          :test #'equalp)))
 
 (declaim (inline label-localpart))
@@ -326,7 +325,7 @@ absoluteURI ::= character+ with escapes as defined in section URI References
 > (get-form eg:Proposal)
 > (<- eg:Proposal eg:author eg:name)
 > (<- eg:Proposal dc:title)
-> (<- eg:Proposal eg:author rdf:type)
+> (<- eg:Proposal eg:author rdf:|type|)
 |#
 
 ;; End of module

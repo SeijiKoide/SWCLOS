@@ -506,7 +506,7 @@
          ;; read uriref
          (let ((uriref
                 (single-angle-bracket-reader instr (getnext-char instr))))
-           (unless (net.uri:uri-p uriref)
+           (unless (uri-p uriref)
              (warn (warn "Syntax error: illegal uriref in ~S" line))
              (signal (make-instance 'trepl-newline)))
            uriref))
@@ -605,7 +605,7 @@
         (localn nil))
     (cond ((null prefix)
            (warn "Syntax error: illegal prefix in ~S" line))
-          ((string= prefix "a") 'rdf:type)
+          ((string= prefix "a") 'rdf:|type|)
           ((string= prefix "@prefix") (intern prefix))
           ((string= prefix "@base") (intern prefix))
           ((string= prefix "read") (intern prefix))

@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright ｩ 2003, 2004, 2006 by Galaxy Express Corporation
+;;; Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007, 2008, 2009, 2013 Seiji Koide
 
@@ -26,6 +26,7 @@
     (make-pathname :host (pathname-host *load-truename*)
                    :device (pathname-device *load-truename*)
                    :directory (pathname-directory *load-truename*)))
+  (format t "*owl-directory* = ~A~%" *owl-directory*)
   (setf (logical-pathname-translations "OWL")
     `(("*.*"
        ,(make-pathname
@@ -35,10 +36,11 @@
          :name :wild
          :type :wild
          ))))
+  (format t "(logical-pathname-translations \"OWL\") = ~A~%" (logical-pathname-translations "OWL"))
 ) ; end of eval-when
 
 (eval-when (:load-toplevel :execute)
-  (unless (asdf:find-system "rdfs" nil)
+  (unless (asdf:find-system "swclos.rdfs" nil)
     (defparameter *rdfs-directory*
       (merge-pathnames
        (make-pathname
@@ -55,12 +57,10 @@
            :name :wild
            :type :wild
            ))))
-    (load "RDFS:RDFS.asdf"))
+    (load "RDFS:rdfs.asd"))
 )
 
-;(defmethod source-file-type ((c cl-source-file) (s module)) "cl")
-
-(defsystem :owl
+(defsystem :swclos.owl
     :name "SWCLOS OWL system"
   :author "Seiji Koide <SeijiKoide@aol.com>"
   :maintainer "Seiji Koide <SeijiKoide@aol.com>"
@@ -68,11 +68,12 @@
   :licence "SWCLOS"
   :description "RDFS subsystem of SWCLOS (an OWL Full processor on top of CLOS)."
   :long-description "This code is written at Galaxy Express Corporation, Japan, for the realization of the MEXT IT Program in Japan."
-  :depends-on ("rdfs")
-  :in-order-to ((compile-op (load-op "rdfs"))  
-                (load-op (load-op "rdfs")))
+  :depends-on ("swclos.rdfs")
+  :in-order-to ((compile-op (load-op "swclos.rdfs"))  
+                (load-op (load-op "swclos.rdfs")))
   :pathname #+(and :asdf (not :asdf2)) (translate-logical-pathname "OWL:")
             #+(and :asdf :asdf2)       nil
+  :default-component-class cl-source-file.cl
   :components
   ((:file "owlerror"              :depends-on ())
    (:file "owlkernel"             :depends-on ())
@@ -88,7 +89,7 @@
 (in-package #:cl-user)
 
 (format t "~%;;To compile, execute these forms:~%~s~%"
-  '(asdf:operate 'asdf:compile-op :owl))
+  '(asdf:operate 'asdf:compile-op :swclos.owl))
 
 (format t "~%;;To load, execute these forms:~%~s~%"
-  '(asdf:operate 'asdf:load-op :owl))
+  '(asdf:operate 'asdf:load-op :swclos.owl))

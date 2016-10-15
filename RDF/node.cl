@@ -5,9 +5,9 @@
 
 (cl:provide :rdfnode)
 
-(defpackage :gx
-  (:export name mclasses))
 (in-package :gx)
+
+(export '(name mclasses))
 
 ;;;; gnode & rdf-node
 ;;; rdf-node will be a superclass of rdfs:Class. 

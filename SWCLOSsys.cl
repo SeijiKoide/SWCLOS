@@ -8,7 +8,7 @@
 ;;; This code is written by Seiji Koide at Galaxy Express Corporation, Japan,
 ;;; for the realization of the MEXT IT Program in Japan.
 ;;;
-;;; Copyright © 2003, 2004, 2006 by Galaxy Express Corporation
+;;; Copyright (c) 2003, 2004, 2006 by Galaxy Express Corporation
 ;;; 
 ;;; Copyright (c) 2007, 2008, 2009 Seiji Koide
 
@@ -33,10 +33,10 @@
 
 (excl:defsystem :RDF (:pretty-name "RDF subsystem of SWCLOS"
                        :default-pathname #,*swclos-directory*)
-  (:module :Utils        "RDF/Utils")
-  (:module :RdfIO        "RDF/RdfIO")
-  (:module :IRI          "RDF/IRI")
   (:module :packages     "RDF/packages")
+  (:module :Utils        "RDF/Utils"        (:load-before-compile :packages))
+  (:module :RdfIO        "RDF/RdfIO"        (:load-before-compile :packages))
+  (:module :IRI          "RDF/IRI"          (:load-before-compile :packages))
   (:module :Xml          "RDF/Xml"          (:load-before-compile :packages))
   (:module :rdferror     "RDF/rdferror"     (:load-before-compile :Utils :packages))
   (:module :NameSpace    "RDF/NameSpace"    (:load-before-compile :IRI :packages))
@@ -51,8 +51,11 @@
                        :default-pathname #,*swclos-directory*)
   (:module :RDF :RDF)
   (:module :SlotDef      "RDFS/SlotDef"      (:load-before-compile :RDF))
-  (:module :RDFboot      "RDFS/RDFboot"      (:load-before-compile :RDF :SlotDef))
-  (:module :GxType       "RDFS/GxType"       (:load-before-compile :RDF :SlotDef :RDFboot))
+  (:module :RDFboot0     "RDFS/RDFboot0"     (:load-before-compile :RDF :SlotDef))
+  (:module :RDFboot1     "RDFS/RDFboot1"     (:load-before-compile :RDF :RDFboot0))
+  (:module :RDFboot      "RDFS/RDFboot"      (:load-before-compile :RDF :RDFboot1))
+  (:module :GxType0      "RDFS/GxType0"      (:load-before-compile :RDF :SlotDef :RDFboot))
+  (:module :GxType       "RDFS/GxType"       (:load-before-compile :RDF :GxType0))
   (:module :DomainRange  "RDFS/DomainRange"  (:load-before-compile :RDF :RDFboot))
   (:module :RdfsObjects  "RDFS/RdfsObjects"  (:load-before-compile :RDF :RDFboot :GxType))
   (:module :RdfsKernel   "RDFS/RdfsKernel"   (:load-before-compile :RDF :SlotDef :RDFboot))
